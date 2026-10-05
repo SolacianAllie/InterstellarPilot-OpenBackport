@@ -1,0 +1,79 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1709254077376921
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4730242686860875}
+  - component: {fileID: 114724804207875695}
+  m_Layer: 0
+  m_Name: TeamColourSettings
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4730242686860875
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114724804207875695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1566625910, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  DefaultTeamColour: {r: 1, g: 1, b: 1, a: 1}
+  EmpireColors:
+  - {r: 0, g: 0.8665147, b: 1, a: 1}
+  - {r: 0.047864318, g: 1, b: 0, a: 1}
+  - {r: 0.9528302, g: 0.78803253, b: 0.112362035, a: 1}
+  - {r: 1, g: 0.25943398, b: 0.9303311, a: 1}
+  - {r: 0.8911502, g: 1, b: 0.2588235, a: 1}
+  - {r: 0.2588235, g: 0.36139762, b: 1, a: 1}
+  - {r: 0.2588235, g: 0.67015, b: 1, a: 1}
+  - {r: 1, g: 0.2588235, b: 0.53079826, a: 1}
+  - {r: 0.2588235, g: 1, b: 0.65365714, a: 1}
+  - {r: 0.6417645, g: 0.2588235, b: 1, a: 1}
+  BanditColors:
+  - {r: 0, g: 0, b: 0, a: 1}
+  - {r: 1, g: 0, b: 0, a: 1}
+  - {r: 0.9622642, g: 0.5310609, b: 0.5310609, a: 1}
+  - {r: 0.496, g: 0, b: 0, a: 1}
+  - {r: 0.6509434, g: 0.42755803, b: 0.2732734, a: 1}
+  - {r: 0.6509804, g: 0.29683346, b: 0.27450982, a: 1}
+  - {r: 0.6792453, g: 0.16981132, b: 0.3475401, a: 1}
+  - {r: 0.38679248, g: 0.26090246, b: 0.33365935, a: 1}
+  - {r: 0.6037736, g: 0.3446066, b: 0.4061996, a: 1}
+  GenericColors:
+  - {r: 0, g: 0.8665147, b: 1, a: 1}
+  - {r: 0.047864318, g: 1, b: 0, a: 1}
+  - {r: 0.9528302, g: 0.78803253, b: 0.112362035, a: 1}
+  - {r: 1, g: 0.25943398, b: 0.9303311, a: 1}
+  - {r: 0.8911502, g: 1, b: 0.2588235, a: 1}
+  - {r: 0.2588235, g: 0.36139762, b: 1, a: 1}
+  - {r: 0.2588235, g: 0.67015, b: 1, a: 1}
+  - {r: 1, g: 0.2588235, b: 0.53079826, a: 1}
+  - {r: 0.2588235, g: 1, b: 0.65365714, a: 1}
+  - {r: 0.6417645, g: 0.2588235, b: 1, a: 1}

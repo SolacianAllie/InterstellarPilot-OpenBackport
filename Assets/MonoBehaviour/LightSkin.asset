@@ -1,0 +1,140 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 704679457, guid: b4ee980cf5e137f601bacb93d73f33c0, type: 3}
+  m_Name: LightSkin
+  m_EditorClassIdentifier:
+  m_font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+  m_fontSize: 14
+  m_windowColor: {r: 0.9338235, g: 0.9338235, b: 0.9338235, a: 1}
+  m_filesListColor: {r: 1, g: 1, b: 1, a: 1}
+  m_filesVerticalSeparatorColor: {r: 0.6397059, g: 0.6397059, b: 0.6397059, a: 1}
+  m_titleBackgroundColor: {r: 0.30882353, g: 0.30882353, b: 0.30882353, a: 1}
+  m_titleTextColor: {r: 1, g: 1, b: 1, a: 1}
+  m_windowResizeGizmoColor: {r: 0.5294118, g: 0.5294118, b: 0.5294118, a: 1}
+  m_headerButtonsColor: {r: 1, g: 1, b: 1, a: 1}
+  m_windowResizeGizmo: {fileID: 21300000, guid: ae983fd2062cb1d4b8f600fb0fd8e88e, type: 2}
+  m_headerBackButton: {fileID: 21300000, guid: f0a4d074f21da85439ac6c5b472e2357, type: 2}
+  m_headerForwardButton: {fileID: 21300000, guid: f0a4d074f21da85439ac6c5b472e2357, type: 2}
+  m_headerUpButton: {fileID: 21300000, guid: f0a4d074f21da85439ac6c5b472e2357, type: 2}
+  m_headerContextMenuButton: {fileID: 21300000, guid: e13ae04d6cae8474aa6581cda92d2171, type: 2}
+  m_inputFieldNormalBackgroundColor: {r: 1, g: 1, b: 1, a: 1}
+  m_inputFieldInvalidBackgroundColor: {r: 1, g: 0.39215687, b: 0.39215687, a: 1}
+  m_inputFieldTextColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_inputFieldPlaceholderTextColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 0.5}
+  m_inputFieldSelectedTextColor: {r: 0.65882355, g: 0.80784315, b: 1, a: 0.7529412}
+  m_inputFieldCaretColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_inputFieldBackground: {fileID: 21300000, guid: 1ef517325800b6948aff3e0226646378, type: 2}
+  m_buttonColor: {r: 1, g: 1, b: 1, a: 1}
+  m_buttonTextColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_buttonBackground: {fileID: 21300000, guid: fcbe96307414c1f4cafb81bc5a9efa0e, type: 2}
+  m_dropdownColor: {r: 1, g: 1, b: 1, a: 1}
+  m_dropdownTextColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_dropdownArrowColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_dropdownCheckmarkColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_dropdownBackground: {fileID: 21300000, guid: fcbe96307414c1f4cafb81bc5a9efa0e, type: 2}
+  m_dropdownArrow: {fileID: 21300000, guid: e29acd3ec8aa3524f842b02ce24921eb, type: 2}
+  m_dropdownCheckmark: {fileID: 21300000, guid: 06d33633470e1bd49bf8f677b0d9e59b, type: 2}
+  m_toggleColor: {r: 1, g: 1, b: 1, a: 1}
+  m_toggleTextColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_toggleCheckmarkColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_toggleBackground: {fileID: 21300000, guid: 1ef517325800b6948aff3e0226646378, type: 2}
+  m_toggleCheckmark: {fileID: 21300000, guid: 06d33633470e1bd49bf8f677b0d9e59b, type: 2}
+  m_scrollbarBackgroundColor: {r: 0.9191176, g: 0.9191176, b: 0.9191176, a: 1}
+  m_scrollbarColor: {r: 0.7647059, g: 0.7647059, b: 0.7647059, a: 1}
+  m_fileHeight: 30
+  m_fileIconsPadding: 6
+  m_fileNormalBackgroundColor: {r: 1, g: 1, b: 1, a: 0}
+  m_fileAlternatingBackgroundColor: {r: 1, g: 1, b: 1, a: 0}
+  m_fileHoveredBackgroundColor: {r: 0.8980392, g: 0.9529412, b: 1, a: 1}
+  m_fileSelectedBackgroundColor: {r: 0.7058824, g: 0.8666667, b: 1, a: 1}
+  m_fileNormalTextColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_fileSelectedTextColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_folderIcon: {fileID: 21300000, guid: 37bd84c0b50aa3c45b78ab47f9e2c1a3, type: 2}
+  m_driveIcon: {fileID: 21300000, guid: ca59b98809c0b4a4ea58ee07919a5a6d, type: 2}
+  m_defaultFileIcon: {fileID: 21300000, guid: 08273a49d24dd164885689e640c811d5, type: 2}
+  m_filetypeIcons:
+  - extension: .txt
+    icon: {fileID: 21300000, guid: a1fd5e17a75de8f4097050c063be352b, type: 2}
+  - extension: .doc
+    icon: {fileID: 21300000, guid: a1fd5e17a75de8f4097050c063be352b, type: 2}
+  - extension: .docx
+    icon: {fileID: 21300000, guid: a1fd5e17a75de8f4097050c063be352b, type: 2}
+  - extension: .xml
+    icon: {fileID: 21300000, guid: a1fd5e17a75de8f4097050c063be352b, type: 2}
+  - extension: .json
+    icon: {fileID: 21300000, guid: a1fd5e17a75de8f4097050c063be352b, type: 2}
+  - extension: .rtf
+    icon: {fileID: 21300000, guid: a1fd5e17a75de8f4097050c063be352b, type: 2}
+  - extension: .pdf
+    icon: {fileID: 21300000, guid: 38ca86a7eb1291b4a90853dc065e123c, type: 2}
+  - extension: .jpg
+    icon: {fileID: 21300000, guid: ff5462648e31b44418d2571790a71c17, type: 2}
+  - extension: .jpeg
+    icon: {fileID: 21300000, guid: ff5462648e31b44418d2571790a71c17, type: 2}
+  - extension: .png
+    icon: {fileID: 21300000, guid: ff5462648e31b44418d2571790a71c17, type: 2}
+  - extension: .gif
+    icon: {fileID: 21300000, guid: ff5462648e31b44418d2571790a71c17, type: 2}
+  - extension: .bmp
+    icon: {fileID: 21300000, guid: ff5462648e31b44418d2571790a71c17, type: 2}
+  - extension: .psd
+    icon: {fileID: 21300000, guid: ff5462648e31b44418d2571790a71c17, type: 2}
+  - extension: .tif
+    icon: {fileID: 21300000, guid: ff5462648e31b44418d2571790a71c17, type: 2}
+  - extension: .tiff
+    icon: {fileID: 21300000, guid: ff5462648e31b44418d2571790a71c17, type: 2}
+  - extension: .mp4
+    icon: {fileID: 21300000, guid: 0ac732a2084728047ac8b0a9f9e4848c, type: 2}
+  - extension: .mkv
+    icon: {fileID: 21300000, guid: 0ac732a2084728047ac8b0a9f9e4848c, type: 2}
+  - extension: .mov
+    icon: {fileID: 21300000, guid: 0ac732a2084728047ac8b0a9f9e4848c, type: 2}
+  - extension: .avi
+    icon: {fileID: 21300000, guid: 0ac732a2084728047ac8b0a9f9e4848c, type: 2}
+  - extension: .flv
+    icon: {fileID: 21300000, guid: 0ac732a2084728047ac8b0a9f9e4848c, type: 2}
+  - extension: .webm
+    icon: {fileID: 21300000, guid: 0ac732a2084728047ac8b0a9f9e4848c, type: 2}
+  - extension: .wmv
+    icon: {fileID: 21300000, guid: 0ac732a2084728047ac8b0a9f9e4848c, type: 2}
+  - extension: .mp3
+    icon: {fileID: 21300000, guid: 54e694a3c004f6a4492422bca025aca9, type: 2}
+  - extension: .wav
+    icon: {fileID: 21300000, guid: 54e694a3c004f6a4492422bca025aca9, type: 2}
+  - extension: .aac
+    icon: {fileID: 21300000, guid: 54e694a3c004f6a4492422bca025aca9, type: 2}
+  - extension: .m4a
+    icon: {fileID: 21300000, guid: 54e694a3c004f6a4492422bca025aca9, type: 2}
+  - extension: .ogg
+    icon: {fileID: 21300000, guid: 54e694a3c004f6a4492422bca025aca9, type: 2}
+  - extension: .wma
+    icon: {fileID: 21300000, guid: 54e694a3c004f6a4492422bca025aca9, type: 2}
+  - extension: .flac
+    icon: {fileID: 21300000, guid: 54e694a3c004f6a4492422bca025aca9, type: 2}
+  - extension: .zip
+    icon: {fileID: 21300000, guid: 879bbc5968091164ea4b0a5f4d8b1669, type: 2}
+  - extension: .rar
+    icon: {fileID: 21300000, guid: 879bbc5968091164ea4b0a5f4d8b1669, type: 2}
+  - extension: .7z
+    icon: {fileID: 21300000, guid: 879bbc5968091164ea4b0a5f4d8b1669, type: 2}
+  - extension: .gz
+    icon: {fileID: 21300000, guid: 879bbc5968091164ea4b0a5f4d8b1669, type: 2}
+  - extension: .exe
+    icon: {fileID: 21300000, guid: 022abd4dca130804baa1c22c711bb6dd, type: 2}
+  m_fileMultiSelectionToggleOffIcon: {fileID: 21300000, guid: a80ce79c293a1974c97bcb22c195c6e6, type: 2}
+  m_fileMultiSelectionToggleOnIcon: {fileID: 21300000, guid: cbe4d8c2dc03402488faae9fbe3649ed, type: 2}
+  m_contextMenuBackgroundColor: {r: 0.955, g: 0.955, b: 0.955, a: 1}
+  m_contextMenuTextColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_contextMenuSeparatorColor: {r: 0.6397059, g: 0.6397059, b: 0.6397059, a: 1}
+  m_popupPanelsBackgroundColor: {r: 0.955, g: 0.955, b: 0.955, a: 1}
+  m_popupPanelsTextColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_popupPanelsBackground: {fileID: 21300000, guid: b3b4c673ce5977d4a9afd5d36f87f7ca, type: 2}

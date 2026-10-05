@@ -1,0 +1,122 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1709254077376921
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4730242686860875}
+  - component: {fileID: 114724804207875695}
+  - component: {fileID: 114618682377417806}
+  m_Layer: 0
+  m_Name: unit_class_ranger_a
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4730242686860875
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 46.38317, y: -42.396122, z: 20.265797}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114724804207875695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 30420292, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  RelativeShipSaleCost: 0.012172285
+  CaptureLikelihood: 0.05
+  ShipPurposes:
+  - FactionStrategy: 2
+    Effectiveness: 0.6
+  - FactionStrategy: 1
+    Effectiveness: 0.05
+  - FactionStrategy: 4
+    Effectiveness: 0.2
+  AIBuildPreferenceMultiplierFudge: 0.65
+  PassengerGroupCountMultiplier: 1
+  Legal: 1
+  AICreditsReserve: 0
+  StationPurpose: 0
+  DisplayData: {fileID: 114724804207875695, guid: 56969391f8ad3834187ce5ed9fbbe453, type: 2}
+  CanTradeAtOwnStation: 0
+  PurposeWarship: 1
+  PurposeTrader: 0
+  PurposeMiner: 0
+  PurposeStealth: 0
+  PurposePassengerTransport: 0
+  PurposeCourier: 1
+  PurposeEquipmentDealer: 0
+  PurposeScout: 1
+  CombatRating: 0.3856629
+  RequiredProduct: {fileID: 0}
+  AIMaxAttackDist: 250
+  BaseCost: 250
+  CanFireAt: 1
+  className: A
+  ShortClassName:
+  Description:
+  ShortDescription:
+  Drag: 0.5
+  ExcludeFromDeliverShipMission: 0
+  GenerateMissions: 0
+  HasRepairFacilities: 0
+  RepairFacilitiesCostMultiplier: 1
+  HullType: 1
+  ShipType: 0
+  IsArmed: 1
+  IsCivilian: 0
+  IsFreighter: 0
+  IsPilottable: 1
+  IsUsable: 1
+  ExcludeFromGodModeSpawn: 0
+  AllowBuildByPlayer: 1
+  SeedInSandbox: 1
+  Manufacturer: {fileID: 114724804207875695, guid: 3ac51d2691ecd9640b665dc1f4b71358, type: 2}
+  maxHealth: 280
+  RepairCostMultiplier: 0.3
+  RpCost: 50
+  SaleCost: 20000
+  TurnAcceleration: 50
+  turnRate: 50
+  UniqueID: 620
+  UnitPrefab: {fileID: 114372920208702427, guid: e4aab68a49c190a4e98c499a20057556, type: 2}
+  ConstructionRateMultiplier: 1
+  UnitSeries: {fileID: 114724804207875695, guid: 2ab6cd6b456690348a60f2c285a2a187, type: 2}
+  UnitType: 1
+  DetectionRange: 700
+  PlanetClass: {fileID: 0}
+--- !u!114 &114618682377417806
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1696413113, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  CargoLoadout: {fileID: 114724804207875695, guid: c43d51ac22e7114479fe93e724ad318e, type: 2}

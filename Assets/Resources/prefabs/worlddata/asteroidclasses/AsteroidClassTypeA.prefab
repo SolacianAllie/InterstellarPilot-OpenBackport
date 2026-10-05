@@ -1,0 +1,191 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1709254077376921
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4884547391421755}
+  - component: {fileID: 114099118695303065}
+  m_Layer: 0
+  m_Name: AsteroidClassTypeA
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1730242686860875
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4243736805655561}
+  m_Layer: 9
+  m_Name: RandomYieldPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1724804207875695
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4061268324235159}
+  m_Layer: 9
+  m_Name: RandomYieldPosition (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1618682377417806
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4587765826080250}
+  m_Layer: 9
+  m_Name: RandomYieldPosition (2)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1703437598541787
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4709867586078768}
+  m_Layer: 9
+  m_Name: RandomYieldPosition (3)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4884547391421755
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 4243736805655561}
+  - {fileID: 4061268324235159}
+  - {fileID: 4587765826080250}
+  - {fileID: 4709867586078768}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114099118695303065
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1299731488, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  RandomYieldPositions:
+  - {fileID: 4243736805655561}
+  - {fileID: 4061268324235159}
+  - {fileID: 4587765826080250}
+  - {fileID: 4709867586078768}
+  AsteroidType: {fileID: 114724804207875695, guid: 755565b5a4dce3e44bef35de5165ed8c, type: 2}
+  ProbabilityOfYield: 0.07
+  MaxYieldQuantity: 3
+  MinYieldQuantity: 1
+  MinTotalYield: 1000
+  MaxTotalYield: 6000
+  YieldExplosionClass: {fileID: 114724804207875695, guid: ceb2dfaf93688a548be1492e3d4c8cbf, type: 2}
+  AsteroidYieldItems:
+  - cargoClass: {fileID: 114724804207875695, guid: 04beae1ba778a73449cd3067b1622d77, type: 2}
+    weight: 5
+  - cargoClass: {fileID: 114724804207875695, guid: e164a87dcd896224b86b0b03ddab9c08, type: 2}
+    weight: 4
+--- !u!4 &4243736805655561
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1730242686860875}
+  m_LocalRotation: {x: -0.047960643, y: -0.6241781, z: 0.038435478, w: -0.7788608}
+  m_LocalPosition: {x: -1.8332386, y: 1.8727448, z: 7.1267757}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4884547391421755}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 7.0474534, y: -77.41728, z: -5.058193E-05}
+--- !u!4 &4061268324235159
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1724804207875695}
+  m_LocalRotation: {x: 0.03076885, y: -0.21333246, z: -0.006722223, w: -0.9764719}
+  m_LocalPosition: {x: 5.229437, y: 1.7742046, z: 3.6718922}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4884547391421755}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: -3.6096098, y: -24.64785, z: -8.481176E-06}
+--- !u!4 &4587765826080250
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1618682377417806}
+  m_LocalRotation: {x: -0.027723286, y: -0.7282196, z: 0.029509103, w: -0.6841468}
+  m_LocalPosition: {x: 6.02701, y: 1.6849872, z: -1.4419075}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4884547391421755}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: -175.35916, y: -86.42534, z: -179.99985}
+--- !u!4 &4709867586078768
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1703437598541787}
+  m_LocalRotation: {x: 0.009714607, y: -0.97380584, z: 0.042387467, w: 0.22318439}
+  m_LocalPosition: {x: 3.0427074, y: 1.114061, z: -6.7675123}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4884547391421755}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: -175.01524, y: 25.817114, z: -179.99998}

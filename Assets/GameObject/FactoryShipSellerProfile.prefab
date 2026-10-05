@@ -1,0 +1,73 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1709254077376921
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4730242686860875}
+  - component: {fileID: 114724804207875695}
+  m_Layer: 0
+  m_Name: FactoryShipSellerProfile
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4730242686860875
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114724804207875695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 439610415, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  ShipTradeItems:
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: 98667e110be1aa24081a7ed62856764a, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: 6ead21c79bc4418409465f18d5b4f597, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: 69c6586e8e725cb4b969e1aa31f62048, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: a988d0017cbc80b42b6831b4c8aa602e, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: 6d77a2da4717b014eab79d06f4f5bce2, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: 876f00318925903449b8fb6ca84b6c91, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: 59f1e6b52928eb8488bcf044f6151538, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: c43373824ee9b23489f7bdabe32ec6ff, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: 8dfc4ef61d1dace42a3271001fe5c557, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: 86661f72638ade4468d1274917e1657c, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: 57b05544c52e5e449982768f93780b6a, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: 292dbc4af50fb3a4e823183df0fbc6b9, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: 728da9fd15a518544b0728146ec2788c, type: 2}

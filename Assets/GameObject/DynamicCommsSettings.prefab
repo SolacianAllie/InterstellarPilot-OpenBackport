@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1709254077376921
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4730242686860875}
+  - component: {fileID: 114724804207875695}
+  m_Layer: 0
+  m_Name: DynamicCommsSettings
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4730242686860875
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114724804207875695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 303385459, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  DynamicCommsSubstitutionSettings: {fileID: 114724804207875695, guid: d291215f05c6fab4b8cf158984f5ccab, type: 2}
+  WelcomeMessageProfiles:
+  - {fileID: 114724804207875695, guid: 2d51c5472a20f3c4fab1fbbab2cd0506, type: 2}
+  - {fileID: 114724804207875695, guid: 9e814f27351029d44a0a15b826dee739, type: 2}
+  - {fileID: 114724804207875695, guid: 3d5cf6f5e7e84f844a91c242dcd5a8e7, type: 2}
+  - {fileID: 114724804207875695, guid: 15e15b45d8e2eb64fbcf023dfa2d7729, type: 2}
+  - {fileID: 114724804207875695, guid: 8a36873d086b0984b8d9a41207da5e49, type: 2}
+  - {fileID: 114724804207875695, guid: 9a8a05106d416654aa20eb4746ce636c, type: 2}
+  RepeatWelcomeMessageProfiles:
+  - {fileID: 114724804207875695, guid: 11054cf91ca80fa4f8f80617aace3e92, type: 2}
+  - {fileID: 114724804207875695, guid: 1468045b81a25d947a67f773d5bd4896, type: 2}
+  - {fileID: 114724804207875695, guid: 6c94137f57ff5ce47af331a11bebde0f, type: 2}

@@ -1,0 +1,93 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1709254077376921
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4730242686860875}
+  - component: {fileID: 114724804207875695}
+  - component: {fileID: 114618682377417806}
+  m_Layer: 0
+  m_Name: ScenarioInfoBattle7
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4730242686860875
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114724804207875695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 655537899, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  ComingSoon: 0
+  DateDay: 13
+  DateMonth: 9
+  DateYear: 2236
+  DateMinute: 0
+  DateHour: 0
+  Description:
+  InitialScene: {fileID: 114618682377417806, guid: 56daf0264c394324cb4c02b6c51f52b0, type: 2}
+  IsTutorial: 0
+  MissionLog:
+  Objectives:
+  PilotFaction: {fileID: 114724804207875695, guid: 526147f0cdbccd9439f8b0a7318f24de, type: 2}
+  PilotName:
+  Prereqs:
+  - {fileID: 114724804207875695, guid: 63e7d83148a7a8d4094bc4e72e8952bc, type: 2}
+  SectorName:
+  ShowCompletionData: 1
+  ShowCompletionDifficultyLevels: 1
+  ShowInListWhenLocked: 1
+  ShowInScenarioUI: 1
+  TargetSceneName: Skirmish
+  Title: Mission 7
+  UniqueId: 6
+--- !u!114 &114618682377417806
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1897504210, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  Teams:
+  - ShipItems:
+    - UnitClass: {fileID: 114724804207875695, guid: d8bb471922cad54478e326f843a52e26, type: 2}
+    - UnitClass: {fileID: 114724804207875695, guid: 7d6b30abfad402a4fac7c9b7a8e9d5a7, type: 2}
+    - UnitClass: {fileID: 114724804207875695, guid: 7d6b30abfad402a4fac7c9b7a8e9d5a7, type: 2}
+    - UnitClass: {fileID: 114724804207875695, guid: 7d6b30abfad402a4fac7c9b7a8e9d5a7, type: 2}
+    TeamColor: {r: 1, g: 1, b: 1, a: 1}
+  - ShipItems:
+    - UnitClass: {fileID: 114724804207875695, guid: 4dc72bdbd9394264ebd3334bb26ed9aa, type: 2}
+    - UnitClass: {fileID: 114724804207875695, guid: a988d0017cbc80b42b6831b4c8aa602e, type: 2}
+    TeamColor: {r: 1, g: 1, b: 1, a: 1}

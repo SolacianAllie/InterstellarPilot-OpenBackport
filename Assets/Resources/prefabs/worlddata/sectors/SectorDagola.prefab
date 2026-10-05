@@ -1,0 +1,242 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1709254077376921
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4618682377417806}
+  - component: {fileID: 114703437598541787}
+  m_Layer: 0
+  m_Name: SectorDagola
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1730242686860875
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4884547391421755}
+  - component: {fileID: 114099118695303065}
+  - component: {fileID: 114243736805655561}
+  - component: {fileID: 65061268324235159}
+  m_Layer: 24
+  m_Name: UnitAsteroidClusterTypeA
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1724804207875695
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4587765826080250}
+  - component: {fileID: 114709867586078768}
+  - component: {fileID: 114044625135789424}
+  - component: {fileID: 65589667821646929}
+  m_Layer: 24
+  m_Name: UnitAsteroidClusterTypeA (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4618682377417806
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 4884547391421755}
+  - {fileID: 4587765826080250}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114703437598541787
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 674440650, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  AsteroidRespawnCooldownTime: 0
+  LightDirectionFudge: 0
+  backgroundRotation: {x: 0, y: 0, z: 0, w: 1}
+  SectorType: 0
+  RandomSeed: 584648
+  UniqueId: -1
+  ActiveSceneResourceName: dagola
+  LightRotation: {x: 0, y: 0, z: 0, w: 1}
+  Description:
+  GateDistanceMultiplier: 1
+  MapPosition: {x: 234, y: 0, z: -45}
+  Name: Dagola
+  SecurityLevel: 0.6
+  UnclampedSecurityLevel: 0.5
+  ThumbnailImageName:
+  SkyTintColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  SkyExposure: 0.8
+  AmbientLightColor: {r: 0.3, g: 0.3, b: 0.3, a: 1}
+  DirectionLightColor: {r: 0.8, g: 0.8, b: 0.8, a: 1}
+  AsteroidType: {fileID: 0}
+--- !u!4 &4884547391421755
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1730242686860875}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2553, y: 0, z: -821}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4618682377417806}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114099118695303065
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1730242686860875}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1305118651, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  ClassName:
+  Mass: 1
+  Seed: -1
+  CollisionCollider: {fileID: 0}
+  Radius: 1
+  DamageCollider: {fileID: 0}
+  asteroid: {fileID: 0}
+  faction: {fileID: 0}
+  hasInit: 0
+  RpProvision: 0
+  uniqueId: -1
+  unitClass: {fileID: 114724804207875695, guid: 22baed9dc7148de479b108628cbdb456, type: 2}
+  UnitName:
+  UnitShortName:
+--- !u!114 &114243736805655561
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1730242686860875}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1277206464, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  unit: {fileID: 114099118695303065}
+  AsteroidType: {fileID: 114724804207875695, guid: 755565b5a4dce3e44bef35de5165ed8c, type: 2}
+--- !u!65 &65061268324235159
+BoxCollider:
+  serializedVersion: 2
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1730242686860875}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Size: {x: 1500, y: 1, z: 1500}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &4587765826080250
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1724804207875695}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -3246, y: 0, z: 2311}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4618682377417806}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114709867586078768
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1724804207875695}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1305118651, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  ClassName:
+  Mass: 1
+  Seed: -1
+  CollisionCollider: {fileID: 0}
+  Radius: 1
+  DamageCollider: {fileID: 0}
+  asteroid: {fileID: 0}
+  faction: {fileID: 0}
+  hasInit: 0
+  RpProvision: 0
+  uniqueId: -1
+  unitClass: {fileID: 114724804207875695, guid: 22baed9dc7148de479b108628cbdb456, type: 2}
+  UnitName:
+  UnitShortName:
+--- !u!114 &114044625135789424
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1724804207875695}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1277206464, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  unit: {fileID: 114709867586078768}
+  AsteroidType: {fileID: 114724804207875695, guid: 755565b5a4dce3e44bef35de5165ed8c, type: 2}
+--- !u!65 &65589667821646929
+BoxCollider:
+  serializedVersion: 2
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1724804207875695}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Size: {x: 1500, y: 1, z: 1500}
+  m_Center: {x: 0, y: 0, z: 0}

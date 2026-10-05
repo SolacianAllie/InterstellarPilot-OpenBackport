@@ -1,0 +1,124 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1709254077376921
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4730242686860875}
+  - component: {fileID: 114724804207875695}
+  m_Layer: 0
+  m_Name: TradeStationLambdaCargoFactoryProfile
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4730242686860875
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114724804207875695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1557971950, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  items:
+  - productionTime: 30
+    Inputs:
+    - CargoClass: {fileID: 114724804207875695, guid: 6a724e1d36b482547a4ba49fe59a1bd3, type: 2}
+      Quantity: 23
+      QuantityWeighting: 1
+    Outputs: []
+    ProfitPerCycle: 4622.998
+    ProfitPerMinute: 9245.996
+    RevenueMultiplier: 1
+    ProductionTimeMultiplier: 1
+    ProductionVolumeMultiplier: 1
+  - productionTime: 30.000002
+    Inputs:
+    - CargoClass: {fileID: 114724804207875695, guid: b28cea41600677e49b94dd6325d785c2, type: 2}
+      Quantity: 28
+      QuantityWeighting: 1
+    Outputs: []
+    ProfitPerCycle: 4620
+    ProfitPerMinute: 9239.999
+    RevenueMultiplier: 1
+    ProductionTimeMultiplier: 1
+    ProductionVolumeMultiplier: 1
+  - productionTime: 30
+    Inputs:
+    - CargoClass: {fileID: 114724804207875695, guid: a6d7f44a9679ab345bef413e96785a77, type: 2}
+      Quantity: 20
+      QuantityWeighting: 1
+    Outputs: []
+    ProfitPerCycle: 4680
+    ProfitPerMinute: 9360
+    RevenueMultiplier: 1
+    ProductionTimeMultiplier: 1
+    ProductionVolumeMultiplier: 1
+  - productionTime: 30.000002
+    Inputs:
+    - CargoClass: {fileID: 114724804207875695, guid: 985f42a557b67014593e8ef3986490de, type: 2}
+      Quantity: 21
+      QuantityWeighting: 1
+    Outputs: []
+    ProfitPerCycle: 4536
+    ProfitPerMinute: 9071.999
+    RevenueMultiplier: 1
+    ProductionTimeMultiplier: 1
+    ProductionVolumeMultiplier: 1
+  - productionTime: 30.000002
+    Inputs:
+    - CargoClass: {fileID: 114724804207875695, guid: 27327d1e1c17cab4b865f69a8ef15e92, type: 2}
+      Quantity: 50
+      QuantityWeighting: 1
+    Outputs: []
+    ProfitPerCycle: 4500
+    ProfitPerMinute: 8999.999
+    RevenueMultiplier: 1
+    ProductionTimeMultiplier: 1
+    ProductionVolumeMultiplier: 1
+  - productionTime: 30
+    Inputs:
+    - CargoClass: {fileID: 114724804207875695, guid: b5a56cb7a538bbe47b8258f182dda094, type: 2}
+      Quantity: 24
+      QuantityWeighting: 1
+    Outputs: []
+    ProfitPerCycle: 4679.998
+    ProfitPerMinute: 9359.996
+    RevenueMultiplier: 1
+    ProductionTimeMultiplier: 1
+    ProductionVolumeMultiplier: 1
+  - productionTime: 29.999998
+    Inputs:
+    - CargoClass: {fileID: 114724804207875695, guid: bc2a9ebd0fe75554f84865cd48fae880, type: 2}
+      Quantity: 16
+      QuantityWeighting: 1
+    Outputs: []
+    ProfitPerCycle: 4704
+    ProfitPerMinute: 9408.001
+    RevenueMultiplier: 1
+    ProductionTimeMultiplier: 1
+    ProductionVolumeMultiplier: 1

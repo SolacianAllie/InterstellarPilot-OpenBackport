@@ -1,0 +1,126 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1709254077376921
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4730242686860875}
+  - component: {fileID: 114724804207875695}
+  m_Layer: 0
+  m_Name: RefineryCargoFactoryProfile
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4730242686860875
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114724804207875695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1557971950, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  items:
+  - productionTime: 60
+    Inputs:
+    - CargoClass: {fileID: 114724804207875695, guid: e164a87dcd896224b86b0b03ddab9c08, type: 2}
+      Quantity: 24
+      QuantityWeighting: 1
+    Outputs:
+    - CargoClass: {fileID: 114724804207875695, guid: 399edc6379688c244a8b5a6d14939878, type: 2}
+      Quantity: 13
+      QuantityWeighting: 0.35
+    - CargoClass: {fileID: 114724804207875695, guid: 369ef3c327f6bf0439c71ee7cf6b4bd3, type: 2}
+      Quantity: 35
+      QuantityWeighting: 1
+    ProfitPerCycle: 1284
+    ProfitPerMinute: 1284
+    RevenueMultiplier: 1
+    ProductionTimeMultiplier: 1
+    ProductionVolumeMultiplier: 1
+  - productionTime: 60
+    Inputs:
+    - CargoClass: {fileID: 114724804207875695, guid: 04beae1ba778a73449cd3067b1622d77, type: 2}
+      Quantity: 38
+      QuantityWeighting: 1
+    Outputs:
+    - CargoClass: {fileID: 114724804207875695, guid: 44f50701ff2ea2a49b834d243e10aa43, type: 2}
+      Quantity: 32
+      QuantityWeighting: 1
+    - CargoClass: {fileID: 114724804207875695, guid: 1de8414736daa34488262edd6c048942, type: 2}
+      Quantity: 10
+      QuantityWeighting: 0.35
+    ProfitPerCycle: 1259
+    ProfitPerMinute: 1259
+    RevenueMultiplier: 1
+    ProductionTimeMultiplier: 1
+    ProductionVolumeMultiplier: 1
+  - productionTime: 60
+    Inputs:
+    - CargoClass: {fileID: 114724804207875695, guid: f51fd3354fa321041944820f8a12bfe5, type: 2}
+      Quantity: 75
+      QuantityWeighting: 1
+    Outputs:
+    - CargoClass: {fileID: 114724804207875695, guid: 44f50701ff2ea2a49b834d243e10aa43, type: 2}
+      Quantity: 43
+      QuantityWeighting: 1
+    ProfitPerCycle: 1082.499
+    ProfitPerMinute: 1082.499
+    RevenueMultiplier: 1
+    ProductionTimeMultiplier: 1
+    ProductionVolumeMultiplier: 1
+  - productionTime: 60.000004
+    Inputs:
+    - CargoClass: {fileID: 114724804207875695, guid: 3a72a0643002b1144a4b2feb98e81203, type: 2}
+      Quantity: 40
+      QuantityWeighting: 1
+    Outputs:
+    - CargoClass: {fileID: 114724804207875695, guid: 27327d1e1c17cab4b865f69a8ef15e92, type: 2}
+      Quantity: 42
+      QuantityWeighting: 1
+    - CargoClass: {fileID: 114724804207875695, guid: e2c758854295a9641b207407db224516, type: 2}
+      Quantity: 7
+      QuantityWeighting: 0.2
+    ProfitPerCycle: 1173.5
+    ProfitPerMinute: 1173.4999
+    RevenueMultiplier: 1
+    ProductionTimeMultiplier: 1
+    ProductionVolumeMultiplier: 1
+  - productionTime: 60
+    Inputs:
+    - CargoClass: {fileID: 114724804207875695, guid: e97c817c561c0314188e07466be7361a, type: 2}
+      Quantity: 67
+      QuantityWeighting: 1
+    Outputs:
+    - CargoClass: {fileID: 114724804207875695, guid: 369ef3c327f6bf0439c71ee7cf6b4bd3, type: 2}
+      Quantity: 47
+      QuantityWeighting: 1
+    ProfitPerCycle: 1032.5
+    ProfitPerMinute: 1032.5
+    RevenueMultiplier: 1
+    ProductionTimeMultiplier: 1
+    ProductionVolumeMultiplier: 1

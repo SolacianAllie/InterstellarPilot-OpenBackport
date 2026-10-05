@@ -1,0 +1,95 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1709254077376921
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4730242686860875}
+  - component: {fileID: 114724804207875695}
+  m_Layer: 0
+  m_Name: TradeStationShipSellerProfile
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4730242686860875
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114724804207875695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 439610415, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  ShipTradeItems:
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: 876f00318925903449b8fb6ca84b6c91, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: 761aa35f7b1edf1498fafec5227a82b6, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: 728da9fd15a518544b0728146ec2788c, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: 8dfc4ef61d1dace42a3271001fe5c557, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: fbe608f4225c3684280c0dd8b7b1f8aa, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: c43373824ee9b23489f7bdabe32ec6ff, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: 86661f72638ade4468d1274917e1657c, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: 6474cdbed3172e94390a77736dc4a4ab, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: 7d6b30abfad402a4fac7c9b7a8e9d5a7, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: 98667e110be1aa24081a7ed62856764a, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: 6ead21c79bc4418409465f18d5b4f597, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: fa07866e645cdc946a785dc32a47de4e, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: 19053f0834ef2a346800bd870910302e, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: 40c4dde903964404d99ed67f7f3aff5e, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: a988d0017cbc80b42b6831b4c8aa602e, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: 6d77a2da4717b014eab79d06f4f5bce2, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: 69c6586e8e725cb4b969e1aa31f62048, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: e4c429f2e5cb67843b07f3cce0d61cf2, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: fdb57158d4e349a44a47688bf99a4a11, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: 59f1e6b52928eb8488bcf044f6151538, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: 292dbc4af50fb3a4e823183df0fbc6b9, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: 57b05544c52e5e449982768f93780b6a, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: 4aef1e74199dda84ea8fd886aaaee6f3, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: 56cfaa74a79740d42b91171852ec1cbe, type: 2}

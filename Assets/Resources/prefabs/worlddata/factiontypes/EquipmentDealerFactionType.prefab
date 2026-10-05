@@ -1,0 +1,70 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1709254077376921
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4730242686860875}
+  - component: {fileID: 114724804207875695}
+  m_Layer: 0
+  m_Name: EquipmentDealerFactionType
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4730242686860875
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 95.30124, y: 154.17236, z: 151.37701}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114724804207875695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1590116524, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  ShipCapType: {fileID: 114724804207875695, guid: cc11adae1ebcb044fb855f9fb96034c3, type: 2}
+  GeneratePassengerGroups: 1
+  ReceivePassengerGroups: 1
+  ProbabilityOfRandomGroupStartPositionMultiplier: 1
+  FactionType: 512
+  FactionAIType: 13
+  BaseRpProvision: 1000
+  AllowableStationPurposes: 1000000040000000
+  SecurityRatingMultiplier: 0.2
+  CustomUnitDesignation:
+  WarPartyUnitDesignation: Security
+  ShortCustomUnitDesignation: Eq. Dealer
+  ProbabilityOfBountySeededOnPilots: 0.01
+  ProbabilityOfSeedingBountyPlacedOnOthers: 0.1
+  MinShipCombatRating: 0
+  MaxShipCombatRating: 99999
+  BuildCloakedShips: 0
+  CanMakeHomeInHostileControlledSector: 0
+  BuildIllegalStations: 0
+  SecurityTypePreference: 1
+  SecurityTypePreferenceMultiplier: 0.5
+  BorderSectorPreference: 0
+  DistressCallProbabilityMultiplier: 1
+  ProbabilityOfDistressCallGoingToPlayerMultiplier: 1

@@ -1,0 +1,75 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1709254077376921
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4730242686860875}
+  - component: {fileID: 114724804207875695}
+  m_Layer: 0
+  m_Name: AvatarColourSettingsHumanSkin
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4730242686860875
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114724804207875695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 660512875, guid: 8ad934e7b649e9f9cca2d32b0af1aee5, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  ColourChannel: {fileID: 114724804207875695, guid: a363378c6e914714fb9f468d7c9f7f1b, type: 2}
+  WeightedColours:
+  - Color: {r: 0.8980392, g: 0.6321647, b: 0.4431373, a: 1}
+    Weighting: 1
+    GenderFlags: 3
+  - Color: {r: 1, g: 0.7412326, b: 0.57254905, a: 1}
+    Weighting: 1.5
+    GenderFlags: 3
+  - Color: {r: 0.9433962, g: 0.6763033, b: 0.5829477, a: 1}
+    Weighting: 1.3
+    GenderFlags: 3
+  - Color: {r: 0.9150943, g: 0.6167311, b: 0.5395603, a: 1}
+    Weighting: 0.5
+    GenderFlags: 3
+  - Color: {r: 0.8773585, g: 0.57848454, b: 0.45490196, a: 1}
+    Weighting: 1
+    GenderFlags: 3
+  - Color: {r: 0.8980392, g: 0.60279316, b: 0.4431373, a: 1}
+    Weighting: 1
+    GenderFlags: 3
+  - Color: {r: 0.735849, g: 0.4480051, b: 0.2880918, a: 1}
+    Weighting: 0.4
+    GenderFlags: 3
+  - Color: {r: 0.6886792, g: 0.47337514, b: 0.35408506, a: 1}
+    Weighting: 0.1
+    GenderFlags: 3
+  - Color: {r: 0.48900002, g: 0.38220692, b: 0.20796554, a: 1}
+    Weighting: 0.1
+    GenderFlags: 3

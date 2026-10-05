@@ -1,0 +1,87 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1709254077376921
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4730242686860875}
+  - component: {fileID: 114724804207875695}
+  m_Layer: 10
+  m_Name: SkyBackgroundNameMapping
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4730242686860875
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114724804207875695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -805817498, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  Items:
+  - SectorName: 'dagola '
+    TextureName: 'MSS_01_01_CoolColours_Cubemap '
+  - SectorName: 'terrantin '
+    TextureName: 'MSS_01_02_Plain_DarkColours_Cubemap '
+  - SectorName: 'eta_solus '
+    TextureName: 'MSS_01_03_Plain_DarkPurple_Cubemap '
+  - SectorName: 'pindares '
+    TextureName: 'MSS_01_04_Plain_BrightContrasts_Cubemap '
+  - SectorName: 'siris_136 '
+    TextureName: 'MSS_01_05_Plain_BrightColours_Cubemap '
+  - SectorName: 'beta_pindola '
+    TextureName: 'MSS_01_06_Plain_FireRedBlue_Cubemap '
+  - SectorName: 'terekos '
+    TextureName: 'MSS_01_09_Plain_DarkColours2_Cubemap '
+  - SectorName: 'androla '
+    TextureName: 'MSS_01_10_Plain_DarkPurple_Cubemap '
+  - SectorName: tau_dalmus
+    TextureName: 'MSS_01_11_Plain_CoolBlue_Cubemap '
+  - SectorName: gatopea
+    TextureName: 'MSS_01_13_Plain_ViolentPurples_Cubemap '
+  - SectorName: dymapa_753
+    TextureName: 'MSS_01_14_Plain_Orange_Cubemap '
+  - SectorName: andris
+    TextureName: 'MSS_01_15_Plain_FireyOrange_Cubemap '
+  - SectorName: galene
+    TextureName: 'MSS_01_16_Plain_FireRed_Cubemap '
+  - SectorName: 'solace '
+    TextureName: 'MSS_01_17_Plain_BrightLights_Cubemap '
+  - SectorName: 'hellemus '
+    TextureName: 'MSS_01_19_Plain_DarkBlue2_Cubemap '
+  - SectorName: 'constar '
+    TextureName: 'MSS_01_20_Plain_BigStar_Cubemap '
+  - SectorName: 'unnamed_1 '
+    TextureName: MSS_01_07_Plain_DarkColours_Cubemap
+  - SectorName: unnamed_2
+    TextureName: 'MSS_01_08_Plain_BlueAndOrange_Cubemap '
+  - SectorName: unnamed_3
+    TextureName: 'MSS_01_12_Plain_BrightPurple_Cubemap '
+  - SectorName: unnamed_4
+    TextureName: 'MSS_01_18_Plain_DarkBlue_Cubemap '

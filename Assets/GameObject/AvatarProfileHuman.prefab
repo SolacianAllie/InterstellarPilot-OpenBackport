@@ -1,0 +1,162 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1709254077376921
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4730242686860875}
+  - component: {fileID: 114724804207875695}
+  m_Layer: 0
+  m_Name: AvatarProfileHuman
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4730242686860875
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114724804207875695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -191070653, guid: 8ad934e7b649e9f9cca2d32b0af1aee5, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  Id: 1
+  Name: Humanoid
+  ProfileLayers:
+  - Layer: {fileID: 114724804207875695, guid: 41645dc830f1ab047b522b2b1a36a709, type: 2}
+    Optional: 0
+    EnabledProbability: 1
+    EnabledForMale: 1
+    EnabledForFemale: 1
+    OptionalForMale: 0
+    OptionalForFemale: 0
+    Styles: -1
+  - Layer: {fileID: 114724804207875695, guid: 081c61302bf0184498ae10128aa3fccb, type: 2}
+    Optional: 0
+    EnabledProbability: 1
+    EnabledForMale: 1
+    EnabledForFemale: 1
+    OptionalForMale: 0
+    OptionalForFemale: 0
+    Styles: -1
+  - Layer: {fileID: 114724804207875695, guid: e6badbac70050f3478b1db989976a987, type: 2}
+    Optional: 0
+    EnabledProbability: 1
+    EnabledForMale: 1
+    EnabledForFemale: 1
+    OptionalForMale: 0
+    OptionalForFemale: 0
+    Styles: -1
+  - Layer: {fileID: 114724804207875695, guid: aa329642b6f00824987c3b23a05db35d, type: 2}
+    Optional: 0
+    EnabledProbability: 1
+    EnabledForMale: 1
+    EnabledForFemale: 1
+    OptionalForMale: 0
+    OptionalForFemale: 0
+    Styles: -1
+  - Layer: {fileID: 114724804207875695, guid: 02876e137ceceb541aa45d2de00f4cbb, type: 2}
+    Optional: 0
+    EnabledProbability: 1
+    EnabledForMale: 1
+    EnabledForFemale: 1
+    OptionalForMale: 0
+    OptionalForFemale: 0
+    Styles: -1
+  - Layer: {fileID: 114724804207875695, guid: 8b7df7f3a12dea240ae075ab701d7f16, type: 2}
+    Optional: 0
+    EnabledProbability: 1
+    EnabledForMale: 1
+    EnabledForFemale: 1
+    OptionalForMale: 0
+    OptionalForFemale: 0
+    Styles: -1
+  - Layer: {fileID: 114724804207875695, guid: 84f8eb5ad1472214c94f067c26a42bc1, type: 2}
+    Optional: 0
+    EnabledProbability: 1
+    EnabledForMale: 1
+    EnabledForFemale: 1
+    OptionalForMale: 0
+    OptionalForFemale: 0
+    Styles: -1
+  - Layer: {fileID: 114724804207875695, guid: 7fcd43731243b9647aa1b62f39bdc187, type: 2}
+    Optional: 1
+    EnabledProbability: 0.45
+    EnabledForMale: 1
+    EnabledForFemale: 1
+    OptionalForMale: 1
+    OptionalForFemale: 1
+    Styles: -1
+  - Layer: {fileID: 114724804207875695, guid: 732136443f894fb4799b67246a21f624, type: 2}
+    Optional: 1
+    EnabledProbability: 0.2
+    EnabledForMale: 0
+    EnabledForFemale: 0
+    OptionalForMale: 1
+    OptionalForFemale: 1
+    Styles: -1
+  - Layer: {fileID: 114724804207875695, guid: fbd76d5fa49aa3742a433e6fe4d8bd6a, type: 2}
+    Optional: 1
+    EnabledProbability: 0.3
+    EnabledForMale: 1
+    EnabledForFemale: 0
+    OptionalForMale: 1
+    OptionalForFemale: 1
+    Styles: -1
+  - Layer: {fileID: 114724804207875695, guid: eaf0de6dce560264eba0cae933159e09, type: 2}
+    Optional: 0
+    EnabledProbability: 1
+    EnabledForMale: 1
+    EnabledForFemale: 1
+    OptionalForMale: 0
+    OptionalForFemale: 0
+    Styles: -1
+  - Layer: {fileID: 114724804207875695, guid: ae20d6eb5acb3fc46bd2b1f7f9e0e593, type: 2}
+    Optional: 1
+    EnabledProbability: 0.05
+    EnabledForMale: 1
+    EnabledForFemale: 1
+    OptionalForMale: 1
+    OptionalForFemale: 1
+    Styles: -1
+  - Layer: {fileID: 114724804207875695, guid: 8eccbfaba73a6f14abbd03f2d0f3454f, type: 2}
+    Optional: 1
+    EnabledProbability: 0.25
+    EnabledForMale: 1
+    EnabledForFemale: 1
+    OptionalForMale: 1
+    OptionalForFemale: 1
+    Styles: -1
+  - Layer: {fileID: 114724804207875695, guid: 31d2445996ae49f49aa2858fdd6ad649, type: 2}
+    Optional: 1
+    EnabledProbability: 0.9
+    EnabledForMale: 1
+    EnabledForFemale: 1
+    OptionalForMale: 1
+    OptionalForFemale: 0
+    Styles: 1
+  ColourSettings: {fileID: 114724804207875695, guid: f6825b82a871f3f43b4600f7c572f13f, type: 2}

@@ -1,0 +1,73 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1709254077376921
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4730242686860875}
+  - component: {fileID: 114724804207875695}
+  m_Layer: 0
+  m_Name: FactionSettings
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4730242686860875
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114724804207875695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 146055542, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  TimeBetweenExpansionSearches: 240
+  FactionRelationSettings: {fileID: 114724804207875695, guid: e990f0d1ea8c84e4aa139d2e8624b7ac, type: 2}
+  FactionRecentDamageSettings: {fileID: 114724804207875695, guid: 48a0735cebb78e342bb010539ea2d795, type: 2}
+  FactionWarDeclarationSettings: {fileID: 114618682377417806, guid: 073cbce46fd78054989028494debb862, type: 2}
+  BanditsHostileVirtueThreshold: 0.35
+  ShipBuildSettings: {fileID: 114724804207875695, guid: 8a9a8a73b1d95854da324d43e99ca263, type: 2}
+  AIPatrolSettings: {fileID: 114724804207875695, guid: a8289b8ab61c76a4c9b4134f6eae3025, type: 2}
+  ProbabilityOfDistressCall: 0.4
+  ProbabilityOfDistressCallGoingToPlayer: 0.8
+  FactionRetireNotificationMinHighestNetWorth: 2000000
+  FactionRetireMaxTimeWithNoUnitsBuilt: 900
+  FactionRetireMinFactionAge: 1200
+  MinAIBuildUnitsInterval: 60
+  MaxAIBuildUnitsInterval: 180
+  TradeOpinionChangePerMillionCr: 0.4
+  OpinionChangeBasedOnRecentDamage: 0.001
+  MaxHostilityCoolDownTime: 12000
+  MinHostilityCoolDownTime: 240
+  HostilityCoolDownTimePower: 4
+  HostilityCoolDownTimeAggressionPower: 4
+  OpinionRolloverScale: 0.25
+  InCombatFriendlyFireDamageMultiplier: 0.5
+  AssistedDamageOpinionEffect: 1E-05
+  AIOrderCooldownTime: 5
+  MinOpinionChangeOnMakePeace: 0.05
+  MaxOpinionChangeOnMakePeace: 0.28
+  TaxedTradeValueMultiplierForOpinionChange: 0.075

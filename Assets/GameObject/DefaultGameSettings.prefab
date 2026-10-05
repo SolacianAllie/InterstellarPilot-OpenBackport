@@ -1,0 +1,1355 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1709254077376921
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4470112387431263}
+  - component: {fileID: 114313026266067498}
+  m_Layer: 0
+  m_Name: DefaultGameSettings
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1730242686860875
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4621510681728303}
+  - component: {fileID: 114632457200066912}
+  m_Layer: 0
+  m_Name: WealthLevels
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1724804207875695
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4634108722742392}
+  - component: {fileID: 114302127217294661}
+  m_Layer: 0
+  m_Name: WealthLevel_Penniless
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1618682377417806
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4969106005120503}
+  - component: {fileID: 114642988549198181}
+  m_Layer: 0
+  m_Name: WealthLevel_Destitute
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1703437598541787
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4946936116752871}
+  - component: {fileID: 114711914853252429}
+  m_Layer: 0
+  m_Name: WealthLevel_Deprived
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1884547391421755
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4918264173551851}
+  - component: {fileID: 114587397909062814}
+  m_Layer: 0
+  m_Name: WealthLevel_GettingBy
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1099118695303065
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4875609422105747}
+  - component: {fileID: 114371939378208658}
+  m_Layer: 0
+  m_Name: WealthLevel_Adequate
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1243736805655561
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4694121525821480}
+  - component: {fileID: 114320256170494724}
+  m_Layer: 0
+  m_Name: WealthLevel_Comfortable
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1061268324235159
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4017697238300914}
+  - component: {fileID: 114733206282342372}
+  m_Layer: 0
+  m_Name: WealthLevel_WellOff
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1587765826080250
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4217368724061974}
+  - component: {fileID: 114089843903986396}
+  m_Layer: 0
+  m_Name: WealthLevel_Affluent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1709867586078768
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4672306508523268}
+  - component: {fileID: 114808113985169905}
+  m_Layer: 0
+  m_Name: WealthLevel_RollingInIt
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1044625135789424
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4060945828524476}
+  - component: {fileID: 114900271049623953}
+  m_Layer: 0
+  m_Name: WealthLevel_MoneyBags
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1589667821646929
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4472185465350827}
+  - component: {fileID: 114518489005915545}
+  m_Layer: 0
+  m_Name: PowerLevels
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1372920208702427
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4220653531496868}
+  - component: {fileID: 114841364053301648}
+  m_Layer: 0
+  m_Name: PowerLevelIrrelevant
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1025901758691103
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4967328832014496}
+  - component: {fileID: 114291844617409189}
+  m_Layer: 0
+  m_Name: PowerLevelFeeble
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1985305603660343
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4344419225485095}
+  - component: {fileID: 114919942235722503}
+  m_Layer: 0
+  m_Name: PowerLevelWeak
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1705390221481576
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4107629493147155}
+  - component: {fileID: 114833703512093738}
+  m_Layer: 0
+  m_Name: PowerLevelLimited
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1977153420339851
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4632746491512912}
+  - component: {fileID: 114719342369648492}
+  m_Layer: 0
+  m_Name: PowerLevelInfluential
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1336590748365959
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4726790013014859}
+  - component: {fileID: 114436073260064126}
+  m_Layer: 0
+  m_Name: PowerLevelStrong
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1256069497284392
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4693329660128220}
+  - component: {fileID: 114801075752484240}
+  m_Layer: 0
+  m_Name: PowerLevelAscendant
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1161607090078389
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4000955326284023}
+  - component: {fileID: 114397768327470545}
+  m_Layer: 0
+  m_Name: PowerLevelSuperpower
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1002669891404536
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4571718729274231}
+  - component: {fileID: 114581786255902400}
+  m_Layer: 0
+  m_Name: PowerLevelGodly
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4470112387431263
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 4621510681728303}
+  - {fileID: 4472185465350827}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114313026266067498
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -298097232, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  TraderHeatmapSettings: {fileID: 114724804207875695, guid: 631e6466c33c0b14386c87ee9056fd38, type: 2}
+  VirtueChangeSettings: {fileID: 114724804207875695, guid: 9cefb4a40c1972c4fbe823fcb80329b0, type: 2}
+  AsteroidRespawnSettings: {fileID: 114724804207875695, guid: 63ff87a1e21b0ed4e873a5587f06d898, type: 2}
+  DitchUnitSettings: {fileID: 114724804207875695, guid: 3fe8deb2c9bdea645a282b7b9b3614cc, type: 2}
+  EconomySettings: {fileID: 114724804207875695, guid: ed25c48abdfaa3448bb9f7beb09beef0, type: 2}
+  BackgroundObjectsSettings: {fileID: 114724804207875695, guid: b781eb93f903ab648a4d1abcaa625682, type: 2}
+  SpaceConstructorSettings: {fileID: 114724804207875695, guid: 1e2b98d5df25e09459fd3fe9684025e9, type: 2}
+  LootSettings: {fileID: 114724804207875695, guid: af8c391cf85518b42942737c2c980047, type: 2}
+  RearmSettings: {fileID: 114724804207875695, guid: 08e5c69433986a446852fc4699db7b43, type: 2}
+  HypersleepSettings: {fileID: 114724804207875695, guid: f5540ae502358cb4b8d9f0c7c23e377e, type: 2}
+  NpcMiningSettings: {fileID: 114724804207875695, guid: a54d1a114f0ed1741ba310bb1ec27ef6, type: 2}
+  AutoTurretTargetSearchSettings: {fileID: 114724804207875695, guid: 6fbd3e7013bb3904e8a5b8cd81418662, type: 2}
+  NpcPiilotArrivalSettings: {fileID: 114724804207875695, guid: 7631a1f77edd07143943410158dca6ee, type: 2}
+  AutoRepairSettings: {fileID: 114724804207875695, guid: 49c607a58219dd241b4d8eb881158395, type: 2}
+  GeneralFleetSettings: {fileID: 114724804207875695, guid: 90a9f31f28343b2489b85079afb11ba1, type: 2}
+  PirateRaidSettings: {fileID: 114724804207875695, guid: 9beafa5237034924d97e7e44f9a55d73, type: 2}
+  TeamColourSettings: {fileID: 114724804207875695, guid: d6bea92c1ed57ba46835508ce2b31219, type: 2}
+  GameplaySettings: {fileID: 114724804207875695, guid: faf68fcd8d6f99542b5a29a45e393c5c, type: 2}
+  VideoSettings: {fileID: 114724804207875695, guid: 1ff351ab35c6c5643b474871a73d414e, type: 2}
+  GasCloudSettings: {fileID: 114724804207875695, guid: 670f5fa54ff110a46bb87c027f5917ef, type: 2}
+  PassengerGroupSettings: {fileID: 114724804207875695, guid: 75071b8d1172b7548bf219392b1fe314, type: 2}
+  UIButtonColors: {fileID: 114724804207875695, guid: 8144e03907c7de34585222ba8050b066, type: 2}
+  ComponentDamageEffectSettings: {fileID: 114724804207875695, guid: de8e13a145b48f94cba6ecfc69287f82, type: 2}
+  ComponentDamageSettings: {fileID: 114724804207875695, guid: 2cf3083ca190ac6488714839fc921710, type: 2}
+  DamageFlashSettings: {fileID: 114724804207875695, guid: c120965c994f1f94a8a2735ddee57da8, type: 2}
+  SectorSecuritySettings: {fileID: 114724804207875695, guid: aea32bcb598b3434aa4c649a4d679f66, type: 2}
+  ColorSettings: {fileID: 114724804207875695, guid: 83746d0f490a445418b2249bf88dd36c, type: 2}
+  NpcTargetSearchSettings: {fileID: 114724804207875695, guid: 2c063731c55bb5e498add8382890bb6f, type: 2}
+  HeatmapSettings: {fileID: 114724804207875695, guid: ae6a587de661af7428b26e1d7ffdd307, type: 2}
+  HudSettings: {fileID: 114724804207875695, guid: c0952b848098b8645a0565e1dff94160, type: 2}
+  ShowQuickTractorButtonForHostileCargo: 1
+  SkirmishSettings: {fileID: 114724804207875695, guid: d9a745b1747feba48a553937fd818823, type: 2}
+  CargoLeakageSettings: {fileID: 114724804207875695, guid: 7b74089027a052543924fb705dc71c6a, type: 2}
+  IntelSettings: {fileID: 114724804207875695, guid: 8ba863929d86b2f428df69d67d3811f2, type: 2}
+  ActiveSectorPathfindingSettings: {fileID: 114724804207875695, guid: 1a239a82f28c07045aa5cde3d74aeb06, type: 2}
+  FormationSettings: {fileID: 114724804207875695, guid: 2c06f7eca705b43439502b70b6c74f35, type: 2}
+  DistanceSettings: {fileID: 114724804207875695, guid: 8c1afbe428dd86b439734f45fb8b46ea, type: 2}
+  HudCameraSettings: {fileID: 114724804207875695, guid: 52ccd9dc9f2550646b24278ad34d2266, type: 2}
+  TractorBeamSettings: {fileID: 114724804207875695, guid: 00d5337cdb2be2d499f4cf2fc07055c7, type: 2}
+  MinorFactionNetWorthThreshold: 2500000
+  UnstableWormholeSettings: {fileID: 114724804207875695, guid: bd2acb2c6427cdf4893ce7766e3683bf, type: 2}
+  SectorIntelSettings: {fileID: 114724804207875695, guid: 5922681982c89664cbcdf0956590479f, type: 2}
+  SandboxPlayerSettings: {fileID: 114724804207875695, guid: c3484523ad8a66648bd1b70076d7fcda, type: 2}
+  AutoSaveSettings: {fileID: 114724804207875695, guid: 094ea97e6b52cdb49ac22a4c758509de, type: 2}
+  PassengerFareSettings: {fileID: 114724804207875695, guid: 0c839d7c44b07904dbaa39877044a230, type: 2}
+  ModdedUnitSettings: {fileID: 114724804207875695, guid: 724e78ad6583fe340ac8b8764adabda5, type: 2}
+  MercenarySettings: {fileID: 114099118695303065, guid: a1d943a067277474abd553472f2e6392, type: 2}
+  DialogEventSettings: {fileID: 114724804207875695, guid: 42b59b86b22b3be43be3b231551b6502, type: 2}
+  MoonTimePerRevolution: 1500
+  SectorMapSettings: {fileID: 114724804207875695, guid: 598915e57f8d5894d89a78208bc2e6cf, type: 2}
+  SaveGameSettings: {fileID: 114724804207875695, guid: bad5907462329d748947569e689a46fb, type: 2}
+  TurretBuildDistanceRadiusMultiplier: 1.5
+  DynamicCommsSettings: {fileID: 114724804207875695, guid: 899554fba1465964db76516f5968d27a, type: 2}
+  AIMineAvoidanceCheckDistance: 350
+  MissionSettings: {fileID: 114724804207875695, guid: 9543beaab2fcf994c862885fe1d92c67, type: 2}
+  MissionSpecSettings: {fileID: 114724804207875695, guid: ec52f105069c06949b46b76d51d9e8fc, type: 2}
+  EquipmentDealerNodeWaitTime: 360
+  DefaultAsteroidPlacementSettings: {fileID: 114724804207875695, guid: c95dcecb361ce644d970486f96b6db3d, type: 2}
+  UniverseBoundsSettings: {fileID: 114724804207875695, guid: 71075ccfb4e242d4e9ccd194a58a2d92, type: 2}
+  MinDistanceBetweenStations: 250
+  MinDistanceBetweenMinorStations: 50
+  DebugSettings: {fileID: 114724804207875695, guid: 566228196d80b594caafd4c428805e50, type: 2}
+  PerformanceSettings: {fileID: 114724804207875695, guid: c6b051c745d704c4585d3e67663571c7, type: 2}
+  AudioSettings: {fileID: 114724804207875695, guid: 5d33c20a6eb6a364dbedbbd8b9ab8fd8, type: 2}
+  SandboxSettings: {fileID: 114724804207875695, guid: 4860630d1dd5ce347b40233c2046e03d, type: 2}
+  DefaultWorldSeedSettings: {fileID: 114918264173551851, guid: 319862f2d128cea429c7859530ecce94, type: 2}
+  AIShipCapPerScene: 26
+  NumAutosaves: 3
+  SaveOnlyWhenDocked: 0
+  PlayerAmbientSoundVolumeMultiplier: 0.3
+  PlayerMessagesMaxUnimportant: 50
+  FactionMinShortNameChars: 2
+  FactionMaxShortNameChars: 10
+  FactionMaxLongNameChars: 30
+  FactionMinNameChars: 3
+  MiningProbabilityDamageRef: 20
+  TargetSpeakingActiveColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  TargetSpeakingInactiveColor: {r: 0.784, g: 0.784, b: 0.784, a: 1}
+  BountyMinCreditsPlaced: 250
+  BountyProbabilityForEachPilot: 0.95
+  BountyGroupMinRewardMultiplier: 0.05
+  BountyGroupMaxRewardMultiplier: 0.5
+  CostToRepairShieldPoint: 2
+  OwnedStationShipRepairMultiplier: 0.75
+  RecordFactionTransactionForAI: 0
+  NumberOfFactionTransactionsHistory: 50
+  UIUnderConstructionDrawDistance: 200
+  ConstructionTimePerHp: 0.2
+  DismantlingTimePerHp: 0.2
+  ConstructionInitialHealth: 0.1
+  CanEntershipFromAnyDistance: 1
+  CanTransferCargoFromAnyDistance: 0
+  ClaimShipDistance: 100
+  EnterShipDistance: 100
+  TransferCargoDistance: 125
+  MaxTransferCargoDistance: 600
+  CargoDeployMinDistanceFromWormhole: 500
+  CargoDeployMinDistanceFromDockableStations: 275
+  AiUnitControllerSettings: {fileID: 114724804207875695, guid: f25f23cc841974748839d05bb62dd135, type: 2}
+  NpcPilotBehaviourMineDropSettings: {fileID: 114724804207875695, guid: e88bc668350661145824bea27d5b333f, type: 2}
+  AIPreferredThrottleWhenAvoiding: 0.6
+  TurretInaccuracyEnabled: 1
+  FactionSettings: {fileID: 114724804207875695, guid: 229e76158ef15cb4ba03dcfe4a4849a7, type: 2}
+  ComponentRepairCostMultiplier: 0.85
+  GameTimeToRealTimeConversion: 48
+  DefaultWorldPermissions: {fileID: 114724804207875695, guid: 81ead8d3037d3a74f8dc6513a0dddd59, type: 2}
+  WealthLevels: {fileID: 114632457200066912}
+  PowerLevels: {fileID: 114518489005915545}
+  LoadGameScenePrefab: {fileID: 114724804207875695, guid: f19ece4347a0d62458b981fcc0437036, type: 2}
+  AbortMissionPenaltyMultiplier: 8
+  ActiveUnitMaxRollAngle: 65
+  ActiveUnitMaxRollTurnValue: 160
+  ActiveUnitRollLerp: 40
+  ActiveUnitTurnArrivalAggression: 0.4
+  AffordableColor: {r: 0, g: 1, b: 0, a: 1}
+  AIActivePilotAvoidProximitityToLargerCombatTarget: 1
+  AISelectBestCombatTargetMinFrequency: 2
+  AISelectBestCombatTargetMaxFrequency: 6
+  AIActivePilotTurnChangeRate: 0.5
+  AICloakingUpdateEnabled: 1
+  AICollisionDamageEnabled: 0
+  AIDockMinCoolDownTime: 10
+  AIDockPlayerOwnedMinCoolDownTime: 5
+  AIDockPlayerOwnedPreferredCoolDownTime: 3
+  AIDockPreferredCoolDownTime: 30
+  AIFiringUpdateEnabled: 1
+  AIGroupCombatCooldownTime: 20
+  AIGroupSpawnMinPlayerDistance: 800
+  AIGroupStaleTargetRemoveTime: 60
+  AILostCloakedTargetCoolDownTime: 20
+  AILostCombatCombatCoolDownTime: 5
+  AIMaxMineAvoidDist: 260
+  AIMineSafeDistanceMinMultiplier: 1.2
+  AIMineSafeDistanceMultiplier: 1.4
+  AIMinTradeOpinion: -0.5
+  AIPilotRegroupDist: 1500
+  AIPointDefenseDeploymentProbability: 0.45
+  AIPointDefenseMaxDeploymentRange: 350
+  AIPointDefenseMinMissileLifetime: 1.5
+  AIPointDefenseUpdateInterval: 0.85
+  AITimeBetweenPathfinding: 8
+  AITurretExistingTargetScore: 5
+  AITurretPreferredTargetScore: 10
+  AllowAiGroupSpawners: 1
+  AllowPlayerDock: 1
+  AsteroidSpawnMaxForce: 220
+  AsteroidSpawnMinForce: 45
+  AttributeLevels:
+  - AttributeType: 1
+    BaseValue: 1
+    ChangePerLevel: -0.0035
+  - AttributeType: 2
+    BaseValue: 0.5
+    ChangePerLevel: 0.0025
+  - AttributeType: 3
+    BaseValue: 1
+    ChangePerLevel: 0.0045
+  - AttributeType: 4
+    BaseValue: 1
+    ChangePerLevel: -0.005
+  - AttributeType: 5
+    BaseValue: 1
+    ChangePerLevel: 0.02
+  - AttributeType: 0
+    BaseValue: 1
+    ChangePerLevel: 0.008
+  AttributePointsPerLevel: 10
+  AudioCombatMusicTimeout: 25
+  CanEjectCargoWhileDocked: 1
+  CloakedPlayerUnitAlphaRange: 0.7
+  CloakedUnitAlphaRange: 0.93
+  CollisionDamageEnabled: 0
+  CollisionShieldDamageType: 2
+  TurretInaccuracyDmgWeight: 0.5
+  TurretInaccuracyNormalWeight: 0.25
+  TurretMaxInaccuracyDegrees: 10
+  DamageParticlesMaxCount: 4
+  DamageParticlesMaxHealth: 0.1
+  DamageParticlesMinHealth: 0.04
+  DamageParticlesThreshold: 0.9
+  DamageShakeDuration: 0.75
+  DamageToShakeMagnitudeMultiplier: 0.02
+  DebrisLifetime: 240
+  DestroyedUnitCargoDropPower: 1.25
+  DestroyedUnitMaxDroppedCargo: 0.8
+  DestroyedUnitMinDroppedCargo: 0.2
+  DestroyedUnitsCreateDebris: 0
+  DockableDistance: 150
+  EjectCargoForce: 5
+  EnginePowerToEnergyUsage: 0.68
+  EquipmentDealerInfiniteCargo: 1
+  ExpireCargoInActiveSceneDistanceFromCamera: 2500
+  ExplosionDamageToForceRatio: 0.02
+  ExplosionTorqueMultiplier: 250
+  HyperdriveAcceleration: 20
+  HyperdriveMovespeed: 100
+  InactiveFireMultiplier: 0.8
+  InactiveGroupMoveSpdMultiplier: 1
+  JumpGateExitDistance: 180
+  LootableCargoClasses:
+  - {fileID: 114724804207875695, guid: f51fd3354fa321041944820f8a12bfe5, type: 2}
+  - {fileID: 114724804207875695, guid: e97c817c561c0314188e07466be7361a, type: 2}
+  LootableCargoMaxMultiplier: 2
+  LootableCargoMaxValues: 2800000028000000
+  LootableCargoMinValues: 0400000004000000
+  LootableCargoShipValueDivisors:
+  - 20000
+  - 20000
+  LootContainerMaxAngularVelocity: 10
+  LootContainerMinAngularVelocity: 5
+  LootSpawnMaxForce: 60
+  LootSpawnMinForce: 10
+  MaxAttributePoints: 100
+  MaxDamageParticlesTime: 8
+  MaxDynamicMissions: 3
+  MaxShieldRestoreDelay: 300
+  MaxShieldRestoreDelayValue: 2000
+  MinDamageParticlesTime: 3
+  MinShieldRestoreDelay: 30
+  MissionsDeliverShipPercentage: 0.055
+  MissionsDeliverShipBaseIncome: 1500
+  PassengersGroupExpireTime: 500
+  PassengersPreferredGroupCount: 18
+  PlayerAutoTargetArmedScore: 4
+  PlayerAutoTargetBearingScore: 3
+  PlayerAutoTargetDistanceScore: 5
+  PlayerAutoTargetHostileScore: 10
+  PlayerAutoTargetLockedMissileScore: 10
+  PlayerAutoTargetMaxDistance: 1000
+  PlayerDamageMultiplier: 0.75
+  PlayerXpEnabled: 0
+  QuickMsgLinksEnabled: 1
+  ReduceLaserDamageWithRange: 0
+  RegroupSpdChangeThreshold: 400
+  RegroupSpdChangeThresholdUpper: 600
+  RetainLootOwnership: 1
+  ShieldRelativeRegenRate: 0.0018
+  ShieldRestoreNormalizedValue: 0.02
+  ShieldRingPrefab: {fileID: 1709254077376921, guid: 73695c8b4517f4048a963526ff901661, type: 2}
+  ShowCapacitorLowerThreshold: 0.9
+  ShowCapacitorUpperThreshold: 0.95
+  ShowMissionMsgs: 1
+  ShowObjectiveMsgs: 1
+  SpawnAsteroidMaxAngularVelocity: 30
+  SpawnAsteroidMaxRandomAngle: 20
+  SpawnAsteroidMinAngularVelocity: 10
+  SpeechModelMinTimeBeforeRepeat: 8
+  TextCargoColor: {r: 0.8593873, g: 0.57569206, b: 0.8897059, a: 1}
+  TextSceneColor: {r: 0, g: 1, b: 0, a: 1}
+  TextHeadingColor: {r: 0.6156863, g: 0.93255776, b: 1, a: 1}
+  TextUnitClassColor: {r: 0, g: 1, b: 0, a: 1}
+  TextUnitNameColor: {r: 0, g: 1, b: 0, a: 1}
+  TractorBeamRetractSpeed: 130
+  TractorBreakDistance: 150
+  TractorMaxForceApplyDist: 125
+  TractorMinForceApplyDist: 80
+  UnaffordableColor: {r: 1, g: 0.53876233, b: 0.18431371, a: 1}
+  UndockDistance: 15
+  UnitCollisionDamageFactor: 0.75
+  UnitCollisionDamageForceThreshold: 5
+  UnitCollisionEngineCooldownThreshold: 0
+  UnitCollisionImmobilizationFactor: 1
+  UnitCollisionMaxImmobileTime: 2
+  UnitDefaultAngularDrag: 0.25
+  UnitDesctructionMinTorqueMultiplier: 0.5
+  UnitDesctructionTorqueMultiplier: 50
+  UnitRollEnabled: 1
+  PilotNameMinChars: 1
+  PilotNameMaxChars: 18
+  PilotTitleMinChars: 3
+  PilotTitleMaxChars: 20
+  NewStationPlayerNotificationProbability: 0.9
+  NewStationPlayerNotificationMaxJumpDistance: 6
+  NewStationPlayerNotificationMinTimeBeforeShow: 600
+  AllowFleetToSetHomeBaseToUnownedUnalliedCapitalShip: 0
+  MaxPlayerFleetStackedOrders: 8
+  MaxExploreRangeGateDistanceMultiplier: 1.2
+  ProjectileVelocityInheritanceFactor: 0.98
+  ExplosionDamageFalloutPower: 1.4
+  AIMinSpeedToDeployMine: 30
+  BanditsAlwaysAtWarWithBandits: 0
+  RandomTitles:
+  - Great One
+  - Admiral
+  - O Captain!
+  - Grand Master
+  - Grand Prince
+  - Your Highness
+  - Your Grace
+  - Lord
+  - Major
+  - Commander
+  - Viceroy
+  - Captain
+  - Emperor
+  - Unholy Despot
+  - Mighty Dictator
+  - Sir
+  - Maam
+  - Serene One
+  - Excellency
+  - Boss
+  - Chief
+  DefaultRankingSystem: {fileID: 114724804207875695, guid: 1391433868841e641a9aa064073c894e, type: 2}
+  ScanRange: 1500
+  UIAutoMultiSelectTime: 1.2
+--- !u!4 &4621510681728303
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1730242686860875}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 4634108722742392}
+  - {fileID: 4969106005120503}
+  - {fileID: 4946936116752871}
+  - {fileID: 4918264173551851}
+  - {fileID: 4875609422105747}
+  - {fileID: 4694121525821480}
+  - {fileID: 4017697238300914}
+  - {fileID: 4217368724061974}
+  - {fileID: 4672306508523268}
+  - {fileID: 4060945828524476}
+  m_Father: {fileID: 4470112387431263}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114632457200066912
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1730242686860875}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1938233942, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  Levels:
+  - {fileID: 114302127217294661}
+  - {fileID: 114642988549198181}
+  - {fileID: 114711914853252429}
+  - {fileID: 114371939378208658}
+  - {fileID: 114587397909062814}
+  - {fileID: 114320256170494724}
+  - {fileID: 114733206282342372}
+  - {fileID: 114089843903986396}
+  - {fileID: 114808113985169905}
+--- !u!4 &4634108722742392
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1724804207875695}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4621510681728303}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114302127217294661
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1724804207875695}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1647345546, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  CreditLimit: 0
+  Description: Penniless
+--- !u!4 &4969106005120503
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1618682377417806}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4621510681728303}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114642988549198181
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1618682377417806}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1647345546, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  CreditLimit: 10000
+  Description: Destitute
+--- !u!4 &4946936116752871
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1703437598541787}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4621510681728303}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114711914853252429
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1703437598541787}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1647345546, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  CreditLimit: 50000
+  Description: Deprived
+--- !u!4 &4918264173551851
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1884547391421755}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4621510681728303}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114587397909062814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1884547391421755}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1647345546, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  CreditLimit: 100000
+  Description: Getting by
+--- !u!4 &4875609422105747
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1099118695303065}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4621510681728303}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114371939378208658
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1099118695303065}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1647345546, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  CreditLimit: 250000
+  Description: Adequate
+--- !u!4 &4694121525821480
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1243736805655561}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4621510681728303}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114320256170494724
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1243736805655561}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1647345546, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  CreditLimit: 500000
+  Description: Comfortable
+--- !u!4 &4017697238300914
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1061268324235159}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4621510681728303}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114733206282342372
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1061268324235159}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1647345546, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  CreditLimit: 1000000
+  Description: Well off
+--- !u!4 &4217368724061974
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1587765826080250}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4621510681728303}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114089843903986396
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1587765826080250}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1647345546, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  CreditLimit: 5000000
+  Description: Affluent
+--- !u!4 &4672306508523268
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709867586078768}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4621510681728303}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114808113985169905
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709867586078768}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1647345546, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  CreditLimit: 10000000
+  Description: Rolling in it
+--- !u!4 &4060945828524476
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1044625135789424}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4621510681728303}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114900271049623953
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1044625135789424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1647345546, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  CreditLimit: 100000000
+  Description: Moneybags
+--- !u!4 &4472185465350827
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1589667821646929}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 4220653531496868}
+  - {fileID: 4967328832014496}
+  - {fileID: 4344419225485095}
+  - {fileID: 4107629493147155}
+  - {fileID: 4632746491512912}
+  - {fileID: 4726790013014859}
+  - {fileID: 4693329660128220}
+  - {fileID: 4000955326284023}
+  - {fileID: 4571718729274231}
+  m_Father: {fileID: 4470112387431263}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114518489005915545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1589667821646929}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1938233942, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  Levels:
+  - {fileID: 114841364053301648}
+  - {fileID: 114291844617409189}
+  - {fileID: 114919942235722503}
+  - {fileID: 114833703512093738}
+  - {fileID: 114719342369648492}
+  - {fileID: 114436073260064126}
+  - {fileID: 114801075752484240}
+  - {fileID: 114397768327470545}
+  - {fileID: 114581786255902400}
+--- !u!4 &4220653531496868
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1372920208702427}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4472185465350827}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114841364053301648
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1372920208702427}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1647345546, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  CreditLimit: 50000
+  Description: Irrelevant
+--- !u!4 &4967328832014496
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1025901758691103}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4472185465350827}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114291844617409189
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1025901758691103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1647345546, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  CreditLimit: 100000
+  Description: Feeble
+--- !u!4 &4344419225485095
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1985305603660343}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4472185465350827}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114919942235722503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1985305603660343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1647345546, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  CreditLimit: 250000
+  Description: Weak
+--- !u!4 &4107629493147155
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1705390221481576}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4472185465350827}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114833703512093738
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1705390221481576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1647345546, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  CreditLimit: 1000000
+  Description: Limited
+--- !u!4 &4632746491512912
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1977153420339851}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4472185465350827}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114719342369648492
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1977153420339851}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1647345546, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  CreditLimit: 5000000
+  Description: Influential
+--- !u!4 &4726790013014859
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1336590748365959}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4472185465350827}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114436073260064126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1336590748365959}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1647345546, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  CreditLimit: 10000000
+  Description: Strong
+--- !u!4 &4693329660128220
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1256069497284392}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4472185465350827}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114801075752484240
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1256069497284392}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1647345546, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  CreditLimit: 25000000
+  Description: Ascendant
+--- !u!4 &4000955326284023
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1161607090078389}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4472185465350827}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114397768327470545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1161607090078389}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1647345546, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  CreditLimit: 100000000
+  Description: Superpower
+--- !u!4 &4571718729274231
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1002669891404536}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4472185465350827}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114581786255902400
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1002669891404536}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1647345546, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  CreditLimit: 1000000000
+  Description: Godly

@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1709254077376921
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4730242686860875}
+  - component: {fileID: 114724804207875695}
+  m_Layer: 0
+  m_Name: AvatarColourSettingsHumanPunk
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4730242686860875
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114724804207875695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1355376218, guid: 8ad934e7b649e9f9cca2d32b0af1aee5, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  ChannelColours2:
+  - {fileID: 114724804207875695, guid: 23a787ca63c90d84e8412861e65a6cb6, type: 2}
+  - {fileID: 114724804207875695, guid: 7cf652f53ad74564cbb0a033ec70e7c0, type: 2}
+  - {fileID: 114724804207875695, guid: b2e7c0674a97cb94f941f720c9a1e7a0, type: 2}
+  - {fileID: 114724804207875695, guid: bddda1ba0e54ed242a152f50a3fde459, type: 2}
+  - {fileID: 114724804207875695, guid: 3759e624d874c2346a2bb6e15259794c, type: 2}
+  - {fileID: 114724804207875695, guid: 487fdbca78e81584e901fc072c60e852, type: 2}
+  - {fileID: 114724804207875695, guid: 00a7854f0967afc47b3a4c14e6e1f3d7, type: 2}

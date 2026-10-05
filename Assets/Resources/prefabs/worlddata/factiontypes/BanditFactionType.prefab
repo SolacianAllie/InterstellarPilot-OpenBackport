@@ -1,0 +1,70 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1709254077376921
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4730242686860875}
+  - component: {fileID: 114724804207875695}
+  m_Layer: 0
+  m_Name: BanditFactionType
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4730242686860875
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 95.30124, y: 154.17236, z: 151.37701}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114724804207875695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1590116524, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  ShipCapType: {fileID: 114724804207875695, guid: 4ac83f183f08dc646b793d02a8588ed1, type: 2}
+  GeneratePassengerGroups: 0
+  ReceivePassengerGroups: 0
+  ProbabilityOfRandomGroupStartPositionMultiplier: 0.05
+  FactionType: 64
+  FactionAIType: 8
+  BaseRpProvision: 2500
+  AllowableStationPurposes: 0800000020000000100000004000000001000000000100000008000004000000
+  SecurityRatingMultiplier: -1
+  CustomUnitDesignation: Bandit
+  WarPartyUnitDesignation: Bandit
+  ShortCustomUnitDesignation:
+  ProbabilityOfBountySeededOnPilots: 0.6
+  ProbabilityOfSeedingBountyPlacedOnOthers: 0.02
+  MinShipCombatRating: 0.1
+  MaxShipCombatRating: 99999
+  BuildCloakedShips: 1
+  CanMakeHomeInHostileControlledSector: 1
+  BuildIllegalStations: 0
+  SecurityTypePreference: 2
+  SecurityTypePreferenceMultiplier: 1
+  BorderSectorPreference: 0
+  DistressCallProbabilityMultiplier: 0.05
+  ProbabilityOfDistressCallGoingToPlayerMultiplier: 0.2

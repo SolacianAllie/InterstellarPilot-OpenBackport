@@ -1,0 +1,70 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1709254077376921
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4730242686860875}
+  - component: {fileID: 114724804207875695}
+  m_Layer: 0
+  m_Name: FactionRecentDamageSettings
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4730242686860875
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114724804207875695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1322433073, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  RecentAttacksThreshold: 20
+  RecentAttacksOpinionAddition: 50
+  RecentAttacksAgressionFactor: 18
+  RecentAttacksDamageScale: 0.04
+  OpinionChangeBasedOnRecentDamage: 0.001
+  RecentAttacksDissipationRatePerSecond: 0.05
+  RecentAttacksMaxValue: 800
+  RecentAttacksDissipationChkRate: 4
+  RecentAttacksTimeBeforeDissipation: 120
+  RecentAttacksExistingDamageFactor: 0.01
+  MinDamageReceivedPerDestroyedUnit: 16
+  MaxDamageReceivedPerDestroyedUnit: 1000
+  DestroyedUnitReferenceCreditsValue: 1000000
+  DamageReceivedPerKilledPerson: 10
+  StolenCargoDamageConversion: 0.0008
+  StolenCargoBaseDamage: 5
+  StolenCargoDamageType: 0
+  ShipScanDamageEnabled: 1
+  ScannedShipMaxDamage: 50
+  ScannedShipDamageMinAggression: 0.1
+  ScannedShipDamageMaxOpinion: 0.6
+  IndirectDamageMultiplier: 0.25
+  NpcFactionIndirectDamageMultiplier: 0.01
+  MinDamagePerAttack: 0.08

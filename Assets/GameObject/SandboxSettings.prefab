@@ -1,0 +1,78 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1709254077376921
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4730242686860875}
+  - component: {fileID: 114724804207875695}
+  m_Layer: 0
+  m_Name: SandboxSettings
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4730242686860875
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 253.84943, y: 143.6311, z: 1629.198}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114724804207875695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -780511779, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  SectorCounts:
+  - {fileID: 114724804207875695, guid: d04f7c9e7d3077c45bba7837857eb8a0, type: 2}
+  - {fileID: 114724804207875695, guid: b448dc2c104dfa34692b436993f5a0ac, type: 2}
+  - {fileID: 114724804207875695, guid: b037922487904024287f8694dadf3da0, type: 2}
+  - {fileID: 114724804207875695, guid: 89773f14e95899044a9ff874f77534de, type: 2}
+  - {fileID: 114724804207875695, guid: 90a903ab38491f04baade6f9d59ed735, type: 2}
+  DefaultSectorCount: {fileID: 114724804207875695, guid: b037922487904024287f8694dadf3da0, type: 2}
+  GenerationDefaultMaxWormholes: 5
+  DefaultDiscoverAllSectors: 0
+  DefaultDiscoverEverything: 0
+  GenerationDefaultSnakiness: 0.15
+  GenerationDefaultMinSectorSize: 0.4
+  GenerationDefaultMaxSectorSize: 0.7
+  GenerationDefaultAsteroidDustCloudsProbability: 0.8
+  DefaultFactionSeedingBandits: 1
+  DefaultFactionSeedingNonBandits: 1
+  DefaultFactionSeedingFreelancers: 1
+  DefaultFactionSeedingBanditPower: 0.5
+  DefaultFactionSeedingNonBanditPower: 0.5
+  DefaultFactionSeedingCargoVolume: 0.3
+  DefaultFactionSpawning: 1
+  DefaultRespawnOnDeath: 1
+  DefaultAllowTeleporting: 1
+  DefaultPermadeath: 0
+  DefaultAsteroidRespawningEnabled: 1
+  DefaultAsteroidRespawnTime: 0.5
+  DefaultSuperchargedBanditsEnabled: 0
+  DefaultFactionSeedingMinEmpireExpansion: 1
+  DefaultFactionSeedingMaxEmpireExpansion: 10
+  DefaultFactionSeedingMinEmpireFactions: 3
+  DefaultFactionSeedingMaxEmpireFactions: 10
+  DefaultFactionSeedingGroupEmpireFactions: 0

@@ -1,0 +1,21 @@
+The Spacebar,Spacebar
+The Launchpad,Launchpad
+The Last Resort,Last Resort
+The Rat Pit,Rat Pit
+Duke's Revenge,Duke's Revenge
+The Lucky Photon,Lucky Photon
+The Sprited Sailor,Sprited Sailor
+The Twilight Zone,Twilight Zone
+The Tractor Beam,Tractor Beam
+The Recharging Stn.,Recharging Stn.
+The Plunger,Plunger
+The Shipwreck,Shipwreck
+The Eager Ensign,Eager Ensign
+Admiral's Last Stand,Admiral's
+The Hull Breach,Hull Breach
+The Refresher,Refresher
+The Highwayman,Highwayman
+Bosun's Arms,Bosun's
+Master's Cabin,Master's
+The Mutiny,Mutiny
+Skipper's Silo,Skipper's Silo

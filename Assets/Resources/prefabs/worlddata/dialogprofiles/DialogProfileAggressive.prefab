@@ -1,0 +1,362 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1709254077376921
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4884547391421755}
+  - component: {fileID: 114099118695303065}
+  - component: {fileID: 114243736805655561}
+  m_Layer: 0
+  m_Name: DialogProfileAggressive
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1730242686860875
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4061268324235159}
+  - component: {fileID: 114587765826080250}
+  m_Layer: 0
+  m_Name: MercenarySalesPitch
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1724804207875695
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4709867586078768}
+  - component: {fileID: 114044625135789424}
+  m_Layer: 0
+  m_Name: MercenaryHired
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1618682377417806
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4589667821646929}
+  - component: {fileID: 114372920208702427}
+  m_Layer: 0
+  m_Name: LostTarget
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1703437598541787
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4025901758691103}
+  - component: {fileID: 114985305603660343}
+  m_Layer: 0
+  m_Name: PlayerEnteredOwnedPilottedShip
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4884547391421755
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.2868505, y: -0.3847242, z: -0.5264201}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 4061268324235159}
+  - {fileID: 4709867586078768}
+  - {fileID: 4589667821646929}
+  - {fileID: 4025901758691103}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114099118695303065
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 2060801398, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  LegacyEventHandlers:
+  - Event: {fileID: 114724804207875695, guid: 99da4228f78f30f44824bc6ef8618707, type: 2}
+    Messages:
+    - I'm Hit!
+    - Taking damage!
+    - I'm under fire here!
+    - We are taking damage!
+  - Event: {fileID: 114724804207875695, guid: 80f37556805f906469427d3475fce774, type: 2}
+    Messages:
+    - Shields are down!
+    - Shields buckling!
+  - Event: {fileID: 114724804207875695, guid: 63df7f12214d4c7418affaa307ac3fc1, type: 2}
+    Messages:
+    - Losing main power...aahhh!
+    - Hull is buckling!
+    - Hull integrity is failing!
+    - Get me out of here, get me out of here!
+    - Aaahhhhh!
+  - Event: {fileID: 114724804207875695, guid: bdf8a0d7d2a95d741a4b18311db754d0, type: 2}
+    Messages:
+    - I'm taking some serious damage here
+    - I have a hull breach
+    - Hull is breached
+  - Event: {fileID: 114724804207875695, guid: 23e5d8cdb14a8ec4b851a70becd18684, type: 2}
+    Messages:
+    - Target acquired
+    - Weapons hot
+  - Event: {fileID: 114724804207875695, guid: 28ff228548583c144b4b074a83ed99c8, type: 2}
+    Messages:
+    - Target acquired, locked on
+    - I'm engaging hostile targets
+    - Powering up weapons
+    - We've got targets, moving in to engage
+    - I'm moving in to engage hostiles
+    - I'm taking on hostile {TargetUnit}
+    - Engaging {TargetUnit}
+  - Event: {fileID: 114724804207875695, guid: 4291ad1cd1c57a844b5beda88ab5af98, type: 2}
+    Messages:
+    - Stop hiding and show yourself!
+    - Target has cloaked
+  - Event: {fileID: 114724804207875695, guid: 6e5d4bd36d34c95458d131d16a567d17, type: 2}
+    Messages:
+    - Eat that
+    - Die!
+    - No chance
+    - He is history
+    - Target burning up
+  - Event: {fileID: 114724804207875695, guid: 3d9c445fa3b75814d8d2fe0d45886c80, type: 2}
+    Messages:
+    - Hostile missile on my tail
+  - Event: {fileID: 114724804207875695, guid: 4e91efff778f90c44a7d1b8f8ed153d2, type: 2}
+    Messages:
+    - You have made a big mistake
+    - You will regret this
+    - Time for you to die
+  - Event: {fileID: 114724804207875695, guid: aef71cdcbf6874241be8bc9f3b8414aa, type: 2}
+    Messages:
+    - Come out of there so I can finish you off
+    - My target is hiding in that station
+  - Event: {fileID: 114724804207875695, guid: 2a54f2f6487d1654e8350a5db92f0368, type: 2}
+    Messages:
+    - Check your fire
+    - Friendly fire!
+    - Shoot straight damn you!
+  - Event: {fileID: 114724804207875695, guid: b03cd2fdf55eb3f43b7146bca9ea30d9, type: 2}
+    Messages:
+    - You will pay for that
+    - Big mistake
+  - Event: {fileID: 114724804207875695, guid: b75301b41573f4743b23853b1a8d55a6, type: 2}
+    Messages:
+    - You will pay for that
+    - You are about to die
+    - Big mistake
+  - Event: {fileID: 114724804207875695, guid: 1e716921b2d41884ab23b8df0dbd160a, type: 2}
+    Messages:
+    - Give that back
+  - Event: {fileID: 114724804207875695, guid: e9dcb2565eeaa564bac73d66e59dd133, type: 2}
+    Messages:
+    - Watch where you are going damn it!
+    - Can't you fly straight?!
+  - Event: {fileID: 114724804207875695, guid: ae972e5d7d7133449ae97dbb9589dd99, type: 2}
+    Messages:
+    - I'm going to tear your ship apart
+    - Time for you to die
+  - Event: {fileID: 114724804207875695, guid: 93121e9aec5f9184d8da1a017a777a96, type: 2}
+    Messages:
+    - New order received
+    - Order acknowledged
+    - Acknowledged
+    - Received, loud and clear
+    - Order received
+    - Yes {TargetPilotTitle}, acknowledged
+    - Understood, {TargetPilotTitle}
+    - Confirmed, {TargetPilotTitle}
+  - Event: {fileID: 114724804207875695, guid: fa14138567c17b54e8d6d792a3b59a4b, type: 2}
+    Messages:
+    - Repairs complete
+    - Good as new
+  uniqueId: 1
+--- !u!114 &114243736805655561
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -2077313204, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  MinAggression: 0.75
+  MaxAggression: 1
+  MinProperness: 0
+  MaxProperness: 1
+  MinVirtue: 0
+  MaxVirtue: 1
+--- !u!4 &4061268324235159
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1730242686860875}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4884547391421755}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114587765826080250
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1730242686860875}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -373329980, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  Event: {fileID: 114724804207875695, guid: d8918eb30610d7845b680b955d9577e3, type: 2}
+  Messages:
+  - Hey.. you need some help?
+  - Mercenary ready for action
+  - I will annihilate your enemies
+  - I am here to serve
+--- !u!4 &4709867586078768
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1724804207875695}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4884547391421755}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114044625135789424
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1724804207875695}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -373329980, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  Event: {fileID: 114724804207875695, guid: 4ba75f782de3a2c4e86fb01e108bf795, type: 2}
+  Messages:
+  - A wise choice
+  - I've got your back
+--- !u!4 &4589667821646929
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1618682377417806}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4884547391421755}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114372920208702427
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1618682377417806}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -373329980, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  Event: {fileID: 114724804207875695, guid: e82ddc20b7920454c808d4f240b1988e, type: 2}
+  Messages:
+  - I've lost track of my target
+  - Target out of scanner range
+--- !u!4 &4025901758691103
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1703437598541787}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4884547391421755}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114985305603660343
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1703437598541787}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -373329980, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  Event: {fileID: 114724804207875695, guid: 50522ca0c1d942a47b7dae7c16eec61e, type: 2}
+  Messages:
+  - At your service, {TargetPilotTitle}
+  - Welcome, {TargetPilotTitle}

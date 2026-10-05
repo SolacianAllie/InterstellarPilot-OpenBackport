@@ -1,0 +1,160 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1709254077376921
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4730242686860875}
+  - component: {fileID: 114724804207875695}
+  - component: {fileID: 114618682377417806}
+  - component: {fileID: 114703437598541787}
+  m_Layer: 0
+  m_Name: UnitClassSectorHQ
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4730242686860875
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 46.38317, y: -42.396122, z: 20.265797}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114724804207875695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 30420292, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  RelativeShipSaleCost: 0
+  CaptureLikelihood: 1
+  ShipPurposes: []
+  AIBuildPreferenceMultiplierFudge: 1
+  PassengerGroupCountMultiplier: 0.45
+  Legal: 1
+  AICreditsReserve: 100000
+  StationPurpose: 1024
+  DisplayData: {fileID: 114724804207875695, guid: ec9d1e82a6e1a074a8efd9cd95341e05, type: 2}
+  CanTradeAtOwnStation: 1
+  PurposeWarship: 0
+  PurposeTrader: 0
+  PurposeMiner: 0
+  PurposeStealth: 0
+  PurposePassengerTransport: 0
+  PurposeCourier: 0
+  PurposeEquipmentDealer: 0
+  PurposeScout: 0
+  CombatRating: 5.2078075
+  RequiredProduct: {fileID: 0}
+  AIMaxAttackDist: 400
+  BaseCost: 250000
+  CanFireAt: 1
+  className: Sector HQ
+  ShortClassName:
+  Description:
+  ShortDescription:
+  Drag: 0.5
+  ExcludeFromDeliverShipMission: 0
+  GenerateMissions: 1
+  HasRepairFacilities: 1
+  RepairFacilitiesCostMultiplier: 1
+  HullType: 64
+  ShipType: 0
+  IsArmed: 1
+  IsCivilian: 0
+  IsFreighter: 0
+  IsPilottable: 0
+  IsUsable: 1
+  ExcludeFromGodModeSpawn: 0
+  AllowBuildByPlayer: 1
+  SeedInSandbox: 1
+  Manufacturer: {fileID: 0}
+  maxHealth: 2800
+  RepairCostMultiplier: 0.5
+  RpCost: 0
+  SaleCost: 500000
+  TurnAcceleration: 30
+  turnRate: 60
+  UniqueID: 37000
+  UnitPrefab: {fileID: 114642988549198181, guid: 9df72802887722742a0f40d039e0614e, type: 2}
+  ConstructionRateMultiplier: 1
+  UnitSeries: {fileID: 114724804207875695, guid: f7fc920e5375e584f9497f2e6267519f, type: 2}
+  UnitType: 2
+  DetectionRange: 1500
+  PlanetClass: {fileID: 0}
+--- !u!114 &114618682377417806
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1366723278, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  Profile: {fileID: 0}
+  ShipTradeItems:
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: c43373824ee9b23489f7bdabe32ec6ff, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: 6474cdbed3172e94390a77736dc4a4ab, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: 7d6b30abfad402a4fac7c9b7a8e9d5a7, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: 98667e110be1aa24081a7ed62856764a, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: 6ead21c79bc4418409465f18d5b4f597, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: 0800c032026538549b184be7b4645d33, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: 47f5df62fda340d4b93040b1924b7f88, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: acd7f0ff37ba0c143960e22737068d74, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: 5d15a47dea5fc7442b309b42b1d2dd72, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: 19053f0834ef2a346800bd870910302e, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: 40c4dde903964404d99ed67f7f3aff5e, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: 8bc2adb8ecd7b384ea817ebec1ccd7e9, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: 876f00318925903449b8fb6ca84b6c91, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: 069b8ec939f259547bd4b090a022a10e, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: 8dfc4ef61d1dace42a3271001fe5c557, type: 2}
+--- !u!114 &114703437598541787
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 2094686444, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:

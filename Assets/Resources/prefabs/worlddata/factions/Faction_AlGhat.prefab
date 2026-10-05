@@ -1,0 +1,169 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1709254077376921
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4730242686860875}
+  - component: {fileID: 114724804207875695}
+  - component: {fileID: 114618682377417806}
+  - component: {fileID: 114703437598541787}
+  m_Layer: 0
+  m_Name: Faction_AlGhat
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4730242686860875
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -21.205437, y: 48.82952, z: -19.067322}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114724804207875695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1173824050, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  PersonAvatarProfiles: []
+  PreferredFormationStyle: {fileID: 0}
+  TeamColour: {r: 1, g: 1, b: 1, a: 1}
+  IsIgnoredByAI: 0
+  homeSector: {fileID: 0}
+  leaderPerson: {fileID: 0}
+  IntelScanner: {fileID: 0}
+  Intel: {fileID: 0}
+  Heatmap: {fileID: 0}
+  AdditionalRpProvision: 0
+  MinAIUnitControllerCombatEfficiency: 0
+  MaxAIUnitControllerCombatEfficiency: 1
+  AISettings: {fileID: 0}
+  Stats: {fileID: 114703437598541787}
+  TradeEfficiency: 0.5
+  Aggression: 1
+  Virtue: 0.2
+  Greed: 0.5
+  Cooperation: 0.5
+  DynamicFactionAttitudes: 1
+  credits: 10000
+  CreateMissions: 1
+  Description:
+  DestroyWhenNoUnits: 0
+  IsCivilian: 0
+  FactionType: 32
+  Name: Al-Ghat Galactic
+  PilotRankingSystem: {fileID: 114724804207875695, guid: 1391433868841e641a9aa064073c894e, type: 2}
+  RequisitionPointMultiplier: 1
+  RestrictedTradeGoods: []
+  ShortName: Al-Ghat
+  ShouldFactionShowMissionSpecs: 1
+  TradeIllegalGoods: 0
+  UniqueId: 1000
+--- !u!114 &114618682377417806
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -382719091, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  ApplyNow: 0
+  Attitudes:
+  - HostilityDuration: 0
+    Neutrality: -1
+    Opinion: -0.9
+    PermanentPeace: 0
+    PermanentWar: 1
+    TargetFaction: {fileID: 114724804207875695, guid: 565c42faeb6281d49970c8aeb4a23473, type: 2}
+  - HostilityDuration: 0
+    Neutrality: -1
+    Opinion: -0.7
+    PermanentPeace: 0
+    PermanentWar: 1
+    TargetFaction: {fileID: 114724804207875695, guid: 79963be9de0b92b4ca358d6e6e89d41b, type: 2}
+  - HostilityDuration: 0
+    Neutrality: -1
+    Opinion: -0.8
+    PermanentPeace: 0
+    PermanentWar: 1
+    TargetFaction: {fileID: 114724804207875695, guid: 2b745373e520121419275a0884cfc7c0, type: 2}
+  - HostilityDuration: 0
+    Neutrality: 0
+    Opinion: 0.8
+    PermanentPeace: 0
+    PermanentWar: 0
+    TargetFaction: {fileID: 114724804207875695, guid: 5b05707934390624fb652eb4b2f310cf, type: 2}
+  - HostilityDuration: 0
+    Neutrality: 0
+    Opinion: -0.1
+    PermanentPeace: 0
+    PermanentWar: 0
+    TargetFaction: {fileID: 114724804207875695, guid: 08fd886dca80aec4e84309bdcc3832f2, type: 2}
+  - HostilityDuration: 0
+    Neutrality: 0
+    Opinion: 0.1
+    PermanentPeace: 0
+    PermanentWar: 0
+    TargetFaction: {fileID: 114724804207875695, guid: 0e00221399fb32242ba5236adbedfdb7, type: 2}
+  - HostilityDuration: 0
+    Neutrality: -1
+    Opinion: -1
+    PermanentPeace: 0
+    PermanentWar: 1
+    TargetFaction: {fileID: 114724804207875695, guid: 526147f0cdbccd9439f8b0a7318f24de, type: 2}
+  - HostilityDuration: 0
+    Neutrality: -1
+    Opinion: -1
+    PermanentPeace: 0
+    PermanentWar: 1
+    TargetFaction: {fileID: 114724804207875695, guid: ae60820cb9115f54cb7b305bf6403f15, type: 2}
+  ForceTwoWay: 0
+  GlobalAttitudes: []
+  sourceFaction: {fileID: 0}
+--- !u!114 &114703437598541787
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1055621724, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  StartingVirtue: -1
+  StartingShipCount: 0
+  StartingStationCount: 0
+  StartingCredits: 0
+  StartingNetWorth: 0
+  TotalDamageReceived: 0
+  TotalDamageInflicted: 0
+  TotalRevenue: 0
+  TotalExpenditure: 0
+  TotalExpenditureOnStationUpgrades: 0

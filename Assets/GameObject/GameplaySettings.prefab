@@ -1,0 +1,93 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1709254077376921
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4730242686860875}
+  - component: {fileID: 114724804207875695}
+  m_Layer: 0
+  m_Name: GameplaySettings
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4730242686860875
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114724804207875695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1782097606, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  CombatEfficiencyChangePerKill: 0.05
+  VirtueChangeRateMultiplier: 0.4
+  ProbabilityOfFactionAIUpgradingStation: 0.05
+  CaptureProbabilityMultiplier: 0.034
+  WeaponsFireSensorRangeChange: 1500
+  ShieldsUpWhenCloaked: 0
+  DecloakWhenReceiveDamage: 1
+  DecloakUnitsWhenCollisionDamage: 1
+  CanDetectCloakedUnits: 1
+  CanTargetCloakedUnits: 1
+  NotifyPlayerTargettedByCloakedShip: 1
+  NotifyPlayerTargettedMaxDistanceToTriggerInCombat: 1200
+  CargoLifetime: 1800
+  CargoOreLifetime: 600
+  CargoPlayerEjectedLifetime: 600
+  CargoBaseHealth: 50
+  CargoHealthPerVolumeUnit: 3
+  CargoMaxHealth: 600
+  GlobalDamageMultiplier: 0.5
+  GlobalHullDamageMultiplier: 0.6
+  ProbabilityOfBanditsRandomAttack: 0.05
+  ProbabilityOfEmpireRandomAttack: 0.8
+  MinAsteroidHealth: 200
+  MaxAsteroidHealth: 3900
+  WormholeEntryScanCooldownTime: 1
+  SeededStaticIntelMultiplier: 1
+  MinTimeBeforeFactionSectorExpansion: 400
+  MinDamageBeforeNpcShipNeedsRepair: 0.2
+  NpcFactionSmallShipRatio: 3
+  MinTimeBeforeFactionShipBuild: 180
+  MaxTimeBeforeFactionShipBuild: 360
+  LaserInaccuracyMultiplier: 0
+  PowerGeneratorRateMultiplier: 1.25
+  TimeBeforeUnitRecapture: 120
+  CapturedUnitAutoTurretCooldownTime: 20
+  LaserOvershootMultiplier: 1.5
+  ProbabilityCountermeasuresDisruptMissileInactiveSector: 1
+  ProbabilityOfMaleNpc: 0.65
+  DismantledStationRefundPercent: 0.6
+  DismantledShipRefundPercent: 0.5
+  AllowBanditOnBanditAttack: 0
+  FleetStrategyAssignment_ScoreFuzziness: 0.3
+  FleetStrategyAssignment_ShipEffectivenessWeight: 0.7
+  FleetStrategyAssignment_FactionStrategyWeight: 0.3
+  ClearPlayerTargetWhenInvalidInstantly: 0
+  ClearNpcTargetWhenInvalidInstantly: 0
+  ExplosionComponentDamageMultiplier: 0.25

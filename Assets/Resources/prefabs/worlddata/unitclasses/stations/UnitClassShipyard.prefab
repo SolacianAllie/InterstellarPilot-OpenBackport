@@ -1,0 +1,172 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1709254077376921
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4730242686860875}
+  - component: {fileID: 114724804207875695}
+  - component: {fileID: 114618682377417806}
+  - component: {fileID: 114703437598541787}
+  - component: {fileID: 114884547391421755}
+  m_Layer: 0
+  m_Name: UnitClassShipyard
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4730242686860875
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 46.38317, y: -42.396122, z: 20.265797}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114724804207875695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 30420292, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  RelativeShipSaleCost: 0
+  CaptureLikelihood: 0.05
+  ShipPurposes: []
+  AIBuildPreferenceMultiplierFudge: 1
+  PassengerGroupCountMultiplier: 0.75
+  Legal: 1
+  AICreditsReserve: 150000
+  StationPurpose: 8
+  DisplayData: {fileID: 114724804207875695, guid: 63331a2ed8804fd44b6fd0117fcedf58, type: 2}
+  CanTradeAtOwnStation: 1
+  PurposeWarship: 0
+  PurposeTrader: 0
+  PurposeMiner: 0
+  PurposeStealth: 0
+  PurposePassengerTransport: 0
+  PurposeCourier: 0
+  PurposeEquipmentDealer: 0
+  PurposeScout: 0
+  CombatRating: 5.1119256
+  RequiredProduct: {fileID: 0}
+  AIMaxAttackDist: 400
+  BaseCost: 1000000
+  CanFireAt: 1
+  className: Shipyard
+  ShortClassName:
+  Description: The shipyard is the only station capable of building the largest ship classes such as the Magnus and Overlord. Due to its strategic importance, this station is typically found in core sectors and often heavily defended.
+  ShortDescription: The shipyard is the only station capable of building the largest ship classes such as the Magnus and Overlord.
+  Drag: 0.5
+  ExcludeFromDeliverShipMission: 0
+  GenerateMissions: 1
+  HasRepairFacilities: 1
+  RepairFacilitiesCostMultiplier: 0.75
+  HullType: 64
+  ShipType: 0
+  IsArmed: 1
+  IsCivilian: 0
+  IsFreighter: 0
+  IsPilottable: 0
+  IsUsable: 1
+  ExcludeFromGodModeSpawn: 0
+  AllowBuildByPlayer: 1
+  SeedInSandbox: 1
+  Manufacturer: {fileID: 0}
+  maxHealth: 5000
+  RepairCostMultiplier: 0.5
+  RpCost: 0
+  SaleCost: 2000000
+  TurnAcceleration: 30
+  turnRate: 60
+  UniqueID: 44100
+  UnitPrefab: {fileID: 114371939378208658, guid: 65d8c7640c312d24a90cc7bb8836e830, type: 2}
+  ConstructionRateMultiplier: 1
+  UnitSeries: {fileID: 0}
+  UnitType: 2
+  DetectionRange: 1500
+  PlanetClass: {fileID: 0}
+--- !u!114 &114618682377417806
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1366723278, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  Profile: {fileID: 0}
+  ShipTradeItems:
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: 775b56de57cd6df45aea57ea93e6d972, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: 3034ec670bdce7542b92a8cbc55aac4a, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: d8bb471922cad54478e326f843a52e26, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: 4dc72bdbd9394264ebd3334bb26ed9aa, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: f11bfbafb90c69d47b40430246e996e1, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: b224c0b9653702a47b2f01a7692e25d2, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: 641f41604a2c59548a0964f673f57add, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: 5b130ae8d581cfd41814c66e339d5723, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: f1c8c50bc0a216549b7e0a8fd9b4c123, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: 9b349794a8a6f374d90a5c44675c2afa, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: 140ac7f1b0d72c143b4525ef4316bfd4, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: 0577b178608a4be4b84ddd73e89d1645, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: b7e8afb098cedc44a88d007292a67c1c, type: 2}
+  - SellMultiplier: 1
+    UnitClass: {fileID: 114724804207875695, guid: 336acdd4bf35ae442a9f5614bdb54fd0, type: 2}
+--- !u!114 &114703437598541787
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 2094686444, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+--- !u!114 &114884547391421755
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1696413113, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  CargoLoadout: {fileID: 114724804207875695, guid: 0f219949ceff65447b5895ce17f8bca9, type: 2}

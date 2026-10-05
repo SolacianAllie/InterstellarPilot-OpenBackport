@@ -1,0 +1,111 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1709254077376921
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4730242686860875}
+  - component: {fileID: 114724804207875695}
+  m_Layer: 0
+  m_Name: FactionSpawnerSpawnTypeEmpire
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4730242686860875
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114724804207875695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 56580802, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  PersonAvatarProfiles:
+  - {fileID: 114724804207875695, guid: 60d048dd266b26a4da858cb8e967f72b, type: 2}
+  MinTimeBeforeSpawn: 0
+  SeedOnNewGame: 1
+  CanSpawnDuringGame: 1
+  ShouldHaveBountyBoard: 1
+  SeedCountMultiplier: 1
+  MinSeedCountMultiplier: 0.5
+  MaxSeedCountMultiplier: 1
+  MinPreferenceToPlaceBounty: 0.3
+  MaxPreferenceToPlaceBounty: 1
+  SeedCreditsPower: 2
+  MinSeedCredits: 5000000
+  MaxSeedCredits: 10000000
+  SpawnCreditsPower: 2
+  MinSpawnCredits: 1000000
+  MaxSpawnCredits: 2000000
+  MaxSpendOfSeededStations: 0.7
+  MinCreditsPerControllingFactionOwnedSectors: 750000
+  MaxCreditsPerControllingFactionOwnedSectors: 1500000
+  MinSectorsBeforeSpawn: 0
+  SpawnPriority: 1
+  NumFactionsPerSector: 0.16
+  NumFactionsCountType: 2
+  TypeInfo: {fileID: 114724804207875695, guid: 01a11b4b59e3b3b4794d11a8c7e4c47b, type: 2}
+  MinShipsInGroup: 2
+  MaxShipsInGroup: 6
+  MinVirtue: 0
+  MaxVirtue: 1
+  VirtueRandomPower: 1
+  MinAggresion: 0.8
+  MaxAggresion: 1
+  AggressionRandomPower: 1
+  CustomUnitDesignation:
+  LargeShipPreferenceLower: 0.2
+  LargeShipPreferenceUpper: 0.8
+  LargeShipPreferencePower: 2
+  CloakShipPreferenceLower: -0.2
+  CloakShipPreferenceUpper: 0
+  CloakShipPreferencePower: 1
+  MinFixedShipCount: -1
+  MaxFixedShipCount: -1
+  BuildShips: 1
+  IsBarOwner: 0
+  MaxJumpDistanceFromHomeSector: -1
+  MaxStationBuildDistanceFromHomeSector: -1
+  MinStaticIntel: 0.4
+  MaxStaticIntel: 0.6
+  MinNonStaticIntel: 0.75
+  MaxNonStaticIntel: 1
+  MinPreferenceToBuildStations: 0
+  MaxPreferenceToBuildStations: 1
+  MinDailyIncome: 0
+  MaxDailyIncome: 0
+  SectorControlLikelihood: 1
+  PilotRankingSystem: {fileID: 114724804207875695, guid: 1391433868841e641a9aa064073c894e, type: 2}
+  PilotRankingSystems: []
+  MinOffensiveStance: 0.25
+  MaxOffensiveStance: 1
+  OffensiveStancePower: 1
+  MinNpcCombatEfficiency: 0.6
+  MaxNpcCombatEfficiency: 1
+  MinPreferenceToHaveAmmo: 0.6
+  MaxPreferenceToHaveAmmo: 1
+  PreferenceToHaveAmmoPower: 1

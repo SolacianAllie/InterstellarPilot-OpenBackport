@@ -1,0 +1,89 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1709254077376921
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4730242686860875}
+  - component: {fileID: 114724804207875695}
+  m_Layer: 0
+  m_Name: ProjectileClass_Photon Burst III
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4730242686860875
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -7.636985, y: 5.0332284, z: -52.005474}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114724804207875695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -824327816, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  EffectiveFiringRangeStationery: 10000
+  EffectiveFiringRangeAgainstMobile: 10000
+  IsWeapon: 1
+  Name: Photon Burst III
+  IsConventionalWeapon: 1
+  AmmoClass: {fileID: 0}
+  AmmoRequirement: 1
+  BurstRounds: 3
+  BurstTimeBetweenRounds: 0.1
+  CollisionEnabled: 1
+  CreateExplosionWhenExpired: 0
+  Damage: -1
+  DamageFuzziness: 0.1
+  DefaultAmmoComplement: 3
+  DestroyOnCollide: 0
+  DestroyOnCollideDelayTime: 0
+  ExplosionClass: {fileID: 114724804207875695, guid: 2e3e43ba4582d314c9e830aa21658696, type: 2}
+  HomingAquiredTargetThreshold: 0.5
+  HomingCanLoseTarget: 1
+  HomingLostTargetDotThreshold: 0.25
+  IsHoming: 0
+  IsMine: 0
+  MaxMoveRange: 700
+  MiningDamageMultiplier: 0.0025
+  MoveSpeed: 290
+  ParentExplosionToTarget: 1
+  ProjectilePrefab: {fileID: 1709254077376921, guid: 6ae7541330788ca4a94b6193dedced3b, type: 2}
+  RotateTowardsTarget: 1
+  SetDamageUsingEnergyCost: 1
+  ShieldDamageType: 0
+  ThrustPower: 1
+  MinThrust: 0.2
+  TimedDestruction: 0
+  TimedExplosionInaccuracy: 30
+  TurnRate: 90
+  InheritParentVelocity: 0
+  InheritParentVelocityMultiplier: 1
+  InaccuracyMultiplier: 0.5
+  MissileIntelligentGuidanceMaxDist: 200
+  MissileIntelligentGuidance: 1
+  MinTimeBeforeGuidanceActivation: 1
+  MaxTimeBeforeGuidanceActivation: 2
+  MaxDuration: 0

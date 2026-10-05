@@ -1,0 +1,208 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1709254077376921
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4618682377417806}
+  - component: {fileID: 114703437598541787}
+  - component: {fileID: 114884547391421755}
+  m_Layer: 0
+  m_Name: FactionGeneric
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1730242686860875
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4099118695303065}
+  - component: {fileID: 114243736805655561}
+  m_Layer: 0
+  m_Name: FactionIntel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1724804207875695
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4061268324235159}
+  - component: {fileID: 114587765826080250}
+  m_Layer: 0
+  m_Name: FactionIntelScanner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4618682377417806
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 4099118695303065}
+  - {fileID: 4061268324235159}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114703437598541787
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1173824050, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  PersonAvatarProfiles: []
+  PreferredFormationStyle: {fileID: 0}
+  TeamColour: {r: 1, g: 1, b: 1, a: 1}
+  IsIgnoredByAI: 0
+  homeSector: {fileID: 0}
+  leaderPerson: {fileID: 0}
+  IntelScanner: {fileID: 114587765826080250}
+  Intel: {fileID: 114243736805655561}
+  Heatmap: {fileID: 0}
+  AdditionalRpProvision: 0
+  MinAIUnitControllerCombatEfficiency: 0
+  MaxAIUnitControllerCombatEfficiency: 1
+  AISettings: {fileID: 0}
+  Stats: {fileID: 0}
+  TradeEfficiency: 0.5
+  Aggression: 0.5
+  Virtue: 0.5
+  Greed: 0.5
+  Cooperation: 0.5
+  DynamicFactionAttitudes: 1
+  credits: 10000
+  CreateMissions: 0
+  Description:
+  DestroyWhenNoUnits: 0
+  IsCivilian: 0
+  FactionType: 0
+  Name:
+  PilotRankingSystem: {fileID: 114724804207875695, guid: 1391433868841e641a9aa064073c894e, type: 2}
+  RequisitionPointMultiplier: 1
+  RestrictedTradeGoods: []
+  ShortName:
+  ShouldFactionShowMissionSpecs: 1
+  TradeIllegalGoods: 0
+  UniqueId: -1
+--- !u!114 &114884547391421755
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 77891051, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  SectorControlLikelihood: 0
+  PatrolSettings: {fileID: 0}
+  IgnoreStationCreditsReserve: 0
+  AllowForeignFactionToUseDocks: 1
+  RepairShips: 1
+  UpgradeShips: 1
+  BuildShips: 1
+  RepairMinHullDamage: 0.2
+  RepairMinShieldDamage: 0.2
+  RepairMinCreditsBeforeRepair: 2000
+  PreferenceToPlaceBounty: 0.5
+  LargeShipPreference: 0.25
+  CloakShipPreference: -0.2
+  DailyIncome: 0
+  HostileWithAll: 0
+  MaxGroupUnitCount: 1
+  MinGroupUnitCount: 1
+  OffensiveStance: 0.5
+  PreferenceToBuildStations: 0.5
+  PreferenceToBuildTurrets: 0.5
+  MaxJumpDistanceFromHomeSector: -1
+  PilotGender: 0
+  FixedShipCount: -1
+  MaxStationBuildDistanceFromHomeSector: -1
+  PreferenceToHaveAmmo: 0.5
+--- !u!4 &4099118695303065
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1730242686860875}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4618682377417806}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114243736805655561
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1730242686860875}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 566258492, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+--- !u!4 &4061268324235159
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1724804207875695}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4618682377417806}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114587765826080250
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1724804207875695}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1031981914, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:

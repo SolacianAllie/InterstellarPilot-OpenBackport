@@ -1,0 +1,75 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1709254077376921
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4730242686860875}
+  - component: {fileID: 114724804207875695}
+  m_Layer: 10
+  m_Name: DialogEvents
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4730242686860875
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114724804207875695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 877833243, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  PlayerEnteredOwnedPilottedShip: {fileID: 114724804207875695, guid: 50522ca0c1d942a47b7dae7c16eec61e, type: 2}
+  AttackTargetIsDockedEvent: {fileID: 114724804207875695, guid: aef71cdcbf6874241be8bc9f3b8414aa, type: 2}
+  AttackedByUnfriendly: {fileID: 114724804207875695, guid: b75301b41573f4743b23853b1a8d55a6, type: 2}
+  AttackedByNeutral: {fileID: 114724804207875695, guid: b03cd2fdf55eb3f43b7146bca9ea30d9, type: 2}
+  AttackedByFriendly: {fileID: 114724804207875695, guid: 2a54f2f6487d1654e8350a5db92f0368, type: 2}
+  CargoBayFull: {fileID: 114724804207875695, guid: 50cd89d814710e9408b012c851cea0f4, type: 2}
+  CountermeasureDeploy: {fileID: 114724804207875695, guid: 2535d93009572a34dac1b1adfa267f67, type: 2}
+  Destroyed: {fileID: 114724804207875695, guid: 63df7f12214d4c7418affaa307ac3fc1, type: 2}
+  DestroyedTarget: {fileID: 114724804207875695, guid: 6e5d4bd36d34c95458d131d16a567d17, type: 2}
+  GotTarget: {fileID: 114724804207875695, guid: 23e5d8cdb14a8ec4b851a70becd18684, type: 2}
+  HullDamage: {fileID: 114724804207875695, guid: bdf8a0d7d2a95d741a4b18311db754d0, type: 2}
+  InterceptingShip: {fileID: 114724804207875695, guid: 28ff228548583c144b4b074a83ed99c8, type: 2}
+  InterceptingStation: {fileID: 114724804207875695, guid: be9712f3dc31a434ba36dd8ba070bbcb, type: 2}
+  LostTarget: {fileID: 114724804207875695, guid: e82ddc20b7920454c808d4f240b1988e, type: 2}
+  LostTargetCloaked: {fileID: 114724804207875695, guid: 4291ad1cd1c57a844b5beda88ab5af98, type: 2}
+  MiningFinished: {fileID: 114724804207875695, guid: 54808b14a8c054a42a25905ed3a23595, type: 2}
+  MissileLock: {fileID: 114724804207875695, guid: 3d9c445fa3b75814d8d2fe0d45886c80, type: 2}
+  PlayerStartDestroyMission: {fileID: 114724804207875695, guid: 4e91efff778f90c44a7d1b8f8ed153d2, type: 2}
+  ShieldsDown: {fileID: 114724804207875695, guid: 80f37556805f906469427d3475fce774, type: 2}
+  TakeDamage: {fileID: 114724804207875695, guid: 99da4228f78f30f44824bc6ef8618707, type: 2}
+  CargoStolenByOther: {fileID: 114724804207875695, guid: 1e716921b2d41884ab23b8df0dbd160a, type: 2}
+  CrashedIntoNpcShip: {fileID: 114724804207875695, guid: e9dcb2565eeaa564bac73d66e59dd133, type: 2}
+  NpcCrashedIntoSuperior: {fileID: 114724804207875695, guid: 5361d0c07df190344a07f87a53893872, type: 2}
+  OutlawRandomAttack: {fileID: 114724804207875695, guid: ae972e5d7d7133449ae97dbb9589dd99, type: 2}
+  FleetMovingToNewSector: {fileID: 114724804207875695, guid: a665d1c712f20884186510cbdce9ab30, type: 2}
+  FleetReceivedNewOrder: {fileID: 114724804207875695, guid: 93121e9aec5f9184d8da1a017a777a96, type: 2}
+  FleetRepairOrderComplete: {fileID: 114724804207875695, guid: fa14138567c17b54e8d6d792a3b59a4b, type: 2}
+  MercenarySalesPitch: {fileID: 114724804207875695, guid: d8918eb30610d7845b680b955d9577e3, type: 2}
+  MercenaryHired: {fileID: 114724804207875695, guid: 4ba75f782de3a2c4e86fb01e108bf795, type: 2}

@@ -1,0 +1,95 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1709254077376921
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4730242686860875}
+  - component: {fileID: 114724804207875695}
+  m_Layer: 0
+  m_Name: UnitClasses
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4730242686860875
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114724804207875695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1075304866, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  Refinery: {fileID: 114724804207875695, guid: 0f7e91d074060f446a110c8aa53cb0fc, type: 2}
+  Shipyard: {fileID: 114724804207875695, guid: 6342a886c6886a049b706b1cabc629df, type: 2}
+  AdvShipyard: {fileID: 114724804207875695, guid: 9f2c41e36db37ab4ca5afa59703f403a, type: 2}
+  TradeStation: {fileID: 114724804207875695, guid: 9b6267e2c32b876408c7f8a988e5fbe7, type: 2}
+  MilitaryOutpost: {fileID: 114724804207875695, guid: ec69b77d2b82b9d4b997dba4d319a12c, type: 2}
+  RepairShop: {fileID: 114724804207875695, guid: 8cbe4616739708f478c0d2faa83aa891, type: 2}
+  Lab: {fileID: 114724804207875695, guid: ee709c815a45f944eaa32e9ee57c8903, type: 2}
+  Bar: {fileID: 114724804207875695, guid: e2e878b9c21162f49957fc58f9774791, type: 2}
+  RationsFactory: {fileID: 114724804207875695, guid: 33a43db603cd86f4e8d386d27cce1573, type: 2}
+  LightWeaponsPlatform: {fileID: 114724804207875695, guid: ad57fa0a1f5a8024c99fc152ac1e984a, type: 2}
+  MediumWeaponsPlatform: {fileID: 114724804207875695, guid: c388687da5e4ad649b3a515de945dd66, type: 2}
+  Hornet_A: {fileID: 114724804207875695, guid: 19053f0834ef2a346800bd870910302e, type: 2}
+  Ranger_A: {fileID: 114724804207875695, guid: 876f00318925903449b8fb6ca84b6c91, type: 2}
+  Ranger_X: {fileID: 114724804207875695, guid: 761aa35f7b1edf1498fafec5227a82b6, type: 2}
+  Raptor_A: {fileID: 114724804207875695, guid: 8dfc4ef61d1dace42a3271001fe5c557, type: 2}
+  Raptor_X: {fileID: 114724804207875695, guid: fbe608f4225c3684280c0dd8b7b1f8aa, type: 2}
+  Overlord_A: {fileID: 114724804207875695, guid: 4dc72bdbd9394264ebd3334bb26ed9aa, type: 2}
+  Overlord_X: {fileID: 114724804207875695, guid: 140ac7f1b0d72c143b4525ef4316bfd4, type: 2}
+  Creon_A: {fileID: 114724804207875695, guid: 775b56de57cd6df45aea57ea93e6d972, type: 2}
+  Creon_X: {fileID: 114724804207875695, guid: 336acdd4bf35ae442a9f5614bdb54fd0, type: 2}
+  Ares_A: {fileID: 114724804207875695, guid: d8bb471922cad54478e326f843a52e26, type: 2}
+  Ares_X: {fileID: 114724804207875695, guid: b7e8afb098cedc44a88d007292a67c1c, type: 2}
+  Magnus_EQ: {fileID: 114724804207875695, guid: 5b130ae8d581cfd41814c66e339d5723, type: 2}
+  Magnus_A: {fileID: 114724804207875695, guid: f11bfbafb90c69d47b40430246e996e1, type: 2}
+  Magnus_X: {fileID: 114724804207875695, guid: 0577b178608a4be4b84ddd73e89d1645, type: 2}
+  Hauler_A: {fileID: 114724804207875695, guid: a988d0017cbc80b42b6831b4c8aa602e, type: 2}
+  Hauler_P: {fileID: 114724804207875695, guid: 69c6586e8e725cb4b969e1aa31f62048, type: 2}
+  Venture_A: {fileID: 114724804207875695, guid: 59f1e6b52928eb8488bcf044f6151538, type: 2}
+  Shuttle_A: {fileID: 114724804207875695, guid: c43373824ee9b23489f7bdabe32ec6ff, type: 2}
+  Shuttle_X: {fileID: 114724804207875695, guid: 4aef1e74199dda84ea8fd886aaaee6f3, type: 2}
+  Pioneer_A: {fileID: 114724804207875695, guid: 98667e110be1aa24081a7ed62856764a, type: 2}
+  Pioneer_P: {fileID: 114724804207875695, guid: 6ead21c79bc4418409465f18d5b4f597, type: 2}
+  Pioneer_X: {fileID: 114724804207875695, guid: fa07866e645cdc946a785dc32a47de4e, type: 2}
+  Hauler_M: {fileID: 114724804207875695, guid: 47280d8c728ad654aad7910e40aa5690, type: 2}
+  Hauler_H: {fileID: 114724804207875695, guid: 6d77a2da4717b014eab79d06f4f5bce2, type: 2}
+  Hauler_X: {fileID: 0}
+  Flyer_A: {fileID: 114724804207875695, guid: 6474cdbed3172e94390a77736dc4a4ab, type: 2}
+  Flyer_X: {fileID: 114724804207875695, guid: 7d6b30abfad402a4fac7c9b7a8e9d5a7, type: 2}
+  Hornet_X: {fileID: 114724804207875695, guid: 40c4dde903964404d99ed67f7f3aff5e, type: 2}
+  Thunder_X: {fileID: 114724804207875695, guid: f1c8c50bc0a216549b7e0a8fd9b4c123, type: 2}
+  Thunder_A: {fileID: 114724804207875695, guid: 641f41604a2c59548a0964f673f57add, type: 2}
+  Orion_A: {fileID: 114724804207875695, guid: b224c0b9653702a47b2f01a7692e25d2, type: 2}
+  CargoContainer: {fileID: 114724804207875695, guid: 8ae96620bde987048a446a708b56eb8c, type: 2}
+  SmallSatellite: {fileID: 114724804207875695, guid: 76837374b747ec44d9af49fb6826785f, type: 2}
+  SectorHQ: {fileID: 114724804207875695, guid: 600211b881dc83f4c80436ef05d51d4c, type: 2}
+  TestingSpeedy: {fileID: 114724804207875695, guid: 97bc37ef7ac688948a78f320a653c7c0, type: 2}
+  StorageLocker: {fileID: 114724804207875695, guid: 74c674b19ca746d4e84b98e7418ce4d3, type: 2}
+  AsteroidTypeH: {fileID: 114724804207875695, guid: 99e6af695f4e0d043b5f487057cc21e1, type: 2}
+  AsteroidTypeA: {fileID: 114724804207875695, guid: 8d598604014f9f7479ed91327f41b14b, type: 2}

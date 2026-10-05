@@ -1,0 +1,17 @@
+﻿Name,Can mix with number,Male/Female,MaxCount
+Bunch,false,Unspecified
+Group,false,Unspecified
+Sect,false,Unspecified
+Clan,false,Unspecified
+Mob,false,Unspecified
+Outfit,false,Unspecified
+Squad,false,Unspecified
+Corps,false,Unspecified
+Boys,true,Male
+Belles,true,Female
+Hags,true,Female
+Sirens,true,Female
+Guys,true,Male
+Brothers,true,Male
+Sisters,true,Female
+Gang,false,Unspecified

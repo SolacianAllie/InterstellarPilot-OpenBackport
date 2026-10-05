@@ -1,0 +1,139 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1709254077376921
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4730242686860875}
+  - component: {fileID: 114724804207875695}
+  m_Layer: 0
+  m_Name: HUD
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4730242686860875
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -3.5993686, y: -0.3713622, z: -49.07863}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114724804207875695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1389281591, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  restrictNavigationAway: 0
+  HelpButton: {fileID: 0}
+  CustomHelpTransform: {fileID: 0}
+  DeactivateType: 0
+  IgnoreCanvasGroupAlpha: 0
+  FadeRateMultiplier: 1
+  ShowDefaultBackButton: 1
+  KeepInNavigationStack: 1
+  FadeIn: 1
+  FadeOut: 1
+  CanvasGroups: []
+  KeepInMemory: 0
+  keepOtherScreensActive: 0
+  RefreshOnEnable: 1
+  RefreshOnStart: 1
+  Canvases: []
+  UpdateWhenNotCurrentScreen: 0
+  PauseWhenShown: 0
+  AllowTogglePause: 0
+  AcceptButton: {fileID: 0}
+  LegacyPauseWhenShown: 0
+  ShowDockHeader: 1
+  TouchTargetButton: {fileID: 0}
+  ComponentManager: {fileID: 0}
+  Padder: {fileID: 0}
+  ViewOptions: {fileID: 0}
+  TargetContextMenuButton: {fileID: 0}
+  MissileLockButtonsController: {fileID: 0}
+  WorldSpaceConditionController: {fileID: 0}
+  ScreenSpaceConditionController: {fileID: 0}
+  QuickTractorController: {fileID: 0}
+  ShipComponentsController: {fileID: 0}
+  HudTargetController: {fileID: 0}
+  HUDScannerDisplayListController: {fileID: 0}
+  TargetInScreenSelector: {fileID: 0}
+  AutoScanner: {fileID: 0}
+  TargetInViewSelector: {fileID: 0}
+  ScannerDisplayList: {fileID: 0}
+  AllowDeselectTargetWithMouse: 0
+  AllowPlayerSteering: 1
+  AllowPlayerTargetting: 1
+  AllowPlayerThrottle: 1
+  CheckCanDockFrequency: 0.2
+  ClaimShipButton: {fileID: 0}
+  CommsButton: {fileID: 0}
+  CommsButtonRoot: {fileID: 0}
+  CommsMaxResponseTime: 3
+  CommsMinResponseTime: 0.3
+  controlPanelButtonSize: 64
+  DockButton: {fileID: 0}
+  DockButtonRoot: {fileID: 0}
+  EnterShipButton: {fileID: 0}
+  GameSpeedButton: {fileID: 0}
+  HostileTargetsAudioSource: {fileID: 0}
+  InGameMenuController: {fileID: 0}
+  InGameMenuTimeout: 5
+  lastRequestDockTime: 0
+  CameraMode: 0
+  MatchTargetSpeedButton: {fileID: 0}
+  MissileLockGameObject: {fileID: 0}
+  PlayerCapacitorRoot: {fileID: 0}
+  PlayerConditionController: {fileID: 0}
+  SectorMapButton: {fileID: 0}
+  ShipTurnSpriteL: {fileID: 0}
+  ShipTurnSpriteR: {fileID: 0}
+  ShowTargetSprites: 1
+  SpdLabel: {fileID: 0}
+  SpeechModel: {fileID: 0}
+  TargetConditionController: {fileID: 0}
+  TargetInfoButton: {fileID: 0}
+  TargetInfoUI: {fileID: 0}
+  TargetMenuButton: {fileID: 0}
+  TargetMissileLockButton: {fileID: 0}
+  TargetOrdersButton: {fileID: 0}
+  TargetRoot: {fileID: 0}
+  ThrottleRoot: {fileID: 0}
+  ThrottleSlider: {fileID: 0}
+  ThrottleButtonSensitivity: 0.5
+  ThrottleControllerUI: {fileID: 0}
+  TimeBetweenHostileTargettedMsg: 10
+  TotalTurnInput: 0
+  TractorLootButtonRoot: {fileID: 0}
+  TurnButtonSensitivity: 1
+  TurnButtonsFlashRoot: {fileID: 0}
+  TurnButtonsRoot: {fileID: 0}
+  TurnSpritePositionOffset: {x: 0, y: -4, z: 0}
+  TurnSpriteRoot: {fileID: 0}
+  TurnSpriteShieldRingMultiplier: 1
+  TurnSpriteThreshold: 5
+  TurretGrids: []
+  UnitCompass: {fileID: 0}
+  UnitTurnRestoreSpd: 0.5
+  UniverseMapButton: {fileID: 0}

@@ -1,0 +1,81 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1709254077376921
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4730242686860875}
+  - component: {fileID: 114724804207875695}
+  m_Layer: 0
+  m_Name: PilotRankingSystemNavyWithCEO
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4730242686860875
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114724804207875695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1559530563, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  UniqueId: 5000
+  Name: Navy
+  Ranks:
+  - Rank: {fileID: 114724804207875695, guid: 42f3ec68b2e08cc40b5ceeb0e644958c, type: 2}
+    RequiredPilotCount: 1
+    MinNumber: 0
+    MaxNumber: 99999
+  - Rank: {fileID: 114724804207875695, guid: 53a92f2e50b61424295d24b13ce34b28, type: 2}
+    RequiredPilotCount: 1
+    MinNumber: 0
+    MaxNumber: 99999
+  - Rank: {fileID: 114724804207875695, guid: 79e1843ee3514aa469bbf374dc24782c, type: 2}
+    RequiredPilotCount: 3
+    MinNumber: 0
+    MaxNumber: 99999
+  - Rank: {fileID: 114724804207875695, guid: 58a01622261b36743bc0962f51d8a945, type: 2}
+    RequiredPilotCount: 8
+    MinNumber: 0
+    MaxNumber: 99999
+  - Rank: {fileID: 114724804207875695, guid: 629859a0b9ca4c14baef1be7220d1e6c, type: 2}
+    RequiredPilotCount: 10
+    MinNumber: 0
+    MaxNumber: 99999
+  - Rank: {fileID: 114724804207875695, guid: 4347587a49db79547847637f572f4c4a, type: 2}
+    RequiredPilotCount: 20
+    MinNumber: 0
+    MaxNumber: 99999
+  - Rank: {fileID: 114724804207875695, guid: 7b27a5bafb06a4542a71e56aefa3d956, type: 2}
+    RequiredPilotCount: 30
+    MinNumber: 0
+    MaxNumber: 99999
+  - Rank: {fileID: 114724804207875695, guid: cb04c54c5f83cb94993208542b26bbc9, type: 2}
+    RequiredPilotCount: 0
+    MinNumber: 1
+    MaxNumber: 1

@@ -1,0 +1,99 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1709254077376921
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4730242686860875}
+  - component: {fileID: 114724804207875695}
+  m_Layer: 0
+  m_Name: DefaultEconomySettings
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4730242686860875
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114724804207875695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -900241803, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  FactionAIMinTradeEfficiency: 0.15
+  FactionAITradeEfficiencyPower: 0.7
+  StationMiscTaxRate: 0.1
+  StationShipSaleTaxRate: 0.025
+  ShipSaleRounding: 250
+  GeneralRounding: 25
+  EquipmentCostMultiplier: 0.87
+  MiningMinPower: 0.6
+  MiningMaxPower: 1.7
+  CargoFactoryBayInputReserve: 0.9
+  CargoFactoryBayOutputReserve: 0.3
+  AITradeSearchScorePerMetreTravelled: -0.5
+  AITradeEfficiencyMinCostFuzziness: 0
+  AITradeEfficiencyMaxCostFuzziness: 0.1
+  AITradeSearchMinPriceObscure: 0.1
+  AITradeSearchMaxPriceObscure: 1
+  AITradeSearchHighStockLevelCostDiscount: 0.95
+  AITradeSearchHighStockReferenceValue: 3
+  AITradeSearchLowStockLevelCostDiscount: 0.1
+  AITradeSearchLowStockLevelThreshold: 0.2
+  AITradeSearchHighStockLevelThreshold: 0.5
+  ClearTraderCachedPricesInterval: 10
+  ApplyGoodRelationsMarkup: 1
+  ApplyTraderMarkup: 1
+  AsteroidYieldQuantityMultiplier: 1.3
+  CargoFactoryMaxBuyPrice: 1.45
+  CargoFactoryMaxSellPrice: 0.85
+  CargoFactoryMinBuyPrice: 1
+  CargoFactoryMinSellPrice: 0.65
+  CargoFactoryHighStock: 0.75
+  CargoFactoryLowStock: 0.4
+  CargoFactoryLowStockMin: 0.5
+  CargoFactoryRequiredInputsMultiplier: 0.4
+  CargoGoodOpinionMultiplier: 0.1
+  CargoGoodOpinionPower: 2
+  CargoPriceMultiplierColorAffect: 0.5
+  ConsumerRevenueMultiplier: 1.75
+  ConsumerProductionTimeMultiplier: 0.5
+  PreferredProductionTimeCycle: 60
+  ProductionTimePerCredits: 0.004
+  SetMiscPrices: 1
+  TraderInitWithCargoMaxVolume: 0.6
+  TraderInitWithCargoMinVolume: 0.3
+  TraderInitWithCargoProbability: 0.5
+  TraderMarkupUpper: 0.15
+  TraderMarkupLower: 0.08
+  TrimTraderCargo: 1
+  TrimTraderCargoThresholdCargoUsage: 0.85
+  TrimTraderCargoTrimLevel: 0.5
+  RepairCostPerHullPoint: 0.01
+  HullValuePerHullPoint: 12
+  TradeIllegalCargoThreshold: 0.38
+  OwnStationTradeScorePercentage: 0.15
