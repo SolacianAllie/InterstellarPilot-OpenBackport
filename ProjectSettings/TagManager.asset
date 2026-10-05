@@ -3,7 +3,16 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Engine
+  - Hud
+  - SpaceScene_Planet
+  - SpaceScene_PlanetRings
+  - SpaceScene_LocalStar
+  - SpaceScene_Nebula
+  - SpaceScene_Camera
+  - SpaceScene_Moon
+  - SpaceScene_Galaxy
   layers:
   - Default
   - TransparentFX
@@ -11,66 +20,33 @@ TagManager:
   - 
   - Water
   - UI
+  - TintBackground
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Engine
+  - MiscUnit
+  - 2D
+  - BackgroundImage
+  - Avoider
+  - Hud3D
+  - Missile
+  - PlayerShipSprites
+  - BackgroundObjects
+  - Cargo
+  - Ship
+  - Station
+  - Asteroid
+  - Projectile
+  - Wormhole
+  - Planet
+  - AsteroidCluster
+  - Mine
+  - BackgroundPlanet
+  - AsteroidClusterObject
+  - Detectable
+  - UnitGasCloud
+  - DeepSpace
+  - UnitWaypoint
   m_SortingLayers:
   - name: Default
     uniqueID: 0
     locked: 0
-  m_RenderingLayers:
-  - Default
-  - Light Layer 1
-  - Light Layer 2
-  - Light Layer 3
-  - Light Layer 4
-  - Light Layer 5
-  - Light Layer 6
-  - Light Layer 7
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
