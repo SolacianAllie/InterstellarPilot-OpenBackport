@@ -1,0 +1,17 @@
+using Pixelfactor.IP.Common;
+
+namespace Pixelfactor.IP.OutlawNamesGenerator
+{
+	public class PirateName
+	{
+		public PirateNamePrefixType PrefixType { get; set; }
+
+		public string SingularName { get; set; }
+
+		public string PluralName { get; set; }
+
+		public GenderChoice Gender { get; set; }
+
+		public bool AllowNameAfterCount { get; set; }
+	}
+}

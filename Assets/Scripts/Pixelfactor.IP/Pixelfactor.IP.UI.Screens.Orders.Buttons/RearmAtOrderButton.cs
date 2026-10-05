@@ -1,0 +1,86 @@
+using System.Linq;
+using Pixelfactor.IP.Engine;
+using Pixelfactor.IP.UI.Screens.EnterSlider;
+using Pixelfactor.IP.UI.Screens.SectorMap;
+using Pixelfactor.IP.UI.Screens.UniverseMap;
+
+namespace Pixelfactor.IP.UI.Screens.Orders.Buttons
+{
+	public class RearmAtOrderButton : OrderButton
+	{
+		protected override bool ShouldBeInteractable()
+		{
+			if (base.ShouldBeInteractable())
+			{
+				return OrderTarget.AllUnitsCanDock;
+			}
+			return false;
+		}
+
+		protected override void OnButtonClick()
+		{
+			base.OnButtonClick();
+			UIController.Instance.ScreenNavigator.ShowCustomUniverseMapScreen((UniverseMapScreen universeMap) =>
+			{
+				universeMap.Title = "Select Sector";
+				universeMap.AllowSectorSelection = true;
+				universeMap.EnabledSectors = OrdersHelper.GetPlayerUniverseMapPickableSectors();
+				universeMap.ShowSelectedSectorInfo = false;
+				universeMap.SectorSelectedCallback = SectorPicked;
+				Sector sector = OrderTarget.Sectors.FirstOrDefault();
+				if (sector != null)
+				{
+					universeMap.SelectSector(sector);
+					universeMap.CenterOnSector(sector);
+				}
+				universeMap.RestrictNavigationAway();
+			});
+		}
+
+		private void SectorPicked(UniverseMapScreen sender, Sector selectedSector)
+		{
+			if (selectedSector != null)
+			{
+				ShowSectorMap(selectedSector);
+			}
+			else
+			{
+				OnOrderCancelled();
+			}
+		}
+
+		private void ShowSectorMap(Sector selectedSector)
+		{
+			UIController.Instance.ScreenNavigator.ShowSectorMapScreen(selectedSector, (SectorMapScreen sectorMap) =>
+			{
+				sectorMap.SectorMapForm.Title = "Select rearm location";
+				sectorMap.SectorMapForm.AllowSelectionConfirm = true;
+				sectorMap.SectorMapForm.SectorMap.CustomUnitDisplayFilter = (Unit unit) => Pixelfactor.IP.UI.Screens.SectorMap.SectorMap.AlwaysShowUnitOnMap(unit) || OrdersHelper.CanOrderRearmAtTarget(OrderTarget, unit) || OrderTarget.IsUnitOrdered(unit);
+				sectorMap.SectorMapForm.SectorMap.CustomSelectionFilter = (SectorMapSelectionItem item) => item.Unit != null && OrdersHelper.CanOrderRearmAtTarget(OrderTarget, item.Unit);
+				sectorMap.SectorMapForm.SelectedCallback = SectorMapItemPicked;
+				sectorMap.RestrictNavigationAway();
+			});
+		}
+
+		private void SectorMapItemPicked(SectorMapForm sender, SectorMapSelectionItem selected)
+		{
+			Unit selectedUnit = selected.Unit;
+			if (selectedUnit != null)
+			{
+				RearmOrderHelper.ShowEquipmentUsagePrompt((EnterSliderIngameScreen handler, bool enteredValue, float newValue) =>
+				{
+					if (enteredValue)
+					{
+						OnOrderIssuing(out var stack);
+						OrdersHelper.OrderRearmAt(OrderTarget, selectedUnit, newValue, stack);
+						OnOrderIssued();
+					}
+				});
+			}
+			else
+			{
+				OnOrderCancelled();
+			}
+		}
+	}
+}

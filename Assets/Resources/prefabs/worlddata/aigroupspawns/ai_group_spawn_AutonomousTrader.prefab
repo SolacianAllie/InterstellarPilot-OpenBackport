@@ -59,7 +59,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709254077376921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 954969277, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: e715c08aaab7a5b7a6791650c6c30035, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   AllowRespawnInActiveScene: 1
@@ -108,7 +108,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1730242686860875}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -1772971838, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 99fe6f783e75869ee97b8e13d4f96abb, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   Notifications: 1

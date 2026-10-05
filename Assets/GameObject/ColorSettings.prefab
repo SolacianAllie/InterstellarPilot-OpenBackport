@@ -41,7 +41,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709254077376921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -1259380680, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 269dea9599b58aea492f9f89b8e27d8f, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   UniverseMapUnclaimedSectorLabelColor: {r: 0.91, g: 0.84031534, b: 0.84031534, a: 1}

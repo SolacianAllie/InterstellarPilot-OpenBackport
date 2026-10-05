@@ -42,7 +42,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709254077376921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 655537899, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 36bf2b7b0c3a936b1d0c6cdb3494dcba, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   ComingSoon: 0
@@ -77,7 +77,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709254077376921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -1897504210, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 518c604a31ed693703a0d1349d8d6f9c, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   Teams:

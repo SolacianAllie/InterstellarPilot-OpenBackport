@@ -41,7 +41,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709254077376921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -2004538969, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 15fde5bc8c84e2d8db4822d2b14c8aa1, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   RefineryPartsCargoClass: {fileID: 114724804207875695, guid: 44f06a6cbbe811144ae9a0fcc00e8adb, type: 2}

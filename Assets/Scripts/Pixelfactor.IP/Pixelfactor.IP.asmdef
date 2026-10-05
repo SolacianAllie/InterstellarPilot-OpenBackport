@@ -1,0 +1,14 @@
+{
+    "name": "Pixelfactor.IP",
+    "rootNamespace": "",
+    "references": ["Pixelfactor.IP.Avatars", "Pixelfactor.IP.Common", "Pixelfactor.IP.OutlawNamesGenerator", "Pixelfactor.IP.SavedGames.V2.BinarySerialization", "Pixelfactor.IP.SavedGames.V2.Model", "Pixelfactor.IP.SpaceUnity", "Pixelfactor.Math", "Pixelfactor.Unity.Utils", "UnityEngine.UI", "Unity.TextMeshPro"],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

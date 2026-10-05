@@ -170,7 +170,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709254077376921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -164596294, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 7580e5954fe4294e1ad88aec641e3da0, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   CloakDrawColor: {r: 1, g: 1, b: 1, a: 1}
@@ -450,7 +450,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1884547391421755}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1524804431, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 8bef8c7edec8b660aa45526903d6f086, type: 3}
   m_Name:
   m_EditorClassIdentifier:
 --- !u!4 &4313026266067498
@@ -477,7 +477,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1099118695303065}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1524804431, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 8bef8c7edec8b660aa45526903d6f086, type: 3}
   m_Name:
   m_EditorClassIdentifier:
 --- !u!4 &4632457200066912
@@ -504,6 +504,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 1243736805655561}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1524804431, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 8bef8c7edec8b660aa45526903d6f086, type: 3}
   m_Name:
   m_EditorClassIdentifier:

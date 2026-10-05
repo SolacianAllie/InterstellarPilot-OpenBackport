@@ -116,7 +116,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709254077376921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1207124324, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: fb2212b0650dfeaff32bbba81af99947, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   restrictNavigationAway: 1
@@ -276,7 +276,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1724804207875695}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -547464634, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 2dd0db332692be0adcf35ab29fe83f01, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   ConformX: 1
@@ -383,7 +383,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1703437598541787}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1389055311, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 21221d0eed5f747088ad6af3e00dcabc, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   AudioClip: {fileID: 8300000, guid: 19898852b8dde6e42aa5ece4312a55ae, type: 3}

@@ -41,7 +41,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709254077376921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -1583294860, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 3021cdc46b486914ff3f265726a688ca, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   Description: The Thunder is a large frigate. It is a significant improvement on the Orion class vessel. This ship has plenty of cargo space, 4 weapon turrets and can be repaired more cheaply.

@@ -59,7 +59,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709254077376921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -1803456270, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: dbe9844c3a86c81fac8b9ad083a7d4ec, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   Name: Bandits
@@ -102,7 +102,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1730242686860875}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1548746655, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 8f214605245671646c1dd9d18c74fbf9, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   HealthMultiplier: 1

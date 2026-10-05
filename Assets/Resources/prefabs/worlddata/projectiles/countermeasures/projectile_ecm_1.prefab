@@ -81,7 +81,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709254077376921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -1305118651, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 31364a87781d1d98b6ee3057585af9b2, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   ClassName: ECM I
@@ -107,7 +107,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709254077376921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1180717505, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: cf934c907b73ad4fa727d0942754a9b0, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   ProjectileClass: {fileID: 114724804207875695, guid: 2ffc420159926c54d8e9175bfd50d984, type: 2}
@@ -120,7 +120,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709254077376921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1093872619, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: af96557cbad7252446709803150b533b, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   CountermeasureClass: {fileID: 114724804207875695, guid: 8106eab623408b0418c25a734d850339, type: 2}

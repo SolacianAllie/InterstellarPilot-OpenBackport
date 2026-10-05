@@ -41,7 +41,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709254077376921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -1583294860, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 3021cdc46b486914ff3f265726a688ca, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   Description: Ever since the mysterious discovery of the first wormhole in the Saturn rings in 2230, wormholes have provided the means of Interstellar travel from the Sol system to the Gatopean system and beyond.  Modern starships have been adapted over time to be able to sustain the massive forces encountered when entering a wormhole. It is now possible for ships to travel between systems with minimal structural damage. Research continues into the possible side-effects that humanoid personnel encounter during interstellar travel.

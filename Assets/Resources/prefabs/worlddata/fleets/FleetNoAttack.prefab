@@ -42,7 +42,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709254077376921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2032711823, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 3d7f58966e65316f8cf86645f00a9b54, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   FleetStrategy: 0
@@ -62,7 +62,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709254077376921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -942643729, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 2102fe35ce91e12ce8fdce47be1980c5, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   NotifyWhenOrderComplete: 0

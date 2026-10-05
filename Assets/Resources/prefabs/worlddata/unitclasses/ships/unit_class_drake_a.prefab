@@ -42,7 +42,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709254077376921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 30420292, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: ad91520bcddc1f797ae6dcb3ac55fb7d, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   RelativeShipSaleCost: 0.060159177
@@ -122,7 +122,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709254077376921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -1696413113, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: a97019955d343518775fc74fb1a18a8a, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   CargoLoadout: {fileID: 114724804207875695, guid: 26d2df2431a79bd4fb4c5e9f988361a9, type: 2}

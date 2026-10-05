@@ -43,7 +43,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709254077376921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -1305118651, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 31364a87781d1d98b6ee3057585af9b2, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   ClassName: Unstable Wormhole
@@ -69,7 +69,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709254077376921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -2056369382, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: bb5e0a64f3ca4211d31de8003590843e, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   DistanceMultiplier: 1

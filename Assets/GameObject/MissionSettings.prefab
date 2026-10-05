@@ -41,7 +41,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709254077376921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -3585011, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 29cc4472ff95de794b90a7117684b049, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   CourierMissionSettings: {fileID: 114724804207875695, guid: 831c2337b54fd29468e5496e3d399494, type: 2}

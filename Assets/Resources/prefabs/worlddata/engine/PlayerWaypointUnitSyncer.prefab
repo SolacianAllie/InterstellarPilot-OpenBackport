@@ -41,7 +41,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709254077376921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1918905705, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 33a1c2af748673f78d47a2714996474c, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   CustomWaypointPrefab: {fileID: 114724804207875695, guid: bcb3c415fa9b28b45b276af764cfba57, type: 2}

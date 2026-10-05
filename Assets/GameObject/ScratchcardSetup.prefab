@@ -167,7 +167,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709254077376921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -932547853, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 956187a379b64997602bc5f001b79207, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   Prizes:
@@ -203,7 +203,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1730242686860875}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1605112193, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 90dd5cf4559f656d01cd87d1699eb15f, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   PrizeValue: 0
@@ -232,7 +232,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1724804207875695}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1605112193, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 90dd5cf4559f656d01cd87d1699eb15f, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   PrizeValue: 5000
@@ -261,7 +261,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1618682377417806}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1605112193, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 90dd5cf4559f656d01cd87d1699eb15f, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   PrizeValue: 10000
@@ -290,7 +290,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1703437598541787}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1605112193, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 90dd5cf4559f656d01cd87d1699eb15f, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   PrizeValue: 50000
@@ -319,7 +319,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1884547391421755}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1605112193, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 90dd5cf4559f656d01cd87d1699eb15f, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   PrizeValue: 100000
@@ -348,7 +348,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1099118695303065}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1605112193, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 90dd5cf4559f656d01cd87d1699eb15f, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   PrizeValue: 1000000
@@ -377,7 +377,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1243736805655561}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1605112193, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 90dd5cf4559f656d01cd87d1699eb15f, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   PrizeValue: 10000000

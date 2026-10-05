@@ -161,7 +161,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709254077376921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 475331240, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: d73720287054940a63819757a7ca5cca, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   StarParticleSystem: {fileID: 114705390221481576}
@@ -174,7 +174,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709254077376921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -1996056688, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 71a9ab18436dfe649ca44f10dfea8703, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   OrbitDistanceMultiplier: 1
@@ -218,7 +218,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709254077376921}
   m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: -89010275, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 5f936ba10c2feb6d77a3a2212ee9589e, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   CurrentOffset: {x: 0, y: 0, z: 0}
@@ -236,7 +236,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709254077376921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -590888565, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: e51937e5a67280f1c5ef2898fb65fef6, type: 3}
   m_Name:
   m_EditorClassIdentifier:
 --- !u!4 &4589667821646929
@@ -306,7 +306,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1730242686860875}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -2033069193, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: a6345853a83bcfc0f0b49618e7e1133d, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   FogStartMultiplier: 1
@@ -336,7 +336,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1724804207875695}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1763343220, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: d0d82e3db7c9f4c6d73e093043662c65, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   ParticleSystem: {fileID: 198256069497284392}

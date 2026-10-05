@@ -141,7 +141,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709254077376921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1973602547, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 3dc4f5a9de3e35234a8b9a9a35c0e98e, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   SpeechImage: {fileID: 114470112387431263}

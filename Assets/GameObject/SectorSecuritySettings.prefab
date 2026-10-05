@@ -41,7 +41,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709254077376921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1276907637, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: d17591ea312d444f95b1f7441db134f8, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   CombatRatingToSecurityLevelMultiplier: 0.014

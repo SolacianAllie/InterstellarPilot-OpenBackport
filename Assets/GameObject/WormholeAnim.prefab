@@ -176,7 +176,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709254077376921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 898154067, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 6b6070e30a444f22c5595dd3ef9994f8, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   EntryAudioSourcePrefab: {fileID: 82724804207875695, guid: 9edfeefaca2e960459ff72111c7d5725, type: 2}
@@ -256,7 +256,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1730242686860875}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 335915325, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 7713c185a3c1a61890fad203476abd33, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   ScrollRate: {x: -0.2, y: 1}
@@ -335,7 +335,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1724804207875695}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 335915325, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 7713c185a3c1a61890fad203476abd33, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   ScrollRate: {x: 0.5, y: 1}
@@ -428,7 +428,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1618682377417806}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -905350441, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: cd1a505128317c136938c5541a586b25, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   DisableOnReachTarget: 1
@@ -525,7 +525,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1703437598541787}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -905350441, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: cd1a505128317c136938c5541a586b25, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   DisableOnReachTarget: 1
@@ -558,7 +558,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1884547391421755}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 957241764, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 6a9f38a38b03111c0f51172f73eaf2ab, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   DestroyOnComplete: 1

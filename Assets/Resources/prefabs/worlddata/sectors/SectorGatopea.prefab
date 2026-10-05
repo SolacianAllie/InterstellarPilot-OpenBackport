@@ -61,7 +61,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709254077376921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 674440650, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: bb16e96a8ba01dd6a20fa359f8c37471, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   AsteroidRespawnCooldownTime: 0
@@ -93,7 +93,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709254077376921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1650911235, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: b69644bdcbf53c32c14a9d6c515dcea9, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   SpaceConstructorParams:
@@ -129,7 +129,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1730242686860875}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -1305118651, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 31364a87781d1d98b6ee3057585af9b2, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   ClassName: JupitersCousin
@@ -155,7 +155,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1730242686860875}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -896224548, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 40c9c439be6db788db69f909045ebdf0, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   Rotation: {x: 0, y: 0, z: 0}

@@ -61,7 +61,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709254077376921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -414247193, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: c776cc1b49ebe835e7cdce7e6d127f36, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   GasCloudData: {fileID: 114724804207875695, guid: fefa253f8e823f745a483e7578760908, type: 2}
@@ -2338,7 +2338,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1730242686860875}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -422091384, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 616edfbda21d6d0c164b019808bd9a24, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   ParticleSystem: {fileID: 198884547391421755}

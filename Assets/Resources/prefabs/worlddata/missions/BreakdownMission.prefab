@@ -95,7 +95,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709254077376921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -470922369, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 109648d447c188d4f6f189a6860a0727, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   BroadcastMessages: 1
@@ -141,7 +141,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1730242686860875}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2138749009, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: b4ad30eb09fb0863c57c7e597f352d51, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   CompletesMission: 1
@@ -171,7 +171,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1724804207875695}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 113310085, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 5de546c4aa188cc58b13d94e9cacf353, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   UniqueId: -1
@@ -207,7 +207,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1618682377417806}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 113310085, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 5de546c4aa188cc58b13d94e9cacf353, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   UniqueId: -1

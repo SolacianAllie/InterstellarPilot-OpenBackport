@@ -1,0 +1,14 @@
+{
+    "name": "Pixelfactor.IP.SpaceUnity",
+    "rootNamespace": "",
+    "references": ["Pixelfactor.IP.Common", "Pixelfactor.Math", "Pixelfactor.Unity.Utils"],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

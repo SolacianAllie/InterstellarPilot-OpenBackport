@@ -43,7 +43,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709254077376921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -1305118651, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 31364a87781d1d98b6ee3057585af9b2, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   ClassName: Gas Cloud Grey
@@ -69,7 +69,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709254077376921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -1081769230, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: a2a5361829ba4492cbe503f92f8c55fa, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   GasCloudClass: {fileID: 114724804207875695, guid: 3d4f68b04c2c4ea4e820497ff9894914, type: 2}

@@ -44,7 +44,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709254077376921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 30420292, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: ad91520bcddc1f797ae6dcb3ac55fb7d, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   RelativeShipSaleCost: 0
@@ -112,7 +112,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709254077376921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -451844379, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 01e458f93cd51c2f5ca334a48d718d86, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   SetAllEquipmentPrices: 0
@@ -128,7 +128,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709254077376921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2094686444, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 648b8e01288f7858565134d1445aa282, type: 3}
   m_Name:
   m_EditorClassIdentifier:
 --- !u!114 &114884547391421755
@@ -140,7 +140,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709254077376921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -1366723278, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 2657b929ba1c094866c0a83f0ed4bad8, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   Profile: {fileID: 114724804207875695, guid: f5ad12bc815e18f43b7416273d66f712, type: 2}

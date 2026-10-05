@@ -78,7 +78,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709254077376921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -1173824050, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: db208dbf16f5fd916159861069528d77, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   PersonAvatarProfiles: []
@@ -124,7 +124,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709254077376921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -1055621724, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 7ad442ca6083616df4f4eb03c2f2d578, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   StartingVirtue: -1
@@ -161,7 +161,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1730242686860875}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 566258492, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 476b4b6d240b9ffa2b5271d3b6ee3544, type: 3}
   m_Name:
   m_EditorClassIdentifier:
 --- !u!4 &4061268324235159
@@ -188,6 +188,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 1724804207875695}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -1031981914, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 7f125807a9ddc56910441d21a0d7ff23, type: 3}
   m_Name:
   m_EditorClassIdentifier:

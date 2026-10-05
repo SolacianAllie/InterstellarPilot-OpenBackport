@@ -41,7 +41,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709254077376921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -209436518, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 647614abd3d430f7643c1b75faf26bc3, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   LightPrefab: {fileID: 108724804207875695, guid: aed12ed665e30794b9ca598d9caef683, type: 2}

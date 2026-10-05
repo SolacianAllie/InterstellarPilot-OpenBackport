@@ -85,7 +85,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709254077376921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -2033069193, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: a6345853a83bcfc0f0b49618e7e1133d, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   FogStartMultiplier: 1

@@ -43,7 +43,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709254077376921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 996939107, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: b927240072b249b15e09e0c79af56e75, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   CustomTitle:
@@ -73,7 +73,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709254077376921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -1103675936, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 4ea8f2f18022aa4dee345a24959e03e2, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   CombatEfficiency: 0.5
@@ -91,7 +91,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709254077376921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -158800988, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 49b364f4dafb2b83ce87032326d47a29, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   DestroyWhenNotPilotting: 1

@@ -1,0 +1,14 @@
+{
+    "name": "Pixelfactor.IP.Avatars",
+    "rootNamespace": "",
+    "references": ["Pixelfactor.Unity.Utils"],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

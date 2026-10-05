@@ -495,7 +495,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709254077376921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 926810972, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 6ffad6c4a7b17f14adeab3477fe7100c, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   HighlightImage: {fileID: 114964469411310401}
@@ -566,7 +566,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709254077376921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -1282195774, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 44f4de279bc4a945db3e1977e3643d10, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   AudioClip: {fileID: 8300000, guid: 074122126344af746aa37b40b53083f3, type: 3}
@@ -827,7 +827,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1618682377417806}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 160141360, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: e0cc4ac32d50a57235367fdcce4eebab, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   MissionPathIcon: {fileID: 114924050743934937}
@@ -842,7 +842,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1618682377417806}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 704951137, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 6feb7fb0d66a301e49655700cbf3dd63, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   UnitUnderAttackImage: {fileID: 114693062532245359}
@@ -1986,7 +1986,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1977153420339851}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -1522250997, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 6f131a792cb8a8083bbf08a86146ccb0, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   MinScaleMultiplier: {x: 1, y: 1}

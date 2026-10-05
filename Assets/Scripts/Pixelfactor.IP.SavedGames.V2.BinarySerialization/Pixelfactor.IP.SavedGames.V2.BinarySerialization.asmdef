@@ -1,0 +1,14 @@
+{
+    "name": "Pixelfactor.IP.SavedGames.V2.BinarySerialization",
+    "rootNamespace": "",
+    "references": ["Pixelfactor.IP.Common", "Pixelfactor.IP.SavedGames.V2.Model"],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -632,7 +632,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709254077376921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1759671144, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 0b46cb8883db9625b4bb8327c1f990b8, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   Toggle: {fileID: 0}
@@ -649,7 +649,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709254077376921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 605389940, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 2d80fb2521e77efaab9dc1cb698d95b0, type: 3}
   m_Name:
   m_EditorClassIdentifier:
 --- !u!224 &224371939378208658
@@ -1053,7 +1053,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1884547391421755}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -1862841707, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 839a7ff2cb53d98d6a89e14e41df32b3, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   RevertHullIconToRenderSprite: 1
@@ -1793,7 +1793,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1470112387431263}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -1446741722, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 955a9f2b8f0d2ab8289aa25b2c601f09, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   Label: {fileID: 114964469411310401}

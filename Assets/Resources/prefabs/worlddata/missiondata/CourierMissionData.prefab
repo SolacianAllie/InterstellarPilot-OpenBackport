@@ -95,7 +95,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709254077376921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1961551550, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 8e198fa239e156c47ff797480b0c45ae, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   BroadcastMessages: 1
@@ -132,7 +132,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1730242686860875}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1311907624, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: e4673c6c302832c1a8f16faa555301f6, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   Description: Pickup the cargo
@@ -163,7 +163,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1724804207875695}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1311907624, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: e4673c6c302832c1a8f16faa555301f6, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   Description: Deliver the cargo to the destination
@@ -194,7 +194,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1618682377417806}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2138749009, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: b4ad30eb09fb0863c57c7e597f352d51, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   CompletesMission: 1

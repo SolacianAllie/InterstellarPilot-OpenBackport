@@ -1,0 +1,14 @@
+{
+    "name": "Pixelfactor.Unity.Utils",
+    "rootNamespace": "",
+    "references": ["Pixelfactor.Math"],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

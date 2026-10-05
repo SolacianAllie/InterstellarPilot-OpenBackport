@@ -1,0 +1,53 @@
+using System.Linq;
+using Pixelfactor.IP.Engine;
+using Pixelfactor.IP.Engine.Fleets.FleetOrders;
+using Pixelfactor.IP.UI.Screens.MultiCargoPicker;
+
+namespace Pixelfactor.IP.UI.Screens.Orders.Buttons
+{
+	public class TradeCargoTypesOrderButton : OrderButton
+	{
+		protected override bool ShouldBeInteractable()
+		{
+			if (base.ShouldBeInteractable() && OrderTarget.AllUnitsMobile)
+			{
+				return OrderTarget.AllUnitsCanDock;
+			}
+			return false;
+		}
+
+		protected override void OnButtonClick()
+		{
+			base.OnButtonClick();
+			UIController.Instance.ScreenNavigator.ShowMultiCargoPickerScreen((MultiCargoPickerScreen screen) =>
+			{
+				screen.TitleLabel.text = "Select cargo types...";
+				screen.Finished += Screen_Finished;
+				screen.Items.AddRange(from e in EngineASX.Instance.TradableCargoClasses
+					orderby e.ClassName
+					select new MultiCargoPickerItem
+					{
+						CargoClass = e
+					});
+			});
+		}
+
+		private void Screen_Finished(MultiCargoPickerScreen sender, MultiCargoPickerResult result)
+		{
+			if (result != null && result.CargoClasses.Count > 0)
+			{
+				OnOrderIssuing(out var stack);
+				OrdersHelper.OrderAutonomousTrade(OrderTarget, stack, (AutonomousTradeOrder order) =>
+				{
+					order.TradeOnlySpecificCargoTypes = true;
+					order.TradeSpecificCargoTypes.AddRange(result.CargoClasses);
+				});
+				OnOrderIssued();
+			}
+			else
+			{
+				OnOrderCancelled();
+			}
+		}
+	}
+}

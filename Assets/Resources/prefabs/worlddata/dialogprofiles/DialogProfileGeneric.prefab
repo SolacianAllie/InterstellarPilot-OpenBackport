@@ -131,7 +131,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709254077376921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2060801398, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 00aad4a872171ec343b050d6f92d50e4, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   LegacyEventHandlers:
@@ -290,7 +290,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1730242686860875}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -373329980, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 2e92369c86f64a892171d1d90d16c035, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   Event: {fileID: 114724804207875695, guid: a665d1c712f20884186510cbdce9ab30, type: 2}
@@ -323,7 +323,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1724804207875695}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -373329980, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 2e92369c86f64a892171d1d90d16c035, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   Event: {fileID: 114724804207875695, guid: 5361d0c07df190344a07f87a53893872, type: 2}
@@ -355,7 +355,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1618682377417806}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -373329980, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 2e92369c86f64a892171d1d90d16c035, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   Event: {fileID: 114724804207875695, guid: d8918eb30610d7845b680b955d9577e3, type: 2}
@@ -387,7 +387,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1703437598541787}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -373329980, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 2e92369c86f64a892171d1d90d16c035, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   Event: {fileID: 114724804207875695, guid: 4ba75f782de3a2c4e86fb01e108bf795, type: 2}
@@ -419,7 +419,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1884547391421755}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -373329980, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 2e92369c86f64a892171d1d90d16c035, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   Event: {fileID: 114724804207875695, guid: 50522ca0c1d942a47b7dae7c16eec61e, type: 2}

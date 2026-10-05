@@ -95,7 +95,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709254077376921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -1383231600, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: e667f37990292f94aa747ae41245ff88, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   MinNumberPlanetSectors: 1
@@ -128,7 +128,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1730242686860875}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -2120730175, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: d3e34b0b955382929cbec465791934fb, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   SectorType: 4
@@ -157,7 +157,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1724804207875695}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -2120730175, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: d3e34b0b955382929cbec465791934fb, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   SectorType: 2
@@ -186,7 +186,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1618682377417806}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -2120730175, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: d3e34b0b955382929cbec465791934fb, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   SectorType: 1

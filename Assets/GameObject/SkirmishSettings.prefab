@@ -41,7 +41,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709254077376921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1688708377, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 840ead9f301e1de698a620d89f0e494b, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   MaxSkirmishTeams: 8

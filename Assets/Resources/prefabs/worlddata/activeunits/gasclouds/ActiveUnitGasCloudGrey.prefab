@@ -98,7 +98,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709254077376921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -164596294, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 7580e5954fe4294e1ad88aec641e3da0, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   CloakDrawColor: {r: 1, g: 1, b: 1, a: 1}
@@ -123,7 +123,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709254077376921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -1706462604, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: ae02c865e60954a217ed96a384690e85, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   ActiveGasCloudPrefab: {fileID: 114618682377417806, guid: 433e8b47c14aa9c4fbb3949415c5a59b, type: 2}
@@ -154,7 +154,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1730242686860875}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -186635534, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 6fa68e43e510ab60bdd35265a446f87b, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   UpperDistance: 2000
@@ -174,7 +174,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1730242686860875}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -1624962126, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 5a595e1bb6e120369cb6235eae82f44c, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   Distance: 1600

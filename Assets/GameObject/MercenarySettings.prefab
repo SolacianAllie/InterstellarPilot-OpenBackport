@@ -113,7 +113,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709254077376921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -1413383694, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: fcae7eb455bc9d33130454aba8992dcc, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   HireDurationSettings:
@@ -146,7 +146,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1730242686860875}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1111072299, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: db95d0a4f1986fd1490af8f7a596916c, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   DisplayText: 4 Hours
@@ -175,7 +175,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1724804207875695}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1111072299, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: db95d0a4f1986fd1490af8f7a596916c, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   DisplayText: 8 Hours
@@ -204,7 +204,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1618682377417806}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1111072299, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: db95d0a4f1986fd1490af8f7a596916c, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   DisplayText: Half day
@@ -233,7 +233,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1703437598541787}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1111072299, guid: 745039979db956e731746d8021b628a7, type: 3}
+  m_Script: {fileID: 11500000, guid: db95d0a4f1986fd1490af8f7a596916c, type: 3}
   m_Name:
   m_EditorClassIdentifier:
   DisplayText: Single Day
