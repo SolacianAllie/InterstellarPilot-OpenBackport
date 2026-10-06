@@ -672,7 +672,7 @@ namespace OpenFrontier.IP.Engine
 #if UNITY_ANDROID && !UNITY_EDITOR
 			if (refreshRate <= 0)
 			{
-				refreshRate = Mathf.RoundToInt(Screen.currentResolution.refreshRateRatio.value);
+				refreshRate = Mathf.RoundToInt((float)Screen.currentResolution.refreshRateRatio.value);
 			}
 			if (refreshRate <= 0)
 			{

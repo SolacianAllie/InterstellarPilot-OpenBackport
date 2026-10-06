@@ -182,7 +182,7 @@ namespace OpenFrontier.IP.UI
 				int fps = GameController.Instance.PlayerOptionConstants.Video_TargetFrameRates[value];
 #if UNITY_ANDROID && !UNITY_EDITOR
 				// Open Frontier: never cap above the panel's refresh rate.
-				int refresh = Mathf.RoundToInt(Screen.currentResolution.refreshRateRatio.value);
+				int refresh = Mathf.RoundToInt((float)Screen.currentResolution.refreshRateRatio.value);
 				if (refresh > 0)
 				{
 					fps = Mathf.Min(fps, refresh);
