@@ -19,9 +19,6 @@ namespace OpenFrontier.IP.UI
 
 		public TMP_Dropdown TargetFrameRateDropdown;
 
-		// Open Frontier: v-sync toggle (display-paced rendering on mobile).
-		public Toggle VSyncToggle;
-
 		public Toggle FullScreenToggle;
 
 		public Toggle General_AllowFireAtNeutralToggle;
@@ -174,11 +171,6 @@ namespace OpenFrontier.IP.UI
 			FullScreenToggle.onValueChanged.AddListener(FullScreenToggleValueChanged);
 			// Open Frontier: the frame rate limit dropdown is back in use
 			// (the original game hid it); the prefab already has it active.
-			if (VSyncToggle != null)
-			{
-				VSyncToggle.gameObject.SetActive(UI.IsMobileDevice);
-				VSyncToggle.onValueChanged.AddListener(VSyncToggleValueChanged);
-			}
 			TiltControlEnabledToggle.gameObject.SetActive(value: false);
 			TargetFrameRateDropdown.onValueChanged.AddListener(TargetFrameRateDropdownValueChanged);
 			CameraShakeOnHullHitToggle.onValueChanged.AddListener(CameraShakeOnHullHitToggleValueChanged);
@@ -187,19 +179,25 @@ namespace OpenFrontier.IP.UI
 
 		private void TargetFrameRateDropdownValueChanged(int value)
 		{
+#if UNITY_ANDROID && !UNITY_EDITOR
+			if (value == GameController.Instance.PlayerOptionConstants.Video_TargetFrameRates.Length)
+			{
+				// V-Sync entry: the display decides (Swappy-paced).
+				PlayerPrefs.SetInt(GameController.Instance.PlayerOptionConstants.Video_VSyncKey, 1);
+				GameController.Instance.ApplyMobileFrameRate();
+				return;
+			}
+			PlayerPrefs.SetInt(GameController.Instance.PlayerOptionConstants.Video_VSyncKey, 0);
+#endif
 			if (value >= 0 && value < GameController.Instance.PlayerOptionConstants.Video_TargetFrameRates.Length)
 			{
 				int fps = GameController.Instance.PlayerOptionConstants.Video_TargetFrameRates[value];
 				GameController.Instance.UserTargetFrameRate = fps;
 #if UNITY_ANDROID && !UNITY_EDITOR
-				// Open Frontier: when V-Sync is on the display decides;
-				// store the choice for when it is turned back off.
-				if (PlayerPrefs.GetInt(GameController.Instance.PlayerOptionConstants.Video_VSyncKey, 0) > 0)
-				{
-					return;
-				}
-#endif
+				GameController.Instance.ApplyMobileFrameRate();
+#else
 				Application.targetFrameRate = fps;
+#endif
 			}
 		}
 
@@ -214,12 +212,6 @@ namespace OpenFrontier.IP.UI
 		private void FullScreenToggleValueChanged(bool value)
 		{
 			GameController.Instance.ApplyResolution(value);
-		}
-
-		private void VSyncToggleValueChanged(bool value)
-		{
-			PlayerPrefs.SetInt(GameController.Instance.PlayerOptionConstants.Video_VSyncKey, value ? 1 : 0);
-			GameController.Instance.ApplyMobileFrameRate();
 		}
 
 		private void CameraShakeOnHullHitToggleValueChanged(bool value)
@@ -333,21 +325,22 @@ namespace OpenFrontier.IP.UI
 			{
 				TargetFrameRateDropdown.onValueChanged.RemoveAllListeners();
 				TargetFrameRateDropdown.ClearOptions();
-				TargetFrameRateDropdown.AddOptions((from e in GameController.Instance.PlayerOptionConstants.Video_TargetFrameRates
+				List<string> fpsOptions = (from e in GameController.Instance.PlayerOptionConstants.Video_TargetFrameRates
 					orderby e
-					select e.ToString()).ToList());
+					select e.ToString()).ToList();
 #if UNITY_ANDROID && !UNITY_EDITOR
-				// Show the user's raw choice, not the refresh-capped value.
-				TargetFrameRateDropdown.value = GameController.Instance.PlayerOptionConstants.Video_TargetFrameRates.IndexOf(GameController.Instance.UserTargetFrameRate);
+				// Open Frontier: V-Sync as a dropdown entry (display decides).
+				fpsOptions.Add("V-Sync");
+#endif
+				TargetFrameRateDropdown.AddOptions(fpsOptions);
+#if UNITY_ANDROID && !UNITY_EDITOR
+				bool vsyncOn = PlayerPrefs.GetInt(GameController.Instance.PlayerOptionConstants.Video_VSyncKey, 0) > 0;
+				TargetFrameRateDropdown.value = vsyncOn ? GameController.Instance.PlayerOptionConstants.Video_TargetFrameRates.Length : GameController.Instance.PlayerOptionConstants.Video_TargetFrameRates.IndexOf(GameController.Instance.UserTargetFrameRate);
 #else
 				TargetFrameRateDropdown.value = GameController.Instance.PlayerOptionConstants.Video_TargetFrameRates.IndexOf(Application.targetFrameRate);
 #endif
 				TargetFrameRateDropdown.onValueChanged.AddListener(TargetFrameRateDropdownValueChanged);
 				FullScreenToggle.isOn = Screen.fullScreen;
-				if (VSyncToggle != null)
-				{
-					VSyncToggle.isOn = PlayerPrefs.GetInt(GameController.Instance.PlayerOptionConstants.Video_VSyncKey, 0) > 0;
-				}
 				RefreshScreenResolutionDropdown();
 				MasterVolumeSlider.value = PlayerPrefsHelper.SafeGetFloat(GameController.Instance.MasterVolumeKey, 1f);
 				MusicVolumeSlider.value = PlayerPrefsHelper.SafeGetFloat(GameController.Instance.MusicVolumeKey, GameController.Instance.DefaultMusicVolume);
