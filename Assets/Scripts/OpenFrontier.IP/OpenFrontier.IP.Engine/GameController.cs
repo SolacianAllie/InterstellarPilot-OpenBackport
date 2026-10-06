@@ -42,7 +42,7 @@ namespace OpenFrontier.IP.Engine
 
 		public bool AutoTurnEnabled;
 
-		public string SupportEmail = "support@pixelfactor.com";
+		public string SupportEmail = "nightvizla@gmail.com";
 
 		public PlayerOptionConstants PlayerOptionConstants;
 

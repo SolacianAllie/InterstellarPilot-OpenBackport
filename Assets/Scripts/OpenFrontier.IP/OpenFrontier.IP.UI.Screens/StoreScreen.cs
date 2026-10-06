@@ -114,7 +114,7 @@ namespace OpenFrontier.IP.UI.Screens
 
 		private void GooglePlayHelpButtonClick()
 		{
-			string message = "Where did my purchase go?\n\nPlease relaunch the Game from the Google Play Store while connected to the internet to sync previous purchases.\nEmail support@pixelfactor.com for further assistance.";
+			string message = "Where did my purchase go?\n\nPlease relaunch the Game from the Google Play Store while connected to the internet to sync previous purchases.\nEmail nightvizla@gmail.com for further assistance.";
 			UIController.Instance.ShowMessageBox(message, MessageBoxButtons.Ok);
 		}
 
