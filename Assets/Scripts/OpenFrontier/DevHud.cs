@@ -18,12 +18,14 @@ namespace OpenFrontier
 		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
 		private static void Create()
 		{
+#if DEVELOPMENT_BUILD || UNITY_EDITOR
 			if (instance == null)
 			{
 				GameObject go = new GameObject("DevHud");
 				instance = go.AddComponent<DevHud>();
 				Object.DontDestroyOnLoad(go);
 			}
+#endif
 		}
 
 		private void OnGUI()
