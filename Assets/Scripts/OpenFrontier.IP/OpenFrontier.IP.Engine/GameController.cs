@@ -765,6 +765,9 @@ namespace OpenFrontier.IP.Engine
 			RespawnOnDeath = PlayerPrefs.GetInt(RespawnOnDeathKey, 1) > 0;
 #if UNITY_ANDROID && !UNITY_EDITOR
 			UserTargetFrameRate = PlayerPrefs.GetInt(PlayerOptionConstants.Video_TargetFrameRateKey, 60);
+			// Open Frontier: vSyncCount is ignored by Android but the debug
+			// overlay reads it; zero it so it does not mislead.
+			QualitySettings.vSyncCount = 0;
 			ApplyMobileFrameRate();
 #else
 			UserTargetFrameRate = PlayerPrefs.GetInt(PlayerOptionConstants.Video_TargetFrameRateKey, -1);

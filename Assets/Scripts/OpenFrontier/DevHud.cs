@@ -54,7 +54,8 @@ namespace OpenFrontier
 			Vector2Int jni = AndroidDisplayMetrics.GetWindowSize();
 			string hz = "";
 #if UNITY_ANDROID && !UNITY_EDITOR
-			hz = $"\nModes {AndroidDisplayMetrics.GetSupportedModesSummary()}  now {AndroidDisplayMetrics.GetCurrentRefreshRate():0}Hz";
+			int vsPref = UnityEngine.PlayerPrefs.GetInt("video_vsync", 1);
+			hz = $"\nModes {AndroidDisplayMetrics.GetSupportedModesSummary()}  now {AndroidDisplayMetrics.GetCurrentRefreshRate():0}Hz  vsyncPref {(vsPref > 0 ? "on" : "off")}";
 #endif
 			GUI.Box(new Rect(8f, 8f, 340f, 154f),
 				$"FPS {currentFps:0}  (cap {Application.targetFrameRate}, vSync {QualitySettings.vSyncCount})\n" +
