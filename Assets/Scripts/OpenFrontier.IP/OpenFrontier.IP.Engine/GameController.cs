@@ -677,7 +677,7 @@ namespace OpenFrontier.IP.Engine
 		// Desktop: real QualitySettings vSync.
 		public void ApplyVSyncState()
 		{
-			bool vsyncOn = PlayerPrefs.GetInt(PlayerOptionConstants.Video_VSyncKey, 0) > 0;
+			bool vsyncOn = PlayerPrefs.GetInt(PlayerOptionConstants.Video_VSyncKey, 1) > 0;
 #if UNITY_ANDROID && !UNITY_EDITOR
 			ApplyMobileFrameRate();
 #elif !UNITY_EDITOR
@@ -692,7 +692,7 @@ namespace OpenFrontier.IP.Engine
 		public void ApplyMobileFrameRate()
 		{
 #if UNITY_ANDROID && !UNITY_EDITOR
-			if (PlayerPrefs.GetInt(PlayerOptionConstants.Video_VSyncKey, 0) > 0)
+			if (PlayerPrefs.GetInt(PlayerOptionConstants.Video_VSyncKey, 1) > 0)
 			{
 				Application.targetFrameRate = -1;
 				ApplyDisplayRefreshForTargetFps(999); // let the display run at its best
@@ -710,8 +710,9 @@ namespace OpenFrontier.IP.Engine
 		public void ApplyMobileFrameRateCap()
 		{
 #if UNITY_ANDROID && !UNITY_EDITOR
-			Application.targetFrameRate = UserTargetFrameRate > 0 ? UserTargetFrameRate : 60;
-			ApplyDisplayRefreshForTargetFps(Application.targetFrameRate);
+			// 0 means unset; -1 is the explicit Uncapped choice.
+			Application.targetFrameRate = UserTargetFrameRate == 0 ? 60 : UserTargetFrameRate;
+			ApplyDisplayRefreshForTargetFps(Application.targetFrameRate > 0 ? Application.targetFrameRate : 999);
 #endif
 		}
 

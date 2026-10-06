@@ -188,7 +188,6 @@ namespace OpenFrontier.IP.UI
 				return;
 			}
 			PlayerPrefs.SetInt(GameController.Instance.PlayerOptionConstants.Video_VSyncKey, 0);
-#if !UNITY_ANDROID || UNITY_EDITOR
 			if (value == ratesCount + 1)
 			{
 				// Uncapped entry: no cap, no vSync.
@@ -196,7 +195,6 @@ namespace OpenFrontier.IP.UI
 				GameController.Instance.ApplyVSyncState();
 				return;
 			}
-#endif
 			if (value >= 0 && value < ratesCount)
 			{
 				GameController.Instance.UserTargetFrameRate = GameController.Instance.PlayerOptionConstants.Video_TargetFrameRates[value];
@@ -333,12 +331,10 @@ namespace OpenFrontier.IP.UI
 					select e.ToString()).ToList();
 				// Open Frontier: V-Sync as a dropdown entry (display decides).
 				fpsOptions.Add("V-Sync");
-#if !UNITY_ANDROID || UNITY_EDITOR
-				// Desktop only: no cap at all.
+				// Open Frontier: Uncapped - no cap at all.
 				fpsOptions.Add("Uncapped");
-#endif
 				TargetFrameRateDropdown.AddOptions(fpsOptions);
-				bool vsyncOn = PlayerPrefs.GetInt(GameController.Instance.PlayerOptionConstants.Video_VSyncKey, 0) > 0;
+				bool vsyncOn = PlayerPrefs.GetInt(GameController.Instance.PlayerOptionConstants.Video_VSyncKey, 1) > 0;
 				int ratesCount = GameController.Instance.PlayerOptionConstants.Video_TargetFrameRates.Length;
 				int fpsIndex;
 				if (vsyncOn)
