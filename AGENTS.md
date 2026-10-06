@@ -1,5 +1,8 @@
 # Notes for Coding Agents
 
+Only non-obvious traps live here — things you cannot learn from the project
+structure. Add new ones as they are found.
+
 ## Offline compile verification (`/tmp/opencode/harness`)
 
 C# changes are verified outside the editor with a generated .NET harness:
@@ -24,10 +27,19 @@ change, confirm zero `error CS` lines in the editor's `Logs/Editor.log`
 2. Editor refocus by the user → read `Logs/Editor.log` for real-Unity compile errors
 3. Runtime/rendering issues are verified by the user in Play mode or on device
 
-## Project shape (quick map)
+Headless Unity does not work in this environment (licensing client fails,
+exit 198) — the user performs all editor actions.
 
-- `Assets/Scripts/OpenFrontier.IP/` — decompiled game code (assembly `OpenFrontier.IP`)
-- `Assets/Scripts/OpenFrontier/` — port shim/utilities (`LegacyInput`, `UrpCameraStacker`, `DevHud`, `AndroidDisplayMetrics`)
-- `Assets/Scripts/Pixelfactor*` — nothing; everything was renamed `Pixelfactor.*` → `OpenFrontier.*` (script .meta GUIDs untouched, all serialized references hold)
-- `Assets/Shader/` — ported/fixed shaders (URP); `Assets/TextMesh Pro/Shaders/` — stock TMP shader sources
-- `AGENTS.md` (this file) — keep it updated when new project-specific traps are found
+## Non-obvious traps
+
+- **Script GUIDs are deterministic:** `Guid(MD5(assemblyName + namespace + className))`
+  (AssetRipper decompile scheme). Never regenerate .meta files; renaming
+  namespaces/assemblies is safe because GUIDs live in the .meta files, but the
+  scheme no longer matches names after the `Pixelfactor.*` → `OpenFrontier.*` rename.
+- **URP material postprocessor strips hand-edited YAML** for materials whose
+  shader has a known URP ShaderID. Recreate those materials natively via the
+  `Material` API; never hand-edit their YAML.
+- **The BIRP project** (`InterstellarPilot - Open Frontier BIRP`, sibling
+  directory) is a read-only reference of the original game — never modify it.
+- **Soft particles are standardized Near=1/Far=0** (empirically verified on
+  this OpenGL stack; URP's formula reads 0 behind empty space here).
