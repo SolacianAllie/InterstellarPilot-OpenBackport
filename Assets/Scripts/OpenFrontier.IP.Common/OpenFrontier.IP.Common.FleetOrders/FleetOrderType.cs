@@ -1,0 +1,42 @@
+namespace OpenFrontier.IP.Common.FleetOrders
+{
+	public enum FleetOrderType
+	{
+		None,
+		CollectCargo,
+		Dock,
+		Patrol,
+		PatrolPath,
+		RTB,
+		Scavenge,
+		Wait,
+		AttackTarget,
+		AttackGroup,
+		AutonomousTrade,
+		ManualTrade,
+		Mine,
+		MoveTo,
+		SellCargo,
+		Trade,
+		JoinFleet,
+		DisposeCargo,
+		Protect,
+		AutonomousTransportPassengers,
+		AutonomousRoamLocationsObjective,
+		AutonomousBountyHunterObjective,
+		ManualRepair,
+		Explore,
+		RepairAtNearest,
+		MoveToNearestFriendlyStation,
+		EnterWormhole,
+		ExploreSector,
+		Undock,
+		MoveToSector,
+		WaitForAutoRepair,
+		Rearm,
+		ManualRearm,
+		RearmAtNearest,
+		BuildStation,
+		ClaimUnit
+	}
+}

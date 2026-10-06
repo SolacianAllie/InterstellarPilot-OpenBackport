@@ -7244,7 +7244,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 114367213189582022}
-        m_TargetAssemblyTypeName: Pixelfactor.IP.UI.Controls.ModalWindow, Pixelfactor.IP
+        m_TargetAssemblyTypeName: OpenFrontier.IP.UI.Controls.ModalWindow, OpenFrontier.IP
         m_MethodName: ToggleActive
         m_Mode: 1
         m_Arguments:

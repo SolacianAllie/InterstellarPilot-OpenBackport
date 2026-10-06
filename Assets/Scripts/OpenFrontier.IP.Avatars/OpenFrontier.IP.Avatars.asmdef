@@ -1,0 +1,14 @@
+{
+    "name": "OpenFrontier.IP.Avatars",
+    "rootNamespace": "",
+    "references": ["OpenFrontier.Unity.Utils"],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

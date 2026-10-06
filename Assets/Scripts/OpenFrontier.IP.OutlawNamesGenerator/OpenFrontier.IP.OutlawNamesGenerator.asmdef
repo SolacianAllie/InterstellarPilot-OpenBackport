@@ -1,0 +1,14 @@
+{
+    "name": "OpenFrontier.IP.OutlawNamesGenerator",
+    "rootNamespace": "",
+    "references": ["OpenFrontier.IP.Common", "OpenFrontier.Unity.Utils"],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -4372,7 +4372,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 114294885792020211}
-        m_TargetAssemblyTypeName: Pixelfactor.IP.UI.Screens.NewFleetOrder.NewFleetOrderScreen, Pixelfactor.IP
+        m_TargetAssemblyTypeName: OpenFrontier.IP.UI.Screens.NewFleetOrder.NewFleetOrderScreen, OpenFrontier.IP
         m_MethodName: SetNavigationCategory
         m_Mode: 1
         m_Arguments:
@@ -4683,7 +4683,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 114294885792020211}
-        m_TargetAssemblyTypeName: Pixelfactor.IP.UI.Screens.NewFleetOrder.NewFleetOrderScreen, Pixelfactor.IP
+        m_TargetAssemblyTypeName: OpenFrontier.IP.UI.Screens.NewFleetOrder.NewFleetOrderScreen, OpenFrontier.IP
         m_MethodName: SetCombatCategory
         m_Mode: 1
         m_Arguments:
@@ -4994,7 +4994,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 114294885792020211}
-        m_TargetAssemblyTypeName: Pixelfactor.IP.UI.Screens.NewFleetOrder.NewFleetOrderScreen, Pixelfactor.IP
+        m_TargetAssemblyTypeName: OpenFrontier.IP.UI.Screens.NewFleetOrder.NewFleetOrderScreen, OpenFrontier.IP
         m_MethodName: SetTradeCategory
         m_Mode: 1
         m_Arguments:
@@ -5305,7 +5305,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 114294885792020211}
-        m_TargetAssemblyTypeName: Pixelfactor.IP.UI.Screens.NewFleetOrder.NewFleetOrderScreen, Pixelfactor.IP
+        m_TargetAssemblyTypeName: OpenFrontier.IP.UI.Screens.NewFleetOrder.NewFleetOrderScreen, OpenFrontier.IP
         m_MethodName: SetSpecialCategory
         m_Mode: 1
         m_Arguments:

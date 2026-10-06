@@ -1,0 +1,14 @@
+{
+    "name": "OpenFrontier.Unity.Utils",
+    "rootNamespace": "",
+    "references": ["OpenFrontier.Math"],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

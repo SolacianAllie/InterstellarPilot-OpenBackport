@@ -1,0 +1,26 @@
+{
+    "name": "OpenFrontier.IP",
+    "rootNamespace": "",
+    "references": [
+        "OpenFrontier.IP.Avatars",
+        "OpenFrontier.IP.Common",
+        "OpenFrontier.IP.OutlawNamesGenerator",
+        "OpenFrontier.IP.SavedGames.V2.BinarySerialization",
+        "OpenFrontier.IP.SavedGames.V2.Model",
+        "OpenFrontier.IP.SpaceUnity",
+        "OpenFrontier.Math",
+        "OpenFrontier.Unity.Utils",
+        "UnityEngine.UI",
+        "Unity.TextMeshPro",
+        "OpenFrontier"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

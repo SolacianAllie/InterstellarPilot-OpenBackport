@@ -1,0 +1,37 @@
+namespace OpenFrontier.IP.UI.Screens.Test.MoveCurrentUnit
+{
+	public enum MoveCurrentUnitDestinationType
+	{
+		ChangeSector,
+		ToCurrentTarget,
+		ToRandomSectorPosition,
+		ToEdgeOfSector,
+		ToRandomUnstableWormhole,
+		ToRandomAsteroid,
+		ToRandomCargo,
+		ToRandomGasCloud,
+		ToRandomAbandonedShip,
+		ToRandomLaboratory,
+		ToRandomUnitUnderAttack,
+		ToRandomShipUnderAttack,
+		ToRandomBar,
+		ToRandomTradeStation,
+		ToRandomRefinery,
+		ToRandomBanditShip,
+		ToRandomOutlawShip,
+		ToRandomScavengerShip,
+		ToRandomBountyHunterShip,
+		ToRandomWarship,
+		ToRandomExplorerShip,
+		ToRandomTraderShip,
+		ToRandomPassengerTransportShip,
+		ToRandomEquipmentDealerShip,
+		ToRandomMinerShip,
+		ToRandomEmpireShip,
+		ToFringeSector,
+		ToNearestTradeStation,
+		ToNearestRefinery,
+		ToNearestShipyard,
+		ToRandomEscort
+	}
+}

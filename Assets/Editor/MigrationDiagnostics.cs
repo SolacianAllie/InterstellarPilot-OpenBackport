@@ -1,5 +1,5 @@
 using System.Text;
-using Pixelfactor.IP.Engine;
+using OpenFrontier.IP.Engine;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
@@ -40,7 +40,7 @@ namespace OpenFrontier.EditorTools
 		public static void DumpStarParticles()
 		{
 			var sb = new StringBuilder();
-			var systems = Object.FindObjectsByType<Pixelfactor.IP.Engine.StarParticleSystem>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+			var systems = Object.FindObjectsByType<OpenFrontier.IP.Engine.StarParticleSystem>(FindObjectsInactive.Include, FindObjectsSortMode.None);
 			sb.AppendLine($"StarParticleSystem components found: {systems.Length}");
 			foreach (var s in systems)
 			{

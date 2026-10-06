@@ -1,8 +1,0 @@
-using UnityEngine;
-
-namespace Pixelfactor.IP.UI
-{
-	public class ThrottleButtonUI : MonoBehaviour
-	{
-	}
-}
