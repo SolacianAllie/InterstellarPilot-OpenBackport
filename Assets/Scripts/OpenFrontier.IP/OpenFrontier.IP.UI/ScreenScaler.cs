@@ -42,6 +42,45 @@ namespace OpenFrontier.IP.UI
 			{
 				ScreenNavigator = ScreenNavigator.Instance;
 			}
+			lastScreenSize = new Vector2Int(Screen.width, Screen.height);
+		}
+
+		// Open Frontier: foldable/display-swap support. Unity does not
+		// raise an event when the device display resizes (fold/unfold),
+		// so poll the size and re-apply UI scaling once it settles.
+		private Vector2Int lastScreenSize;
+		private bool settlePollRunning;
+
+		private void Update()
+		{
+			if (!settlePollRunning && (Screen.width != lastScreenSize.x || Screen.height != lastScreenSize.y))
+			{
+				StartCoroutine(RescaleWhenSettled());
+			}
+		}
+
+		private System.Collections.IEnumerator RescaleWhenSettled()
+		{
+			settlePollRunning = true;
+			Vector2Int last = new Vector2Int(Screen.width, Screen.height);
+			int stableFrames = 0;
+			while (stableFrames < 5)
+			{
+				yield return null;
+				if (Screen.width != last.x || Screen.height != last.y)
+				{
+					last = new Vector2Int(Screen.width, Screen.height);
+					stableFrames = 0;
+				}
+				else
+				{
+					stableFrames++;
+				}
+			}
+			lastScreenSize = new Vector2Int(Screen.width, Screen.height);
+			ScaleScreens();
+			Canvas.ForceUpdateCanvases();
+			settlePollRunning = false;
 		}
 
 		public void ScaleScreens()
