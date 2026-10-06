@@ -699,7 +699,14 @@ namespace OpenFrontier.IP.Engine
 			AutoTargetHostiles = PlayerPrefs.GetInt(AutoTargetHostilesKey, Helper.BoolToInt(val: true)) > 0;
 			AutoCloseInGameMenu = PlayerPrefs.GetInt(AutoCloseInGameMenuKey, 1) > 0;
 			RespawnOnDeath = PlayerPrefs.GetInt(RespawnOnDeathKey, 1) > 0;
+#if UNITY_ANDROID && !UNITY_EDITOR
+			// Open Frontier: cap the frame rate on mobile VRR panels;
+			// unlimited fps with no frame pacing causes visible flicker.
+			int androidFps = PlayerPrefs.GetInt(PlayerOptionConstants.Video_TargetFrameRateKey, 60);
+			Application.targetFrameRate = androidFps > 0 ? androidFps : 60;
+#else
 			Application.targetFrameRate = -1;
+#endif
 			ForceTouchInputEnabled = PlayerPrefs.GetInt(ForceTouchInputEnabledKey, Helper.BoolToInt(val: false)) > 0;
 			TiltControlEnabled = PlayerPrefs.GetInt(TiltControlEnabledKey, Helper.BoolToInt(val: false)) > 0;
 			TiltSensitivity = PlayerPrefsHelper.SafeGetFloat(TiltSensitivityKey, 18f);
