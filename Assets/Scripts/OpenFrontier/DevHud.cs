@@ -15,6 +15,22 @@ namespace OpenFrontier
 		// (fold/unfold); shown here so the behavior can be verified.
 		public static int DisplayResyncCount;
 
+		private float fpsAccum;
+		private int fpsFrames;
+		private float currentFps;
+
+		private void Update()
+		{
+			fpsAccum += Time.unscaledDeltaTime;
+			fpsFrames++;
+			if (fpsAccum >= 0.5f)
+			{
+				currentFps = fpsFrames / fpsAccum;
+				fpsAccum = 0f;
+				fpsFrames = 0;
+			}
+		}
+
 		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
 		private static void Create()
 		{
@@ -36,12 +52,13 @@ namespace OpenFrontier
 			GUI.matrix = Matrix4x4.Scale(new Vector3(scale, scale, 1f));
 			Rect safe = Screen.safeArea;
 			Vector2Int jni = AndroidDisplayMetrics.GetWindowSize();
-			GUI.Box(new Rect(8f, 8f, 340f, 110f),
+			GUI.Box(new Rect(8f, 8f, 340f, 132f),
+				$"FPS {currentFps:0}  (cap {Application.targetFrameRate}, vSync {QualitySettings.vSyncCount})\n" +
 				$"Screen {Screen.width}x{Screen.height}  {Screen.orientation}\n" +
 				$"Display.main {Display.main.systemWidth}x{Display.main.systemHeight}\n" +
 				$"Android window {jni.x}x{jni.y}  dpi {Screen.dpi:0}\n" +
 				$"SafeArea {safe.x:0},{safe.y:0} {safe.width:0}x{safe.height:0}\n" +
-				$"fps cap {Application.targetFrameRate}  resyncs {DisplayResyncCount}");
+				$"resyncs {DisplayResyncCount}");
 			GUI.matrix = old;
 		}
 	}
