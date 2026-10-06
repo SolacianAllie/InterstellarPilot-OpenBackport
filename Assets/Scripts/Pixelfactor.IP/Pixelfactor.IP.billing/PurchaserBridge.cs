@@ -1,4 +1,3 @@
-using Pixelfactor.IP.billing.UnityIAP;
 using UnityEngine;
 
 namespace Pixelfactor.IP.billing
@@ -36,7 +35,8 @@ namespace Pixelfactor.IP.billing
 
 		public IPurchaser CreatePurchaser()
 		{
-			return gameObject.AddComponent<UnityPurchaser>();
+			// Open Frontier: no real IAP backend; stub purchaser keeps the store browsable.
+			return gameObject.AddComponent<MockPurchaser>();
 		}
 	}
 }

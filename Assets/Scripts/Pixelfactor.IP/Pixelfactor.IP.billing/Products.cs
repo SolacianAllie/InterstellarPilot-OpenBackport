@@ -8,7 +8,8 @@ namespace Pixelfactor.IP.billing
 
 		public static bool HasProduct(string product)
 		{
-			return ZPlayerPrefs.GetInt(product, 0) == 1;
+			// Open Frontier: all former IAP content is unlocked for everyone.
+			return true;
 		}
 
 		public static bool HasProduct(IPProduct product)
