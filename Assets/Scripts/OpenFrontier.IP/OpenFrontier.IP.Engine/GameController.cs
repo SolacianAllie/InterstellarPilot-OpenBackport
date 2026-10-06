@@ -675,6 +675,23 @@ namespace OpenFrontier.IP.Engine
 			Screen.SetResolution(Screen.width, Screen.height, fullScreenMode, Screen.currentResolution.refreshRate);
 		}
 
+		// Open Frontier: vsync-aware frame pacing on mobile. When the
+		// V-Sync option is on, the display decides (targetFrameRate -1,
+		// paced by Swappy); otherwise the Frame rate limit row applies.
+		public void ApplyMobileFrameRate()
+		{
+#if UNITY_ANDROID && !UNITY_EDITOR
+			if (PlayerPrefs.GetInt(PlayerOptionConstants.Video_VSyncKey, 0) > 0)
+			{
+				Application.targetFrameRate = -1;
+			}
+			else
+			{
+				ApplyMobileFrameRateCap();
+			}
+#endif
+		}
+
 		// Open Frontier: on mobile the resolution setting only selects a
 		// refresh rate, so cap the frame rate to it (and to the user's fps
 		// option, whichever is lower). Called on load, when the resolution
@@ -733,7 +750,7 @@ namespace OpenFrontier.IP.Engine
 			RespawnOnDeath = PlayerPrefs.GetInt(RespawnOnDeathKey, 1) > 0;
 #if UNITY_ANDROID && !UNITY_EDITOR
 			UserTargetFrameRate = PlayerPrefs.GetInt(PlayerOptionConstants.Video_TargetFrameRateKey, 60);
-			ApplyMobileFrameRateCap();
+			ApplyMobileFrameRate();
 #else
 			Application.targetFrameRate = -1;
 #endif

@@ -19,6 +19,9 @@ namespace OpenFrontier.IP.UI
 
 		public TMP_Dropdown TargetFrameRateDropdown;
 
+		// Open Frontier: v-sync toggle (display-paced rendering on mobile).
+		public Toggle VSyncToggle;
+
 		public Toggle FullScreenToggle;
 
 		public Toggle General_AllowFireAtNeutralToggle;
@@ -115,10 +118,6 @@ namespace OpenFrontier.IP.UI
 
 		private Resolution[] supportedResolutions;
 
-		// Open Frontier: index of the synthetic 30Hz battery-saver entry
-		// in the resolution dropdown (Android only, -1 when absent).
-		private int batterySaverIndex = -1;
-
 		protected override void awake()
 		{
 			base.awake();
@@ -175,6 +174,11 @@ namespace OpenFrontier.IP.UI
 			FullScreenToggle.onValueChanged.AddListener(FullScreenToggleValueChanged);
 			// Open Frontier: the frame rate limit dropdown is back in use
 			// (the original game hid it); the prefab already has it active.
+			if (VSyncToggle != null)
+			{
+				VSyncToggle.gameObject.SetActive(UI.IsMobileDevice);
+				VSyncToggle.onValueChanged.AddListener(VSyncToggleValueChanged);
+			}
 			TiltControlEnabledToggle.gameObject.SetActive(value: false);
 			TargetFrameRateDropdown.onValueChanged.AddListener(TargetFrameRateDropdownValueChanged);
 			CameraShakeOnHullHitToggle.onValueChanged.AddListener(CameraShakeOnHullHitToggleValueChanged);
@@ -188,6 +192,12 @@ namespace OpenFrontier.IP.UI
 				int fps = GameController.Instance.PlayerOptionConstants.Video_TargetFrameRates[value];
 				GameController.Instance.UserTargetFrameRate = fps;
 #if UNITY_ANDROID && !UNITY_EDITOR
+				// Open Frontier: when V-Sync is on the display decides;
+				// store the choice for when it is turned back off.
+				if (PlayerPrefs.GetInt(GameController.Instance.PlayerOptionConstants.Video_VSyncKey, 0) > 0)
+				{
+					return;
+				}
 				// Open Frontier: never cap above the panel's refresh rate.
 				int refresh = Mathf.RoundToInt((float)Screen.currentResolution.refreshRateRatio.value);
 				if (refresh > 0)
@@ -201,25 +211,21 @@ namespace OpenFrontier.IP.UI
 
 		private void ScreenResolutionDropdownValueChanged(int value)
 		{
-#if UNITY_ANDROID && !UNITY_EDITOR
-			if (batterySaverIndex >= 0 && value == batterySaverIndex)
-			{
-				// Synthetic battery-saver entry: keep the current display
-				// mode (30Hz is not a real mode) and only cap the frame rate.
-				GameController.Instance.ApplyMobileFrameRateCap(30);
-				return;
-			}
-#endif
 			if (value >= 0 && value < supportedResolutions.Length)
 			{
 				Screen.SetResolution(supportedResolutions[value].width, supportedResolutions[value].height, GameController.Instance.GetFullScreenMode(FullScreenToggle.isOn), supportedResolutions[value].refreshRate);
-				GameController.Instance.ApplyMobileFrameRateCap(supportedResolutions[value].refreshRate);
 			}
 		}
 
 		private void FullScreenToggleValueChanged(bool value)
 		{
 			GameController.Instance.ApplyResolution(value);
+		}
+
+		private void VSyncToggleValueChanged(bool value)
+		{
+			PlayerPrefs.SetInt(GameController.Instance.PlayerOptionConstants.Video_VSyncKey, value ? 1 : 0);
+			GameController.Instance.ApplyMobileFrameRate();
 		}
 
 		private void CameraShakeOnHullHitToggleValueChanged(bool value)
@@ -344,6 +350,10 @@ namespace OpenFrontier.IP.UI
 #endif
 				TargetFrameRateDropdown.onValueChanged.AddListener(TargetFrameRateDropdownValueChanged);
 				FullScreenToggle.isOn = Screen.fullScreen;
+				if (VSyncToggle != null)
+				{
+					VSyncToggle.isOn = PlayerPrefs.GetInt(GameController.Instance.PlayerOptionConstants.Video_VSyncKey, 0) > 0;
+				}
 				RefreshScreenResolutionDropdown();
 				MasterVolumeSlider.value = PlayerPrefsHelper.SafeGetFloat(GameController.Instance.MasterVolumeKey, 1f);
 				MusicVolumeSlider.value = PlayerPrefsHelper.SafeGetFloat(GameController.Instance.MusicVolumeKey, GameController.Instance.DefaultMusicVolume);
@@ -399,35 +409,25 @@ namespace OpenFrontier.IP.UI
 			ScreenResolutionDropdown.ClearOptions();
 #if UNITY_ANDROID && !UNITY_EDITOR
 			// Open Frontier: never cache on mobile - a fold swap changes
-			// the panel's native resolution and available refresh rates.
+			// the panel's native resolution.
 			supportedResolutions = null;
 #endif
 			if (supportedResolutions == null)
 			{
-				supportedResolutions = Screen.resolutions.Where((Resolution e) => e.width >= GameController.Instance.GameSettings.VideoSettings.MinDisplayWidth && e.height >= GameController.Instance.GameSettings.VideoSettings.MinDisplayHeight).ToArray();
+				// Open Frontier: resolutions only - refresh rate variants
+				// are not listed (frame rate is controlled solely by the
+				// Frame rate limit row). Keep one entry per distinct
+				// resolution, using its highest available refresh rate
+				// for the actual mode switch.
+				supportedResolutions = Screen.resolutions.Where((Resolution e) => e.width >= GameController.Instance.GameSettings.VideoSettings.MinDisplayWidth && e.height >= GameController.Instance.GameSettings.VideoSettings.MinDisplayHeight)
+					.GroupBy((Resolution e) => new { e.width, e.height })
+					.Select((g) => g.OrderByDescending((Resolution e) => (double)e.refreshRateRatio.value).First())
+					.ToArray();
 			}
-			List<string> labels = supportedResolutions.Select((Resolution e) => $"{e.width:N0} x {e.height:N0} @ {e.refreshRate}Hz ({(float)e.width / (float)e.height:N2})").ToList();
-			batterySaverIndex = -1;
-#if UNITY_ANDROID && !UNITY_EDITOR
-			// Open Frontier: inject a synthetic 30Hz battery-saver entry.
-			// 30Hz is not a real display mode on most panels, so the change
-			// handler only caps the frame rate instead of switching modes.
-			if (supportedResolutions.Length > 0)
-			{
-				Resolution native = supportedResolutions[0];
-				labels.Add($"{native.width:N0} x {native.height:N0} @ 30Hz ({(float)native.width / (float)native.height:N2}) (Battery Saver)");
-				batterySaverIndex = labels.Count - 1;
-			}
-#endif
+			List<string> labels = supportedResolutions.Select((Resolution e) => $"{e.width:N0} x {e.height:N0} ({(float)e.width / (float)e.height:N2})").ToList();
 			ScreenResolutionDropdown.AddOptions(labels);
-			Resolution item = supportedResolutions.FirstOrDefault((Resolution e) => e.width == Screen.width && e.height == Screen.height && e.refreshRate == Screen.currentResolution.refreshRate);
+			Resolution item = supportedResolutions.FirstOrDefault((Resolution e) => e.width == Screen.width && e.height == Screen.height);
 			ScreenResolutionDropdown.value = supportedResolutions.IndexOf(item);
-#if UNITY_ANDROID && !UNITY_EDITOR
-			if (batterySaverIndex >= 0 && Application.targetFrameRate > 0 && Application.targetFrameRate <= 30)
-			{
-				ScreenResolutionDropdown.value = batterySaverIndex;
-			}
-#endif
 			ScreenResolutionDropdown.onValueChanged.AddListener(ScreenResolutionDropdownValueChanged);
 		}
 

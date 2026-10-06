@@ -141,13 +141,13 @@ namespace OpenFrontier.IP.UI
 			}
 			ScaleScreens();
 			Canvas.ForceUpdateCanvases();
-			// Let the new display mode apply, then re-cap the frame rate
-			// to the new panel's refresh rate.
+			// Let the new display mode apply, then re-apply frame pacing
+			// (vsync-aware) for the new panel.
 			yield return null;
 			yield return null;
 			if (GameController.Instance != null)
 			{
-				GameController.Instance.ApplyMobileFrameRateCap();
+				GameController.Instance.ApplyMobileFrameRate();
 			}
 			settlePollRunning = false;
 		}

@@ -50,6 +50,9 @@ namespace OpenFrontier.IP.Engine.Core
 
 		public int[] Video_TargetFrameRates = new int[5] { 30, 60, 90, 120, 144 };
 
+		// Open Frontier: v-sync toggle (display-paced rendering on mobile).
+		public string Video_VSyncKey = "video_vsync";
+
 		public string Audio_MissileLockSoundKey = "audio_missile_lock_sound";
 	}
 }
