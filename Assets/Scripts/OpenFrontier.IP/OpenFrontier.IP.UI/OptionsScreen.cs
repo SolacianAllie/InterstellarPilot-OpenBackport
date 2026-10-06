@@ -172,6 +172,8 @@ namespace OpenFrontier.IP.UI
 			DefaultFactionShortNameButton.onClick.AddListener(DefaultFactionShortNameButtonClick);
 			ForceTouchControlEnabledToggle.gameObject.SetActive(!UI.IsMobileDevice);
 			AdjustSafeAreaButton.onClick.AddListener(AdjustSafeAreaButtonClick);
+			// Open Frontier: fullscreen is meaningless on mobile - hide it.
+			FullScreenToggle.gameObject.SetActive(!UI.IsMobileDevice);
 			FullScreenToggle.onValueChanged.AddListener(FullScreenToggleValueChanged);
 			// Open Frontier: the frame rate limit dropdown is back in use
 			// (the original game hid it); the prefab already has it active.

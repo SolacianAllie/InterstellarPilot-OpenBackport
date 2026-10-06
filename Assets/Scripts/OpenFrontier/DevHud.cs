@@ -50,20 +50,13 @@ namespace OpenFrontier
 			float scale = Mathf.Max(2f, Screen.dpi > 0f ? Screen.dpi / 160f : 2f);
 			Matrix4x4 old = GUI.matrix;
 			GUI.matrix = Matrix4x4.Scale(new Vector3(scale, scale, 1f));
-			Rect safe = Screen.safeArea;
-			Vector2Int jni = AndroidDisplayMetrics.GetWindowSize();
 			string hz = "";
 #if UNITY_ANDROID && !UNITY_EDITOR
 			int vsPref = UnityEngine.PlayerPrefs.GetInt("video_vsync", 1);
 			hz = $"\nModes {AndroidDisplayMetrics.GetSupportedModesSummary()}  now {AndroidDisplayMetrics.GetCurrentRefreshRate():0}Hz  vsyncPref {(vsPref > 0 ? "on" : "off")}";
 #endif
-			GUI.Box(new Rect(8f, 8f, 340f, 154f),
-				$"FPS {currentFps:0}  (cap {Application.targetFrameRate}, vSync {QualitySettings.vSyncCount})\n" +
-				$"Screen {Screen.width}x{Screen.height}  {Screen.orientation}\n" +
-				$"Display.main {Display.main.systemWidth}x{Display.main.systemHeight}\n" +
-				$"Android window {jni.x}x{jni.y}  dpi {Screen.dpi:0}\n" +
-				$"SafeArea {safe.x:0},{safe.y:0} {safe.width:0}x{safe.height:0}\n" +
-				$"resyncs {DisplayResyncCount}" + hz);
+			GUI.Box(new Rect(8f, 8f, 340f, 66f),
+				$"FPS {currentFps:0}  (cap {Application.targetFrameRate}, vSync {QualitySettings.vSyncCount})" + hz);
 			GUI.matrix = old;
 		}
 	}
