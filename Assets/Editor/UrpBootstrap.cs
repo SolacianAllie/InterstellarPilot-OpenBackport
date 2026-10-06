@@ -10,7 +10,7 @@ namespace OpenFrontier.EditorTools
 	{
 		const string SettingsDir = "Assets/Settings";
 		const string PipelinePath = SettingsDir + "/OpenFrontier-URP.asset";
-		const string RendererPath = SettingsDir + "/OpenFrontier-URP-Renderer.asset";
+		
 
 		[MenuItem("OpenFrontier/URP/1 - Create and Assign URP Pipeline")]
 		public static void CreateAndAssign()
@@ -18,20 +18,11 @@ namespace OpenFrontier.EditorTools
 			Directory.CreateDirectory(SettingsDir);
 
 			var pipeline = AssetDatabase.LoadAssetAtPath<UniversalRenderPipelineAsset>(PipelinePath);
-			UniversalRendererData renderer = null;
 			if (pipeline == null)
 			{
+				// Create() builds the asset with a default Universal Renderer as a sub-asset
 				pipeline = UniversalRenderPipelineAsset.Create();
 				AssetDatabase.CreateAsset(pipeline, PipelinePath);
-				renderer = UniversalRenderPipelineAsset.CreateRendererAsset(RendererPath, RendererType.UniversalRenderer, false);
-				// wire the renderer into the pipeline
-				var so = new SerializedObject(pipeline);
-				var prop = so.FindProperty("m_RendererDataList");
-				prop.arraySize = 1;
-				prop.GetArrayElementAtIndex(0).objectReferenceValue = renderer;
-				prop = so.FindProperty("m_DefaultRendererIndex");
-				if (prop != null) prop.intValue = 0;
-				so.ApplyModifiedPropertiesWithoutUndo();
 			}
 			else
 			{
