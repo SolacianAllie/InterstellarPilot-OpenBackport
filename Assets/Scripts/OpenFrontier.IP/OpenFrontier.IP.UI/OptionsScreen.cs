@@ -179,25 +179,18 @@ namespace OpenFrontier.IP.UI
 
 		private void TargetFrameRateDropdownValueChanged(int value)
 		{
-#if UNITY_ANDROID && !UNITY_EDITOR
 			if (value == GameController.Instance.PlayerOptionConstants.Video_TargetFrameRates.Length)
 			{
-				// V-Sync entry: the display decides (Swappy-paced).
+				// V-Sync entry: the display decides.
 				PlayerPrefs.SetInt(GameController.Instance.PlayerOptionConstants.Video_VSyncKey, 1);
-				GameController.Instance.ApplyMobileFrameRate();
+				GameController.Instance.ApplyVSyncState();
 				return;
 			}
 			PlayerPrefs.SetInt(GameController.Instance.PlayerOptionConstants.Video_VSyncKey, 0);
-#endif
 			if (value >= 0 && value < GameController.Instance.PlayerOptionConstants.Video_TargetFrameRates.Length)
 			{
-				int fps = GameController.Instance.PlayerOptionConstants.Video_TargetFrameRates[value];
-				GameController.Instance.UserTargetFrameRate = fps;
-#if UNITY_ANDROID && !UNITY_EDITOR
-				GameController.Instance.ApplyMobileFrameRate();
-#else
-				Application.targetFrameRate = fps;
-#endif
+				GameController.Instance.UserTargetFrameRate = GameController.Instance.PlayerOptionConstants.Video_TargetFrameRates[value];
+				GameController.Instance.ApplyVSyncState();
 			}
 		}
 
@@ -328,17 +321,15 @@ namespace OpenFrontier.IP.UI
 				List<string> fpsOptions = (from e in GameController.Instance.PlayerOptionConstants.Video_TargetFrameRates
 					orderby e
 					select e.ToString()).ToList();
-#if UNITY_ANDROID && !UNITY_EDITOR
 				// Open Frontier: V-Sync as a dropdown entry (display decides).
 				fpsOptions.Add("V-Sync");
-#endif
 				TargetFrameRateDropdown.AddOptions(fpsOptions);
-#if UNITY_ANDROID && !UNITY_EDITOR
 				bool vsyncOn = PlayerPrefs.GetInt(GameController.Instance.PlayerOptionConstants.Video_VSyncKey, 0) > 0;
-				TargetFrameRateDropdown.value = vsyncOn ? GameController.Instance.PlayerOptionConstants.Video_TargetFrameRates.Length : GameController.Instance.PlayerOptionConstants.Video_TargetFrameRates.IndexOf(GameController.Instance.UserTargetFrameRate);
-#else
-				TargetFrameRateDropdown.value = GameController.Instance.PlayerOptionConstants.Video_TargetFrameRates.IndexOf(Application.targetFrameRate);
-#endif
+				int fpsIndex = vsyncOn ? GameController.Instance.PlayerOptionConstants.Video_TargetFrameRates.Length : GameController.Instance.PlayerOptionConstants.Video_TargetFrameRates.IndexOf(GameController.Instance.UserTargetFrameRate);
+				if (fpsIndex >= 0)
+				{
+					TargetFrameRateDropdown.value = fpsIndex;
+				}
 				TargetFrameRateDropdown.onValueChanged.AddListener(TargetFrameRateDropdownValueChanged);
 				FullScreenToggle.isOn = Screen.fullScreen;
 				RefreshScreenResolutionDropdown();

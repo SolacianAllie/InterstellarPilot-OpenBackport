@@ -605,13 +605,9 @@ namespace OpenFrontier.IP.Engine
 			PlayerPrefs.SetInt(PlayerOptionConstants.General_CameraShakeOnHullHitKey, Helper.BoolTo01(PlayerOptions.General_CameraShakeOnHullHit));
 			PlayerPrefs.SetInt(PlayerOptionConstants.General_CameraShakeOnShieldHitKey, Helper.BoolTo01(PlayerOptions.General_CameraShakeOnShieldHit));
 			PlayerPrefs.SetFloat(CameraDragRotateSensitivityKey, CameraDragRotateSensitivity);
-#if UNITY_ANDROID && !UNITY_EDITOR
 			// Open Frontier: save the user's raw fps CHOICE, never the
 			// refresh-capped value, or the cap can never release.
 			PlayerPrefs.SetInt(PlayerOptionConstants.Video_TargetFrameRateKey, UserTargetFrameRate);
-#else
-			PlayerPrefs.SetInt(PlayerOptionConstants.Video_TargetFrameRateKey, Application.targetFrameRate);
-#endif
 			SaveAutoSaveSettings();
 			PlayerPrefs.SetString(DefaultPilotNameKey, DefaultPilotName);
 			PlayerPrefs.SetString(DefaultPilotTitleKey, DefaultPilotTitle);
@@ -673,6 +669,21 @@ namespace OpenFrontier.IP.Engine
 		public void ApplyResolution(FullScreenMode fullScreenMode)
 		{
 			Screen.SetResolution(Screen.width, Screen.height, fullScreenMode, Screen.currentResolution.refreshRate);
+		}
+
+		// Open Frontier: vsync-aware frame pacing, all platforms. When the
+		// V-Sync option is on, the display decides; otherwise the Frame
+		// rate limit row applies. Android: targetFrameRate paced by Swappy.
+		// Desktop: real QualitySettings vSync.
+		public void ApplyVSyncState()
+		{
+			bool vsyncOn = PlayerPrefs.GetInt(PlayerOptionConstants.Video_VSyncKey, 0) > 0;
+#if UNITY_ANDROID && !UNITY_EDITOR
+			ApplyMobileFrameRate();
+#elif !UNITY_EDITOR
+			QualitySettings.vSyncCount = vsyncOn ? 1 : 0;
+			Application.targetFrameRate = vsyncOn ? -1 : (UserTargetFrameRate > 0 ? UserTargetFrameRate : -1);
+#endif
 		}
 
 		// Open Frontier: vsync-aware frame pacing on mobile. When the
@@ -792,7 +803,8 @@ namespace OpenFrontier.IP.Engine
 			UserTargetFrameRate = PlayerPrefs.GetInt(PlayerOptionConstants.Video_TargetFrameRateKey, 60);
 			ApplyMobileFrameRate();
 #else
-			Application.targetFrameRate = -1;
+			UserTargetFrameRate = PlayerPrefs.GetInt(PlayerOptionConstants.Video_TargetFrameRateKey, -1);
+			ApplyVSyncState();
 #endif
 			ForceTouchInputEnabled = PlayerPrefs.GetInt(ForceTouchInputEnabledKey, Helper.BoolToInt(val: false)) > 0;
 			TiltControlEnabled = PlayerPrefs.GetInt(TiltControlEnabledKey, Helper.BoolToInt(val: false)) > 0;
