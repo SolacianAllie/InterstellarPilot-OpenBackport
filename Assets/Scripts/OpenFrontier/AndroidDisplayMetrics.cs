@@ -18,11 +18,7 @@ namespace OpenFrontier
 #if UNITY_ANDROID && !UNITY_EDITOR
 			try
 			{
-				if (unityPlayerClass == null)
-				{
-					unityPlayerClass = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
-				}
-				using (AndroidJavaObject activity = unityPlayerClass.GetStatic<AndroidJavaObject>("currentActivity"))
+				using (AndroidJavaObject activity = CurrentActivity())
 				using (AndroidJavaObject resources = activity.Call<AndroidJavaObject>("getResources"))
 				using (AndroidJavaObject metrics = resources.Call<AndroidJavaObject>("getDisplayMetrics"))
 				{
@@ -37,5 +33,123 @@ namespace OpenFrontier
 			return new Vector2Int(Screen.width, Screen.height);
 #endif
 		}
+
+#if UNITY_ANDROID && !UNITY_EDITOR
+		private static AndroidJavaObject CurrentActivity()
+		{
+			if (unityPlayerClass == null)
+			{
+				unityPlayerClass = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+			}
+			return unityPlayerClass.GetStatic<AndroidJavaObject>("currentActivity");
+		}
+
+		private static AndroidJavaObject CurrentDisplay(AndroidJavaObject activity)
+		{
+			AndroidJavaObject wm = activity.Call<AndroidJavaObject>("getWindowManager");
+			return wm.Call<AndroidJavaObject>("getDefaultDisplay");
+		}
+
+		// The panel's currently active refresh rate (the REAL value, from
+		// Android's Display API - Unity's Screen.currentResolution can lag).
+		public static float GetCurrentRefreshRate()
+		{
+			try
+			{
+				using (AndroidJavaObject activity = CurrentActivity())
+				using (AndroidJavaObject display = CurrentDisplay(activity))
+				{
+					return display.Call<float>("getRefreshRate");
+				}
+			}
+			catch (System.Exception)
+			{
+				return 0f;
+			}
+		}
+
+		// Summary for the debug overlay: distinct supported rates + active rate.
+		public static string GetSupportedModesSummary()
+		{
+			try
+			{
+				using (AndroidJavaObject activity = CurrentActivity())
+				using (AndroidJavaObject display = CurrentDisplay(activity))
+				{
+					AndroidJavaObject[] modes = display.Call<AndroidJavaObject[]>("getSupportedModes");
+					System.Collections.Generic.SortedSet<int> rates = new System.Collections.Generic.SortedSet<int>();
+					foreach (AndroidJavaObject mode in modes)
+					{
+						rates.Add((int)(mode.Call<float>("getRefreshRate") + 0.5f));
+						mode.Dispose();
+					}
+					return string.Join("/", rates) + "Hz";
+				}
+			}
+			catch (System.Exception)
+			{
+				return "?";
+			}
+		}
+
+		// Switch the display MODE to the smallest supported rate >= targetHz
+		// (or the highest available) at the current resolution, via the
+		// window's preferredDisplayModeId. Needed because Screen.resolutions
+		// does not expose high-refresh modes on some devices.
+		public static void SetPreferredRefreshRate(float targetHz)
+		{
+			try
+			{
+				using (AndroidJavaObject activity = CurrentActivity())
+				using (AndroidJavaObject display = CurrentDisplay(activity))
+				{
+					AndroidJavaObject[] modes = display.Call<AndroidJavaObject[]>("getSupportedModes");
+					int curW = display.Call<int>("getPhysicalWidth");
+					int curH = display.Call<int>("getPhysicalHeight");
+					int bestId = -1;
+					float bestHz = -1f;
+					float highestHz = -1f;
+					int highestId = -1;
+					foreach (AndroidJavaObject mode in modes)
+					{
+						float hz = mode.Call<float>("getRefreshRate");
+						int w = mode.Call<int>("getPhysicalWidth");
+						int h = mode.Call<int>("getPhysicalHeight");
+						int id = mode.Call<int>("getModeId");
+						if (w == curW && h == curH)
+						{
+							if (hz > highestHz)
+							{
+								highestHz = hz;
+								highestId = id;
+							}
+							if (hz >= targetHz - 0.5f && (bestId < 0 || hz < bestHz))
+							{
+								bestHz = hz;
+								bestId = id;
+							}
+						}
+						mode.Dispose();
+					}
+					if (bestId < 0)
+					{
+						bestId = highestId;
+					}
+					if (bestId >= 0)
+					{
+						using (AndroidJavaObject window = activity.Call<AndroidJavaObject>("getWindow"))
+						using (AndroidJavaObject lp = window.Call<AndroidJavaObject>("getAttributes"))
+						{
+							lp.Set("preferredDisplayModeId", bestId);
+							window.Call("setAttributes", lp);
+						}
+					}
+				}
+			}
+			catch (System.Exception)
+			{
+			}
+		}
+#endif
 	}
 }

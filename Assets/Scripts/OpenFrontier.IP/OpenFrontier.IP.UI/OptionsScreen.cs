@@ -179,7 +179,8 @@ namespace OpenFrontier.IP.UI
 
 		private void TargetFrameRateDropdownValueChanged(int value)
 		{
-			if (value == GameController.Instance.PlayerOptionConstants.Video_TargetFrameRates.Length)
+			int ratesCount = GameController.Instance.PlayerOptionConstants.Video_TargetFrameRates.Length;
+			if (value == ratesCount)
 			{
 				// V-Sync entry: the display decides.
 				PlayerPrefs.SetInt(GameController.Instance.PlayerOptionConstants.Video_VSyncKey, 1);
@@ -187,7 +188,16 @@ namespace OpenFrontier.IP.UI
 				return;
 			}
 			PlayerPrefs.SetInt(GameController.Instance.PlayerOptionConstants.Video_VSyncKey, 0);
-			if (value >= 0 && value < GameController.Instance.PlayerOptionConstants.Video_TargetFrameRates.Length)
+#if !UNITY_ANDROID || UNITY_EDITOR
+			if (value == ratesCount + 1)
+			{
+				// Uncapped entry: no cap, no vSync.
+				GameController.Instance.UserTargetFrameRate = -1;
+				GameController.Instance.ApplyVSyncState();
+				return;
+			}
+#endif
+			if (value >= 0 && value < ratesCount)
 			{
 				GameController.Instance.UserTargetFrameRate = GameController.Instance.PlayerOptionConstants.Video_TargetFrameRates[value];
 				GameController.Instance.ApplyVSyncState();
@@ -323,9 +333,26 @@ namespace OpenFrontier.IP.UI
 					select e.ToString()).ToList();
 				// Open Frontier: V-Sync as a dropdown entry (display decides).
 				fpsOptions.Add("V-Sync");
+#if !UNITY_ANDROID || UNITY_EDITOR
+				// Desktop only: no cap at all.
+				fpsOptions.Add("Uncapped");
+#endif
 				TargetFrameRateDropdown.AddOptions(fpsOptions);
 				bool vsyncOn = PlayerPrefs.GetInt(GameController.Instance.PlayerOptionConstants.Video_VSyncKey, 0) > 0;
-				int fpsIndex = vsyncOn ? GameController.Instance.PlayerOptionConstants.Video_TargetFrameRates.Length : GameController.Instance.PlayerOptionConstants.Video_TargetFrameRates.IndexOf(GameController.Instance.UserTargetFrameRate);
+				int ratesCount = GameController.Instance.PlayerOptionConstants.Video_TargetFrameRates.Length;
+				int fpsIndex;
+				if (vsyncOn)
+				{
+					fpsIndex = ratesCount;
+				}
+				else if (GameController.Instance.UserTargetFrameRate <= 0)
+				{
+					fpsIndex = ratesCount + 1; // Uncapped (desktop)
+				}
+				else
+				{
+					fpsIndex = GameController.Instance.PlayerOptionConstants.Video_TargetFrameRates.IndexOf(GameController.Instance.UserTargetFrameRate);
+				}
 				if (fpsIndex >= 0)
 				{
 					TargetFrameRateDropdown.value = fpsIndex;

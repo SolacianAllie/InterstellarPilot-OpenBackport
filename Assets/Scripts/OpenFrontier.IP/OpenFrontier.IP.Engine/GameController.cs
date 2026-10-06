@@ -722,44 +722,7 @@ namespace OpenFrontier.IP.Engine
 		public void ApplyDisplayRefreshForTargetFps(int targetFps)
 		{
 #if UNITY_ANDROID && !UNITY_EDITOR
-			Resolution best = default(Resolution);
-			double bestHz = -1.0;
-			bool found = false;
-			foreach (Resolution r in Screen.resolutions)
-			{
-				if (r.width != Screen.width || r.height != Screen.height)
-				{
-					continue;
-				}
-				double hz = (double)r.refreshRateRatio.value;
-				if (hz >= targetFps && (!found || hz < bestHz))
-				{
-					best = r;
-					bestHz = hz;
-					found = true;
-				}
-			}
-			if (!found)
-			{
-				foreach (Resolution r in Screen.resolutions)
-				{
-					if (r.width != Screen.width || r.height != Screen.height)
-					{
-						continue;
-					}
-					double hz = (double)r.refreshRateRatio.value;
-					if (hz > bestHz)
-					{
-						best = r;
-						bestHz = hz;
-						found = true;
-					}
-				}
-			}
-			if (found && System.Math.Abs(bestHz - (double)Screen.currentResolution.refreshRateRatio.value) > 1.0)
-			{
-				Screen.SetResolution(best.width, best.height, Screen.fullScreenMode, best.refreshRateRatio);
-			}
+			OpenFrontier.AndroidDisplayMetrics.SetPreferredRefreshRate(targetFps);
 #endif
 		}
 

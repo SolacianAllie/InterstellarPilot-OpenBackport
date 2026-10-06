@@ -52,13 +52,17 @@ namespace OpenFrontier
 			GUI.matrix = Matrix4x4.Scale(new Vector3(scale, scale, 1f));
 			Rect safe = Screen.safeArea;
 			Vector2Int jni = AndroidDisplayMetrics.GetWindowSize();
-			GUI.Box(new Rect(8f, 8f, 340f, 132f),
+			string hz = "";
+#if UNITY_ANDROID && !UNITY_EDITOR
+			hz = $"\nModes {AndroidDisplayMetrics.GetSupportedModesSummary()}  now {AndroidDisplayMetrics.GetCurrentRefreshRate():0}Hz";
+#endif
+			GUI.Box(new Rect(8f, 8f, 340f, 154f),
 				$"FPS {currentFps:0}  (cap {Application.targetFrameRate}, vSync {QualitySettings.vSyncCount})\n" +
 				$"Screen {Screen.width}x{Screen.height}  {Screen.orientation}\n" +
 				$"Display.main {Display.main.systemWidth}x{Display.main.systemHeight}\n" +
 				$"Android window {jni.x}x{jni.y}  dpi {Screen.dpi:0}\n" +
 				$"SafeArea {safe.x:0},{safe.y:0} {safe.width:0}x{safe.height:0}\n" +
-				$"resyncs {DisplayResyncCount}");
+				$"resyncs {DisplayResyncCount}" + hz);
 			GUI.matrix = old;
 		}
 	}
