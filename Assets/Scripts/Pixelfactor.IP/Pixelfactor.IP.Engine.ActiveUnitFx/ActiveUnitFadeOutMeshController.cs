@@ -11,14 +11,14 @@ namespace Pixelfactor.IP.Engine.ActiveUnitFx
 
 			public MeshRenderer MeshRenderer;
 
-			public float OriginalAlpha;
+			public Color OriginalColor;
 
-			public FadeOutMesh(MeshRenderer meshRenderer, MaterialPropertyBlock materialPropertyBlock, float originalAlpha)
+			public FadeOutMesh(MeshRenderer meshRenderer, MaterialPropertyBlock materialPropertyBlock, Color originalColor)
 			{
 				this = default;
 				MeshRenderer = meshRenderer;
 				MaterialPropertyBlock = materialPropertyBlock;
-				OriginalAlpha = originalAlpha;
+				OriginalColor = originalColor;
 			}
 		}
 
@@ -62,8 +62,16 @@ namespace Pixelfactor.IP.Engine.ActiveUnitFx
 			foreach (MeshRenderer meshRenderer in componentsInChildren)
 			{
 				MaterialPropertyBlock materialPropertyBlock = new MaterialPropertyBlock();
-				fadeOutMeshes.Add(new FadeOutMesh(meshRenderer, materialPropertyBlock, OriginalColor.a));
-				SetColour(materialPropertyBlock, meshRenderer, OriginalColor);
+				// URP port: URP Lit exposes _BaseColor (not _Color). Seed
+				// the block with the material's own color so the fade only
+				// ever animates alpha and never wipes out the albedo.
+				Color originalColor = OriginalColor;
+				if (meshRenderer.sharedMaterial != null)
+				{
+					originalColor = meshRenderer.sharedMaterial.GetColor("_BaseColor");
+				}
+				fadeOutMeshes.Add(new FadeOutMesh(meshRenderer, materialPropertyBlock, originalColor));
+				SetColour(materialPropertyBlock, meshRenderer, originalColor);
 			}
 			activeUnit.DrawDistanceChangedImmediate += ActiveUnit_DrawDistanceChanged;
 		}
@@ -99,8 +107,11 @@ namespace Pixelfactor.IP.Engine.ActiveUnitFx
 			foreach (FadeOutMesh fadeOutMesh in fadeOutMeshes)
 			{
 				MeshRenderer meshRenderer = fadeOutMesh.MeshRenderer;
-				float originalAlpha = fadeOutMesh.OriginalAlpha;
-				Color color = fadeOutMesh.MaterialPropertyBlock.GetColor("_Color");
+				float originalAlpha = fadeOutMesh.OriginalColor.a;
+				// Read the animated color back from the block (written
+				// as _BaseColor by SetColour), keeping the original albedo.
+				Color color = fadeOutMesh.OriginalColor;
+				color.a = fadeOutMesh.MaterialPropertyBlock.GetColor("_BaseColor").a;
 				if (!(meshRenderer != null))
 				{
 					continue;
