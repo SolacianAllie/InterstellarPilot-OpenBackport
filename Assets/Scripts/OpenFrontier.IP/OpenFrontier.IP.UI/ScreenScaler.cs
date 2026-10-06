@@ -42,6 +42,114 @@ namespace OpenFrontier.IP.UI
 			{
 				ScreenNavigator = ScreenNavigator.Instance;
 			}
+			lastDisplay = Snapshot();
+		}
+
+		// Open Frontier: foldable/display-swap support. Unity does not
+		// raise an event when the device display resizes (fold/unfold),
+		// and on some devices even Screen.width/height go stale. Poll the
+		// physical display signals; once they settle, re-sync the surface
+		// with the same Screen.SetResolution nudge the video options use,
+		// then re-apply UI scaling.
+		private struct DisplaySnapshot
+		{
+			public int screenW, screenH, systemW, systemH, jniW, jniH;
+			public Rect safeArea;
+			public float dpi;
+
+			public bool DiffersFrom(in DisplaySnapshot o)
+			{
+				return screenW != o.screenW || screenH != o.screenH
+					|| systemW != o.systemW || systemH != o.systemH
+					|| jniW != o.jniW || jniH != o.jniH
+					|| safeArea != o.safeArea
+					|| Mathf.Abs(dpi - o.dpi) > 1f;
+			}
+		}
+
+		private DisplaySnapshot lastDisplay;
+		private bool settlePollRunning;
+
+		private static float jniPollTimer;
+		private static Vector2Int jniSize;
+
+		private static DisplaySnapshot Snapshot()
+		{
+			// JNI queries cost a little; throttle to ~4 Hz. Fold
+			// transitions take much longer, so nothing is missed.
+			if (Time.unscaledTime >= jniPollTimer)
+			{
+				jniPollTimer = Time.unscaledTime + 0.25f;
+				jniSize = OpenFrontier.AndroidDisplayMetrics.GetWindowSize();
+			}
+			return new DisplaySnapshot
+			{
+				screenW = Screen.width,
+				screenH = Screen.height,
+				systemW = Display.main.systemWidth,
+				systemH = Display.main.systemHeight,
+				jniW = jniSize.x,
+				jniH = jniSize.y,
+				safeArea = Screen.safeArea,
+				dpi = Screen.dpi
+			};
+		}
+
+		private void Update()
+		{
+			DisplaySnapshot cur = Snapshot();
+			if (!settlePollRunning && cur.DiffersFrom(lastDisplay))
+			{
+				StartCoroutine(ResyncWhenSettled());
+			}
+		}
+
+		private System.Collections.IEnumerator ResyncWhenSettled()
+		{
+			settlePollRunning = true;
+			DisplaySnapshot last = Snapshot();
+			int stableFrames = 0;
+			while (stableFrames < 5)
+			{
+				yield return null;
+				DisplaySnapshot cur = Snapshot();
+				if (cur.DiffersFrom(last))
+				{
+					last = cur;
+					stableFrames = 0;
+				}
+				else
+				{
+					stableFrames++;
+				}
+			}
+			lastDisplay = last;
+			OpenFrontier.DevHud.DisplayResyncCount++;
+			// Open Frontier: on foldables the OS swaps the physical display
+			// (Display.main updates) but does not resize the app window, so
+			// the window is stretched onto the new panel and every Unity
+			// Screen metric goes stale. Force the window to the new physical
+			// size - the same fix as manually re-applying the video options.
+			if (Display.main.systemWidth > 0 && Display.main.systemHeight > 0
+				&& (Display.main.systemWidth != Screen.width || Display.main.systemHeight != Screen.height))
+			{
+				Screen.SetResolution(Display.main.systemWidth, Display.main.systemHeight, Screen.fullScreenMode);
+			}
+			else if (GameController.Instance != null)
+			{
+				GameController.Instance.ApplyResolution(Screen.fullScreenMode);
+			}
+			ScaleScreens();
+			Canvas.ForceUpdateCanvases();
+			// Let the new display mode apply, then re-apply frame pacing
+			// (vsync-aware) for the new panel.
+			yield return null;
+			yield return null;
+			if (GameController.Instance != null)
+			{
+				GameController.Instance.ApplyMobileFrameRate();
+			}
+			settlePollRunning = false;
 		}
 
 		public void ScaleScreens()

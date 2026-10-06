@@ -317,6 +317,12 @@ namespace OpenFrontier.IP.Engine
 
 		public bool SpaceFogEnabled = true;
 
+		// Open Frontier: the user's raw fps dropdown choice (30/60/90/120/144).
+		// The applied cap is min(UserTargetFrameRate, panel refresh rate);
+		// storing the choice separately lets the cap release when the
+		// refresh rate goes back up.
+		public int UserTargetFrameRate = 60;
+
 		public bool LightingFXEnabled = true;
 
 		public const bool DefaultLightingFXEnabled = true;
@@ -599,7 +605,9 @@ namespace OpenFrontier.IP.Engine
 			PlayerPrefs.SetInt(PlayerOptionConstants.General_CameraShakeOnHullHitKey, Helper.BoolTo01(PlayerOptions.General_CameraShakeOnHullHit));
 			PlayerPrefs.SetInt(PlayerOptionConstants.General_CameraShakeOnShieldHitKey, Helper.BoolTo01(PlayerOptions.General_CameraShakeOnShieldHit));
 			PlayerPrefs.SetFloat(CameraDragRotateSensitivityKey, CameraDragRotateSensitivity);
-			PlayerPrefs.SetInt(PlayerOptionConstants.Video_TargetFrameRateKey, Application.targetFrameRate);
+			// Open Frontier: save the user's raw fps CHOICE, never the
+			// refresh-capped value, or the cap can never release.
+			PlayerPrefs.SetInt(PlayerOptionConstants.Video_TargetFrameRateKey, UserTargetFrameRate);
 			SaveAutoSaveSettings();
 			PlayerPrefs.SetString(DefaultPilotNameKey, DefaultPilotName);
 			PlayerPrefs.SetString(DefaultPilotTitleKey, DefaultPilotTitle);
@@ -663,6 +671,62 @@ namespace OpenFrontier.IP.Engine
 			Screen.SetResolution(Screen.width, Screen.height, fullScreenMode, Screen.currentResolution.refreshRate);
 		}
 
+		// Open Frontier: vsync-aware frame pacing, all platforms. When the
+		// V-Sync option is on, the display decides; otherwise the Frame
+		// rate limit row applies. Android: targetFrameRate paced by Swappy.
+		// Desktop: real QualitySettings vSync.
+		public void ApplyVSyncState()
+		{
+			bool vsyncOn = PlayerPrefs.GetInt(PlayerOptionConstants.Video_VSyncKey, 1) > 0;
+#if UNITY_ANDROID && !UNITY_EDITOR
+			ApplyMobileFrameRate();
+#elif !UNITY_EDITOR
+			QualitySettings.vSyncCount = vsyncOn ? 1 : 0;
+			Application.targetFrameRate = vsyncOn ? -1 : (UserTargetFrameRate > 0 ? UserTargetFrameRate : -1);
+#endif
+		}
+
+		// Open Frontier: vsync-aware frame pacing on mobile. When the
+		// V-Sync option is on, the display decides (targetFrameRate -1,
+		// paced by Swappy); otherwise the Frame rate limit row applies.
+		public void ApplyMobileFrameRate()
+		{
+#if UNITY_ANDROID && !UNITY_EDITOR
+			if (PlayerPrefs.GetInt(PlayerOptionConstants.Video_VSyncKey, 1) > 0)
+			{
+				Application.targetFrameRate = -1;
+				ApplyDisplayRefreshForTargetFps(999); // let the display run at its best
+			}
+			else
+			{
+				ApplyMobileFrameRateCap();
+			}
+#endif
+		}
+
+		// Open Frontier: the Frame rate limit row is the cap, full stop.
+		// (No refresh-rate clamp - LTPO panels report dropped rates like
+		// 30Hz, which pinned the cap and could never release.)
+		public void ApplyMobileFrameRateCap()
+		{
+#if UNITY_ANDROID && !UNITY_EDITOR
+			// 0 means unset; -1 is the explicit Uncapped choice.
+			Application.targetFrameRate = UserTargetFrameRate == 0 ? 60 : UserTargetFrameRate;
+			ApplyDisplayRefreshForTargetFps(Application.targetFrameRate > 0 ? Application.targetFrameRate : 999);
+#endif
+		}
+
+		// Open Frontier: caps above 60fps require the display MODE to run
+		// above 60Hz, otherwise presentation stays at 60 no matter the
+		// targetFrameRate. Switch to the smallest mode >= the target (or
+		// the highest available) at the current resolution.
+		public void ApplyDisplayRefreshForTargetFps(int targetFps)
+		{
+#if UNITY_ANDROID && !UNITY_EDITOR
+			OpenFrontier.AndroidDisplayMetrics.SetPreferredRefreshRate(targetFps);
+#endif
+		}
+
 		public void ApplyResolution(bool fullScreen)
 		{
 			ApplyResolution(GetFullScreenMode(fullScreen));
@@ -699,7 +763,16 @@ namespace OpenFrontier.IP.Engine
 			AutoTargetHostiles = PlayerPrefs.GetInt(AutoTargetHostilesKey, Helper.BoolToInt(val: true)) > 0;
 			AutoCloseInGameMenu = PlayerPrefs.GetInt(AutoCloseInGameMenuKey, 1) > 0;
 			RespawnOnDeath = PlayerPrefs.GetInt(RespawnOnDeathKey, 1) > 0;
-			Application.targetFrameRate = -1;
+#if UNITY_ANDROID && !UNITY_EDITOR
+			UserTargetFrameRate = PlayerPrefs.GetInt(PlayerOptionConstants.Video_TargetFrameRateKey, 60);
+			// Open Frontier: vSyncCount is ignored by Android but the debug
+			// overlay reads it; zero it so it does not mislead.
+			QualitySettings.vSyncCount = 0;
+			ApplyMobileFrameRate();
+#else
+			UserTargetFrameRate = PlayerPrefs.GetInt(PlayerOptionConstants.Video_TargetFrameRateKey, -1);
+			ApplyVSyncState();
+#endif
 			ForceTouchInputEnabled = PlayerPrefs.GetInt(ForceTouchInputEnabledKey, Helper.BoolToInt(val: false)) > 0;
 			TiltControlEnabled = PlayerPrefs.GetInt(TiltControlEnabledKey, Helper.BoolToInt(val: false)) > 0;
 			TiltSensitivity = PlayerPrefsHelper.SafeGetFloat(TiltSensitivityKey, 18f);

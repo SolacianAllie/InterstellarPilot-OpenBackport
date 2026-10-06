@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using OpenFrontier.IP.Engine;
 using OpenFrontier.IP.UI.Screens;
@@ -114,6 +115,10 @@ namespace OpenFrontier.IP.UI
 
 		private Resolution[] supportedResolutions;
 
+		// Open Frontier: on mobile the fps limiter lists the panel's own
+		// refresh rates (plus 30); holds the values behind the dropdown.
+		private System.Collections.Generic.List<int> mobileRates;
+
 		protected override void awake()
 		{
 			base.awake();
@@ -167,8 +172,11 @@ namespace OpenFrontier.IP.UI
 			DefaultFactionShortNameButton.onClick.AddListener(DefaultFactionShortNameButtonClick);
 			ForceTouchControlEnabledToggle.gameObject.SetActive(!UI.IsMobileDevice);
 			AdjustSafeAreaButton.onClick.AddListener(AdjustSafeAreaButtonClick);
+			// Open Frontier: fullscreen is meaningless on mobile - hide it.
+			FullScreenToggle.gameObject.SetActive(!UI.IsMobileDevice);
 			FullScreenToggle.onValueChanged.AddListener(FullScreenToggleValueChanged);
-			TargetFrameRateDropdown.gameObject.SetActive(value: false);
+			// Open Frontier: the frame rate limit dropdown is back in use
+			// (the original game hid it); the prefab already has it active.
 			TiltControlEnabledToggle.gameObject.SetActive(value: false);
 			TargetFrameRateDropdown.onValueChanged.AddListener(TargetFrameRateDropdownValueChanged);
 			CameraShakeOnHullHitToggle.onValueChanged.AddListener(CameraShakeOnHullHitToggleValueChanged);
@@ -177,9 +185,35 @@ namespace OpenFrontier.IP.UI
 
 		private void TargetFrameRateDropdownValueChanged(int value)
 		{
-			if (value >= 0 && value < GameController.Instance.PlayerOptionConstants.Video_TargetFrameRates.Length)
+#if UNITY_ANDROID && !UNITY_EDITOR
+			if (mobileRates != null && value >= 0 && value < mobileRates.Count)
 			{
-				Application.targetFrameRate = GameController.Instance.PlayerOptionConstants.Video_TargetFrameRates[value];
+				PlayerPrefs.SetInt(GameController.Instance.PlayerOptionConstants.Video_VSyncKey, 0);
+				GameController.Instance.UserTargetFrameRate = mobileRates[value];
+				GameController.Instance.ApplyMobileFrameRate();
+			}
+			return;
+#endif
+			int ratesCount = GameController.Instance.PlayerOptionConstants.Video_TargetFrameRates.Length;
+			if (value == ratesCount)
+			{
+				// V-Sync entry: the display decides.
+				PlayerPrefs.SetInt(GameController.Instance.PlayerOptionConstants.Video_VSyncKey, 1);
+				GameController.Instance.ApplyVSyncState();
+				return;
+			}
+			PlayerPrefs.SetInt(GameController.Instance.PlayerOptionConstants.Video_VSyncKey, 0);
+			if (value == ratesCount + 1)
+			{
+				// Uncapped entry: no cap, no vSync.
+				GameController.Instance.UserTargetFrameRate = -1;
+				GameController.Instance.ApplyVSyncState();
+				return;
+			}
+			if (value >= 0 && value < ratesCount)
+			{
+				GameController.Instance.UserTargetFrameRate = GameController.Instance.PlayerOptionConstants.Video_TargetFrameRates[value];
+				GameController.Instance.ApplyVSyncState();
 			}
 		}
 
@@ -307,10 +341,63 @@ namespace OpenFrontier.IP.UI
 			{
 				TargetFrameRateDropdown.onValueChanged.RemoveAllListeners();
 				TargetFrameRateDropdown.ClearOptions();
-				TargetFrameRateDropdown.AddOptions((from e in GameController.Instance.PlayerOptionConstants.Video_TargetFrameRates
+#if UNITY_ANDROID && !UNITY_EDITOR
+				// Open Frontier: on mobile the limiter offers the panel's own
+				// refresh rates (plus 30 as a battery saver if absent).
+				mobileRates = OpenFrontier.AndroidDisplayMetrics.GetSupportedRates();
+				if (!mobileRates.Contains(30))
+				{
+					mobileRates.Insert(0, 30);
+				}
+				TargetFrameRateDropdown.AddOptions(mobileRates.Select((int r) => r.ToString()).ToList());
+				int fpsIndex;
+				if (PlayerPrefs.GetInt(GameController.Instance.PlayerOptionConstants.Video_VSyncKey, 1) > 0)
+				{
+					fpsIndex = mobileRates.Count - 1; // display-paced default
+				}
+				else
+				{
+					int current = (int)(OpenFrontier.AndroidDisplayMetrics.GetCurrentRefreshRate() + 0.5f);
+					fpsIndex = mobileRates.IndexOf(current);
+					if (fpsIndex < 0)
+					{
+						fpsIndex = mobileRates.IndexOf(GameController.Instance.UserTargetFrameRate);
+					}
+					if (fpsIndex < 0)
+					{
+						fpsIndex = mobileRates.Count - 1;
+					}
+				}
+				TargetFrameRateDropdown.value = fpsIndex;
+#else
+				List<string> fpsOptions = (from e in GameController.Instance.PlayerOptionConstants.Video_TargetFrameRates
 					orderby e
-					select e.ToString()).ToList());
-				TargetFrameRateDropdown.value = GameController.Instance.PlayerOptionConstants.Video_TargetFrameRates.IndexOf(Application.targetFrameRate);
+					select e.ToString()).ToList();
+				// Open Frontier: V-Sync as a dropdown entry (display decides).
+				fpsOptions.Add("V-Sync");
+				// Open Frontier: Uncapped - no cap at all.
+				fpsOptions.Add("Uncapped");
+				TargetFrameRateDropdown.AddOptions(fpsOptions);
+				bool vsyncOn = PlayerPrefs.GetInt(GameController.Instance.PlayerOptionConstants.Video_VSyncKey, 1) > 0;
+				int ratesCount = GameController.Instance.PlayerOptionConstants.Video_TargetFrameRates.Length;
+				int fpsIndex;
+				if (vsyncOn)
+				{
+					fpsIndex = ratesCount;
+				}
+				else if (GameController.Instance.UserTargetFrameRate <= 0)
+				{
+					fpsIndex = ratesCount + 1; // Uncapped (desktop)
+				}
+				else
+				{
+					fpsIndex = GameController.Instance.PlayerOptionConstants.Video_TargetFrameRates.IndexOf(GameController.Instance.UserTargetFrameRate);
+				}
+				if (fpsIndex >= 0)
+				{
+					TargetFrameRateDropdown.value = fpsIndex;
+				}
+#endif
 				TargetFrameRateDropdown.onValueChanged.AddListener(TargetFrameRateDropdownValueChanged);
 				FullScreenToggle.isOn = Screen.fullScreen;
 				RefreshScreenResolutionDropdown();
@@ -366,12 +453,26 @@ namespace OpenFrontier.IP.UI
 		{
 			ScreenResolutionDropdown.onValueChanged.RemoveAllListeners();
 			ScreenResolutionDropdown.ClearOptions();
+#if UNITY_ANDROID && !UNITY_EDITOR
+			// Open Frontier: never cache on mobile - a fold swap changes
+			// the panel's native resolution.
+			supportedResolutions = null;
+#endif
 			if (supportedResolutions == null)
 			{
-				supportedResolutions = Screen.resolutions.Where((Resolution e) => e.width >= GameController.Instance.GameSettings.VideoSettings.MinDisplayWidth && e.height >= GameController.Instance.GameSettings.VideoSettings.MinDisplayHeight).ToArray();
+				// Open Frontier: resolutions only - refresh rate variants
+				// are not listed (frame rate is controlled solely by the
+				// Frame rate limit row). Keep one entry per distinct
+				// resolution, using its highest available refresh rate
+				// for the actual mode switch.
+				supportedResolutions = Screen.resolutions.Where((Resolution e) => e.width >= GameController.Instance.GameSettings.VideoSettings.MinDisplayWidth && e.height >= GameController.Instance.GameSettings.VideoSettings.MinDisplayHeight)
+					.GroupBy((Resolution e) => new { e.width, e.height })
+					.Select((g) => g.OrderByDescending((Resolution e) => (double)e.refreshRateRatio.value).First())
+					.ToArray();
 			}
-			ScreenResolutionDropdown.AddOptions(supportedResolutions.Select((Resolution e) => $"{e.width:N0} x {e.height:N0} @ {e.refreshRate}Hz ({(float)e.width / (float)e.height:N2})").ToList());
-			Resolution item = supportedResolutions.FirstOrDefault((Resolution e) => e.width == Screen.width && e.height == Screen.height && e.refreshRate == Screen.currentResolution.refreshRate);
+			List<string> labels = supportedResolutions.Select((Resolution e) => $"{e.width:N0} x {e.height:N0} ({(float)e.width / (float)e.height:N2})").ToList();
+			ScreenResolutionDropdown.AddOptions(labels);
+			Resolution item = supportedResolutions.FirstOrDefault((Resolution e) => e.width == Screen.width && e.height == Screen.height);
 			ScreenResolutionDropdown.value = supportedResolutions.IndexOf(item);
 			ScreenResolutionDropdown.onValueChanged.AddListener(ScreenResolutionDropdownValueChanged);
 		}
