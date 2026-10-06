@@ -11,6 +11,10 @@ namespace OpenFrontier
 	{
 		private static DevHud instance;
 
+		// Incremented by the UI layer whenever it re-syncs the display
+		// (fold/unfold); shown here so the behavior can be verified.
+		public static int DisplayResyncCount;
+
 		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
 		private static void Create()
 		{
@@ -27,10 +31,11 @@ namespace OpenFrontier
 		private void OnGUI()
 		{
 			Rect safe = Screen.safeArea;
-			GUI.Box(new Rect(8f, 8f, 360f, 84f),
+			GUI.Box(new Rect(8f, 8f, 400f, 106f),
 				$"Screen {Screen.width}x{Screen.height}  {Screen.orientation}\n" +
+				$"Display.main {Display.main.systemWidth}x{Display.main.systemHeight}  dpi {Screen.dpi:0}\n" +
 				$"SafeArea {safe.x:0},{safe.y:0} {safe.width:0}x{safe.height:0}\n" +
-				$"targetFrameRate {Application.targetFrameRate}");
+				$"targetFrameRate {Application.targetFrameRate}  resyncs {DisplayResyncCount}");
 		}
 	}
 }

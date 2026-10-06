@@ -42,34 +42,67 @@ namespace OpenFrontier.IP.UI
 			{
 				ScreenNavigator = ScreenNavigator.Instance;
 			}
-			lastScreenSize = new Vector2Int(Screen.width, Screen.height);
+			lastDisplay = Snapshot();
 		}
 
 		// Open Frontier: foldable/display-swap support. Unity does not
 		// raise an event when the device display resizes (fold/unfold),
-		// so poll the size and re-apply UI scaling once it settles.
-		private Vector2Int lastScreenSize;
-		private bool settlePollRunning;
-
-		private void Update()
+		// and on some devices even Screen.width/height go stale. Poll the
+		// physical display signals; once they settle, re-sync the surface
+		// with the same Screen.SetResolution nudge the video options use,
+		// then re-apply UI scaling.
+		private struct DisplaySnapshot
 		{
-			if (!settlePollRunning && (Screen.width != lastScreenSize.x || Screen.height != lastScreenSize.y))
+			public int screenW, screenH, systemW, systemH;
+			public Rect safeArea;
+			public float dpi;
+
+			public bool DiffersFrom(in DisplaySnapshot o)
 			{
-				StartCoroutine(RescaleWhenSettled());
+				return screenW != o.screenW || screenH != o.screenH
+					|| systemW != o.systemW || systemH != o.systemH
+					|| safeArea != o.safeArea
+					|| Mathf.Abs(dpi - o.dpi) > 1f;
 			}
 		}
 
-		private System.Collections.IEnumerator RescaleWhenSettled()
+		private DisplaySnapshot lastDisplay;
+		private bool settlePollRunning;
+
+		private static DisplaySnapshot Snapshot()
+		{
+			return new DisplaySnapshot
+			{
+				screenW = Screen.width,
+				screenH = Screen.height,
+				systemW = Display.main.systemWidth,
+				systemH = Display.main.systemHeight,
+				safeArea = Screen.safeArea,
+				dpi = Screen.dpi
+			};
+		}
+
+		private void Update()
+		{
+			DisplaySnapshot cur = Snapshot();
+			if (!settlePollRunning && cur.DiffersFrom(lastDisplay))
+			{
+				StartCoroutine(ResyncWhenSettled());
+			}
+		}
+
+		private System.Collections.IEnumerator ResyncWhenSettled()
 		{
 			settlePollRunning = true;
-			Vector2Int last = new Vector2Int(Screen.width, Screen.height);
+			DisplaySnapshot last = Snapshot();
 			int stableFrames = 0;
 			while (stableFrames < 5)
 			{
 				yield return null;
-				if (Screen.width != last.x || Screen.height != last.y)
+				DisplaySnapshot cur = Snapshot();
+				if (cur.DiffersFrom(last))
 				{
-					last = new Vector2Int(Screen.width, Screen.height);
+					last = cur;
 					stableFrames = 0;
 				}
 				else
@@ -77,7 +110,12 @@ namespace OpenFrontier.IP.UI
 					stableFrames++;
 				}
 			}
-			lastScreenSize = new Vector2Int(Screen.width, Screen.height);
+			lastDisplay = last;
+			OpenFrontier.DevHud.DisplayResyncCount++;
+			if (GameController.Instance != null)
+			{
+				GameController.Instance.ApplyResolution(Screen.fullScreenMode);
+			}
 			ScaleScreens();
 			Canvas.ForceUpdateCanvases();
 			settlePollRunning = false;
