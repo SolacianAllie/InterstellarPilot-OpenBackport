@@ -179,7 +179,16 @@ namespace OpenFrontier.IP.UI
 		{
 			if (value >= 0 && value < GameController.Instance.PlayerOptionConstants.Video_TargetFrameRates.Length)
 			{
-				Application.targetFrameRate = GameController.Instance.PlayerOptionConstants.Video_TargetFrameRates[value];
+				int fps = GameController.Instance.PlayerOptionConstants.Video_TargetFrameRates[value];
+#if UNITY_ANDROID && !UNITY_EDITOR
+				// Open Frontier: never cap above the panel's refresh rate.
+				int refresh = Mathf.RoundToInt(Screen.currentResolution.refreshRateRatio.value);
+				if (refresh > 0)
+				{
+					fps = Mathf.Min(fps, refresh);
+				}
+#endif
+				Application.targetFrameRate = fps;
 			}
 		}
 
@@ -188,6 +197,7 @@ namespace OpenFrontier.IP.UI
 			if (value >= 0 && value < supportedResolutions.Length)
 			{
 				Screen.SetResolution(supportedResolutions[value].width, supportedResolutions[value].height, GameController.Instance.GetFullScreenMode(FullScreenToggle.isOn), supportedResolutions[value].refreshRate);
+				GameController.Instance.ApplyMobileFrameRateCap(supportedResolutions[value].refreshRate);
 			}
 		}
 

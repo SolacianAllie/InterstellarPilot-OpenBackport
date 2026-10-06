@@ -663,6 +663,26 @@ namespace OpenFrontier.IP.Engine
 			Screen.SetResolution(Screen.width, Screen.height, fullScreenMode, Screen.currentResolution.refreshRate);
 		}
 
+		// Open Frontier: on mobile the resolution setting only selects a
+		// refresh rate, so cap the frame rate to it (and to the user's fps
+		// option, whichever is lower). Called on load, when the resolution
+		// setting changes, and after foldable display swaps.
+		public void ApplyMobileFrameRateCap(int refreshRate = 0)
+		{
+#if UNITY_ANDROID && !UNITY_EDITOR
+			if (refreshRate <= 0)
+			{
+				refreshRate = Mathf.RoundToInt(Screen.currentResolution.refreshRateRatio.value);
+			}
+			if (refreshRate <= 0)
+			{
+				refreshRate = 60;
+			}
+			int userCap = PlayerPrefs.GetInt(PlayerOptionConstants.Video_TargetFrameRateKey, refreshRate);
+			Application.targetFrameRate = userCap > 0 ? Mathf.Min(userCap, refreshRate) : refreshRate;
+#endif
+		}
+
 		public void ApplyResolution(bool fullScreen)
 		{
 			ApplyResolution(GetFullScreenMode(fullScreen));
@@ -700,10 +720,7 @@ namespace OpenFrontier.IP.Engine
 			AutoCloseInGameMenu = PlayerPrefs.GetInt(AutoCloseInGameMenuKey, 1) > 0;
 			RespawnOnDeath = PlayerPrefs.GetInt(RespawnOnDeathKey, 1) > 0;
 #if UNITY_ANDROID && !UNITY_EDITOR
-			// Open Frontier: cap the frame rate on mobile VRR panels;
-			// unlimited fps with no frame pacing causes visible flicker.
-			int androidFps = PlayerPrefs.GetInt(PlayerOptionConstants.Video_TargetFrameRateKey, 60);
-			Application.targetFrameRate = androidFps > 0 ? androidFps : 60;
+			ApplyMobileFrameRateCap();
 #else
 			Application.targetFrameRate = -1;
 #endif
