@@ -43,7 +43,7 @@ namespace Pixelfactor.IP.Engine.GasClouds
 		{
 			gameObject.SetActive(value: true);
 			PlayParticleSystems(prewarm: false);
-			EngineASX.Instance.EnvironmentController.SkyOverlayColor = GasCloudData.SkyTintColor;
+			EngineASX.Instance.EnvironmentController.SkyOverlayColor = GasCloudData.FogColor; // Open Frontier: sky matches fog color
 			EngineASX.Instance.EnvironmentController.SkySecondaryExposure = GasCloudData.SkyExposure;
 			EngineASX.Instance.EnvironmentController.FogDesiredStart = GasCloudData.FogStartDistance;
 			EngineASX.Instance.EnvironmentController.FogDesiredEnd = GasCloudData.FogEndDistance;
@@ -56,7 +56,7 @@ namespace Pixelfactor.IP.Engine.GasClouds
 		{
 			gameObject.SetActive(value: true);
 			PlayParticleSystems(prewarm: true);
-			EngineASX.Instance.EnvironmentController.SkyOverlayColor = GasCloudData.SkyTintColor;
+			EngineASX.Instance.EnvironmentController.SkyOverlayColor = GasCloudData.FogColor; // Open Frontier: sky matches fog color
 			EngineASX.Instance.EnvironmentController.SkySecondaryExposure = GasCloudData.SkyExposure;
 			EngineASX.Instance.EnvironmentController.FogDesiredStart = GasCloudData.FogStartDistance;
 			EngineASX.Instance.EnvironmentController.FogDesiredEnd = GasCloudData.FogEndDistance;

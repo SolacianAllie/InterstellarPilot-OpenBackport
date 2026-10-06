@@ -242,7 +242,7 @@ namespace Pixelfactor.IP.Engine.GasClouds
 			if (activeGasCloud != null)
 			{
 				skySecondaryExposure = activeGasCloud.GasCloudData.SkyExposure;
-				SkyOverlayColor = activeGasCloud.GasCloudData.SkyTintColor;
+				SkyOverlayColor = activeGasCloud.GasCloudData.FogColor; // Open Frontier: sky matches fog color
 				fogDesiredStart = activeGasCloud.GasCloudData.FogStartDistance;
 				fogDesiredEnd = activeGasCloud.GasCloudData.FogEndDistance;
 				fogDesiredColor = activeGasCloud.GasCloudData.FogColor;
