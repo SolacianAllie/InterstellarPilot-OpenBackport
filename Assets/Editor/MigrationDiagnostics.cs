@@ -36,6 +36,27 @@ namespace OpenFrontier.EditorTools
 			Debug.Log(sb.ToString());
 		}
 
+		[MenuItem("OpenFrontier/Dump Star Particle State")]
+		public static void DumpStarParticles()
+		{
+			var sb = new StringBuilder();
+			var systems = Object.FindObjectsByType<Pixelfactor.IP.Engine.StarParticleSystem>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+			sb.AppendLine($"StarParticleSystem components found: {systems.Length}");
+			foreach (var s in systems)
+			{
+				sb.AppendLine($"--- '{s.name}' (go active={s.gameObject.activeInHierarchy}, comp enabled={s.enabled})");
+				var ps = s.ParticleSystem;
+				sb.AppendLine($"    ParticleSystem field: {(ps == null ? "NULL (fake or real)" : "OK " + ps.name)}");
+				if (ps != null)
+				{
+					var rend = ps.GetComponent<ParticleSystemRenderer>();
+					sb.AppendLine($"    renderer: {(rend == null ? "MISSING" : $"enabled={rend.enabled} material={(rend.sharedMaterial == null ? "NONE/MISSING" : rend.sharedMaterial.name + " shader=" + rend.sharedMaterial.shader.name)}")}");
+					sb.AppendLine($"    ps go active={ps.gameObject.activeInHierarchy}, isPlaying={ps.isPlaying}, particleCount={ps.particleCount}");
+				}
+			}
+			Debug.Log(sb.ToString());
+		}
+
 		[MenuItem("OpenFrontier/Dump Formation Chain State")]
 		public static void Dump()
 		{
