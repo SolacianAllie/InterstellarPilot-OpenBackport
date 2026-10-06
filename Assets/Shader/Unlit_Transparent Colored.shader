@@ -1,6 +1,6 @@
 Shader "Unlit/Transparent Colored" {
 	Properties {
-		_Color ("Main Color", Vector) = (1,1,1,1)
+		_Color ("Main Color", Color) = (1,1,1,1)
 	}
 	SubShader {
 		Tags { "Queue"="Transparent" "IgnoreProjector"="True" "RenderType"="Transparent" }
