@@ -8855,13 +8855,13 @@ RectTransform:
   m_Children:
   - {fileID: 224384533402719018}
   - {fileID: 224176931266004030}
+  - {fileID: 224909888333327498}
   - {fileID: 224045549052472940}
   - {fileID: 224135074601103973}
   - {fileID: 224600491667411216}
   - {fileID: 224293872096801073}
   - {fileID: 224101133080060232}
   - {fileID: 224092164755975753}
-  - {fileID: 224909888333327498}
   m_Father: {fileID: 224293769854670634}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
@@ -13533,7 +13533,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Target frame rate
+  m_text: Frame rate limit
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: aefad2323caa07c409a285aad750d046, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: e3d74bbb34a47d84796bfb4a92431d69, type: 2}
