@@ -2,11 +2,40 @@ using System.Text;
 using Pixelfactor.IP.Engine;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 namespace OpenFrontier.EditorTools
 {
 	public static class MigrationDiagnostics
 	{
+		[MenuItem("OpenFrontier/Dump DeepSpace Renderers")]
+		public static void DumpDeepSpace()
+		{
+			var sb = new StringBuilder();
+			int deepSpaceLayer = 30;
+			var renderers = Object.FindObjectsByType<Renderer>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+			int shown = 0;
+			foreach (var r in renderers)
+			{
+				if (r.gameObject.layer != deepSpaceLayer) continue;
+				shown++;
+				if (shown > 12) continue;
+				var mats = r.sharedMaterials;
+				string matDesc = mats == null || mats.Length == 0
+					? "NO MATERIALS"
+					: string.Join(", ", System.Linq.Enumerable.Select(mats, m => m == null ? "NULL-MAT" : $"{m.name} [shader: {(m.shader == null ? "NULL-SHADER" : m.shader.name)}, tex: {(m.HasProperty("_BaseMap") && m.GetTexture("_BaseMap") != null ? m.GetTexture("_BaseMap").name : "none")}]"));
+				sb.AppendLine($"{r.GetType().Name} '{r.name}' active={r.gameObject.activeInHierarchy} enabled={r.enabled} pos={r.transform.position} scale={r.transform.lossyScale} mats=[{matDesc}]");
+			}
+			sb.AppendLine($"total DeepSpace renderers: {shown}");
+			var cams = Object.FindObjectsByType<Camera>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+			foreach (var c in cams)
+			{
+				var data = c.GetUniversalAdditionalCameraData();
+				sb.AppendLine($"camera '{c.name}' depth={c.depth} type={data.renderType} stackCount={(data.renderType == CameraRenderType.Base ? data.cameraStack.Count : 0)}");
+			}
+			Debug.Log(sb.ToString());
+		}
+
 		[MenuItem("OpenFrontier/Dump Formation Chain State")]
 		public static void Dump()
 		{

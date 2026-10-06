@@ -49,7 +49,7 @@ Material:
     - _AtmosFalloff: 3
     - _Blend: 0
     - _BlendOp: 0
-    - _Cull: 2
+    - _Cull: 0
     - _DstBlend: 10
     - _DstBlendAlpha: 10
     - _LightScale: 1
