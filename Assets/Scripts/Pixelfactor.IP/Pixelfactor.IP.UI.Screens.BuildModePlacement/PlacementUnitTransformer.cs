@@ -1,5 +1,6 @@
 using Pixelfactor.IP.Engine;
 using UnityEngine;
+using Input = OpenFrontier.LegacyInput;
 
 namespace Pixelfactor.IP.UI.Screens.BuildModePlacement
 {

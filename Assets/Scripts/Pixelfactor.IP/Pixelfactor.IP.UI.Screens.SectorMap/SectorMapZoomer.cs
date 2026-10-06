@@ -1,4 +1,5 @@
 using UnityEngine;
+using Input = OpenFrontier.LegacyInput;
 
 namespace Pixelfactor.IP.UI.Screens.SectorMap
 {

@@ -5,6 +5,7 @@ using Pixelfactor.IP.UI.Engine;
 using Pixelfactor.IP.UI.Screens.Hud;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Input = OpenFrontier.LegacyInput;
 
 namespace Pixelfactor.IP.Engine
 {

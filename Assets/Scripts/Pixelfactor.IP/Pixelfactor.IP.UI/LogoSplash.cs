@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Input = OpenFrontier.LegacyInput;
 
 namespace Pixelfactor.IP.UI
 {

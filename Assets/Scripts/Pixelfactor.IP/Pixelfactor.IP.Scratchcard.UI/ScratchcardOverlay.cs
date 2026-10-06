@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Input = OpenFrontier.LegacyInput;
 
 namespace Pixelfactor.IP.Scratchcard.UI
 {

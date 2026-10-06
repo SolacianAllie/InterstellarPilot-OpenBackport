@@ -7,6 +7,7 @@ using Pixelfactor.IP.UI.Screens.UniverseMap;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Input = OpenFrontier.LegacyInput;
 
 namespace Pixelfactor.IP.UI.Screens.Home
 {

@@ -15,6 +15,7 @@ using Pixelfactor.IP.UI.Screens.UniverseMap;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Input = OpenFrontier.LegacyInput;
 
 namespace Pixelfactor.IP.UI.Screens.Hud
 {

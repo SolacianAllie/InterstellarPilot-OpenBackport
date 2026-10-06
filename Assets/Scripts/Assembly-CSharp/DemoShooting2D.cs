@@ -1,4 +1,5 @@
 using UnityEngine;
+using Input = OpenFrontier.LegacyInput;
 
 public class DemoShooting2D : MonoBehaviour
 {

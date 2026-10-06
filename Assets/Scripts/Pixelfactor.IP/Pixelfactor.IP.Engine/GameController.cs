@@ -21,6 +21,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using Object = UnityEngine.Object;
+using Input = OpenFrontier.LegacyInput;
 
 namespace Pixelfactor.IP.Engine
 {

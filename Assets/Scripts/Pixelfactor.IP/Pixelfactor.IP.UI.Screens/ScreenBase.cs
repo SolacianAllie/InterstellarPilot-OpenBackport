@@ -5,6 +5,7 @@ using Pixelfactor.IP.UI.Screens.MessageBox;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Input = OpenFrontier.LegacyInput;
 
 namespace Pixelfactor.IP.UI.Screens
 {

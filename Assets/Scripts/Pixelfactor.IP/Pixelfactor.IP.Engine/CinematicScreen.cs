@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using DigitalRubyShared;
 using Pixelfactor.IP.UI;
 using UnityEngine;
+using Input = OpenFrontier.LegacyInput;
 
 namespace Pixelfactor.IP.Engine
 {
