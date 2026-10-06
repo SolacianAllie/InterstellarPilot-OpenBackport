@@ -10,6 +10,7 @@ namespace OpenFrontier.EditorTools
 	{
 		const string SettingsDir = "Assets/Settings";
 		const string PipelinePath = SettingsDir + "/OpenFrontier-URP.asset";
+		const string RendererPath = SettingsDir + "/OpenFrontier-URP-Renderer.asset";
 		
 
 		[MenuItem("OpenFrontier/URP/1 - Create and Assign URP Pipeline")]
@@ -17,16 +18,35 @@ namespace OpenFrontier.EditorTools
 		{
 			Directory.CreateDirectory(SettingsDir);
 
+			// 1. renderer data asset (must be saved BEFORE the pipeline references it)
+			var renderer = AssetDatabase.LoadAssetAtPath<UniversalRendererData>(RendererPath);
+			if (renderer == null)
+			{
+				renderer = ScriptableObject.CreateInstance<UniversalRendererData>();
+				AssetDatabase.CreateAsset(renderer, RendererPath);
+			}
+
+			// 2. pipeline asset referencing the renderer
 			var pipeline = AssetDatabase.LoadAssetAtPath<UniversalRenderPipelineAsset>(PipelinePath);
 			if (pipeline == null)
 			{
-				// Create() builds the asset with a default Universal Renderer as a sub-asset
-				pipeline = UniversalRenderPipelineAsset.Create();
+				pipeline = UniversalRenderPipelineAsset.Create(renderer);
 				AssetDatabase.CreateAsset(pipeline, PipelinePath);
 			}
 			else
 			{
-				Debug.Log("Pipeline asset already exists, reassigning only.");
+				// repair: ensure a valid default renderer is assigned
+				var so = new SerializedObject(pipeline);
+				var list = so.FindProperty("m_RendererDataList");
+				bool broken = list == null || list.arraySize == 0 ||
+					list.GetArrayElementAtIndex(0).objectReferenceValue == null;
+				if (broken && list != null)
+				{
+					if (list.arraySize == 0) list.arraySize = 1;
+					list.GetArrayElementAtIndex(0).objectReferenceValue = renderer;
+					so.ApplyModifiedPropertiesWithoutUndo();
+					Debug.Log("Repaired missing default renderer on existing pipeline asset.");
+				}
 			}
 
 			// Graphics settings
