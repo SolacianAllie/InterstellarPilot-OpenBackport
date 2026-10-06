@@ -185,6 +185,7 @@ namespace OpenFrontier.IP.UI
 			if (value >= 0 && value < GameController.Instance.PlayerOptionConstants.Video_TargetFrameRates.Length)
 			{
 				int fps = GameController.Instance.PlayerOptionConstants.Video_TargetFrameRates[value];
+				GameController.Instance.UserTargetFrameRate = fps;
 #if UNITY_ANDROID && !UNITY_EDITOR
 				// Open Frontier: never cap above the panel's refresh rate.
 				int refresh = Mathf.RoundToInt((float)Screen.currentResolution.refreshRateRatio.value);
@@ -334,7 +335,12 @@ namespace OpenFrontier.IP.UI
 				TargetFrameRateDropdown.AddOptions((from e in GameController.Instance.PlayerOptionConstants.Video_TargetFrameRates
 					orderby e
 					select e.ToString()).ToList());
+#if UNITY_ANDROID && !UNITY_EDITOR
+				// Show the user's raw choice, not the refresh-capped value.
+				TargetFrameRateDropdown.value = GameController.Instance.PlayerOptionConstants.Video_TargetFrameRates.IndexOf(GameController.Instance.UserTargetFrameRate);
+#else
 				TargetFrameRateDropdown.value = GameController.Instance.PlayerOptionConstants.Video_TargetFrameRates.IndexOf(Application.targetFrameRate);
+#endif
 				TargetFrameRateDropdown.onValueChanged.AddListener(TargetFrameRateDropdownValueChanged);
 				FullScreenToggle.isOn = Screen.fullScreen;
 				RefreshScreenResolutionDropdown();
