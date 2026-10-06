@@ -68,6 +68,35 @@ namespace OpenFrontier
 			}
 		}
 
+		// Distinct supported refresh rates of the active display, sorted.
+		public static System.Collections.Generic.List<int> GetSupportedRates()
+		{
+			System.Collections.Generic.SortedSet<int> rates = new System.Collections.Generic.SortedSet<int>();
+#if UNITY_ANDROID && !UNITY_EDITOR
+			try
+			{
+				using (AndroidJavaObject activity = CurrentActivity())
+				using (AndroidJavaObject display = CurrentDisplay(activity))
+				{
+					AndroidJavaObject[] modes = display.Call<AndroidJavaObject[]>("getSupportedModes");
+					foreach (AndroidJavaObject mode in modes)
+					{
+						rates.Add((int)(mode.Call<float>("getRefreshRate") + 0.5f));
+						mode.Dispose();
+					}
+				}
+			}
+			catch (System.Exception)
+			{
+			}
+#endif
+			if (rates.Count == 0)
+			{
+				rates.Add(60);
+			}
+			return new System.Collections.Generic.List<int>(rates);
+		}
+
 		// Summary for the debug overlay: distinct supported rates + active rate.
 		public static string GetSupportedModesSummary()
 		{

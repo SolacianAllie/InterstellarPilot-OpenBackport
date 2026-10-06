@@ -115,6 +115,10 @@ namespace OpenFrontier.IP.UI
 
 		private Resolution[] supportedResolutions;
 
+		// Open Frontier: on mobile the fps limiter lists the panel's own
+		// refresh rates (plus 30); holds the values behind the dropdown.
+		private System.Collections.Generic.List<int> mobileRates;
+
 		protected override void awake()
 		{
 			base.awake();
@@ -179,6 +183,15 @@ namespace OpenFrontier.IP.UI
 
 		private void TargetFrameRateDropdownValueChanged(int value)
 		{
+#if UNITY_ANDROID && !UNITY_EDITOR
+			if (mobileRates != null && value >= 0 && value < mobileRates.Count)
+			{
+				PlayerPrefs.SetInt(GameController.Instance.PlayerOptionConstants.Video_VSyncKey, 0);
+				GameController.Instance.UserTargetFrameRate = mobileRates[value];
+				GameController.Instance.ApplyMobileFrameRate();
+			}
+			return;
+#endif
 			int ratesCount = GameController.Instance.PlayerOptionConstants.Video_TargetFrameRates.Length;
 			if (value == ratesCount)
 			{
@@ -326,6 +339,35 @@ namespace OpenFrontier.IP.UI
 			{
 				TargetFrameRateDropdown.onValueChanged.RemoveAllListeners();
 				TargetFrameRateDropdown.ClearOptions();
+#if UNITY_ANDROID && !UNITY_EDITOR
+				// Open Frontier: on mobile the limiter offers the panel's own
+				// refresh rates (plus 30 as a battery saver if absent).
+				mobileRates = OpenFrontier.AndroidDisplayMetrics.GetSupportedRates();
+				if (!mobileRates.Contains(30))
+				{
+					mobileRates.Insert(0, 30);
+				}
+				TargetFrameRateDropdown.AddOptions(mobileRates.Select((int r) => r.ToString()).ToList());
+				int fpsIndex;
+				if (PlayerPrefs.GetInt(GameController.Instance.PlayerOptionConstants.Video_VSyncKey, 1) > 0)
+				{
+					fpsIndex = mobileRates.Count - 1; // display-paced default
+				}
+				else
+				{
+					int current = (int)(OpenFrontier.AndroidDisplayMetrics.GetCurrentRefreshRate() + 0.5f);
+					fpsIndex = mobileRates.IndexOf(current);
+					if (fpsIndex < 0)
+					{
+						fpsIndex = mobileRates.IndexOf(GameController.Instance.UserTargetFrameRate);
+					}
+					if (fpsIndex < 0)
+					{
+						fpsIndex = mobileRates.Count - 1;
+					}
+				}
+				TargetFrameRateDropdown.value = fpsIndex;
+#else
 				List<string> fpsOptions = (from e in GameController.Instance.PlayerOptionConstants.Video_TargetFrameRates
 					orderby e
 					select e.ToString()).ToList();
@@ -353,6 +395,7 @@ namespace OpenFrontier.IP.UI
 				{
 					TargetFrameRateDropdown.value = fpsIndex;
 				}
+#endif
 				TargetFrameRateDropdown.onValueChanged.AddListener(TargetFrameRateDropdownValueChanged);
 				FullScreenToggle.isOn = Screen.fullScreen;
 				RefreshScreenResolutionDropdown();
