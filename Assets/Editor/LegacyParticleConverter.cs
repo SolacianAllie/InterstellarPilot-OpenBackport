@@ -27,6 +27,44 @@ namespace OpenFrontier.EditorTools
 			"Assets/Material/wormhole_capMaterial.mat",
 		};
 
+		[MenuItem("OpenFrontier/Repair Star Particle Material Ref")]
+		public static void RepairStarParticleMaterial()
+		{
+			const string matPath = "Assets/Material/MaterialStarParticle.mat";
+			var mat = AssetDatabase.LoadAssetAtPath<Material>(matPath);
+			var sb = new StringBuilder();
+			sb.AppendLine($"load {matPath}: {(mat == null ? "NULL (import broken!)" : "OK - shader " + mat.shader.name)}");
+			if (mat == null)
+			{
+				Debug.LogError(sb.ToString());
+				return;
+			}
+			string[] prefabs =
+			{
+				"Assets/Resources/prefabs/worlddata/engine/StarParticles.prefab",
+				"Assets/Resources/prefabs/worlddata/engine/cameras/GameCamera.prefab",
+			};
+			foreach (var p in prefabs)
+			{
+				var go = AssetDatabase.LoadAssetAtPath<GameObject>(p);
+				if (go == null) { sb.AppendLine($"prefab missing: {p}"); continue; }
+				int fixedCount = 0;
+				foreach (var rend in go.GetComponentsInChildren<ParticleSystemRenderer>(true))
+				{
+					if (rend.sharedMaterial == null || rend.sharedMaterial != mat)
+					{
+						rend.sharedMaterial = mat;
+						fixedCount++;
+						sb.AppendLine($"  rewired renderer on '{rend.gameObject.name}' in {p}");
+					}
+				}
+				if (fixedCount > 0) EditorUtility.SetDirty(go);
+				sb.AppendLine($"{p}: {fixedCount} renderers rewired");
+			}
+			AssetDatabase.SaveAssets();
+			Debug.Log(sb.ToString());
+		}
+
 		[MenuItem("OpenFrontier/URP/2 - Convert Remaining Legacy Particle Materials")]
 		public static void Convert()
 		{
