@@ -6,11 +6,12 @@ Shader "OpenFrontier/Unlit Solid Color" {
 		_Color ("Overlay Color", Color) = (0.302, 0.29, 0.282, 1)
 	}
 	SubShader {
-		Tags { "Queue"="Overlay" "IgnoreProjector"="True" "RenderType"="Overlay" }
+		Tags { "Queue"="Overlay" "IgnoreProjector"="True" "RenderType"="Transparent" }
 		ZWrite Off
 		Cull Off
 		Lighting Off
 		Fog { Mode Off }
+		Blend SrcAlpha OneMinusSrcAlpha
 
 		Pass {
 			HLSLPROGRAM
