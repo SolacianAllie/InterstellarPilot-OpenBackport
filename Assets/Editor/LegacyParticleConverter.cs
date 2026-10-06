@@ -110,8 +110,11 @@ namespace OpenFrontier.EditorTools
 				if (invFade > 0f)
 				{
 					mat.SetFloat("_SoftParticlesEnabled", 1f);
-					mat.SetFloat("_SoftParticlesNearFadeDistance", 0f);
-					mat.SetFloat("_SoftParticlesFarFadeDistance", 1f / Mathf.Max(invFade, 0.0001f));
+					// Empirical: on this OpenGL stack the depth sample behind empty space
+					// reads 0, so Near=1/Far=0 is the configuration that keeps
+					// soft particles visible (fade = saturate(1 - negativeGap) = 1).
+					mat.SetFloat("_SoftParticlesNearFadeDistance", 1f);
+					mat.SetFloat("_SoftParticlesFarFadeDistance", 0f);
 				}
 				mat.SetOverrideTag("RenderType", "Transparent");
 				mat.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
