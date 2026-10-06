@@ -49,6 +49,9 @@ namespace OpenFrontier.EditorTools
 				}
 			}
 
+			// the game relies on soft particles (nebulas, fog, dust) - they need scene depth
+			pipeline.supportsCameraDepthTexture = true;
+
 			// Graphics settings
 			GraphicsSettings.defaultRenderPipeline = pipeline;
 			// All quality levels

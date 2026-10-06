@@ -72,7 +72,7 @@ Shader "Hovl/Particles/Electricity" {
 				float fres = 1.0 - saturate(dot(worldNormal, viewDir));
 				output.fresnel = lerp(_RemapXYFresnelZW.z, _RemapXYFresnelZW.w, fres);
 				output.screenPos = ComputeScreenPos(output.pos);
-				COMPUTE_EYEDEPTH(output.eyeDepth);
+				output.eyeDepth = -UnityObjectToViewPos(input.vertex.xyz).z;
 				return output;
 			}
 
