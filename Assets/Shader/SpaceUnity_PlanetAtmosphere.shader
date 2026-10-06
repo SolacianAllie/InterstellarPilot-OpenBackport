@@ -5,44 +5,55 @@ Shader "SpaceUnity/PlanetAtmosphere" {
 		_Falloff ("Falloff", Float) = 5
 		_Transparency ("Transparency", Float) = 15
 	}
-	//DummyShaderTextExporter
-	SubShader{
-		Tags { "RenderType" = "Opaque" }
-		LOD 200
+	SubShader {
+		Tags { "Queue"="Transparent" "IgnoreProjector"="True" "RenderType"="Transparent" }
+		ZWrite Off
+		Cull Front
+		Lighting Off
+		Fog { Mode Off }
+		Blend SrcAlpha One
 
-		Pass
-		{
+		Pass {
 			HLSLPROGRAM
 			#pragma vertex vert
 			#pragma fragment frag
+			#include "UnityCG.cginc"
 
-			float4x4 unity_ObjectToWorld;
-			float4x4 unity_MatrixVP;
+			fixed4 _AtmoColor;
+			float _Size;
+			float _Falloff;
+			float _Transparency;
 
-			struct Vertex_Stage_Input
-			{
-				float4 pos : POSITION;
+			struct appdata {
+				float4 vertex : POSITION;
+				float3 normal : NORMAL;
 			};
-
-			struct Vertex_Stage_Output
-			{
+			struct v2f {
 				float4 pos : SV_POSITION;
+				float3 normalDir : TEXCOORD0;
+				float3 viewDir : TEXCOORD1;
 			};
 
-			Vertex_Stage_Output vert(Vertex_Stage_Input input)
+			v2f vert(appdata input)
 			{
-				Vertex_Stage_Output output;
-				output.pos = mul(unity_MatrixVP, mul(unity_ObjectToWorld, input.pos));
+				v2f output;
+				// expand the shell slightly
+				float3 pos = input.vertex.xyz * (1.0 + _Size * 0.1);
+				output.pos = UnityObjectToClipPos(float4(pos, 1));
+				output.normalDir = UnityObjectToWorldNormal(input.normal);
+				float3 worldPos = mul(unity_ObjectToWorld, input.vertex).xyz;
+				output.viewDir = normalize(_WorldSpaceCameraPos - worldPos);
 				return output;
 			}
 
-			float4 frag(Vertex_Stage_Output input) : SV_TARGET
+			fixed4 frag(v2f input) : SV_Target
 			{
-				return float4(1.0, 1.0, 1.0, 1.0); // RGBA
+				// back faces of the shell -> rim seen through the planet silhouette
+				float fres = saturate(dot(normalize(input.normalDir), normalize(input.viewDir)));
+				fres = pow(fres, _Falloff);
+				return _AtmoColor * fres * (_Transparency * 0.1);
 			}
-
 			ENDHLSL
 		}
 	}
-	Fallback "Diffuse"
 }

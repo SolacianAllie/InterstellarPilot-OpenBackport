@@ -2,54 +2,47 @@ Shader "Mobile/Particles/AdditiveDisabledFog" {
 	Properties {
 		_MainTex ("Particle Texture", 2D) = "white" {}
 	}
-	//DummyShaderTextExporter
-	SubShader{
-		Tags { "RenderType"="Opaque" }
-		LOD 200
+	SubShader {
+		Tags { "Queue"="Transparent" "IgnoreProjector"="True" "RenderType"="Transparent" "PreviewType"="Plane" }
+		ZWrite Off
+		Cull Off
+		Lighting Off
+		Fog { Mode Off }
+		Blend SrcAlpha One
 
-		Pass
-		{
+		Pass {
 			HLSLPROGRAM
 			#pragma vertex vert
 			#pragma fragment frag
+			#include "UnityCG.cginc"
 
-			float4x4 unity_ObjectToWorld;
-			float4x4 unity_MatrixVP;
+			sampler2D _MainTex;
 			float4 _MainTex_ST;
 
-			struct Vertex_Stage_Input
-			{
-				float4 pos : POSITION;
-				float2 uv : TEXCOORD0;
+			struct appdata {
+				float4 vertex : POSITION;
+				fixed4 color : COLOR;
+				float2 texcoord : TEXCOORD0;
 			};
-
-			struct Vertex_Stage_Output
-			{
-				float2 uv : TEXCOORD0;
+			struct v2f {
 				float4 pos : SV_POSITION;
+				fixed4 color : COLOR;
+				float2 texcoord : TEXCOORD0;
 			};
 
-			Vertex_Stage_Output vert(Vertex_Stage_Input input)
+			v2f vert(appdata input)
 			{
-				Vertex_Stage_Output output;
-				output.uv = (input.uv.xy * _MainTex_ST.xy) + _MainTex_ST.zw;
-				output.pos = mul(unity_MatrixVP, mul(unity_ObjectToWorld, input.pos));
+				v2f output;
+				output.pos = UnityObjectToClipPos(input.vertex);
+				output.texcoord = TRANSFORM_TEX(input.texcoord, _MainTex);
+				output.color = input.color;
 				return output;
 			}
 
-			Texture2D<float4> _MainTex;
-			SamplerState sampler_MainTex;
-
-			struct Fragment_Stage_Input
+			fixed4 frag(v2f input) : SV_Target
 			{
-				float2 uv : TEXCOORD0;
-			};
-
-			float4 frag(Fragment_Stage_Input input) : SV_TARGET
-			{
-				return _MainTex.Sample(sampler_MainTex, input.uv.xy);
+				return input.color * tex2D(_MainTex, input.texcoord);
 			}
-
 			ENDHLSL
 		}
 	}

@@ -3,44 +3,44 @@ Shader "Outlined/OutlineOnly" {
 		_OutlineColor ("Outline Color", Vector) = (0,0,0,1)
 		_Outline ("Outline width", Range(0, 0.03)) = 0.005
 	}
-	//DummyShaderTextExporter
-	SubShader{
-		Tags { "RenderType" = "Opaque" }
+	SubShader {
+		Tags { "RenderType"="Opaque" }
 		LOD 200
 
-		Pass
-		{
+		// Inverted-hull outline pass
+		Pass {
+			Cull Front
+			ZWrite On
+
 			HLSLPROGRAM
 			#pragma vertex vert
 			#pragma fragment frag
+			#include "UnityCG.cginc"
 
-			float4x4 unity_ObjectToWorld;
-			float4x4 unity_MatrixVP;
+			fixed4 _OutlineColor;
+			float _Outline;
 
-			struct Vertex_Stage_Input
-			{
-				float4 pos : POSITION;
+			struct appdata {
+				float4 vertex : POSITION;
+				float3 normal : NORMAL;
 			};
-
-			struct Vertex_Stage_Output
-			{
+			struct v2f {
 				float4 pos : SV_POSITION;
 			};
 
-			Vertex_Stage_Output vert(Vertex_Stage_Input input)
+			v2f vert(appdata input)
 			{
-				Vertex_Stage_Output output;
-				output.pos = mul(unity_MatrixVP, mul(unity_ObjectToWorld, input.pos));
+				v2f output;
+				float3 pos = input.vertex.xyz + normalize(input.normal) * _Outline;
+				output.pos = UnityObjectToClipPos(float4(pos, 1));
 				return output;
 			}
 
-			float4 frag(Vertex_Stage_Output input) : SV_TARGET
+			fixed4 frag(v2f input) : SV_Target
 			{
-				return float4(1.0, 1.0, 1.0, 1.0); // RGBA
+				return _OutlineColor;
 			}
-
 			ENDHLSL
 		}
 	}
-	Fallback "Diffuse"
 }

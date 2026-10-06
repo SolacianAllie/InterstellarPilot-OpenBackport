@@ -2,44 +2,41 @@ Shader "Unlit/Transparent Colored" {
 	Properties {
 		_Color ("Main Color", Vector) = (1,1,1,1)
 	}
-	//DummyShaderTextExporter
-	SubShader{
-		Tags { "RenderType"="Opaque" }
-		LOD 200
+	SubShader {
+		Tags { "Queue"="Transparent" "IgnoreProjector"="True" "RenderType"="Transparent" }
+		LOD 100
+		ZWrite Off
+		Blend SrcAlpha OneMinusSrcAlpha
 
-		Pass
-		{
+		Pass {
 			HLSLPROGRAM
 			#pragma vertex vert
 			#pragma fragment frag
+			#include "UnityCG.cginc"
 
-			float4x4 unity_ObjectToWorld;
-			float4x4 unity_MatrixVP;
+			fixed4 _Color;
 
-			struct Vertex_Stage_Input
-			{
-				float4 pos : POSITION;
+			struct appdata {
+				float4 vertex : POSITION;
+				float4 color : COLOR;
 			};
-
-			struct Vertex_Stage_Output
-			{
+			struct v2f {
 				float4 pos : SV_POSITION;
+				fixed4 color : COLOR;
 			};
 
-			Vertex_Stage_Output vert(Vertex_Stage_Input input)
+			v2f vert(appdata input)
 			{
-				Vertex_Stage_Output output;
-				output.pos = mul(unity_MatrixVP, mul(unity_ObjectToWorld, input.pos));
+				v2f output;
+				output.pos = UnityObjectToClipPos(input.vertex);
+				output.color = input.color * _Color;
 				return output;
 			}
 
-			float4 _Color;
-
-			float4 frag(Vertex_Stage_Output input) : SV_TARGET
+			fixed4 frag(v2f input) : SV_Target
 			{
-				return _Color; // RGBA
+				return input.color;
 			}
-
 			ENDHLSL
 		}
 	}
