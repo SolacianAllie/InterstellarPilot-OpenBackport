@@ -173,7 +173,8 @@ namespace OpenFrontier.IP.UI
 			ForceTouchControlEnabledToggle.gameObject.SetActive(!UI.IsMobileDevice);
 			AdjustSafeAreaButton.onClick.AddListener(AdjustSafeAreaButtonClick);
 			FullScreenToggle.onValueChanged.AddListener(FullScreenToggleValueChanged);
-			TargetFrameRateDropdown.gameObject.SetActive(value: false);
+			// Open Frontier: the frame rate limit dropdown is back in use
+			// (the original game hid it); the prefab already has it active.
 			TiltControlEnabledToggle.gameObject.SetActive(value: false);
 			TargetFrameRateDropdown.onValueChanged.AddListener(TargetFrameRateDropdownValueChanged);
 			CameraShakeOnHullHitToggle.onValueChanged.AddListener(CameraShakeOnHullHitToggleValueChanged);
