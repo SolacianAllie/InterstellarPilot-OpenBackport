@@ -8,10 +8,12 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: SpaceFogAlphaBlendCoolBlue
-  m_Shader: {fileID: 203, guid: 0000000000000000f000000000000000, type: 0}
+  m_Shader: {fileID: 4800000, guid: 0406db5a14f94604a8c57ccfbc9f3b46, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
+  m_ValidKeywords:
+    - _SURFACE_TYPE_TRANSPARENT
+    - _SOFTPARTICLES_ON
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -23,19 +25,32 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-      _MainTex:
+      _BaseMap:
         m_Texture: {fileID: 2800000, guid: 35c08fa4d081cce4ba03d19531ee42fd, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: {}
     m_Floats:
+      _Surface: 1
+      _BlendOp: 0
+      _ZWrite: 0
+      _SrcBlendAlpha: 1
+      _DstBlendAlpha: 10
+      _AlphaClip: 0
+      _AlphaToMask: 0
+      _Cull: 2
+      _Blend: 0
+      _SrcBlend: 5
+      _DstBlend: 10
+      _SoftParticlesEnabled: 1
+      _SoftParticlesNearFadeDistance: 0.0
+      _SoftParticlesFarFadeDistance: 0.784314
       _AtmosFalloff: 3
-      _InvFade: 1.275
       _LightScale: 1
     m_Colors:
       _AtmosFar: {r: 0.4557808, g: 0.5187039, b: 0.9850746, a: 1}
       _AtmosNear: {r: 0.1686275, g: 0.7372549, b: 1, a: 1}
       _Color: {r: 1, g: 1, b: 1, a: 1}
       _EmisColor: {r: 0.2, g: 0.2, b: 0.2, a: 0}
-      _TintColor: {r: 1, g: 1, b: 1, a: 1}
+      _BaseColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
