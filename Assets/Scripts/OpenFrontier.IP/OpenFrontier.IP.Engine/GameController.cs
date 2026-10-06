@@ -684,6 +684,7 @@ namespace OpenFrontier.IP.Engine
 			if (PlayerPrefs.GetInt(PlayerOptionConstants.Video_VSyncKey, 0) > 0)
 			{
 				Application.targetFrameRate = -1;
+				ApplyDisplayRefreshForTargetFps(999); // let the display run at its best
 			}
 			else
 			{
@@ -699,6 +700,55 @@ namespace OpenFrontier.IP.Engine
 		{
 #if UNITY_ANDROID && !UNITY_EDITOR
 			Application.targetFrameRate = UserTargetFrameRate > 0 ? UserTargetFrameRate : 60;
+			ApplyDisplayRefreshForTargetFps(Application.targetFrameRate);
+#endif
+		}
+
+		// Open Frontier: caps above 60fps require the display MODE to run
+		// above 60Hz, otherwise presentation stays at 60 no matter the
+		// targetFrameRate. Switch to the smallest mode >= the target (or
+		// the highest available) at the current resolution.
+		public void ApplyDisplayRefreshForTargetFps(int targetFps)
+		{
+#if UNITY_ANDROID && !UNITY_EDITOR
+			Resolution best = default(Resolution);
+			double bestHz = -1.0;
+			bool found = false;
+			foreach (Resolution r in Screen.resolutions)
+			{
+				if (r.width != Screen.width || r.height != Screen.height)
+				{
+					continue;
+				}
+				double hz = (double)r.refreshRateRatio.value;
+				if (hz >= targetFps && (!found || hz < bestHz))
+				{
+					best = r;
+					bestHz = hz;
+					found = true;
+				}
+			}
+			if (!found)
+			{
+				foreach (Resolution r in Screen.resolutions)
+				{
+					if (r.width != Screen.width || r.height != Screen.height)
+					{
+						continue;
+					}
+					double hz = (double)r.refreshRateRatio.value;
+					if (hz > bestHz)
+					{
+						best = r;
+						bestHz = hz;
+						found = true;
+					}
+				}
+			}
+			if (found && System.Math.Abs(bestHz - (double)Screen.currentResolution.refreshRateRatio.value) > 1.0)
+			{
+				Screen.SetResolution(best.width, best.height, Screen.fullScreenMode, best.refreshRateRatio);
+			}
 #endif
 		}
 
