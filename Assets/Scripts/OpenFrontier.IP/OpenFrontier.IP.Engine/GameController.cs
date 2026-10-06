@@ -692,23 +692,13 @@ namespace OpenFrontier.IP.Engine
 #endif
 		}
 
-		// Open Frontier: on mobile the resolution setting only selects a
-		// refresh rate, so cap the frame rate to it (and to the user's fps
-		// option, whichever is lower). Called on load, when the resolution
-		// setting changes, and after foldable display swaps.
-		public void ApplyMobileFrameRateCap(int refreshRate = 0)
+		// Open Frontier: the Frame rate limit row is the cap, full stop.
+		// (No refresh-rate clamp - LTPO panels report dropped rates like
+		// 30Hz, which pinned the cap and could never release.)
+		public void ApplyMobileFrameRateCap()
 		{
 #if UNITY_ANDROID && !UNITY_EDITOR
-			if (refreshRate <= 0)
-			{
-				refreshRate = Mathf.RoundToInt((float)Screen.currentResolution.refreshRateRatio.value);
-			}
-			if (refreshRate <= 0)
-			{
-				refreshRate = 60;
-			}
-			int userCap = UserTargetFrameRate > 0 ? UserTargetFrameRate : refreshRate;
-			Application.targetFrameRate = Mathf.Min(userCap, refreshRate);
+			Application.targetFrameRate = UserTargetFrameRate > 0 ? UserTargetFrameRate : 60;
 #endif
 		}
 

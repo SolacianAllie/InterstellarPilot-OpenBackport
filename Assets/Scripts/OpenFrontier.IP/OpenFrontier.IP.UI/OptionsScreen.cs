@@ -198,12 +198,6 @@ namespace OpenFrontier.IP.UI
 				{
 					return;
 				}
-				// Open Frontier: never cap above the panel's refresh rate.
-				int refresh = Mathf.RoundToInt((float)Screen.currentResolution.refreshRateRatio.value);
-				if (refresh > 0)
-				{
-					fps = Mathf.Min(fps, refresh);
-				}
 #endif
 				Application.targetFrameRate = fps;
 			}
