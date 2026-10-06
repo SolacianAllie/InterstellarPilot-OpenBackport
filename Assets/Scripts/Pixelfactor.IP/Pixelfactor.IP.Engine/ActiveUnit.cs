@@ -274,7 +274,7 @@ namespace Pixelfactor.IP.Engine
 		private void ApplyCloakColorMaterialPropertyBlock(MeshRenderer meshRenderer, ref Color color)
 		{
 			meshRenderer.GetPropertyBlock(cloakMaterialPropertyBlock);
-			cloakMaterialPropertyBlock.SetColor("_Color", color);
+			cloakMaterialPropertyBlock.SetColor("_BaseColor", color); // URP port: _Color -> _BaseColor
 			meshRenderer.SetPropertyBlock(cloakMaterialPropertyBlock);
 		}
 

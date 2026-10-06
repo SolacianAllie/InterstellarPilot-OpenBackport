@@ -133,7 +133,7 @@ namespace Pixelfactor.IP.Engine.ActiveUnitFx
 
 		private static void SetColour(MaterialPropertyBlock materialPropertyBlock, MeshRenderer meshRenderer, Color color)
 		{
-			materialPropertyBlock.SetColor("_Color", color);
+			materialPropertyBlock.SetColor("_BaseColor", color); // URP port: _Color -> _BaseColor
 			meshRenderer.SetPropertyBlock(materialPropertyBlock);
 		}
 	}

@@ -102,9 +102,10 @@ namespace Pixelfactor.IP.Engine
 
 		private void SetParticlesAlpha()
 		{
-			Color color = particlesMaterialPropertyBlock.GetColor("_Color");
+			// URP port: legacy "_Color" is unused by URP Particles/Unlit; drive _BaseColor instead
+			Color color = particlesMaterialPropertyBlock.GetColor("_BaseColor");
 			color = Color.Lerp(FadedOutColor, FadedInColor, Mathf.Clamp01(cameraSpeed / FadeParticlesSpeedThreshold));
-			particlesMaterialPropertyBlock.SetColor("_Color", color);
+			particlesMaterialPropertyBlock.SetColor("_BaseColor", color);
 			particleSystemRenderer.SetPropertyBlock(particlesMaterialPropertyBlock);
 		}
 	}

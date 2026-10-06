@@ -51,7 +51,7 @@ namespace Pixelfactor.IP.Engine
 				}
 				float a = Mathf.Lerp(GameController.Instance.GameSettings.VideoSettings.VelocityTrailMinAlpha, GameController.Instance.GameSettings.VideoSettings.VelocityTrailMaxAlpha, Mathf.Clamp01(vector.magnitude / GameController.Instance.GameSettings.VideoSettings.VelocityTrailFullAlphaSpeed));
 				activeTrailRenderer.GetPropertyBlock(materialPropertyBlock);
-				materialPropertyBlock.SetColor("_TintColor", new Color(1f, 1f, 1f, a));
+				materialPropertyBlock.SetColor("_BaseColor", new Color(1f, 1f, 1f, a)); // URP port: _TintColor -> _BaseColor
 				activeTrailRenderer.SetPropertyBlock(materialPropertyBlock);
 			}
 		}
