@@ -53,7 +53,7 @@ namespace OpenFrontier.IP.UI
 		// then re-apply UI scaling.
 		private struct DisplaySnapshot
 		{
-			public int screenW, screenH, systemW, systemH;
+			public int screenW, screenH, systemW, systemH, jniW, jniH;
 			public Rect safeArea;
 			public float dpi;
 
@@ -61,6 +61,7 @@ namespace OpenFrontier.IP.UI
 			{
 				return screenW != o.screenW || screenH != o.screenH
 					|| systemW != o.systemW || systemH != o.systemH
+					|| jniW != o.jniW || jniH != o.jniH
 					|| safeArea != o.safeArea
 					|| Mathf.Abs(dpi - o.dpi) > 1f;
 			}
@@ -69,14 +70,26 @@ namespace OpenFrontier.IP.UI
 		private DisplaySnapshot lastDisplay;
 		private bool settlePollRunning;
 
+		private static float jniPollTimer;
+		private static Vector2Int jniSize;
+
 		private static DisplaySnapshot Snapshot()
 		{
+			// JNI queries cost a little; throttle to ~4 Hz. Fold
+			// transitions take much longer, so nothing is missed.
+			if (Time.unscaledTime >= jniPollTimer)
+			{
+				jniPollTimer = Time.unscaledTime + 0.25f;
+				jniSize = OpenFrontier.AndroidDisplayMetrics.GetWindowSize();
+			}
 			return new DisplaySnapshot
 			{
 				screenW = Screen.width,
 				screenH = Screen.height,
 				systemW = Display.main.systemWidth,
 				systemH = Display.main.systemHeight,
+				jniW = jniSize.x,
+				jniH = jniSize.y,
 				safeArea = Screen.safeArea,
 				dpi = Screen.dpi
 			};
