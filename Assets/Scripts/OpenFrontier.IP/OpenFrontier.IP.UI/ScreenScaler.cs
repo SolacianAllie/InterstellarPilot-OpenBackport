@@ -125,7 +125,17 @@ namespace OpenFrontier.IP.UI
 			}
 			lastDisplay = last;
 			OpenFrontier.DevHud.DisplayResyncCount++;
-			if (GameController.Instance != null)
+			// Open Frontier: on foldables the OS swaps the physical display
+			// (Display.main updates) but does not resize the app window, so
+			// the window is stretched onto the new panel and every Unity
+			// Screen metric goes stale. Force the window to the new physical
+			// size - the same fix as manually re-applying the video options.
+			if (Display.main.systemWidth > 0 && Display.main.systemHeight > 0
+				&& (Display.main.systemWidth != Screen.width || Display.main.systemHeight != Screen.height))
+			{
+				Screen.SetResolution(Display.main.systemWidth, Display.main.systemHeight, Screen.fullScreenMode);
+			}
+			else if (GameController.Instance != null)
 			{
 				GameController.Instance.ApplyResolution(Screen.fullScreenMode);
 			}
