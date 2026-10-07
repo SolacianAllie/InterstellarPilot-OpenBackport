@@ -1,7 +1,9 @@
 Shader "OpenFrontier/Particles/Unlit (NoFog)" {
 	Properties {
 		_BaseMap ("Base Map", 2D) = "white" {}
-		_BaseColor ("Base Color", Color) = (1,1,1,1)
+		// HDR-capable: the inspector shows the intensity slider, so the
+		// material's base color can exceed 1 and drive bloom directly.
+		[HDR] _BaseColor ("Base Color", Color) = (1,1,1,1)
 		_Cutoff ("Alpha Cutoff", Range(0.0, 1.0)) = 0.5
 		[HDR] _EmissionColor ("Color", Color) = (0,0,0)
 		_EmissionMap ("Emission", 2D) = "white" {}
