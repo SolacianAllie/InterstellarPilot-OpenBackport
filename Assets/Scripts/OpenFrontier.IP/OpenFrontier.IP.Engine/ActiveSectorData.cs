@@ -19,11 +19,11 @@ namespace OpenFrontier.IP.Engine
 
 		public GameObject SpaceFog;
 
-		// Open Frontier: textures for the runtime-built visible sun (crisp
+		// Open Frontier: materials for the runtime-built visible sun (crisp
 		// core + soft glow). See SunBillboard.
-		public Texture2D SunCoreTexture;
+		public Material SunCoreMaterial;
 
-		public Texture2D SunGlowTexture;
+		public Material SunGlowMaterial;
 
 		private List<ParticleSystem> spaceFogParticleSystems = new List<ParticleSystem>(3);
 
@@ -78,8 +78,8 @@ namespace OpenFrontier.IP.Engine
 					{
 						sunBillboard = light.gameObject.AddComponent<SunBillboard>();
 					}
-					sunBillboard.CoreTexture = SunCoreTexture;
-					sunBillboard.GlowTexture = SunGlowTexture;
+					sunBillboard.CoreMaterial = SunCoreMaterial;
+					sunBillboard.GlowMaterial = SunGlowMaterial;
 					break;
 				}
 			}

@@ -9,25 +9,23 @@ namespace OpenFrontier
 	/// additive) placed along the light's direction at a constant angular
 	/// size, following the camera every frame so it reads as infinitely
 	/// distant. Added at runtime by ActiveSectorData onto the sector's
-	/// directional light; tint follows the light's color.
+	/// directional light.
+	///
+	/// The materials (Assets/Material/SunCore.mat, SunGlow.mat) are the
+	/// source of truth for textures and base brightness; the light's color
+	/// is multiplied in per frame as a tint, so material edits apply live.
 	/// </summary>
 	public class SunBillboard : MonoBehaviour
 	{
-		public Texture2D CoreTexture;
+		public Material CoreMaterial;
 
-		public Texture2D GlowTexture;
+		public Material GlowMaterial;
 
 		private const float CoreAngularDiameter = 2.2f;
 
 		private const float GlowAngularDiameter = 10f;
 
-		private const float CoreIntensity = 2.2f;
-
-		private const float GlowIntensity = 0.85f;
-
 		private static Mesh quadMesh;
-
-		private static Material sunMaterial;
 
 		private Light cachedLight;
 
@@ -45,23 +43,18 @@ namespace OpenFrontier
 		{
 			cachedLight = GetComponent<Light>();
 			propertyBlock = new MaterialPropertyBlock();
+		}
+
+		// Materials are assigned AFTER AddComponent runs Awake, so the quads
+		// are built lazily on the first LateUpdate that has them.
+		private void Build()
+		{
 			if (quadMesh == null)
 			{
 				quadMesh = BuildQuadMesh();
 			}
-			if (sunMaterial == null)
-			{
-				Shader shader = Resources.Load<Shader>("Shaders/OpenFrontier_SunGlow");
-				if (shader == null)
-				{
-					Debug.LogWarning("[SunBillboard] Shaders/OpenFrontier_SunGlow not found in Resources", this);
-					enabled = false;
-					return;
-				}
-				sunMaterial = new Material(shader);
-			}
-			coreTransform = CreateQuad("SunCore", out coreRenderer);
-			glowTransform = CreateQuad("SunGlow", out glowRenderer);
+			coreTransform = CreateQuad("SunCore", CoreMaterial, out coreRenderer);
+			glowTransform = CreateQuad("SunGlow", GlowMaterial, out glowRenderer);
 		}
 
 		// Unit quad in the XY plane, front face looking down -Z (same
@@ -97,14 +90,14 @@ namespace OpenFrontier
 			return mesh;
 		}
 
-		private Transform CreateQuad(string objectName, out MeshRenderer meshRenderer)
+		private Transform CreateQuad(string objectName, Material material, out MeshRenderer meshRenderer)
 		{
 			GameObject gameObject = new GameObject(objectName);
 			gameObject.transform.SetParent(transform, worldPositionStays: false);
 			MeshFilter meshFilter = gameObject.AddComponent<MeshFilter>();
 			meshFilter.sharedMesh = quadMesh;
 			meshRenderer = gameObject.AddComponent<MeshRenderer>();
-			meshRenderer.sharedMaterial = sunMaterial;
+			meshRenderer.sharedMaterial = material;
 			meshRenderer.shadowCastingMode = ShadowCastingMode.Off;
 			meshRenderer.receiveShadows = false;
 			return gameObject.transform;
@@ -112,8 +105,16 @@ namespace OpenFrontier
 
 		private void LateUpdate()
 		{
+			if (coreTransform == null)
+			{
+				if (CoreMaterial == null || GlowMaterial == null)
+				{
+					return;
+				}
+				Build();
+			}
 			Camera main = Camera.main;
-			if (main == null || cachedLight == null || coreTransform == null)
+			if (main == null || cachedLight == null)
 			{
 				return;
 			}
@@ -128,11 +129,12 @@ namespace OpenFrontier
 			float num3 = num2 * (GlowAngularDiameter / CoreAngularDiameter);
 			glowTransform.localScale = new Vector3(num3, num3, 1f);
 			Color color = cachedLight.color;
-			propertyBlock.SetTexture("_BaseMap", (CoreTexture != null) ? CoreTexture : Texture2D.whiteTexture);
-			propertyBlock.SetColor("_Color", new Color((color.r + 1f) * 0.5f * CoreIntensity, (color.g + 1f) * 0.5f * CoreIntensity, (color.b + 1f) * 0.5f * CoreIntensity, 1f));
+			// Material base color x light tint; the core is additionally
+			// pulled towards white so it reads as the blinding disk.
+			Color value = new Color((color.r + 1f) * 0.5f, (color.g + 1f) * 0.5f, (color.b + 1f) * 0.5f, 1f);
+			propertyBlock.SetColor("_Color", CoreMaterial.GetColor("_Color") * value);
 			coreRenderer.SetPropertyBlock(propertyBlock);
-			propertyBlock.SetTexture("_BaseMap", (GlowTexture != null) ? GlowTexture : Texture2D.whiteTexture);
-			propertyBlock.SetColor("_Color", new Color(color.r * GlowIntensity, color.g * GlowIntensity, color.b * GlowIntensity, 1f));
+			propertyBlock.SetColor("_Color", GlowMaterial.GetColor("_Color") * color);
 			glowRenderer.SetPropertyBlock(propertyBlock);
 		}
 	}
