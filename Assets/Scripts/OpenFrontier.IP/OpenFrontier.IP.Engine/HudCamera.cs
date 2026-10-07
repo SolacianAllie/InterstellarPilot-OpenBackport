@@ -138,7 +138,7 @@ namespace OpenFrontier.IP.Engine
 				UpdateDesiredCameraOrientation_FixedForward();
 				break;
 			case HudCameraMode.Free:
-				UpdateDesiredCameraPosition(SpectateTarget.ActiveUnit);
+				UpdateDesiredCameraPosition_Free(SpectateTarget.ActiveUnit);
 				break;
 			case HudCameraMode.LockTarget:
 				if (HasTarget)
@@ -185,6 +185,21 @@ namespace OpenFrontier.IP.Engine
 				float num2 = Mathf.Lerp(minCameraHeight, maxCameraHeight, cameraElevation);
 				Vector3 vector = Quaternion.Euler(0f, camDesiredRotation.y, 0f) * (Vector3.back * num + Vector3.up * num2);
 				camDesiredPosition = activeUnit.Unit.transform.position + vector;
+			}
+		}
+
+		// Open Frontier: Free mode mirrors CameraSpectator's manual orbit -
+		// the camera sits on the orbit sphere around the unit at the full
+		// pitch/yaw angle, and the matching rotation looks back at it
+		// (position = target + Q*(back*d), rotation = Q, is exactly LookAt).
+		private void UpdateDesiredCameraPosition_Free(ActiveUnit activeUnit)
+		{
+			if (!(activeUnit == null))
+			{
+				float minCameraDistance = activeUnit.ActiveUnitClass.MinCameraDistance;
+				float maxCameraDistance = activeUnit.ActiveUnitClass.MaxCameraDistance;
+				float num = Mathf.Lerp(minCameraDistance, maxCameraDistance, CamUnitDistance);
+				camDesiredPosition = activeUnit.Unit.transform.position + Quaternion.Euler(camDesiredRotation) * (Vector3.back * num);
 			}
 		}
 
