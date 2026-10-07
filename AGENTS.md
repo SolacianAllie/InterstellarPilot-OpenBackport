@@ -49,6 +49,13 @@ exit 198) — the user performs all editor actions.
   (reflection probes!) gets a lopsided or missing sky — capture from the
   SECTOR ANCHOR instead (see `SpaceReflectionProbe`), with far plane
   ~100000.
+- **Cameras instantiated mid-scene become rogue BASE cameras in URP:**
+  `UrpCameraStacker` only restacks on scene load, so any prefab spawned
+  with an enabled Camera (e.g. WormholeAnim) renders AFTER the stack as
+  its own base camera — with clear flags that can wipe the frame to black
+  (this blacked out the wormhole transition; the anim's camera is now
+  disabled in the prefab). Never spawn enabled cameras at runtime unless
+  they are explicitly stacked.
 - **Play-mode edits to the URP asset can PERSIST in the editor:**
   `ShadowQualitySync` writes `mainLightShadowmapResolution` at runtime;
   the editor re-serialized the asset mid-session and the value stuck
