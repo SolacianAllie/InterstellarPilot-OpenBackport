@@ -25,16 +25,10 @@ namespace OpenFrontier.IP.Engine
 		// StarColorGenerator.ResolveCurrent); defaults to white.
 		public Color StarTint = Color.white;
 
-		// Hysteresis anchoring: the sun sits at the light's position offset
-		// along its facing (child-of-light semantics), but if flying far
-		// enough makes its apparent direction drift more than this from the
-		// light's axis, it quietly re-anchors near the camera - the far
-		// plane (8500) is much smaller than sector travel distances.
-		private const float ReanchorAngleDegrees = 0.5f;
-
-		private Vector3 anchorPosition;
-
-		private bool anchorInitialized;
+		// Placement is purely light-relative: the sun sits at the light's
+		// position offset along its facing. No camera anchoring, no
+		// hysteresis - where the light points, the sun is. (The camera is
+		// still used for billboarding, far-plane distance and scale only.)
 
 		private const float CoreAngularDiameter = 6.6f;
 
@@ -138,22 +132,10 @@ namespace OpenFrontier.IP.Engine
 			// (day/night scattering follows the same light the sun shows).
 			Shader.SetGlobalVector("_SunDirectionWorld", new Vector4(vector.x, vector.y, vector.z, 0f));
 			float num = Mathf.Max(main.farClipPlane * 0.5f, 100f);
-			// Open Frontier: the sun is placed at the light's own position
-			// offset along its facing - but with hysteresis: if travel makes
-			// its apparent direction drift too far off the light's axis, it
-			// silently re-anchors to the camera's vicinity so it always sits
-			// where the light says.
-			if (!anchorInitialized)
-			{
-				anchorPosition = cachedLight.transform.position;
-				anchorInitialized = true;
-			}
-			Vector3 position = anchorPosition + vector * num;
-			if (Vector3.Angle(position - main.transform.position, vector) > ReanchorAngleDegrees)
-			{
-				anchorPosition = main.transform.position;
-				position = anchorPosition + vector * num;
-			}
+			// Open Frontier: placement is purely light-relative - the light's
+			// position offset along its facing. No camera involvement:
+			// where the light points, the sun is.
+			Vector3 position = cachedLight.transform.position + vector * num;
 			// True billboard: face the camera dead-on (forward along the view
 			// ray, up aligned to the camera's up) so the sun reads correctly
 			// from any angle, including near the zenith/nadir.
