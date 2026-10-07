@@ -56,3 +56,7 @@ exit 198) — the user performs all editor actions.
   any hit-test radius authored in "pixels" must be multiplied by
   `Canvas.scaleFactor` or it shrinks physically on high-DPI screens (see
   `SectorMapUnitSelector`).
+- **`OpenFrontier.LegacyInput` is a shim over the NEW Input System**, not
+  `UnityEngine.Input`: `Mouse.current` is null/stale on touch-only devices,
+  so `mousePosition` must mirror the primary touch (fixed in the shim —
+  keep that behaviour when migrating the remaining ~60 call sites).

@@ -12,13 +12,66 @@ namespace OpenFrontier
 	/// </summary>
 	public static class LegacyInput
 	{
-		public static Vector3 mousePosition => Mouse.current?.position.ReadValue() ?? Vector3.zero;
+		// Mirrors UnityEngine.Input semantics: on touch devices mousePosition
+		// follows the primary finger - Mouse.current is null (or stale) on
+		// phones, so without this every tap reads as (0,0) and touch hit-tests
+		// (sector map selection, HUD tap-targeting) break.
+		public static Vector3 mousePosition
+		{
+			get
+			{
+				Touchscreen touchscreen = Touchscreen.current;
+				if (touchscreen != null)
+				{
+					foreach (TouchControl touch in touchscreen.touches)
+					{
+						if (touch.press.isPressed)
+						{
+							return touch.position.ReadValue();
+						}
+					}
+					// uGUI fires clicks on release, after the touch has ended;
+					// the primary touch control keeps its last position. Only
+					// prefer it when the mouse has nothing better to report.
+					if (Mouse.current == null || Mouse.current.position.ReadValue() == Vector2.zero)
+					{
+						Vector2 vector = touchscreen.primaryTouch.position.ReadValue();
+						if (vector != Vector2.zero)
+						{
+							return vector;
+						}
+					}
+				}
+				return Mouse.current?.position.ReadValue() ?? Vector3.zero;
+			}
+		}
 
 		public static Vector2 mouseScrollDelta => Mouse.current?.scroll.ReadValue() ?? Vector2.zero;
 
 		public static Vector3 acceleration => Accelerometer.current?.acceleration.ReadValue() ?? Vector3.zero;
 
-		public static int touchCount => Touchscreen.current?.touches.Count ?? 0;
+		// Active touch count (Touchscreen.touches.Count is the fixed capacity
+		// of the touch array, not the number of fingers down).
+		public static int touchCount
+		{
+			get
+			{
+				Touchscreen touchscreen = Touchscreen.current;
+				if (touchscreen == null)
+				{
+					return 0;
+				}
+				int num = 0;
+				foreach (TouchControl touch in touchscreen.touches)
+				{
+					if (touch.press.isPressed)
+					{
+						num++;
+					}
+				}
+				return num;
+			}
+		}
 
 		public static bool GetMouseButton(int button) => MouseButton(button)?.isPressed ?? false;
 
