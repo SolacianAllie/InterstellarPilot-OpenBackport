@@ -137,7 +137,11 @@ namespace OpenFrontier.IP.Engine
 			// backdrop doesn't move while flying, so neither should the sun.
 			Vector3 vector2 = (WorldAnchor ?? ((EngineASX.Instance != null && EngineASX.Instance.ActiveSector != null) ? EngineASX.Instance.ActiveSector.transform.position : main.transform.position));
 			Vector3 position = vector2 + vector * num;
-			Quaternion rotation = Quaternion.LookRotation(position - main.transform.position);
+			// True billboard: face the camera dead-on (forward along the view
+			// ray, up aligned to the camera's up) so the sun reads correctly
+			// from any angle, including near the zenith/nadir.
+			Vector3 vector3 = position - main.transform.position;
+			Quaternion rotation = ((vector3.sqrMagnitude > 0.0001f) ? Quaternion.LookRotation(vector3, main.transform.up) : Quaternion.identity);
 			float num2 = Vector3.Distance(main.transform.position, position);
 			float num3 = 2f * num2 * Mathf.Tan(CoreAngularDiameter * 0.5f * (Mathf.PI / 180f));
 			coreTransform.SetPositionAndRotation(position, rotation);
