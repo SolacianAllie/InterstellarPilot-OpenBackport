@@ -28,7 +28,32 @@ namespace OpenFrontier.IP.Engine
 		// World anchor the sun is placed around (sector content centroid,
 		// set by ActiveSectorData). Falls back to the sector transform when
 		// unset - hand-crafted scenes can place content far from it.
-		public Vector3? WorldAnchor;
+		public Vector3? WorldAnchor
+		{
+			get
+			{
+				return worldAnchor;
+			}
+			set
+			{
+				if (worldAnchor != value)
+				{
+					worldAnchor = value;
+					anchorInitialized = false;
+				}
+			}
+		}
+
+		private Vector3? worldAnchor;
+
+		// Hysteresis anchoring: the sun is pinned in world space, but if
+		// flying far enough makes its apparent direction drift more than
+		// this from the light's direction, it quietly re-anchors nearby.
+		private const float ReanchorAngleDegrees = 2f;
+
+		private Vector3 anchorPosition;
+
+		private bool anchorInitialized;
 
 		private const float CoreAngularDiameter = 6.6f;
 
@@ -132,11 +157,21 @@ namespace OpenFrontier.IP.Engine
 			// (day/night scattering follows the same light the sun shows).
 			Shader.SetGlobalVector("_SunDirectionWorld", new Vector4(vector.x, vector.y, vector.z, 0f));
 			float num = Mathf.Max(main.farClipPlane * 0.5f, 100f);
-			// Open Frontier: the sun is WORLD-anchored at the sector center
-			// (like the background planets), not camera-following - the
-			// backdrop doesn't move while flying, so neither should the sun.
-			Vector3 vector2 = (WorldAnchor ?? ((EngineASX.Instance != null && EngineASX.Instance.ActiveSector != null) ? EngineASX.Instance.ActiveSector.transform.position : main.transform.position));
-			Vector3 position = vector2 + vector * num;
+			// Open Frontier: the sun is world-pinned, NOT camera-following -
+			// but with hysteresis: if travel makes its apparent direction
+			// drift too far from the light's, it silently re-anchors to the
+			// camera's vicinity so it always sits where the light says.
+			if (!anchorInitialized)
+			{
+				anchorPosition = (WorldAnchor ?? ((EngineASX.Instance != null && EngineASX.Instance.ActiveSector != null) ? EngineASX.Instance.ActiveSector.transform.position : main.transform.position));
+				anchorInitialized = true;
+			}
+			Vector3 position = anchorPosition + vector * num;
+			if (Vector3.Angle(position - main.transform.position, vector) > ReanchorAngleDegrees)
+			{
+				anchorPosition = main.transform.position;
+				position = anchorPosition + vector * num;
+			}
 			// True billboard: face the camera dead-on (forward along the view
 			// ray, up aligned to the camera's up) so the sun reads correctly
 			// from any angle, including near the zenith/nadir.
