@@ -178,6 +178,16 @@ namespace OpenFrontier.IP.Engine
 			{
 				return;
 			}
+			// Hide while between sectors (wormhole transition): only the
+			// tunnel should be visible in the void.
+			bool flag = EngineASX.Instance == null || EngineASX.Instance.ActiveSector != null;
+			if (coreRenderer.enabled != flag)
+			{
+				coreRenderer.enabled = flag;
+				glowRenderer.enabled = flag;
+				anchorCoreRenderer.enabled = flag;
+				anchorGlowRenderer.enabled = flag;
+			}
 			Vector3 vector = -cachedLight.transform.forward;
 			// Publish the sun direction for the planet atmosphere shader
 			// (day/night scattering follows the same light the sun shows).
