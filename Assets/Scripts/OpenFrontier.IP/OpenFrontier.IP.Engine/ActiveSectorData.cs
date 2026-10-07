@@ -19,12 +19,6 @@ namespace OpenFrontier.IP.Engine
 
 		public GameObject SpaceFog;
 
-		// Open Frontier: materials for the runtime-built visible sun (crisp
-		// core + soft glow). See SunBillboard.
-		public Material SunCoreMaterial;
-
-		public Material SunGlowMaterial;
-
 		private List<ParticleSystem> spaceFogParticleSystems = new List<ParticleSystem>(3);
 
 		public void Init(EngineASX engine)
@@ -42,7 +36,6 @@ namespace OpenFrontier.IP.Engine
 				gameObject.transform.localPosition = Vector3.zero;
 				BackgroundObjectsRoot = gameObject;
 			}
-			EnsureSunBillboard();
 			EnsureSpaceReflectionProbe();
 		}
 
@@ -55,7 +48,6 @@ namespace OpenFrontier.IP.Engine
 				EngineASX.Instance.ActiveSector.GenerateSpaceBackground();
 				TryCreateBackgroundObjects();
 			}
-			EnsureSunBillboard();
 			EnsureSpaceReflectionProbe();
 		}
 
@@ -71,56 +63,6 @@ namespace OpenFrontier.IP.Engine
 			GameObject gameObject = new GameObject("SpaceReflectionProbe");
 			gameObject.transform.SetParent(engineASX.transform, worldPositionStays: false);
 			gameObject.AddComponent<SpaceReflectionProbe>();
-		}
-
-		// Open Frontier: give the sector's directional light a visible sun.
-		// (The light is a sibling of this object under EngineASX, not a
-		// child, so FindFirstChildDirectionalLight can't find it - look at
-		// scene lights instead. Scene light COLOR is star-tinted inside
-		// GasCloudController.GetDesiredDirectionLightColor, which drives the
-		// light color every frame - tinting it here would get stomped.)
-		private void EnsureSunBillboard()
-		{
-			EngineASX engineASX = (engine != null) ? engine : EngineASX.Instance;
-			if (engineASX == null)
-			{
-				return;
-			}
-			Light light = FirstDirectionalLight(engineASX.GetComponentsInChildren<Light>());
-			if (light == null)
-			{
-				// Manual missions can bring their own scene light instead of
-				// the engine default - give that one a sun too.
-				light = FirstDirectionalLight(UnityEngine.Object.FindObjectsByType<Light>(FindObjectsInactive.Exclude, FindObjectsSortMode.None));
-			}
-			if (light == null)
-			{
-				return;
-			}
-			SunBillboard sunBillboard = light.GetComponent<SunBillboard>();
-			if (sunBillboard == null)
-			{
-				sunBillboard = light.gameObject.AddComponent<SunBillboard>();
-				sunBillboard.CoreMaterial = SunCoreMaterial;
-				sunBillboard.GlowMaterial = SunGlowMaterial;
-				sunBillboard.AutoTintFromSector = true;
-			}
-			if (sunBillboard.AutoTintFromSector)
-			{
-				sunBillboard.StarTint = StarColorGenerator.ForSector((engineASX.ActiveSector != null) ? engineASX.ActiveSector.UniqueId : 0);
-			}
-		}
-
-		private static Light FirstDirectionalLight(Light[] lights)
-		{
-			foreach (Light light in lights)
-			{
-				if (light.type == LightType.Directional)
-				{
-					return light;
-				}
-			}
-			return null;
 		}
 
 		private void TryCreateBackgroundObjects()

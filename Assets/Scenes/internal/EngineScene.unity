@@ -6429,8 +6429,6 @@ MonoBehaviour:
   BackgroundObjectsRoot: {fileID: 0}
   BackgroundMusicResourceName: 
   SpaceFog: {fileID: 61}
-  SunCoreMaterial: {fileID: 2100000, guid: 390c8a5fbb2043b38f8a0ca374246495, type: 2}
-  SunGlowMaterial: {fileID: 2100000, guid: 4b97b58008b6476d8989ea25f7567eef, type: 2}
 --- !u!114 &211
 MonoBehaviour:
   m_ObjectHideFlags: 0
