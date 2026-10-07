@@ -123,6 +123,9 @@ namespace OpenFrontier.IP.Engine
 				return;
 			}
 			Vector3 vector = -cachedLight.transform.forward;
+			// Publish the sun direction for the planet atmosphere shader
+			// (day/night scattering follows the same light the sun shows).
+			Shader.SetGlobalVector("_SunDirectionWorld", new Vector4(vector.x, vector.y, vector.z, 0f));
 			float num = Mathf.Max(main.farClipPlane * 0.5f, 100f);
 			// Open Frontier: the sun is WORLD-anchored at the sector center
 			// (like the background planets), not camera-following - the
