@@ -250,6 +250,7 @@ GameObject:
   - component: {fileID: 28}
   - component: {fileID: 19}
   - component: {fileID: 44}
+  - component: {fileID: 49}
   m_Layer: 5
   m_Name: ShipImage
   m_TagString: Untagged
@@ -930,3 +931,15 @@ MonoBehaviour:
   ConformX: 1
   ConformY: 1
   Logging: 0
+--- !u!114 &49
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03c418d338ff4537b23c4b2dcf895b39, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

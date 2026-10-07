@@ -6,6 +6,6 @@ namespace OpenFrontier.IP
 	{
 		public static Version Version = new Version(0, 0, 1);
 
-		public static bool IsAlphaVersion = true;
+		public static bool IsAlphaVersion = false;
 	}
 }
