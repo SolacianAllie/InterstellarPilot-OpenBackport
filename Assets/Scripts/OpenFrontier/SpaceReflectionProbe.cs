@@ -7,8 +7,10 @@ namespace OpenFrontier
 	/// Open Frontier: realtime reflection probe that captures only the space
 	/// backdrop layers (DeepSpace, BackgroundPlanet, Wormhole), so ships and
 	/// nearby objects reflect the starfield, sun and distant bodies instead
-	/// of each other or nothing. Follows the main camera and re-renders via
-	/// scripting once per second (cheap: small resolution, sparse layers).
+	/// of each other or nothing. Clears to opaque black (not the skybox) so
+	/// empty space reflects as black rather than any odd skybox colors.
+	/// Follows the main camera and re-renders via scripting once per second
+	/// (cheap: small resolution, sparse layers).
 	/// Spawned by ActiveSectorData under the EngineASX root.
 	/// </summary>
 	public class SpaceReflectionProbe : MonoBehaviour
@@ -31,7 +33,8 @@ namespace OpenFrontier
 			probe.refreshMode = ReflectionProbeRefreshMode.ViaScripting;
 			probe.resolution = ProbeResolution;
 			probe.cullingMask = CullingMask;
-			probe.clearFlags = ReflectionProbeClearFlags.Skybox;
+			probe.clearFlags = ReflectionProbeClearFlags.SolidColor;
+			probe.backgroundColor = new Color(0f, 0f, 0f, 1f);
 			probe.boxProjection = false;
 			probe.importance = 1;
 			probe.size = new Vector3(5000f, 5000f, 5000f);
