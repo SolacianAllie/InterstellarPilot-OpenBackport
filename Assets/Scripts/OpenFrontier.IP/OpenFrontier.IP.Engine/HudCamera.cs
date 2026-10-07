@@ -193,6 +193,13 @@ namespace OpenFrontier.IP.Engine
 			camDesiredRotation = new Vector3(EngineASX.Instance.GameSettings.HudCameraSettings.CamRelativeXAngle, desiredYAngle, 0f);
 		}
 
+		// Open Frontier: free-mode rotation with user pitch (the locked modes
+		// keep the forced CamRelativeXAngle pitch via SetCameraDesiredRotationY).
+		public void SetCameraDesiredRotation(float desiredXAngle, float desiredYAngle)
+		{
+			camDesiredRotation = new Vector3(desiredXAngle, desiredYAngle, 0f);
+		}
+
 		public bool HasHudTargetExpired()
 		{
 			return Time.time > currentHudTarget.Value.ExpiryTime;
