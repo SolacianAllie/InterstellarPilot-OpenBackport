@@ -8,12 +8,13 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: wormhole1Material
-  m_Shader: {fileID: 10721, guid: 0000000000000000f000000000000000, type: 0}
+  m_Shader: {fileID: 4800000, guid: fd23041324888deef9f6c2b5d48b3a09, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
+  m_ValidKeywords:
+  - _SURFACE_TYPE_TRANSPARENT
   m_InvalidKeywords: []
-  m_LightmapFlags: 5
+  m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: 3000
@@ -23,13 +24,38 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-      _MainTex:
+      _BaseMap:
+        m_Texture: {fileID: 2800000, guid: a26b1e4f346e77945b4d08b588fc6669, type: 3}
+        m_Scale: {x: 1, y: 2}
+        m_Offset: {x: 0, y: 0}
+      _EmissionMap:
         m_Texture: {fileID: 2800000, guid: a26b1e4f346e77945b4d08b588fc6669, type: 3}
         m_Scale: {x: 1, y: 2}
         m_Offset: {x: 0, y: 0}
     m_Ints: {}
     m_Floats:
-      _EmissionLM: 0
+      _AlphaClip: 0
+      _AlphaToMask: 0
+      _Blend: 0
+      _BlendOp: 0
+      _CameraFadingEnabled: 0
+      _ColorMode: 0
+      _Cull: 0
+      _Cutoff: 0
+      _DstBlend: 1
+      _DstBlendAlpha: 1
+      _FlipbookBlending: 0
+      _QueueOffset: 0
+      _SoftParticlesEnabled: 0
+      _SrcBlend: 5
+      _SrcBlendAlpha: 5
+      _Surface: 1
+      _ZWrite: 0
     m_Colors:
+      _BaseColor: {r: 1, g: 1, b: 1, a: 1}
+      _BaseColorAddSubDiff: {r: 0, g: 0, b: 0, a: 0}
+      _CameraFadeParams: {r: 0, g: 0, b: 0, a: 0}
       _Color: {r: 1, g: 1, b: 1, a: 1}
+      _EmissionColor: {r: 1.6, g: 1.6, b: 1.6, a: 1}
+      _SoftParticleFadeParams: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
