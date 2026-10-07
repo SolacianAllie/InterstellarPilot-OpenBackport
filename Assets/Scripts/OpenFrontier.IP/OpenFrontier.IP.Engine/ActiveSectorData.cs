@@ -103,7 +103,45 @@ namespace OpenFrontier.IP.Engine
 					// DirectionLightColor (author-painted or seeded at
 					// creation), otherwise the deterministic per-sector color.
 					sunBillboard.StarTint = StarColorGenerator.ResolveCurrent((engineASX.ActiveSector != null) ? engineASX.ActiveSector.gameObject : null, (engineASX.ActiveSector != null) ? engineASX.ActiveSector.DirectionLightColor : Color.white, (engineASX.ActiveSector != null) ? engineASX.ActiveSector.UniqueId : 0);
+					sunBillboard.WorldAnchor = ComputeSunAnchor(engineASX);
 					break;
+				}
+			}
+		}
+
+		// Open Frontier: anchor the sun at the sector's content centroid
+		// (average of planets + stations). Hand-crafted scenes can place
+		// content thousands of units from the sector's transform anchor,
+		// which made the sun appear offset from the light direction there.
+		private static Vector3 ComputeSunAnchor(EngineASX engineASX)
+		{
+			if (engineASX.ActiveSector == null)
+			{
+				return Vector3.zero;
+			}
+			Vector3 vector = Vector3.zero;
+			int num = 0;
+			AddUnitPositions(engineASX.ActiveSector.GetUnitsByType(UnitType.Planet), ref vector, ref num);
+			AddUnitPositions(engineASX.ActiveSector.GetUnitsByType(UnitType.Station), ref vector, ref num);
+			if (num == 0)
+			{
+				return engineASX.ActiveSector.transform.position;
+			}
+			return vector / num;
+		}
+
+		private static void AddUnitPositions(List<Unit> units, ref Vector3 sum, ref int count)
+		{
+			if (units == null)
+			{
+				return;
+			}
+			foreach (Unit unit in units)
+			{
+				if (unit != null)
+				{
+					sum += unit.transform.position;
+					count++;
 				}
 			}
 		}

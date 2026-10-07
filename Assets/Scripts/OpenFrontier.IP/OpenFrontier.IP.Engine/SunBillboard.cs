@@ -25,6 +25,11 @@ namespace OpenFrontier.IP.Engine
 		// StarColorGenerator.ResolveCurrent); defaults to white.
 		public Color StarTint = Color.white;
 
+		// World anchor the sun is placed around (sector content centroid,
+		// set by ActiveSectorData). Falls back to the sector transform when
+		// unset - hand-crafted scenes can place content far from it.
+		public Vector3? WorldAnchor;
+
 		private const float CoreAngularDiameter = 6.6f;
 
 		private const float GlowAngularDiameter = 60f;
@@ -130,7 +135,7 @@ namespace OpenFrontier.IP.Engine
 			// Open Frontier: the sun is WORLD-anchored at the sector center
 			// (like the background planets), not camera-following - the
 			// backdrop doesn't move while flying, so neither should the sun.
-			Vector3 vector2 = ((EngineASX.Instance != null && EngineASX.Instance.ActiveSector != null) ? EngineASX.Instance.ActiveSector.transform.position : main.transform.position);
+			Vector3 vector2 = (WorldAnchor ?? ((EngineASX.Instance != null && EngineASX.Instance.ActiveSector != null) ? EngineASX.Instance.ActiveSector.transform.position : main.transform.position));
 			Vector3 position = vector2 + vector * num;
 			Quaternion rotation = Quaternion.LookRotation(position - main.transform.position);
 			float num2 = Vector3.Distance(main.transform.position, position);
