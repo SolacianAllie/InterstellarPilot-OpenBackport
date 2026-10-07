@@ -88,6 +88,14 @@ namespace OpenFrontier.IP.Engine.WorldPopulation
 			sector.LightDirectionFudge = UnityEngine.Random.value;
 			sector.SectorType = node.SectorType;
 			sector.AsteroidType = node.AsteroidType;
+			// Open Frontier: seed this sector's star color into its direction
+			// light color (never set by the generator otherwise). The field
+			// is serialized with saves, so the star is created with and saved
+			// into the universe itself. The 0.8 factor matches the brightness
+			// of the original default light color.
+			Color color = StarColorGenerator.ForSector(sector.RandomSeed) * 0.8f;
+			color.a = 1f;
+			sector.DirectionLightColor = color;
 			sector.SkyExposure = Maths.RandomFloatWithPower(sectorLightingSettings.SkyMinExposure, sectorLightingSettings.SkyMaxExposure, sectorLightingSettings.SkyExposurePower);
 			sector.SkyTintColor = UnityEngine.Random.ColorHSV(sectorLightingSettings.SkyMinHue, sectorLightingSettings.SkyMaxHue, sectorLightingSettings.SkyMinSaturation, sectorLightingSettings.SkyMaxSaturation, sectorLightingSettings.SkyMinValue, sectorLightingSettings.SkyMaxValue);
 			sector.AmbientLightColor = Color.Lerp(new Color(0.03f, 0.03f, 0.03f), new Color(0.3f, 0.3f, 0.3f), UnityEngine.Random.value);

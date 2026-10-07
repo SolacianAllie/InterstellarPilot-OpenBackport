@@ -10,62 +10,34 @@ namespace OpenFrontier
 	/// </summary>
 	public static class StarColorGenerator
 	{
-		public struct StarColorResult
-		{
-			// The sun's visual tint.
-			public Color StarColor;
-
-			// Multiplied into the sector's (or gas cloud's) base light
-			// color. White when the author already picked a chromatic
-			// DirectionLightColor - that color IS the intended light, so
-			// tinting again would apply the hue twice.
-			public Color LightMultiplier;
-		}
-
-		// Resolves the sector's star identity, in priority order:
+		// Resolves the sector's star color, in priority order:
 		// 1. a StarColorMarker under the sector's own object (child of a
 		//    scenario's Sector<name> object = that sector's crafted star)
 		// 2. a scene-wide StarColorMarker
-		// 3. a chromatic DirectionLightColor on the Sector (an author picked
-		//    a hue; the procedural default is achromatic grey)
-		// 4. the deterministic seeded color
-		public static StarColorResult ResolveCurrent(int sectorUniqueId, GameObject sectorObject, Color sectorLightColor)
+		// 3. the sector's DirectionLightColor when it carries a hue -
+		//    author-painted in hand-crafted universes, or seeded into the
+		//    field at universe creation (SectorCreator)
+		// 4. the deterministic seeded color (fallback for old saves whose
+		//    sectors predate the creation-time seeding)
+		public static Color ResolveCurrent(GameObject sectorObject, Color sectorLightColor, int sectorUniqueId)
 		{
-			Color? markerColor = null;
 			if (sectorObject != null)
 			{
 				StarColorMarker componentInChildren = sectorObject.GetComponentInChildren<StarColorMarker>();
 				if (componentInChildren != null)
 				{
-					markerColor = componentInChildren.StarColor;
+					return componentInChildren.StarColor;
 				}
 			}
-			if (!markerColor.HasValue && StarColorMarker.ActiveMarker != null)
+			if (StarColorMarker.ActiveMarker != null)
 			{
-				markerColor = StarColorMarker.ActiveMarker.StarColor;
-			}
-			if (markerColor.HasValue)
-			{
-				return new StarColorResult
-				{
-					StarColor = markerColor.Value,
-					LightMultiplier = markerColor.Value
-				};
+				return StarColorMarker.ActiveMarker.StarColor;
 			}
 			if (IsChromatic(sectorLightColor))
 			{
-				return new StarColorResult
-				{
-					StarColor = NormalizeStarColor(sectorLightColor),
-					LightMultiplier = Color.white
-				};
+				return NormalizeStarColor(sectorLightColor);
 			}
-			Color color = ForSector(sectorUniqueId);
-			return new StarColorResult
-			{
-				StarColor = color,
-				LightMultiplier = color
-			};
+			return ForSector(sectorUniqueId);
 		}
 
 		// True when the value carries an actual hue (an author picked a
@@ -74,7 +46,7 @@ namespace OpenFrontier
 		public static bool IsChromatic(Color color)
 		{
 			float num = Mathf.Max(color.r, Mathf.Max(color.g, color.b));
-			return num - Mathf.Min(color.r, Mathf.Min(color.g, color.b)) > 0.03f;
+			return num - Mathf.Min(color.r, Mathf.Min(color.g, color.b)) > 0.02f;
 		}
 
 		// Same hue/saturation with the brightness normalised to 1, so an
