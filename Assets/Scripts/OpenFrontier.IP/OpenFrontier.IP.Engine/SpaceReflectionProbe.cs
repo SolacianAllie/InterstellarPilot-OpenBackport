@@ -42,12 +42,15 @@ namespace OpenFrontier.IP.Engine
 			probe.refreshMode = ReflectionProbeRefreshMode.ViaScripting;
 			// Mobile gets a cheaper probe; reflections are blurry by nature.
 			probe.resolution = (Application.isMobilePlatform ? 64 : 128);
-			// The default far plane (1000) clips nearly everything we want
-			// reflected: the sun quads ride at 4250 and nebulae scatter
-			// thousands of units out. Whether ANY backdrop content fell
-			// inside 1000 was sector-seed luck - which is why the probe
-			// appeared to "break" only in some sectors. Match the world.
-			probe.farClipPlane = 9000f;
+			// The default far plane (1000) clipped nearly everything we
+			// want reflected; even 9000 is not enough. The starfield is a
+			// 20000-wide cube mesh pinned at the WORLD ORIGIN (Imphenzia
+			// StaticStars.LateUpdate), while sectors sit up to 16000+
+			// units out - from there the star cube is 6k-36k units from
+			// the probe. The SpaceCamera survives this with far plane
+			// 100000; the probe needs the same reach. Depth precision is
+			// irrelevant for an emissive backdrop.
+			probe.farClipPlane = 100000f;
 			probe.cullingMask = CullingMask;
 			probe.clearFlags = ReflectionProbeClearFlags.SolidColor;
 			probe.backgroundColor = new Color(0f, 0f, 0f, 1f);
