@@ -42,6 +42,12 @@ namespace OpenFrontier.IP.Engine
 			probe.refreshMode = ReflectionProbeRefreshMode.ViaScripting;
 			// Mobile gets a cheaper probe; reflections are blurry by nature.
 			probe.resolution = (Application.isMobilePlatform ? 64 : 128);
+			// The default far plane (1000) clips nearly everything we want
+			// reflected: the sun quads ride at 4250 and nebulae scatter
+			// thousands of units out. Whether ANY backdrop content fell
+			// inside 1000 was sector-seed luck - which is why the probe
+			// appeared to "break" only in some sectors. Match the world.
+			probe.farClipPlane = 9000f;
 			probe.cullingMask = CullingMask;
 			probe.clearFlags = ReflectionProbeClearFlags.SolidColor;
 			probe.backgroundColor = new Color(0f, 0f, 0f, 1f);
@@ -79,7 +85,11 @@ namespace OpenFrontier.IP.Engine
 				renderRequested = false;
 				lastRenderTime = Time.unscaledTime;
 				nextRenderTime = lastRenderTime + SecondsBetweenRenders;
-				probe.RenderProbe();
+				int num = probe.RenderProbe();
+				if (num == -1)
+				{
+					Debug.LogWarning("[SpaceReflectionProbe] RenderProbe scheduling failed", this);
+				}
 			}
 		}
 	}
