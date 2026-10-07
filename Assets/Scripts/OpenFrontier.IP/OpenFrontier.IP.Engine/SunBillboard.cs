@@ -45,22 +45,25 @@ namespace OpenFrontier.IP.Engine
 		// StarColorMarker editor preview.
 		public static Mesh QuadMesh => SharedMeshes.Quad;
 
-		// The sun quads live on the DeepSpace layer so the space reflection
-		// probe (and only background-aware systems) can see them.
+		// The sun quads live on the BackgroundObjects layer (16), which the
+		// moving GameCamera renders. NOT DeepSpace (30): that layer is
+		// rendered only by the pinned SpaceScene camera, which made the sun
+		// draw in the backdrop's frame instead of the world's - fine in
+		// scene view, offset in game view.
 		// NOTE: looked up lazily - NameToLayer (a native call) is forbidden
 		// from a MonoBehaviour's type initializer; a static readonly there
 		// throws TypeInitializationException and poisons the whole type.
-		private static int deepSpaceLayer = -2;
+		private static int sunLayer = -2;
 
-		private static int DeepSpaceLayer
+		private static int SunLayer
 		{
 			get
 			{
-				if (deepSpaceLayer == -2)
+				if (sunLayer == -2)
 				{
-					deepSpaceLayer = LayerMask.NameToLayer("DeepSpace");
+					sunLayer = LayerMask.NameToLayer("BackgroundObjects");
 				}
-				return deepSpaceLayer;
+				return sunLayer;
 			}
 		}
 
@@ -106,9 +109,9 @@ namespace OpenFrontier.IP.Engine
 		{
 			GameObject gameObject = new GameObject(objectName);
 			gameObject.transform.SetParent(transform, worldPositionStays: false);
-			if (DeepSpaceLayer >= 0)
+			if (SunLayer >= 0)
 			{
-				gameObject.layer = DeepSpaceLayer;
+				gameObject.layer = SunLayer;
 			}
 			MeshFilter meshFilter = gameObject.AddComponent<MeshFilter>();
 			meshFilter.sharedMesh = SharedMeshes.Quad;

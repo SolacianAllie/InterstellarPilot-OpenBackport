@@ -22,8 +22,9 @@ namespace OpenFrontier.IP.Engine
 
 		private const float MinSecondsBetweenRequestedRenders = 0.1f;
 
-		// DeepSpace (30) | BackgroundPlanet (26) | Wormhole (22)
-		private const int CullingMask = 1073741824 | 67108864 | 4194304;
+		// DeepSpace (30) | BackgroundPlanet (26) | Wormhole (22) |
+		// BackgroundObjects (16 - the sun's layer)
+		private const int CullingMask = 1073741824 | 67108864 | 4194304 | 65536;
 
 		private ReflectionProbe probe;
 
