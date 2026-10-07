@@ -86,22 +86,41 @@ namespace OpenFrontier.IP.Engine
 			{
 				return;
 			}
-			Light[] componentsInChildren = engineASX.GetComponentsInChildren<Light>();
-			foreach (Light light in componentsInChildren)
+			Light light = FirstDirectionalLight(engineASX.GetComponentsInChildren<Light>());
+			if (light == null)
+			{
+				// Manual missions can bring their own scene light instead of
+				// the engine default - give that one a sun too.
+				light = FirstDirectionalLight(UnityEngine.Object.FindObjectsByType<Light>(FindObjectsInactive.Exclude, FindObjectsSortMode.None));
+			}
+			if (light == null)
+			{
+				return;
+			}
+			SunBillboard sunBillboard = light.GetComponent<SunBillboard>();
+			if (sunBillboard == null)
+			{
+				sunBillboard = light.gameObject.AddComponent<SunBillboard>();
+				sunBillboard.CoreMaterial = SunCoreMaterial;
+				sunBillboard.GlowMaterial = SunGlowMaterial;
+				sunBillboard.AutoTintFromSector = true;
+			}
+			if (sunBillboard.AutoTintFromSector)
+			{
+				sunBillboard.StarTint = StarColorGenerator.ForSector((engineASX.ActiveSector != null) ? engineASX.ActiveSector.UniqueId : 0);
+			}
+		}
+
+		private static Light FirstDirectionalLight(Light[] lights)
+		{
+			foreach (Light light in lights)
 			{
 				if (light.type == LightType.Directional)
 				{
-					SunBillboard sunBillboard = light.GetComponent<SunBillboard>();
-					if (sunBillboard == null)
-					{
-						sunBillboard = light.gameObject.AddComponent<SunBillboard>();
-					}
-					sunBillboard.CoreMaterial = SunCoreMaterial;
-					sunBillboard.GlowMaterial = SunGlowMaterial;
-					sunBillboard.StarTint = StarColorGenerator.ForSector((engineASX.ActiveSector != null) ? engineASX.ActiveSector.UniqueId : 0);
-					break;
+					return light;
 				}
 			}
+			return null;
 		}
 
 		private void TryCreateBackgroundObjects()

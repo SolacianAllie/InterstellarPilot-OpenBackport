@@ -24,6 +24,12 @@ namespace OpenFrontier
 		// Per-sector star color (set by ActiveSectorData); defaults to white.
 		public Color StarTint = Color.white;
 
+		// When true, ActiveSectorData overwrites StarTint with the sector's
+		// generated star color on every sector change. Left false on
+		// hand-placed suns (Assets/GameObject/Sun.prefab) so scene authors
+		// keep full control of their custom star.
+		public bool AutoTintFromSector;
+
 		private const float CoreAngularDiameter = 6.6f;
 
 		private const float GlowAngularDiameter = 60f;
