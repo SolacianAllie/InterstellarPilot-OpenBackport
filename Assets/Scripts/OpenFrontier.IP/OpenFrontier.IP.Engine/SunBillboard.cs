@@ -68,9 +68,10 @@ namespace OpenFrontier.IP.Engine
 		// parallax-shifted off the light axis. So a SECOND sun pair rides
 		// the probe-only SkyProbe layer (3 - no camera renders it), placed
 		// anchor-origin along the light axis: hulls reflect a sun that
-		// matches the lighting. Distance is arbitrary (probe far plane is
-		// 100000); 8000 keeps it outside sector content.
-		private const float AnchorSunDistance = 8000f;
+		// matches the lighting. 12000 puts it beyond sector content
+		// (asteroid fields reach ~9000) so the reflected sun occludes
+		// like the camera sun; the probe's far plane is 100000.
+		private const float AnchorSunDistance = 12000f;
 
 		private static int skyProbeLayer = -2;
 
@@ -192,7 +193,10 @@ namespace OpenFrontier.IP.Engine
 			// Publish the sun direction for the planet atmosphere shader
 			// (day/night scattering follows the same light the sun shows).
 			Shader.SetGlobalVector("_SunDirectionWorld", new Vector4(vector.x, vector.y, vector.z, 0f));
-			float num = Mathf.Max(main.farClipPlane * 0.5f, 100f);
+			// 0.95 of the far plane (~8075): beyond the asteroid field
+			// visuals (~5000+), which were drawing UNDER the closer sun -
+			// the sun now correctly hides behind passing asteroids.
+			float num = Mathf.Max(main.farClipPlane * 0.95f, 100f);
 			Vector3 position = main.transform.position + vector * num;
 			// True billboard: face the camera dead-on (forward along the view
 			// ray, up aligned to the camera's up) so the sun reads correctly
