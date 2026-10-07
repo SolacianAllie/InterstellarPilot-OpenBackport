@@ -69,6 +69,10 @@ exit 198) — the user performs all editor actions.
   directory) is a read-only reference of the original game — never modify it.
 - **Soft particles are standardized Near=1/Far=0** (empirically verified on
   this OpenGL stack; URP's formula reads 0 behind empty space here).
+  Do NOT write new soft-particle fades against `_CameraDepthTexture` —
+  `sceneZ` reads ~0 behind open space and any `sceneZ - eyeZ` fade kills
+  alpha (this made the legacy-particle additive shaders render lasers
+  invisibly; their fade is now a passthrough).
 - **`Screen.dpi` can return 0** (Android foldables, Linux editor). Never feed
   it into touch/drag thresholds directly — it once set
   `EventSystem.pixelDragThreshold` to 0 and ate every tap on the sector map.
