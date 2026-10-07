@@ -19,6 +19,12 @@ namespace OpenFrontier.IP.Engine
 
 		public GameObject SpaceFog;
 
+		// Open Frontier: materials for the runtime-built visible sun (crisp
+		// core + soft glow). See SunBillboard.
+		public Material SunCoreMaterial;
+
+		public Material SunGlowMaterial;
+
 		private List<ParticleSystem> spaceFogParticleSystems = new List<ParticleSystem>(3);
 
 		public void Init(EngineASX engine)
@@ -36,6 +42,7 @@ namespace OpenFrontier.IP.Engine
 				gameObject.transform.localPosition = Vector3.zero;
 				BackgroundObjectsRoot = gameObject;
 			}
+			EnsureSunBillboard();
 			EnsureSpaceReflectionProbe();
 		}
 
@@ -48,6 +55,7 @@ namespace OpenFrontier.IP.Engine
 				EngineASX.Instance.ActiveSector.GenerateSpaceBackground();
 				TryCreateBackgroundObjects();
 			}
+			EnsureSunBillboard();
 			EnsureSpaceReflectionProbe();
 		}
 
@@ -63,6 +71,37 @@ namespace OpenFrontier.IP.Engine
 			GameObject gameObject = new GameObject("SpaceReflectionProbe");
 			gameObject.transform.SetParent(engineASX.transform, worldPositionStays: false);
 			gameObject.AddComponent<SpaceReflectionProbe>();
+		}
+
+		// Open Frontier: give the sector's directional light a visible sun.
+		// (The light is a sibling of this object under EngineASX, not a
+		// child, so FindFirstChildDirectionalLight can't find it - look at
+		// scene lights instead. Scene light COLOR is star-tinted inside
+		// GasCloudController.GetDesiredDirectionLightColor, which drives the
+		// light color every frame - tinting it here would get stomped.)
+		private void EnsureSunBillboard()
+		{
+			EngineASX engineASX = (engine != null) ? engine : EngineASX.Instance;
+			if (engineASX == null)
+			{
+				return;
+			}
+			Light[] componentsInChildren = engineASX.GetComponentsInChildren<Light>();
+			foreach (Light light in componentsInChildren)
+			{
+				if (light.type == LightType.Directional)
+				{
+					SunBillboard sunBillboard = light.GetComponent<SunBillboard>();
+					if (sunBillboard == null)
+					{
+						sunBillboard = light.gameObject.AddComponent<SunBillboard>();
+					}
+					sunBillboard.CoreMaterial = SunCoreMaterial;
+					sunBillboard.GlowMaterial = SunGlowMaterial;
+					sunBillboard.StarTint = StarColorGenerator.ForSector((engineASX.ActiveSector != null) ? engineASX.ActiveSector.UniqueId : 0);
+					break;
+				}
+			}
 		}
 
 		private void TryCreateBackgroundObjects()
