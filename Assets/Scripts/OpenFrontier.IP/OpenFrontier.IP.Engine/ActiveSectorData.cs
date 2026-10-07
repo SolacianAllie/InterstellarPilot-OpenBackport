@@ -43,6 +43,7 @@ namespace OpenFrontier.IP.Engine
 				BackgroundObjectsRoot = gameObject;
 			}
 			EnsureSunBillboard();
+			EnsureSpaceReflectionProbe();
 		}
 
 		public void OnSectorChanged()
@@ -55,6 +56,21 @@ namespace OpenFrontier.IP.Engine
 				TryCreateBackgroundObjects();
 			}
 			EnsureSunBillboard();
+			EnsureSpaceReflectionProbe();
+		}
+
+		// Open Frontier: spawn the space reflection probe (once) under the
+		// EngineASX root - ships reflect the starfield/sun/distant planets.
+		private void EnsureSpaceReflectionProbe()
+		{
+			EngineASX engineASX = (engine != null) ? engine : EngineASX.Instance;
+			if (engineASX == null || engineASX.GetComponentInChildren<SpaceReflectionProbe>() != null)
+			{
+				return;
+			}
+			GameObject gameObject = new GameObject("SpaceReflectionProbe");
+			gameObject.transform.SetParent(engineASX.transform, worldPositionStays: false);
+			gameObject.AddComponent<SpaceReflectionProbe>();
 		}
 
 		// Open Frontier: give the sector's directional light a visible sun.

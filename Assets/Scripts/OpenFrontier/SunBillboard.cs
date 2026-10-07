@@ -30,6 +30,10 @@ namespace OpenFrontier
 
 		private static Mesh quadMesh;
 
+		// The sun quads live on the DeepSpace layer so the space reflection
+		// probe (and only background-aware systems) can see them.
+		private static readonly int DeepSpaceLayer = LayerMask.NameToLayer("DeepSpace");
+
 		private Light cachedLight;
 
 		private Transform coreTransform;
@@ -97,6 +101,10 @@ namespace OpenFrontier
 		{
 			GameObject gameObject = new GameObject(objectName);
 			gameObject.transform.SetParent(transform, worldPositionStays: false);
+			if (DeepSpaceLayer >= 0)
+			{
+				gameObject.layer = DeepSpaceLayer;
+			}
 			MeshFilter meshFilter = gameObject.AddComponent<MeshFilter>();
 			meshFilter.sharedMesh = quadMesh;
 			meshRenderer = gameObject.AddComponent<MeshRenderer>();
