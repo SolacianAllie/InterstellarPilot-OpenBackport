@@ -12,14 +12,17 @@ namespace OpenFrontier
 	/// directional light.
 	///
 	/// The materials (Assets/Material/SunCore.mat, SunGlow.mat) are the
-	/// source of truth for textures and base brightness; the light's color
-	/// is multiplied in per frame as a tint, so material edits apply live.
+	/// source of truth for textures and base brightness; StarTint is
+	/// multiplied in per frame, so material edits apply live.
 	/// </summary>
 	public class SunBillboard : MonoBehaviour
 	{
 		public Material CoreMaterial;
 
 		public Material GlowMaterial;
+
+		// Per-sector star color (set by ActiveSectorData); defaults to white.
+		public Color StarTint = Color.white;
 
 		private const float CoreAngularDiameter = 6.6f;
 
@@ -128,13 +131,13 @@ namespace OpenFrontier
 			glowTransform.SetPositionAndRotation(position + vector, rotation);
 			float num3 = num2 * (GlowAngularDiameter / CoreAngularDiameter);
 			glowTransform.localScale = new Vector3(num3, num3, 1f);
-			Color color = cachedLight.color;
-			// Material base color x light tint; the core is additionally
+			Color starTint = StarTint;
+			// Material base color x star tint; the core is additionally
 			// pulled towards white so it reads as the blinding disk.
-			Color value = new Color((color.r + 1f) * 0.5f, (color.g + 1f) * 0.5f, (color.b + 1f) * 0.5f, 1f);
+			Color value = new Color((starTint.r + 1f) * 0.5f, (starTint.g + 1f) * 0.5f, (starTint.b + 1f) * 0.5f, 1f);
 			propertyBlock.SetColor("_Color", CoreMaterial.GetColor("_Color") * value);
 			coreRenderer.SetPropertyBlock(propertyBlock);
-			propertyBlock.SetColor("_Color", GlowMaterial.GetColor("_Color") * color);
+			propertyBlock.SetColor("_Color", GlowMaterial.GetColor("_Color") * starTint);
 			glowRenderer.SetPropertyBlock(propertyBlock);
 		}
 	}

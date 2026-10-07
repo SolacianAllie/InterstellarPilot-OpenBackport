@@ -57,7 +57,15 @@ namespace OpenFrontier.IP.Engine
 			EnsureSunBillboard();
 		}
 
-		// Open Frontier: give the sector's directional light a visible sun.
+		// Open Frontier: give the sector's directional light a visible sun,
+		// and tint both it and the scene lighting with the sector's star
+		// color (full strength on the sun, gentle on the light).
+		private const float LightStarTintAmount = 0.35f;
+
+		private Color baseLightColor = Color.white;
+
+		private bool baseLightColorCaptured;
+
 		// (The light is a sibling of this object under EngineASX, not a
 		// child, so FindFirstChildDirectionalLight can't find it - look at
 		// scene lights instead.)
@@ -73,6 +81,13 @@ namespace OpenFrontier.IP.Engine
 			{
 				if (light.type == LightType.Directional)
 				{
+					if (!baseLightColorCaptured)
+					{
+						baseLightColor = light.color;
+						baseLightColorCaptured = true;
+					}
+					Color color = StarColorGenerator.ForSector((engineASX.ActiveSector != null) ? engineASX.ActiveSector.UniqueId : 0);
+					light.color = Color.Lerp(baseLightColor, color, LightStarTintAmount);
 					SunBillboard sunBillboard = light.GetComponent<SunBillboard>();
 					if (sunBillboard == null)
 					{
@@ -80,6 +95,7 @@ namespace OpenFrontier.IP.Engine
 					}
 					sunBillboard.CoreMaterial = SunCoreMaterial;
 					sunBillboard.GlowMaterial = SunGlowMaterial;
+					sunBillboard.StarTint = color;
 					break;
 				}
 			}
