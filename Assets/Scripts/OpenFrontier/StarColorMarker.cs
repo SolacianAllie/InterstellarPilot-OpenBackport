@@ -9,6 +9,10 @@ namespace OpenFrontier
 	/// takes this marker's color instead of the generated one (see
 	/// StarColorGenerator.ResolveCurrent).
 	///
+	/// Usage: drop the prefab under a scenario's Sector<name> object to
+	/// hand-craft THAT sector's star, or anywhere else in the scene for a
+	/// scene-wide override. Sector markers win over scene markers.
+	///
 	/// In the editor (edit mode only) an EditorOnly child preview shows the
 	/// chosen color and reports it in its name; the preview is stripped
 	/// from play mode and builds.

@@ -10,6 +10,23 @@ namespace OpenFrontier
 	/// </summary>
 	public static class StarColorGenerator
 	{
+		// Resolves the star color for the given sector: a StarColorMarker on
+		// the sector's own object tree (a child of a scenario's Sector<name>
+		// object = that sector's hand-crafted star) wins; then a scene-wide
+		// marker; otherwise the deterministic per-sector color.
+		public static Color ResolveCurrent(int sectorUniqueId, GameObject sectorObject)
+		{
+			if (sectorObject != null)
+			{
+				StarColorMarker componentInChildren = sectorObject.GetComponentInChildren<StarColorMarker>();
+				if (componentInChildren != null)
+				{
+					return componentInChildren.StarColor;
+				}
+			}
+			return ResolveCurrent(sectorUniqueId);
+		}
+
 		// Resolves the star color for the current scene: a hand-placed
 		// StarColorMarker (hand-crafted universes) wins; otherwise the
 		// deterministic per-sector color (procedural universes).

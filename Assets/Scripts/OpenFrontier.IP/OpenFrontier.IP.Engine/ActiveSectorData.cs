@@ -98,9 +98,10 @@ namespace OpenFrontier.IP.Engine
 					}
 					sunBillboard.CoreMaterial = SunCoreMaterial;
 					sunBillboard.GlowMaterial = SunGlowMaterial;
-					// ResolveCurrent: a StarColorMarker in the scene wins;
-					// otherwise the deterministic per-sector color.
-					sunBillboard.StarTint = StarColorGenerator.ResolveCurrent((engineASX.ActiveSector != null) ? engineASX.ActiveSector.UniqueId : 0);
+					// ResolveCurrent: a StarColorMarker under the sector's
+					// object wins, then a scene-wide marker, otherwise the
+					// deterministic per-sector color.
+					sunBillboard.StarTint = StarColorGenerator.ResolveCurrent((engineASX.ActiveSector != null) ? engineASX.ActiveSector.UniqueId : 0, (engineASX.ActiveSector != null) ? engineASX.ActiveSector.gameObject : null);
 					break;
 				}
 			}
