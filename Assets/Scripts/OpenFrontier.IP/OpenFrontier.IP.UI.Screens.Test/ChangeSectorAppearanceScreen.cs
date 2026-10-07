@@ -76,10 +76,20 @@ namespace OpenFrontier.IP.UI.Screens.Test
 		private void RandomizeButtonClick()
 		{
 			EngineASX.Instance.ActiveSector.GenerateSpaceBackgroundWithNewSeed();
-			// Open Frontier: reseed the sun along with the background.
+			// Open Frontier: reseed the sun along with the background, and
+			// show the new star's values on the sliders.
 			EngineASX.Instance.ActiveSector.DirectionLightColor = StarColorGenerator.ForSector(EngineASX.Instance.ActiveSector.RandomSeed);
 			ApplySunToCurrentSunBillboard();
+			RefreshSunSliders();
 			RefreshCurrentSeedText();
+		}
+
+		private void RefreshSunSliders()
+		{
+			StarColorGenerator.RgbToHsv(EngineASX.Instance.ActiveSector.DirectionLightColor, out float h, out float s, out float v);
+			SunHueSlider.SetValueWithoutNotify(h);
+			SunSaturationSlider.SetValueWithoutNotify(s);
+			SunValueSlider.SetValueWithoutNotify(Mathf.Clamp(v, SunValueSlider.minValue, SunValueSlider.maxValue));
 		}
 
 		private void SunHsvSliderValueChanged(float value)
@@ -202,10 +212,7 @@ namespace OpenFrontier.IP.UI.Screens.Test
 					StarsIntensitySlider.value = (component.SpaceConstructorParams.StarsIntensity - StarsIntensitySlider.minValue) / (StarsIntensitySlider.maxValue - StarsIntensitySlider.minValue);
 					NebulaCountSlider.value = component.SpaceConstructorParams.NebulaCount;
 				}
-				StarColorGenerator.RgbToHsv(EngineASX.Instance.ActiveSector.DirectionLightColor, out float h, out float s, out float v);
-				SunHueSlider.SetValueWithoutNotify(h);
-				SunSaturationSlider.SetValueWithoutNotify(s);
-				SunValueSlider.SetValueWithoutNotify(Mathf.Clamp(v, SunValueSlider.minValue, SunValueSlider.maxValue));
+				RefreshSunSliders();
 				RefreshCustomSettingsVisible();
 				RefreshCurrentSeedText();
 			}
