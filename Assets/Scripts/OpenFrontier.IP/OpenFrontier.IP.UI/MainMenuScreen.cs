@@ -139,7 +139,13 @@ namespace OpenFrontier.IP.UI
 
 		private void RefreshVersionText()
 		{
+			// Open Frontier: merged version display (the old alpha watermark
+			// is retired) - one label, project-driven number, alpha tag kept.
 			string text = $"Version: {Versioning.Version}";
+			if (Versioning.IsAlphaVersion)
+			{
+				text += " Alpha";
+			}
 			VersionText.text = text;
 		}
 
