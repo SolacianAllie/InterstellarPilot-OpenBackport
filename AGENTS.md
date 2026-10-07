@@ -36,6 +36,19 @@ exit 198) — the user performs all editor actions.
   (AssetRipper decompile scheme). Never regenerate .meta files; renaming
   namespaces/assemblies is safe because GUIDs live in the .meta files, but the
   scheme no longer matches names after the `Pixelfactor.*` → `OpenFrontier.*` rename.
+- **The starfield is pinned at the WORLD ORIGIN, not the camera:**
+  `Imphenzia.SpaceForUnity.StaticStars.LateUpdate` force-pins its
+  20000-unit-wide star-cube mesh to `Vector3.zero` every frame (DLL,
+  uneditable). The main view survives because the DeepSpace "SpaceCamera"
+  sits at the sector anchor with far plane 100000 and rotation following
+  the main camera (parented under the `SkyboxCamera` object, driven by
+  `GameController.LateUpdate`). Nebulae are world-pinned too: they live
+  under `ActiveSectorDataGeneric`'s transform — the `PositionAtCamera`
+  object is vestigial (it pins only itself; nothing is parented under
+  it). Anything that renders the backdrop from a flying-camera position
+  (reflection probes!) gets a lopsided or missing sky — capture from the
+  SECTOR ANCHOR instead (see `SpaceReflectionProbe`), with far plane
+  ~100000.
 - **URP material postprocessor strips hand-edited YAML** for materials whose
   shader has a known URP ShaderID. Recreate those materials natively via the
   `Material` API; never hand-edit their YAML.
@@ -52,6 +65,12 @@ exit 198) — the user performs all editor actions.
   GameController prefab's EventSystem object overrides `DeviceInfo` after
   each scene load. The one-time red error at startup is cosmetic and cannot
   be silenced without patching the DLL.
+- **Only `Assets/Scripts/OpenFrontier/OpenFrontier.asmdef` references
+  `Unity.RenderPipelines.Universal.Runtime`** — any new script touching URP
+  types (`UniversalRenderPipelineAsset`, etc.) MUST live in the OpenFrontier
+  assembly. The harness links every package into every csproj, so a missing
+  asmdef reference passes the harness and fails in the editor with CS0234
+  (`ShadowQualitySync` was bitten by this).
 - **uGUI positions on ScreenSpace-Overlay canvases are in screen pixels**;
   any hit-test radius authored in "pixels" must be multiplied by
   `Canvas.scaleFactor` or it shrinks physically on high-DPI screens (see

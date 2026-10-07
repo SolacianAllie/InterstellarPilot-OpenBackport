@@ -20,7 +20,11 @@ namespace OpenFrontier.IP.Engine
 			SimpleMusicPlayer musicPlayer = GameController.Instance.MusicPlayer;
 			if (musicPlayer != null)
 			{
-				if (EngineASX.Instance.PlayerInCombat)
+				if (IsMainMenuScenario())
+				{
+					PlayMenuMusic(musicPlayer);
+				}
+				else if (EngineASX.Instance.PlayerInCombat)
 				{
 					PlayWhenInCombat(musicPlayer);
 				}
@@ -28,6 +32,41 @@ namespace OpenFrontier.IP.Engine
 				{
 					PlayScenarioMusic(musicPlayer);
 				}
+			}
+		}
+
+		// Open Frontier: the main menu always plays Starbound - and Starbound
+		// plays nowhere else. Detected via the world's ScenarioInfo matching
+		// GameController.MainMenuScenario (reference or UniqueId).
+		private const string MenuMusicTrackResourceName = "music_starbound";
+
+		private static bool IsMainMenuScenario()
+		{
+			if (EngineASX.Instance == null || EngineASX.Instance.World == null || GameController.Instance == null)
+			{
+				return false;
+			}
+			ScenarioInfo scenarioInfo = EngineASX.Instance.World.ScenarioInfo;
+			ScenarioInfo mainMenuScenario = GameController.Instance.MainMenuScenario;
+			return scenarioInfo != null && mainMenuScenario != null && (scenarioInfo == mainMenuScenario || scenarioInfo.UniqueId == mainMenuScenario.UniqueId);
+		}
+
+		private static void PlayMenuMusic(SimpleMusicPlayer musicPlayer)
+		{
+			if (musicPlayer.PlayingTrack == null && musicPlayer.QueuedTracks.Count == 0)
+			{
+				Track track = new Track
+				{
+					FinishMode = TrackFinishMode.Discard,
+					Loop = true,
+					TrackName = MenuMusicTrackResourceName
+				};
+				musicPlayer.QueuedTracks.Clear();
+				musicPlayer.EnqueueTrack(track);
+			}
+			else if (musicPlayer.PlayingTrack != null && musicPlayer.PlayingTrack.Track.TrackName != MenuMusicTrackResourceName)
+			{
+				musicPlayer.FadeOutIfPlaying();
 			}
 		}
 

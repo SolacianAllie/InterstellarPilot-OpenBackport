@@ -57,6 +57,12 @@ namespace OpenFrontier.IP.Engine
 			}
 			EnsureSunBillboard();
 			EnsureSpaceReflectionProbe();
+			// Capture the new sector's backdrop immediately rather than
+			// waiting out the 1s render interval.
+			if (SpaceReflectionProbe.Instance != null)
+			{
+				SpaceReflectionProbe.Instance.RequestRender();
+			}
 		}
 
 		// Open Frontier: spawn the space reflection probe (once) under the

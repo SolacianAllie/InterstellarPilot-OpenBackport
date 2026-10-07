@@ -11,7 +11,6 @@ Shader "OpenFrontier/GasCloud Billboard" {
 		ZWrite Off
 		Cull Off
 		Lighting Off
-		Fog { Mode Off }
 		Blend SrcAlpha OneMinusSrcAlpha
 
 		Pass {
@@ -32,6 +31,7 @@ Shader "OpenFrontier/GasCloud Billboard" {
 			struct v2f {
 				float4 pos : SV_POSITION;
 				float2 uv : TEXCOORD0;
+				UNITY_FOG_COORDS(2)
 			};
 
 			v2f vert(appdata input)
@@ -39,6 +39,7 @@ Shader "OpenFrontier/GasCloud Billboard" {
 				v2f output;
 				output.pos = UnityObjectToClipPos(input.vertex);
 				output.uv = TRANSFORM_TEX(input.uv, _BaseMap);
+				UNITY_TRANSFER_FOG(output, output.pos);
 				return output;
 			}
 
@@ -46,6 +47,10 @@ Shader "OpenFrontier/GasCloud Billboard" {
 			{
 				fixed4 col = tex2D(_BaseMap, input.uv) * _BaseColor;
 				col.a = saturate(col.a * _AlphaBoost);
+				// Open Frontier: fog now applies - from inside a cloud (dense
+				// fog), other clouds' billboards are swallowed by the murk
+				// instead of hanging visibly in it.
+				UNITY_APPLY_FOG(input.fogCoord, col);
 				return col;
 			}
 			ENDHLSL

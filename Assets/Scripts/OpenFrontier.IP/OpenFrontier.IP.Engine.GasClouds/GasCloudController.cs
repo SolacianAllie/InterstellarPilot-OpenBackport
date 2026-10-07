@@ -277,8 +277,12 @@ namespace OpenFrontier.IP.Engine.GasClouds
 			}
 			if (EngineASX.Instance.DirectionalLight != null && EngineASX.Instance.ActiveSector != null)
 			{
-				double num = 86400.0;
-				double num2 = (double)EngineASX.Instance.ActiveSector.LightDirectionFudge + EngineASX.Instance.DateTimeUtils.GameWorldElapsedSeconds % num / num;
+				// Open Frontier: the day-cycle time term is removed - the light
+				// keeps each sector's static LightDirectionFudge angle but no
+				// longer rotates over time. With a visible sun tracking the
+				// light (and shadows cast from it), the rotation read as the
+				// sun sliding across the sky and made shadows shimmer.
+				double num2 = EngineASX.Instance.ActiveSector.LightDirectionFudge;
 				float x = EngineASX.Instance.DirectionalLight.transform.localRotation.eulerAngles.x;
 				EngineASX.Instance.DirectionalLight.transform.localRotation = Quaternion.Euler(x, (float)num2 * 360f, 0f);
 				Color? desiredDirectionLightColor = GetDesiredDirectionLightColor();
