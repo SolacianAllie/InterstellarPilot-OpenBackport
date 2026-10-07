@@ -4,21 +4,29 @@ using UnityEngine.Rendering;
 namespace OpenFrontier.IP.Engine
 {
 	/// <summary>
-	/// Open Frontier: realtime reflection probe positioned at the SECTOR
-	/// ANCHOR - the same viewpoint the pinned SpaceCamera renders the sky
-	/// from. The starfield is a 20000-wide cube at the world origin and
-	/// the nebulae are world-pinned too; a camera-following probe leaves
-	/// the star cube in far sectors and captures a lopsided sky. From the
-	/// anchor the sky captures correctly, and since cubemaps are sampled
-	/// by direction only, one anchor capture serves the whole sector.
-	/// The mask spans sky AND local content (ships, stations, wormholes,
-	/// planets, asteroids, gas clouds, the probe-only anchor sun on
-	/// SkyProbe/3) so hulls reflect everything; local objects sit far
-	/// enough from the anchor that the parallax error is sub-degree.
-	/// NOT in the mask: BackgroundObjects (16) - that is the CAMERA-origin
-	/// sun, which sits off-axis from the anchor.
-	/// Clears to opaque black; re-renders once per second or on demand via
-	/// RequestRender (rate-limited to 0.1s). Spawned by ActiveSectorData.
+	/// Open Frontier: TWO blended realtime reflection probes.
+	///
+	/// SKY probe (importance 1, sector anchor, far 100000, box 30000):
+	/// captures only the sky - starfield + nebulae (DeepSpace/30), gas
+	/// clouds (29) and the probe-only anchor sun (SkyProbe/3). The
+	/// starfield is a 20000-wide cube pinned at the world origin and the
+	/// nebulae are world-pinned too, so the sky only captures correctly
+	/// from the sector anchor - the SpaceCamera's own viewpoint. Its huge
+	/// box covers the whole sector so every renderer samples it.
+	///
+	/// NEAR probe (importance 2, follows the camera, far 9000, box 1000):
+	/// captures local detail - the CAMERA-origin sun (BackgroundObjects/16,
+	/// on-axis from here), ships, stations, asteroids, wormholes, planets.
+	///
+	/// URP reflection probe blending (enabled in the pipeline asset) mixes
+	/// both per renderer by volume weight; deep inside both boxes the
+	/// blend is 50/50, so both probes run intensity 2 to compensate -
+	/// making the blend an exact additive composite: sky from one probe,
+	/// local detail from the other, each at full strength.
+	///
+	/// Both clear to opaque black; re-render once per second or on demand
+	/// via RequestRender (rate-limited to 0.1s). Spawned by
+	/// ActiveSectorData under the EngineASX root.
 	/// </summary>
 	public class SpaceReflectionProbe : MonoBehaviour
 	{
@@ -28,12 +36,22 @@ namespace OpenFrontier.IP.Engine
 
 		private const float MinSecondsBetweenRequestedRenders = 0.1f;
 
-		// DeepSpace (30) | UnitGasCloud (29) | AsteroidClusterObject (27) |
-		// BackgroundPlanet (26) | Planet (23) | Wormhole (22) |
-		// Asteroid (20) | Station (19) | Ship (18) | SkyProbe (3 - anchor sun)
-		private const int CullingMask = 1073741824 | 536870912 | 134217728 | 67108864 | 8388608 | 4194304 | 1048576 | 524288 | 262144 | 8;
+		// SKY: DeepSpace (30 - starfield + nebulae) | UnitGasCloud (29) |
+		// SkyProbe (3 - anchor sun)
+		private const int SkyCullingMask = 1073741824 | 536870912 | 8;
 
-		private ReflectionProbe probe;
+		// NEAR: BackgroundObjects (16 - camera sun) | AsteroidClusterObject
+		// (27) | BackgroundPlanet (26) | Planet (23) | Wormhole (22) |
+		// Asteroid (20) | Station (19) | Ship (18)
+		private const int NearCullingMask = 65536 | 134217728 | 67108864 | 8388608 | 4194304 | 1048576 | 524288 | 262144;
+
+		// Both probes blend ~50/50 inside the overlap; intensity 2 makes
+		// the blend an exact additive composite instead of half-dim.
+		private const float ProbeIntensity = 2f;
+
+		private ReflectionProbe skyProbe;
+
+		private ReflectionProbe nearProbe;
 
 		private float nextRenderTime;
 
@@ -44,27 +62,28 @@ namespace OpenFrontier.IP.Engine
 		private void Awake()
 		{
 			Instance = this;
-			probe = gameObject.AddComponent<ReflectionProbe>();
-			probe.mode = ReflectionProbeMode.Realtime;
-			probe.refreshMode = ReflectionProbeRefreshMode.ViaScripting;
+			skyProbe = CreateProbe("SkyReflectionProbe", SkyCullingMask, 100000f, new Vector3(30000f, 30000f, 30000f), 1);
+			nearProbe = CreateProbe("NearReflectionProbe", NearCullingMask, 9000f, new Vector3(1000f, 1000f, 1000f), 2);
+		}
+
+		private ReflectionProbe CreateProbe(string objectName, int cullingMask, float farClip, Vector3 size, int importance)
+		{
+			GameObject gameObject = new GameObject(objectName);
+			gameObject.transform.SetParent(transform, worldPositionStays: false);
+			ReflectionProbe reflectionProbe = gameObject.AddComponent<ReflectionProbe>();
+			reflectionProbe.mode = ReflectionProbeMode.Realtime;
+			reflectionProbe.refreshMode = ReflectionProbeRefreshMode.ViaScripting;
 			// Mobile gets a cheaper probe; reflections are blurry by nature.
-			probe.resolution = (Application.isMobilePlatform ? 64 : 128);
-			// The default far plane (1000) clipped nearly everything we
-			// want reflected; even 9000 is not enough. The starfield is a
-			// 20000-wide cube mesh pinned at the WORLD ORIGIN (Imphenzia
-			// StaticStars.LateUpdate), while sectors sit up to 16000+
-			// units out - from there the star cube is 6k-36k units from
-			// the probe. The SpaceCamera survives this with far plane
-			// 100000; the probe needs the same reach. Depth precision is
-			// irrelevant for an emissive backdrop.
-			probe.farClipPlane = 100000f;
-			probe.cullingMask = CullingMask;
-			probe.clearFlags = ReflectionProbeClearFlags.SolidColor;
-			probe.backgroundColor = new Color(0f, 0f, 0f, 1f);
-			probe.boxProjection = false;
-			probe.importance = 1;
-			// Cover the whole sector so every renderer samples this probe.
-			probe.size = new Vector3(30000f, 30000f, 30000f);
+			reflectionProbe.resolution = (Application.isMobilePlatform ? 64 : 128);
+			reflectionProbe.farClipPlane = farClip;
+			reflectionProbe.cullingMask = cullingMask;
+			reflectionProbe.clearFlags = ReflectionProbeClearFlags.SolidColor;
+			reflectionProbe.backgroundColor = new Color(0f, 0f, 0f, 1f);
+			reflectionProbe.boxProjection = false;
+			reflectionProbe.intensity = ProbeIntensity;
+			reflectionProbe.importance = importance;
+			reflectionProbe.size = size;
+			return reflectionProbe;
 		}
 
 		private void OnDestroy()
@@ -84,31 +103,39 @@ namespace OpenFrontier.IP.Engine
 
 		private void LateUpdate()
 		{
-			// Anchor to the sector (the SpaceCamera's viewpoint); fall back
-			// to the world camera when no sector is loaded.
+			// The sky probe sits at the sector anchor (the SpaceCamera's
+			// viewpoint); fall back to the camera when no sector is loaded.
 			if (EngineASX.Instance != null && EngineASX.Instance.ActiveSector != null)
 			{
-				transform.position = EngineASX.Instance.ActiveSector.transform.position;
+				skyProbe.transform.position = EngineASX.Instance.ActiveSector.transform.position;
 			}
 			else
 			{
-				Camera camera = WorldCamera.Resolve();
-				if (camera == null)
+				Camera camera2 = WorldCamera.Resolve();
+				if (camera2 != null)
 				{
-					return;
+					skyProbe.transform.position = camera2.transform.position;
 				}
-				transform.position = camera.transform.position;
 			}
+			Camera camera = WorldCamera.Resolve();
+			if (camera == null)
+			{
+				return;
+			}
+			nearProbe.transform.position = camera.transform.position;
 			bool flag = renderRequested && Time.unscaledTime >= lastRenderTime + MinSecondsBetweenRequestedRenders;
 			if (flag || Time.unscaledTime >= nextRenderTime)
 			{
 				renderRequested = false;
 				lastRenderTime = Time.unscaledTime;
 				nextRenderTime = lastRenderTime + SecondsBetweenRenders;
-				int num = probe.RenderProbe();
-				if (num == -1)
+				if (skyProbe.RenderProbe() == -1)
 				{
-					Debug.LogWarning("[SpaceReflectionProbe] RenderProbe scheduling failed", this);
+					Debug.LogWarning("[SpaceReflectionProbe] Sky RenderProbe scheduling failed", this);
+				}
+				if (nearProbe.RenderProbe() == -1)
+				{
+					Debug.LogWarning("[SpaceReflectionProbe] Near RenderProbe scheduling failed", this);
 				}
 			}
 		}
