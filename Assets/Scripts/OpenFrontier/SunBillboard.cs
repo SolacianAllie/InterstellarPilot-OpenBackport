@@ -163,7 +163,10 @@ namespace OpenFrontier
 				}
 				Build();
 			}
-			Camera main = Camera.main;
+			// WorldCamera.Resolve, not Camera.main - two cameras share the
+			// MainCamera tag (MenuCamera/GameCamera) and the menu one is
+			// static, which made the sun parallax wrongly while flying.
+			Camera main = WorldCamera.Resolve();
 			if (main == null || cachedLight == null)
 			{
 				return;
