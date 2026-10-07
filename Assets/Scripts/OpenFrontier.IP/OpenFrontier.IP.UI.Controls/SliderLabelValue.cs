@@ -11,13 +11,22 @@ namespace OpenFrontier.IP.UI.Controls
 
 		public TextMeshProUGUI Label;
 
+		private Slider slider;
+
 		private void Awake()
 		{
-			Slider slider = GetComponent<Slider>();
+			slider = GetComponent<Slider>();
 			slider.onValueChanged.AddListener((float value) =>
 			{
 				RefreshLabel(slider, value);
 			});
+			RefreshLabel(slider, slider.value);
+		}
+
+		// Open Frontier: refresh the label manually - needed when the slider
+		// value is set via SetValueWithoutNotify (which fires no events).
+		public void Refresh()
+		{
 			RefreshLabel(slider, slider.value);
 		}
 

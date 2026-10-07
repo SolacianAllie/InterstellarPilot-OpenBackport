@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using OpenFrontier.IP.Common;
 using OpenFrontier.IP.Engine;
+using OpenFrontier.IP.UI.Controls;
 using OpenFrontier.IP.UI.Screens.EnterNumber;
 using TMPro;
 using UnityEngine;
@@ -90,6 +91,11 @@ namespace OpenFrontier.IP.UI.Screens.Test
 			SunHueSlider.SetValueWithoutNotify(h);
 			SunSaturationSlider.SetValueWithoutNotify(s);
 			SunValueSlider.SetValueWithoutNotify(Mathf.Clamp(v, SunValueSlider.minValue, SunValueSlider.maxValue));
+			// SetValueWithoutNotify fires no events, so the value labels
+			// need a manual nudge.
+			SunHueSlider.GetComponent<SliderLabelValue>()?.Refresh();
+			SunSaturationSlider.GetComponent<SliderLabelValue>()?.Refresh();
+			SunValueSlider.GetComponent<SliderLabelValue>()?.Refresh();
 		}
 
 		private void SunHsvSliderValueChanged(float value)
