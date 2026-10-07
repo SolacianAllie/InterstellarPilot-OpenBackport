@@ -34,6 +34,32 @@ namespace OpenFrontier.IP
 			}
 		}
 
-		public static bool IsAlphaVersion = false;
+		public static bool IsAlphaVersion = true;
+
+		public static bool IsBetaVersion = false;
+
+		public static bool IsLegacyVersion = false;
+
+		// The tag shown next to the version number (menu display); empty for
+		// release builds. If several flags are set, Alpha > Beta > Legacy.
+		public static string StageTag
+		{
+			get
+			{
+				if (IsAlphaVersion)
+				{
+					return " Alpha";
+				}
+				if (IsBetaVersion)
+				{
+					return " Beta";
+				}
+				if (IsLegacyVersion)
+				{
+					return " Legacy";
+				}
+				return "";
+			}
+		}
 	}
 }
