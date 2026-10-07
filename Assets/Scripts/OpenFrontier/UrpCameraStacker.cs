@@ -47,6 +47,14 @@ namespace OpenFrontier
 				}
 				var data = cam.GetUniversalAdditionalCameraData();
 				data.renderType = CameraRenderType.Overlay;
+				// Share the base camera's depth buffer (URP overlays default
+				// to clearing depth). BiRP's GameCamera also cleared depth
+				// after the asteroid-camera pass, which is why background
+				// asteroid fields rendered behind everything - intentional
+				// improvement: near asteroid visuals now occlude ships and
+				// stations by distance, consistent with the sun hiding
+				// behind them.
+				data.clearDepth = false;
 				baseData.cameraStack.Add(cam);
 			}
 			Debug.Log($"[UrpCameraStacker] stacked {cams.Count - 1} cameras onto '{cams[0].name}'");
