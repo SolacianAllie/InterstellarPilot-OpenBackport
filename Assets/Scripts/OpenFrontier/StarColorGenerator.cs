@@ -49,16 +49,52 @@ namespace OpenFrontier
 			return num - Mathf.Min(color.r, Mathf.Min(color.g, color.b)) > 0.02f;
 		}
 
-		// Same hue/saturation with the brightness normalised to 1, so an
-		// author-picked light color reads as a bright star.
+		// Floors the brightness at 0.5 so the sun always reads, without
+		// brightening anything already above it; HDR values pass through.
 		public static Color NormalizeStarColor(Color color)
 		{
 			float num = Mathf.Max(color.r, Mathf.Max(color.g, color.b));
-			if (num <= 0f)
+			if (num >= 0.5f)
 			{
 				return color;
 			}
-			return new Color(color.r / num, color.g / num, color.b / num, 1f);
+			if (num <= 0f)
+			{
+				return new Color(0.5f, 0.5f, 0.5f, 1f);
+			}
+			float num2 = 0.5f / num;
+			return new Color(color.r * num2, color.g * num2, color.b * num2, 1f);
+		}
+
+		public static void RgbToHsv(Color color, out float h, out float s, out float v)
+		{
+			float num = Mathf.Max(color.r, Mathf.Max(color.g, color.b));
+			float num2 = Mathf.Min(color.r, Mathf.Min(color.g, color.b));
+			float num3 = num - num2;
+			v = num;
+			s = ((num > 0f) ? (num3 / num) : 0f);
+			if (num3 <= 0f)
+			{
+				h = 0f;
+				return;
+			}
+			if (num == color.r)
+			{
+				h = (color.g - color.b) / num3;
+			}
+			else if (num == color.g)
+			{
+				h = 2f + (color.b - color.r) / num3;
+			}
+			else
+			{
+				h = 4f + (color.r - color.g) / num3;
+			}
+			h /= 6f;
+			if (h < 0f)
+			{
+				h += 1f;
+			}
 		}
 
 		public static Color ForSector(int sectorUniqueId)
@@ -91,7 +127,8 @@ namespace OpenFrontier
 				h = Range(random, 0f, 0.04f);
 				s = Range(random, 0.4f, 0.65f);
 			}
-			return HsvToRgb(h, s, 1f);
+			// Brightness randomised too (floor 0.5 so the sun always reads).
+			return HsvToRgb(h, s, Range(random, 0.5f, 1f));
 		}
 
 		private static float Range(System.Random random, float min, float max)
@@ -99,7 +136,7 @@ namespace OpenFrontier
 			return min + (float)random.NextDouble() * (max - min);
 		}
 
-		private static Color HsvToRgb(float h, float s, float v)
+		public static Color HsvToRgb(float h, float s, float v)
 		{
 			if (s <= 0f)
 			{

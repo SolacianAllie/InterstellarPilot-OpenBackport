@@ -38,6 +38,14 @@ namespace OpenFrontier.IP.UI.Screens.Test
 
 		public Slider NebulaCountSlider;
 
+		// Open Frontier: sun HSV - writes the sector's DirectionLightColor,
+		// which drives both the sun visuals and the scene lighting.
+		public Slider SunHueSlider;
+
+		public Slider SunSaturationSlider;
+
+		public Slider SunValueSlider;
+
 		private List<NebulaColourToggle> nebulaColourToggles = new List<NebulaColourToggle>();
 
 		protected override void awake()
@@ -54,12 +62,43 @@ namespace OpenFrontier.IP.UI.Screens.Test
 			NebulaCountSlider.minValue = 0f;
 			NebulaCountSlider.maxValue = 64f;
 			NebulaCountSlider.onValueChanged.AddListener(NebulaCountSliderValueChanged);
+			SunHueSlider.minValue = 0f;
+			SunHueSlider.maxValue = 1f;
+			SunHueSlider.onValueChanged.AddListener(SunHsvSliderValueChanged);
+			SunSaturationSlider.minValue = 0f;
+			SunSaturationSlider.maxValue = 1f;
+			SunSaturationSlider.onValueChanged.AddListener(SunHsvSliderValueChanged);
+			SunValueSlider.minValue = 0.5f;
+			SunValueSlider.maxValue = 2f;
+			SunValueSlider.onValueChanged.AddListener(SunHsvSliderValueChanged);
 		}
 
 		private void RandomizeButtonClick()
 		{
 			EngineASX.Instance.ActiveSector.GenerateSpaceBackgroundWithNewSeed();
+			// Open Frontier: reseed the sun along with the background.
+			EngineASX.Instance.ActiveSector.DirectionLightColor = StarColorGenerator.ForSector(EngineASX.Instance.ActiveSector.RandomSeed);
+			ApplySunToCurrentSunBillboard();
 			RefreshCurrentSeedText();
+		}
+
+		private void SunHsvSliderValueChanged(float value)
+		{
+			Color color = StarColorGenerator.HsvToRgb(SunHueSlider.value, SunSaturationSlider.value, SunValueSlider.value);
+			EngineASX.Instance.ActiveSector.DirectionLightColor = color;
+			ApplySunToCurrentSunBillboard();
+		}
+
+		private void ApplySunToCurrentSunBillboard()
+		{
+			if (EngineASX.Instance.DirectionalLight != null)
+			{
+				SunBillboard component = EngineASX.Instance.DirectionalLight.GetComponent<SunBillboard>();
+				if (component != null)
+				{
+					component.StarTint = StarColorGenerator.NormalizeStarColor(EngineASX.Instance.ActiveSector.DirectionLightColor);
+				}
+			}
 		}
 
 		private void SetSeedButtonClick()
@@ -163,6 +202,10 @@ namespace OpenFrontier.IP.UI.Screens.Test
 					StarsIntensitySlider.value = (component.SpaceConstructorParams.StarsIntensity - StarsIntensitySlider.minValue) / (StarsIntensitySlider.maxValue - StarsIntensitySlider.minValue);
 					NebulaCountSlider.value = component.SpaceConstructorParams.NebulaCount;
 				}
+				StarColorGenerator.RgbToHsv(EngineASX.Instance.ActiveSector.DirectionLightColor, out float h, out float s, out float v);
+				SunHueSlider.SetValueWithoutNotify(h);
+				SunSaturationSlider.SetValueWithoutNotify(s);
+				SunValueSlider.SetValueWithoutNotify(Mathf.Clamp(v, SunValueSlider.minValue, SunValueSlider.maxValue));
 				RefreshCustomSettingsVisible();
 				RefreshCurrentSeedText();
 			}
