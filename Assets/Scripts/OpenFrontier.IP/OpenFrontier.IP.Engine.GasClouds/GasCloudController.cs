@@ -215,8 +215,24 @@ namespace OpenFrontier.IP.Engine.GasClouds
 				if (desiredDirectionLightColor.HasValue)
 				{
 					EngineASX.Instance.DirectionalLight.color = desiredDirectionLightColor.Value;
+					EngineASX.Instance.DirectionalLight.intensity = GetDesiredDirectionLightIntensity();
 				}
 			}
+		}
+
+		// Open Frontier: a giant gas cloud blocks starlight - inside one the
+		// directional light drops to this fraction of its base intensity.
+		private const float CloudDirectionalLightBlock = 0.2f;
+
+		private float baseDirectionalLightIntensity = -1f;
+
+		private float GetDesiredDirectionLightIntensity()
+		{
+			if (baseDirectionalLightIntensity < 0f)
+			{
+				baseDirectionalLightIntensity = EngineASX.Instance.DirectionalLight.intensity;
+			}
+			return baseDirectionalLightIntensity * ((activeGasCloud != null) ? CloudDirectionalLightBlock : 1f);
 		}
 
 		public void Update()
@@ -269,6 +285,7 @@ namespace OpenFrontier.IP.Engine.GasClouds
 				if (desiredDirectionLightColor.HasValue)
 				{
 					EngineASX.Instance.DirectionalLight.color = Color.Lerp(EngineASX.Instance.DirectionalLight.color, desiredDirectionLightColor.Value, GetDeltaTime());
+					EngineASX.Instance.DirectionalLight.intensity = Mathf.Lerp(EngineASX.Instance.DirectionalLight.intensity, GetDesiredDirectionLightIntensity(), GetDeltaTime());
 				}
 			}
 		}
