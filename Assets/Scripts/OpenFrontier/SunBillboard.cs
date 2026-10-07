@@ -21,19 +21,29 @@ namespace OpenFrontier
 
 		public Material GlowMaterial;
 
-		// Per-sector star color (set by ActiveSectorData); defaults to white.
+		// Per-sector star color (set by ActiveSectorData via
+		// StarColorGenerator.ResolveCurrent); defaults to white.
 		public Color StarTint = Color.white;
-
-		// True for runtime-attached suns (ActiveSectorData re-tints them on
-		// sector change and retires them when a hand-placed sun exists).
-		// False on hand-placed Sun.prefab instances - the author owns them.
-		public bool AutoTintFromSector;
 
 		private const float CoreAngularDiameter = 6.6f;
 
 		private const float GlowAngularDiameter = 60f;
 
 		private static Mesh quadMesh;
+
+		// Shared unit quad (XY plane, -Z front face); also used by the
+		// StarColorMarker editor preview.
+		public static Mesh QuadMesh
+		{
+			get
+			{
+				if (quadMesh == null)
+				{
+					quadMesh = BuildQuadMesh();
+				}
+				return quadMesh;
+			}
+		}
 
 		// The sun quads live on the DeepSpace layer so the space reflection
 		// probe (and only background-aware systems) can see them.
@@ -73,10 +83,7 @@ namespace OpenFrontier
 		// are built lazily on the first LateUpdate that has them.
 		private void Build()
 		{
-			if (quadMesh == null)
-			{
-				quadMesh = BuildQuadMesh();
-			}
+			Mesh sharedMesh = QuadMesh;
 			coreTransform = CreateQuad("SunCore", CoreMaterial, out coreRenderer);
 			glowTransform = CreateQuad("SunGlow", GlowMaterial, out glowRenderer);
 		}

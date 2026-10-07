@@ -10,6 +10,18 @@ namespace OpenFrontier
 	/// </summary>
 	public static class StarColorGenerator
 	{
+		// Resolves the star color for the current scene: a hand-placed
+		// StarColorMarker (hand-crafted universes) wins; otherwise the
+		// deterministic per-sector color (procedural universes).
+		public static Color ResolveCurrent(int sectorUniqueId)
+		{
+			if (StarColorMarker.ActiveMarker != null)
+			{
+				return StarColorMarker.ActiveMarker.StarColor;
+			}
+			return ForSector(sectorUniqueId);
+		}
+
 		public static Color ForSector(int sectorUniqueId)
 		{
 			System.Random random = new System.Random(sectorUniqueId * 7919 + 101);

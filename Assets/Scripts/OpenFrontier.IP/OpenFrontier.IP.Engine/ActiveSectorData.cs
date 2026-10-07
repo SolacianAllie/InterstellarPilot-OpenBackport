@@ -86,44 +86,21 @@ namespace OpenFrontier.IP.Engine
 			{
 				return;
 			}
-			// A hand-placed sun (Sun.prefab, AutoTintFromSector = false) in
-			// any loaded scene wins: retire every dynamic sun and leave the
-			// author's custom star alone.
-			SunBillboard[] array = UnityEngine.Object.FindObjectsByType<SunBillboard>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
-			bool flag = false;
-			foreach (SunBillboard sunBillboard2 in array)
-			{
-				if (!sunBillboard2.AutoTintFromSector)
-				{
-					flag = true;
-				}
-			}
-			if (flag)
-			{
-				foreach (SunBillboard sunBillboard3 in array)
-				{
-					if (sunBillboard3.AutoTintFromSector)
-					{
-						UnityEngine.Object.Destroy(sunBillboard3);
-					}
-				}
-				return;
-			}
-			// No hand-placed sun - dynamic generation on the engine's light.
 			Light[] componentsInChildren = engineASX.GetComponentsInChildren<Light>();
 			foreach (Light light in componentsInChildren)
 			{
 				if (light.type == LightType.Directional)
 				{
-					SunBillboard sunBillboard4 = light.GetComponent<SunBillboard>();
-					if (sunBillboard4 == null)
+					SunBillboard sunBillboard = light.GetComponent<SunBillboard>();
+					if (sunBillboard == null)
 					{
-						sunBillboard4 = light.gameObject.AddComponent<SunBillboard>();
-						sunBillboard4.CoreMaterial = SunCoreMaterial;
-						sunBillboard4.GlowMaterial = SunGlowMaterial;
-						sunBillboard4.AutoTintFromSector = true;
+						sunBillboard = light.gameObject.AddComponent<SunBillboard>();
 					}
-					sunBillboard4.StarTint = StarColorGenerator.ForSector((engineASX.ActiveSector != null) ? engineASX.ActiveSector.UniqueId : 0);
+					sunBillboard.CoreMaterial = SunCoreMaterial;
+					sunBillboard.GlowMaterial = SunGlowMaterial;
+					// ResolveCurrent: a StarColorMarker in the scene wins;
+					// otherwise the deterministic per-sector color.
+					sunBillboard.StarTint = StarColorGenerator.ResolveCurrent((engineASX.ActiveSector != null) ? engineASX.ActiveSector.UniqueId : 0);
 					break;
 				}
 			}
