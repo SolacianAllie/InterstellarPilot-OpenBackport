@@ -36,6 +36,16 @@ exit 198) — the user performs all editor actions.
   (AssetRipper decompile scheme). Never regenerate .meta files; renaming
   namespaces/assemblies is safe because GUIDs live in the .meta files, but the
   scheme no longer matches names after the `Pixelfactor.*` → `OpenFrontier.*` rename.
+- **The starfield is pinned at the WORLD ORIGIN, not the camera:**
+  `Imphenzia.SpaceForUnity.StaticStars.LateUpdate` force-pins its
+  20000-unit-wide star-cube mesh to `Vector3.zero` every frame (DLL,
+  uneditable). The main view survives because the DeepSpace "SpaceCamera"
+  sits at the sector anchor with far plane 100000 and rotation following
+  the main camera (parented under the `SkyboxCamera` object, driven by
+  `GameController.LateUpdate`). Anything that renders the backdrop from a
+  flying-camera position (reflection probes!) needs far plane ~100000 or
+  the stars vanish beyond ~10000 units from origin. Nebulae, by contrast,
+  DO follow the camera (`PositionAtCamera` pins their root).
 - **URP material postprocessor strips hand-edited YAML** for materials whose
   shader has a known URP ShaderID. Recreate those materials natively via the
   `Material` API; never hand-edit their YAML.
