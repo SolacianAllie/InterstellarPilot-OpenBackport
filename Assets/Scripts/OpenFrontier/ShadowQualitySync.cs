@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
-namespace OpenFrontier.IP.Engine
+namespace OpenFrontier
 {
 	/// <summary>
 	/// Open Frontier: ties the URP shadow map resolution to the graphics

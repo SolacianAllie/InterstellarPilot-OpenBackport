@@ -52,6 +52,12 @@ exit 198) — the user performs all editor actions.
   GameController prefab's EventSystem object overrides `DeviceInfo` after
   each scene load. The one-time red error at startup is cosmetic and cannot
   be silenced without patching the DLL.
+- **Only `Assets/Scripts/OpenFrontier/OpenFrontier.asmdef` references
+  `Unity.RenderPipelines.Universal.Runtime`** — any new script touching URP
+  types (`UniversalRenderPipelineAsset`, etc.) MUST live in the OpenFrontier
+  assembly. The harness links every package into every csproj, so a missing
+  asmdef reference passes the harness and fails in the editor with CS0234
+  (`ShadowQualitySync` was bitten by this).
 - **uGUI positions on ScreenSpace-Overlay canvases are in screen pixels**;
   any hit-test radius authored in "pixels" must be multiplied by
   `Canvas.scaleFactor` or it shrinks physically on high-DPI screens (see
