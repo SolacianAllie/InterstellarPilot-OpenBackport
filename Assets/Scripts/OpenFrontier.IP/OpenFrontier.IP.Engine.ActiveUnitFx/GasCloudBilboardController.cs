@@ -8,6 +8,13 @@ namespace OpenFrontier.IP.Engine.ActiveUnitFx
 
 		public float MinDistanceFromCamera = 50f;
 
+		// Open Frontier: set by GasCloudController - when the camera is
+		// inside ANY gas cloud, every cloud billboard is hidden (distant
+		// billboards read as crisp shapes floating inside the fog you are
+		// flying through). Each controller honors the flag by toggling its
+		// own billboard group, so dynamically spawned clouds follow too.
+		public static bool BillboardsHidden;
+
 		private void Awake()
 		{
 			EngineASX.Instance.CameraMoved += Instance_CameraMoved;
@@ -30,6 +37,10 @@ namespace OpenFrontier.IP.Engine.ActiveUnitFx
 
 		private void Update()
 		{
+			if (gameObject.activeSelf == BillboardsHidden)
+			{
+				gameObject.SetActive(!BillboardsHidden);
+			}
 			if (GameController.Instance != null && GameController.Instance.MainCamera != null)
 			{
 				Vector3 forward = Vector3.Normalize(transform.parent.position - GameController.Instance.MainCamera.transform.position);

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using OpenFrontier.IP.Engine.ActiveUnitFx;
 using UnityEngine;
 
 namespace OpenFrontier.IP.Engine.GasClouds
@@ -251,6 +252,8 @@ namespace OpenFrontier.IP.Engine.GasClouds
 				EngineASX.Instance.ActiveSectorData.SpaceFog.transform.position = GameController.Instance.MainCamera.transform.position;
 			}
 			ActiveUnitGasCloud cameraGasCloud = GetCameraGasCloud();
+			// Open Frontier: inside ANY cloud, hide every cloud billboard.
+			GasCloudBilboardController.BillboardsHidden = cameraGasCloud != null;
 			if (cameraGasCloud != currentActiveUnitGasCloud)
 			{
 				SetNewGasCloud(cameraGasCloud);
