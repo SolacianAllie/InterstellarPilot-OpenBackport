@@ -5,10 +5,11 @@ using UnityEngine.Rendering.Universal;
 namespace OpenFrontier
 {
 	/// <summary>
-	/// Open Frontier: ties the URP shadow map resolution to the graphics
-	/// quality slider - 4K at the highest level, 2K in the middle, 1K at
-	/// the bottom. Lives on the persistent GameController and applies
-	/// whenever the quality level changes.
+	/// Open Frontier: ties the URP shadow settings to the graphics quality
+	/// slider - no shadows at the lowest level, then 1K / 2K / 4K maps as
+	/// quality rises. Lives on the persistent GameController and applies
+	/// whenever the quality level changes. Shadows are disabled by zeroing
+	/// the shadow distance (the supported-flags are not runtime-settable).
 	/// </summary>
 	public class ShadowQualitySync : MonoBehaviour
 	{
@@ -49,6 +50,11 @@ namespace OpenFrontier
 			if (universalRenderPipelineAsset.mainLightShadowmapResolution != num)
 			{
 				universalRenderPipelineAsset.mainLightShadowmapResolution = num;
+			}
+			float num2 = ((qualityLevel == 0) ? 0f : 250f);
+			if (universalRenderPipelineAsset.shadowDistance != num2)
+			{
+				universalRenderPipelineAsset.shadowDistance = num2;
 			}
 		}
 	}
