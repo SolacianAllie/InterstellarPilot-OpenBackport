@@ -19,6 +19,12 @@ namespace OpenFrontier.IP.Engine
 
 		public GameObject SpaceFog;
 
+		// Open Frontier: textures for the runtime-built visible sun (crisp
+		// core + soft glow). See SunBillboard.
+		public Texture2D SunCoreTexture;
+
+		public Texture2D SunGlowTexture;
+
 		private List<ParticleSystem> spaceFogParticleSystems = new List<ParticleSystem>(3);
 
 		public void Init(EngineASX engine)
@@ -36,6 +42,7 @@ namespace OpenFrontier.IP.Engine
 				gameObject.transform.localPosition = Vector3.zero;
 				BackgroundObjectsRoot = gameObject;
 			}
+			EnsureSunBillboard();
 		}
 
 		public void OnSectorChanged()
@@ -46,6 +53,35 @@ namespace OpenFrontier.IP.Engine
 			{
 				EngineASX.Instance.ActiveSector.GenerateSpaceBackground();
 				TryCreateBackgroundObjects();
+			}
+			EnsureSunBillboard();
+		}
+
+		// Open Frontier: give the sector's directional light a visible sun.
+		// (The light is a sibling of this object under EngineASX, not a
+		// child, so FindFirstChildDirectionalLight can't find it - look at
+		// scene lights instead.)
+		private void EnsureSunBillboard()
+		{
+			EngineASX engineASX = (engine != null) ? engine : EngineASX.Instance;
+			if (engineASX == null)
+			{
+				return;
+			}
+			Light[] componentsInChildren = engineASX.GetComponentsInChildren<Light>();
+			foreach (Light light in componentsInChildren)
+			{
+				if (light.type == LightType.Directional)
+				{
+					SunBillboard sunBillboard = light.GetComponent<SunBillboard>();
+					if (sunBillboard == null)
+					{
+						sunBillboard = light.gameObject.AddComponent<SunBillboard>();
+					}
+					sunBillboard.CoreTexture = SunCoreTexture;
+					sunBillboard.GlowTexture = SunGlowTexture;
+					break;
+				}
 			}
 		}
 

@@ -6427,8 +6427,10 @@ MonoBehaviour:
   m_Name:
   m_EditorClassIdentifier:
   BackgroundObjectsRoot: {fileID: 0}
-  BackgroundMusicResourceName:
+  BackgroundMusicResourceName: 
   SpaceFog: {fileID: 61}
+  SunCoreTexture: {fileID: 2800000, guid: 03915efe7ac1cec4ba63c8f0f7fa2982, type: 3}
+  SunGlowTexture: {fileID: 2800000, guid: f72e301f73e70e948a644f7e7a2b67fd, type: 3}
 --- !u!114 &211
 MonoBehaviour:
   m_ObjectHideFlags: 0
