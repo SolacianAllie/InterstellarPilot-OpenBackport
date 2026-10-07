@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Rendering;
 
-namespace OpenFrontier
+namespace OpenFrontier.IP.Engine
 {
 	/// <summary>
 	/// Open Frontier: realtime reflection probe that captures only the space
@@ -9,7 +9,7 @@ namespace OpenFrontier
 	/// nearby objects reflect the starfield, sun and distant bodies instead
 	/// of each other or nothing. Clears to opaque black (not the skybox) so
 	/// empty space reflects as black rather than any odd skybox colors.
-	/// Follows the main camera and re-renders via scripting once per second
+	/// Follows the world camera and re-renders via scripting once per second
 	/// (cheap: small resolution, sparse layers).
 	/// Spawned by ActiveSectorData under the EngineASX root.
 	/// </summary>
@@ -42,17 +42,39 @@ namespace OpenFrontier
 
 		private void LateUpdate()
 		{
-			Camera main = Camera.main;
-			if (main == null)
+			Camera camera = ResolveWorldCamera();
+			if (camera == null)
 			{
 				return;
 			}
-			transform.position = main.transform.position;
-			if (Time.time >= nextRenderTime)
+			transform.position = camera.transform.position;
+			if (Time.unscaledTime >= nextRenderTime)
 			{
-				nextRenderTime = Time.time + SecondsBetweenRenders;
+				nextRenderTime = Time.unscaledTime + SecondsBetweenRenders;
 				probe.RenderProbe();
 			}
+		}
+
+		// Camera.main is unreliable here: BOTH MenuCamera and GameCamera are
+		// tagged MainCamera, so it can return the (static) menu camera.
+		// Prefer the game's canonical camera; fall back to the lowest-depth
+		// enabled camera (the world base camera, per UrpCameraStacker).
+		private static Camera ResolveWorldCamera()
+		{
+			if (GameController.Instance != null && GameController.Instance.MainCamera != null && GameController.Instance.MainCamera.isActiveAndEnabled)
+			{
+				return GameController.Instance.MainCamera;
+			}
+			Camera[] array = Object.FindObjectsByType<Camera>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+			Camera camera = null;
+			foreach (Camera camera2 in array)
+			{
+				if (camera == null || camera2.depth < camera.depth)
+				{
+					camera = camera2;
+				}
+			}
+			return camera;
 		}
 	}
 }
