@@ -25,18 +25,14 @@ namespace OpenFrontier.IP.Engine
 		// StarColorGenerator.ResolveCurrent); defaults to white.
 		public Color StarTint = Color.white;
 
-		// Placement is light-relative (child-of-light offset), but with
-		// hysteresis: if flying far from the light's position drags the
-		// apparent direction this far off the light's axis, the anchor
-		// quietly re-seats at the camera's vicinity. World-pinned like the
-		// backdrop, on-axis like the light - the only scheme that survives
-		// both nearby play and 16000-unit hand-crafted sectors.
-		private const float ReanchorAngleDegrees = 0.5f;
-
-		private Vector3 anchorPosition;
-
-		private bool anchorInitialized;
-
+		// Placement: camera-origin, every frame - the sun sits on the
+		// light's axis at a fixed distance from the camera. Zero parallax,
+		// so it NEVER drifts or snaps no matter how far the camera flies.
+		// (World-pinning fails: flying 9000 units in hand-crafted sectors
+		// drags the disk ~65 degrees off the light axis. Child-of-camera
+		// fails: rotation glues it to the screen. Per-frame camera-origin
+		// is the only scheme that is stable under both translation and
+		// rotation - it IS the sky.)
 		private const float CoreAngularDiameter = 6.6f;
 
 		private const float GlowAngularDiameter = 60f;
@@ -142,17 +138,7 @@ namespace OpenFrontier.IP.Engine
 			// (day/night scattering follows the same light the sun shows).
 			Shader.SetGlobalVector("_SunDirectionWorld", new Vector4(vector.x, vector.y, vector.z, 0f));
 			float num = Mathf.Max(main.farClipPlane * 0.5f, 100f);
-			if (!anchorInitialized)
-			{
-				anchorPosition = cachedLight.transform.position;
-				anchorInitialized = true;
-			}
-			Vector3 position = anchorPosition + vector * num;
-			if (Vector3.Angle(position - main.transform.position, vector) > ReanchorAngleDegrees)
-			{
-				anchorPosition = main.transform.position;
-				position = anchorPosition + vector * num;
-			}
+			Vector3 position = main.transform.position + vector * num;
 			// True billboard: face the camera dead-on (forward along the view
 			// ray, up aligned to the camera's up) so the sun reads correctly
 			// from any angle, including near the zenith/nadir.
