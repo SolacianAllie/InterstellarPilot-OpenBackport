@@ -30,7 +30,7 @@ namespace OpenFrontier.IP.Engine
 		// enough makes its apparent direction drift more than this from the
 		// light's axis, it quietly re-anchors near the camera - the far
 		// plane (8500) is much smaller than sector travel distances.
-		private const float ReanchorAngleDegrees = 2f;
+		private const float ReanchorAngleDegrees = 0.5f;
 
 		private Vector3 anchorPosition;
 
