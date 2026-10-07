@@ -47,7 +47,7 @@ namespace OpenFrontier
 			propertyBlock = new MaterialPropertyBlock();
 			if (quadMesh == null)
 			{
-				quadMesh = Resources.GetBuiltinResource<Mesh>("Quad.mesh");
+				quadMesh = BuildQuadMesh();
 			}
 			if (sunMaterial == null)
 			{
@@ -62,6 +62,39 @@ namespace OpenFrontier
 			}
 			coreTransform = CreateQuad("SunCore", out coreRenderer);
 			glowTransform = CreateQuad("SunGlow", out glowRenderer);
+		}
+
+		// Unit quad in the XY plane, front face looking down -Z (same
+		// orientation as Unity's builtin Quad, but with no dependency on
+		// builtin resource names).
+		private static Mesh BuildQuadMesh()
+		{
+			Mesh mesh = new Mesh();
+			mesh.name = "SunQuad";
+			mesh.vertices = new Vector3[]
+			{
+				new Vector3(-0.5f, -0.5f, 0f),
+				new Vector3(0.5f, -0.5f, 0f),
+				new Vector3(0.5f, 0.5f, 0f),
+				new Vector3(-0.5f, 0.5f, 0f)
+			};
+			mesh.normals = new Vector3[]
+			{
+				-Vector3.forward,
+				-Vector3.forward,
+				-Vector3.forward,
+				-Vector3.forward
+			};
+			mesh.uv = new Vector2[]
+			{
+				new Vector2(0f, 0f),
+				new Vector2(1f, 0f),
+				new Vector2(1f, 1f),
+				new Vector2(0f, 1f)
+			};
+			mesh.triangles = new int[] { 0, 3, 2, 0, 2, 1 };
+			mesh.RecalculateBounds();
+			return mesh;
 		}
 
 		private Transform CreateQuad(string objectName, out MeshRenderer meshRenderer)
