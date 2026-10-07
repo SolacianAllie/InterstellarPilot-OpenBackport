@@ -16936,6 +16936,7 @@ MonoBehaviour:
   SelectionImage: {fileID: 114148353818683595}
   SectorMap: {fileID: 114887312969816373}
   Sector: {fileID: 0}
+  SelectUnitSound: {fileID: 8300000, guid: da03a0a5c7e97c248ba9c4afbea66182, type: 3}
   EnabledSelectedUnitContextMenu: 1
   SyncSelectionWithHud: 1
 --- !u!224 &224311008779287018
