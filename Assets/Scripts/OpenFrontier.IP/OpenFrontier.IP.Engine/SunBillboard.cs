@@ -117,9 +117,6 @@ namespace OpenFrontier.IP.Engine
 				}
 				Build();
 			}
-			// WorldCamera.Resolve, not Camera.main - two cameras share the
-			// MainCamera tag (MenuCamera/GameCamera) and the menu one is
-			// static, which made the sun parallax wrongly while flying.
 			Camera main = WorldCamera.Resolve();
 			if (main == null || cachedLight == null)
 			{
@@ -127,14 +124,19 @@ namespace OpenFrontier.IP.Engine
 			}
 			Vector3 vector = -cachedLight.transform.forward;
 			float num = Mathf.Max(main.farClipPlane * 0.5f, 100f);
-			Vector3 position = main.transform.position + vector * num;
-			Quaternion rotation = Quaternion.LookRotation(vector);
-			float num2 = 2f * num * Mathf.Tan(CoreAngularDiameter * 0.5f * (Mathf.PI / 180f));
+			// Open Frontier: the sun is WORLD-anchored at the sector center
+			// (like the background planets), not camera-following - the
+			// backdrop doesn't move while flying, so neither should the sun.
+			Vector3 vector2 = ((EngineASX.Instance != null && EngineASX.Instance.ActiveSector != null) ? EngineASX.Instance.ActiveSector.transform.position : main.transform.position);
+			Vector3 position = vector2 + vector * num;
+			Quaternion rotation = Quaternion.LookRotation(position - main.transform.position);
+			float num2 = Vector3.Distance(main.transform.position, position);
+			float num3 = 2f * num2 * Mathf.Tan(CoreAngularDiameter * 0.5f * (Mathf.PI / 180f));
 			coreTransform.SetPositionAndRotation(position, rotation);
-			coreTransform.localScale = new Vector3(num2, num2, 1f);
+			coreTransform.localScale = new Vector3(num3, num3, 1f);
 			glowTransform.SetPositionAndRotation(position + vector, rotation);
-			float num3 = num2 * (GlowAngularDiameter / CoreAngularDiameter);
-			glowTransform.localScale = new Vector3(num3, num3, 1f);
+			float num4 = num3 * (GlowAngularDiameter / CoreAngularDiameter);
+			glowTransform.localScale = new Vector3(num4, num4, 1f);
 			Color starTint = StarTint;
 			// Material base color x star tint; the core is additionally
 			// pulled towards white so it reads as the blinding disk.
