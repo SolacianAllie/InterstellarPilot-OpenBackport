@@ -21,9 +21,9 @@ namespace OpenFrontier
 
 		public Material GlowMaterial;
 
-		private const float CoreAngularDiameter = 2.2f;
+		private const float CoreAngularDiameter = 6.6f;
 
-		private const float GlowAngularDiameter = 10f;
+		private const float GlowAngularDiameter = 60f;
 
 		private static Mesh quadMesh;
 
