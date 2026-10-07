@@ -25,30 +25,11 @@ namespace OpenFrontier.IP.Engine
 		// StarColorGenerator.ResolveCurrent); defaults to white.
 		public Color StarTint = Color.white;
 
-		// World anchor the sun is placed around (sector content centroid,
-		// set by ActiveSectorData). Falls back to the sector transform when
-		// unset - hand-crafted scenes can place content far from it.
-		public Vector3? WorldAnchor
-		{
-			get
-			{
-				return worldAnchor;
-			}
-			set
-			{
-				if (worldAnchor != value)
-				{
-					worldAnchor = value;
-					anchorInitialized = false;
-				}
-			}
-		}
-
-		private Vector3? worldAnchor;
-
-		// Hysteresis anchoring: the sun is pinned in world space, but if
-		// flying far enough makes its apparent direction drift more than
-		// this from the light's direction, it quietly re-anchors nearby.
+		// Hysteresis anchoring: the sun sits at the light's position offset
+		// along its facing (child-of-light semantics), but if flying far
+		// enough makes its apparent direction drift more than this from the
+		// light's axis, it quietly re-anchors near the camera - the far
+		// plane (8500) is much smaller than sector travel distances.
 		private const float ReanchorAngleDegrees = 2f;
 
 		private Vector3 anchorPosition;
@@ -157,13 +138,14 @@ namespace OpenFrontier.IP.Engine
 			// (day/night scattering follows the same light the sun shows).
 			Shader.SetGlobalVector("_SunDirectionWorld", new Vector4(vector.x, vector.y, vector.z, 0f));
 			float num = Mathf.Max(main.farClipPlane * 0.5f, 100f);
-			// Open Frontier: the sun is world-pinned, NOT camera-following -
-			// but with hysteresis: if travel makes its apparent direction
-			// drift too far from the light's, it silently re-anchors to the
-			// camera's vicinity so it always sits where the light says.
+			// Open Frontier: the sun is placed at the light's own position
+			// offset along its facing - but with hysteresis: if travel makes
+			// its apparent direction drift too far off the light's axis, it
+			// silently re-anchors to the camera's vicinity so it always sits
+			// where the light says.
 			if (!anchorInitialized)
 			{
-				anchorPosition = (WorldAnchor ?? ((EngineASX.Instance != null && EngineASX.Instance.ActiveSector != null) ? EngineASX.Instance.ActiveSector.transform.position : main.transform.position));
+				anchorPosition = cachedLight.transform.position;
 				anchorInitialized = true;
 			}
 			Vector3 position = anchorPosition + vector * num;
