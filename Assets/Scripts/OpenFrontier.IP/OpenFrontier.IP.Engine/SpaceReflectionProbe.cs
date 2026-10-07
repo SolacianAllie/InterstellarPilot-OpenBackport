@@ -4,15 +4,21 @@ using UnityEngine.Rendering;
 namespace OpenFrontier.IP.Engine
 {
 	/// <summary>
-	/// Open Frontier: realtime reflection probe that captures only the space
-	/// backdrop layers (DeepSpace, BackgroundPlanet, Wormhole), so ships and
-	/// nearby objects reflect the starfield, sun and distant bodies instead
-	/// of each other or nothing. Clears to opaque black (not the skybox) so
-	/// empty space reflects as black rather than any odd skybox colors.
-	/// Follows the world camera and re-renders via scripting once per second
-	/// (cheap: small resolution, sparse layers), or on demand via
-	/// RequestRender (rate-limited to 0.1s between renders).
-	/// Spawned by ActiveSectorData under the EngineASX root.
+	/// Open Frontier: realtime reflection probe positioned at the SECTOR
+	/// ANCHOR - the same viewpoint the pinned SpaceCamera renders the sky
+	/// from. The starfield is a 20000-wide cube at the world origin and
+	/// the nebulae are world-pinned too; a camera-following probe leaves
+	/// the star cube in far sectors and captures a lopsided sky. From the
+	/// anchor the sky captures correctly, and since cubemaps are sampled
+	/// by direction only, one anchor capture serves the whole sector.
+	/// The mask spans sky AND local content (ships, stations, wormholes,
+	/// planets, asteroids, gas clouds, the probe-only anchor sun on
+	/// SkyProbe/3) so hulls reflect everything; local objects sit far
+	/// enough from the anchor that the parallax error is sub-degree.
+	/// NOT in the mask: BackgroundObjects (16) - that is the CAMERA-origin
+	/// sun, which sits off-axis from the anchor.
+	/// Clears to opaque black; re-renders once per second or on demand via
+	/// RequestRender (rate-limited to 0.1s). Spawned by ActiveSectorData.
 	/// </summary>
 	public class SpaceReflectionProbe : MonoBehaviour
 	{
@@ -22,9 +28,10 @@ namespace OpenFrontier.IP.Engine
 
 		private const float MinSecondsBetweenRequestedRenders = 0.1f;
 
-		// DeepSpace (30) | BackgroundPlanet (26) | Wormhole (22) |
-		// BackgroundObjects (16 - the sun's layer)
-		private const int CullingMask = 1073741824 | 67108864 | 4194304 | 65536;
+		// DeepSpace (30) | UnitGasCloud (29) | AsteroidClusterObject (27) |
+		// BackgroundPlanet (26) | Planet (23) | Wormhole (22) |
+		// Asteroid (20) | Station (19) | Ship (18) | SkyProbe (3 - anchor sun)
+		private const int CullingMask = 1073741824 | 536870912 | 134217728 | 67108864 | 8388608 | 4194304 | 1048576 | 524288 | 262144 | 8;
 
 		private ReflectionProbe probe;
 
@@ -56,7 +63,8 @@ namespace OpenFrontier.IP.Engine
 			probe.backgroundColor = new Color(0f, 0f, 0f, 1f);
 			probe.boxProjection = false;
 			probe.importance = 1;
-			probe.size = new Vector3(5000f, 5000f, 5000f);
+			// Cover the whole sector so every renderer samples this probe.
+			probe.size = new Vector3(30000f, 30000f, 30000f);
 		}
 
 		private void OnDestroy()
@@ -76,12 +84,21 @@ namespace OpenFrontier.IP.Engine
 
 		private void LateUpdate()
 		{
-			Camera camera = WorldCamera.Resolve();
-			if (camera == null)
+			// Anchor to the sector (the SpaceCamera's viewpoint); fall back
+			// to the world camera when no sector is loaded.
+			if (EngineASX.Instance != null && EngineASX.Instance.ActiveSector != null)
 			{
-				return;
+				transform.position = EngineASX.Instance.ActiveSector.transform.position;
 			}
-			transform.position = camera.transform.position;
+			else
+			{
+				Camera camera = WorldCamera.Resolve();
+				if (camera == null)
+				{
+					return;
+				}
+				transform.position = camera.transform.position;
+			}
 			bool flag = renderRequested && Time.unscaledTime >= lastRenderTime + MinSecondsBetweenRequestedRenders;
 			if (flag || Time.unscaledTime >= nextRenderTime)
 			{

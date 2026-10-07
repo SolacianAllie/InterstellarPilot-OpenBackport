@@ -42,10 +42,13 @@ exit 198) — the user performs all editor actions.
   uneditable). The main view survives because the DeepSpace "SpaceCamera"
   sits at the sector anchor with far plane 100000 and rotation following
   the main camera (parented under the `SkyboxCamera` object, driven by
-  `GameController.LateUpdate`). Anything that renders the backdrop from a
-  flying-camera position (reflection probes!) needs far plane ~100000 or
-  the stars vanish beyond ~10000 units from origin. Nebulae, by contrast,
-  DO follow the camera (`PositionAtCamera` pins their root).
+  `GameController.LateUpdate`). Nebulae are world-pinned too: they live
+  under `ActiveSectorDataGeneric`'s transform — the `PositionAtCamera`
+  object is vestigial (it pins only itself; nothing is parented under
+  it). Anything that renders the backdrop from a flying-camera position
+  (reflection probes!) gets a lopsided or missing sky — capture from the
+  SECTOR ANCHOR instead (see `SpaceReflectionProbe`), with far plane
+  ~100000.
 - **URP material postprocessor strips hand-edited YAML** for materials whose
   shader has a known URP ShaderID. Recreate those materials natively via the
   `Material` API; never hand-edit their YAML.
