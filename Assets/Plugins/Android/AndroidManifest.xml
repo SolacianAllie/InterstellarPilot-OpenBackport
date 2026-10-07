@@ -15,7 +15,7 @@
     <meta-data android:name="notch.config" android:value="portrait|landscape" />
     <meta-data android:name="unity.auto-report-fully-drawn" android:value="true" />
     <meta-data android:name="unity.strip-engine-code" android:value="true" />
-    <meta-data android:name="unity.run-without-focus" android:value="false" />
+    <meta-data android:name="unity.run-without-focus" android:value="true" />
     <meta-data android:name="unity.auto-set-game-state" android:value="true" />
     <!-- Open Frontier: sensorLandscape (both landscape directions always,
          ignoring the system rotation lock) instead of userLandscape. -->
