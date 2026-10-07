@@ -221,7 +221,12 @@ namespace OpenFrontier.IP.Engine
 			anchorCoreTransform.localScale = new Vector3(num5, num5, 1f);
 			anchorGlowTransform.SetPositionAndRotation(position2 + vector, rotation2);
 			anchorGlowTransform.localScale = new Vector3(num5 * (GlowAngularDiameter / CoreAngularDiameter), num5 * (GlowAngularDiameter / CoreAngularDiameter), 1f);
-			Color starTint = StarTint;
+			// Dim with the cloud's starlight block: the visible sun
+			// breathes with the same lerped factor the directional
+			// light drops to inside gas clouds (additive quads scale
+			// with color).
+			float num6 = ((EngineASX.Instance != null && EngineASX.Instance.EnvironmentController != null) ? EngineASX.Instance.EnvironmentController.CurrentDirectionalLightFactor : 1f);
+			Color starTint = StarTint * num6;
 			// Material base color x star tint; the core is additionally
 			// pulled towards white so it reads as the blinding disk.
 			Color value = new Color((starTint.r + 1f) * 0.5f, (starTint.g + 1f) * 0.5f, (starTint.b + 1f) * 0.5f, 1f);

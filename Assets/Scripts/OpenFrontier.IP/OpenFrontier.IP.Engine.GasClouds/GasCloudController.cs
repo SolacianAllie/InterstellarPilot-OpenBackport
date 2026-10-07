@@ -225,6 +225,22 @@ namespace OpenFrontier.IP.Engine.GasClouds
 		// directional light drops to this fraction of its base intensity.
 		private const float CloudDirectionalLightBlock = 0.2f;
 
+		// Open Frontier: the light's CURRENT intensity as a fraction of its
+		// undimmed base (lerped 0.2 inside clouds). SunBillboard dims its
+		// quads by the same factor so the visible sun breathes with the
+		// starlight the cloud blocks.
+		public float CurrentDirectionalLightFactor
+		{
+			get
+			{
+				if (baseDirectionalLightIntensity <= 0f || EngineASX.Instance == null || EngineASX.Instance.DirectionalLight == null)
+				{
+					return 1f;
+				}
+				return EngineASX.Instance.DirectionalLight.intensity / baseDirectionalLightIntensity;
+			}
+		}
+
 		private float baseDirectionalLightIntensity = -1f;
 
 		private float GetDesiredDirectionLightIntensity()
