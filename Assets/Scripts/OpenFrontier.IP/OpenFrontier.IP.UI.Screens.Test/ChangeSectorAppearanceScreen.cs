@@ -83,6 +83,7 @@ namespace OpenFrontier.IP.UI.Screens.Test
 			ApplySunToCurrentSunBillboard();
 			RefreshSunSliders();
 			RefreshCurrentSeedText();
+			SpaceReflectionProbe.Instance?.RequestRender();
 		}
 
 		private void RefreshSunSliders()
@@ -103,6 +104,7 @@ namespace OpenFrontier.IP.UI.Screens.Test
 			Color color = StarColorGenerator.HsvToRgb(SunHueSlider.value, SunSaturationSlider.value, SunValueSlider.value);
 			EngineASX.Instance.ActiveSector.DirectionLightColor = color;
 			ApplySunToCurrentSunBillboard();
+			SpaceReflectionProbe.Instance?.RequestRender();
 		}
 
 		private void ApplySunToCurrentSunBillboard()
@@ -127,11 +129,13 @@ namespace OpenFrontier.IP.UI.Screens.Test
 			EngineASX.Instance.ActiveSector.GetOrCreateCustomAppearanceSettings().SpaceConstructorParams.StarsIntensity = value;
 			EngineASX.Instance.SpaceConstructor.StaticStars.starsIntensity = value;
 			EngineASX.Instance.SpaceConstructor.StaticStars.UpdateMaterial();
+			SpaceReflectionProbe.Instance?.RequestRender();
 		}
 
 		private void NebulaCountSliderValueChanged(float value)
 		{
 			EngineASX.Instance.ActiveSector.GetOrCreateCustomAppearanceSettings().SpaceConstructorParams.NebulaCount = (int)value;
+			SpaceReflectionProbe.Instance?.RequestRender();
 		}
 
 		private void EnterSectorSeedValueConfirm(EnterNumberScreen handler, bool enteredValue, int? newValue)

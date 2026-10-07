@@ -10,14 +10,17 @@ namespace OpenFrontier.IP.Engine
 	/// of each other or nothing. Clears to opaque black (not the skybox) so
 	/// empty space reflects as black rather than any odd skybox colors.
 	/// Follows the world camera and re-renders via scripting once per second
-	/// (cheap: small resolution, sparse layers).
+	/// (cheap: small resolution, sparse layers), or on demand via
+	/// RequestRender (rate-limited to 0.1s between renders).
 	/// Spawned by ActiveSectorData under the EngineASX root.
 	/// </summary>
 	public class SpaceReflectionProbe : MonoBehaviour
 	{
+		public static SpaceReflectionProbe Instance { get; private set; }
+
 		private const float SecondsBetweenRenders = 1f;
 
-		private const int ProbeResolution = 128;
+		private const float MinSecondsBetweenRequestedRenders = 0.1f;
 
 		// DeepSpace (30) | BackgroundPlanet (26) | Wormhole (22)
 		private const int CullingMask = 1073741824 | 67108864 | 4194304;
@@ -26,12 +29,18 @@ namespace OpenFrontier.IP.Engine
 
 		private float nextRenderTime;
 
+		private float lastRenderTime = -1f;
+
+		private bool renderRequested;
+
 		private void Awake()
 		{
+			Instance = this;
 			probe = gameObject.AddComponent<ReflectionProbe>();
 			probe.mode = ReflectionProbeMode.Realtime;
 			probe.refreshMode = ReflectionProbeRefreshMode.ViaScripting;
-			probe.resolution = ProbeResolution;
+			// Mobile gets a cheaper probe; reflections are blurry by nature.
+			probe.resolution = (Application.isMobilePlatform ? 64 : 128);
 			probe.cullingMask = CullingMask;
 			probe.clearFlags = ReflectionProbeClearFlags.SolidColor;
 			probe.backgroundColor = new Color(0f, 0f, 0f, 1f);
@@ -40,41 +49,37 @@ namespace OpenFrontier.IP.Engine
 			probe.size = new Vector3(5000f, 5000f, 5000f);
 		}
 
+		private void OnDestroy()
+		{
+			if (Instance == this)
+			{
+				Instance = null;
+			}
+		}
+
+		// Ask for a fresh render (e.g. godmode appearance edits). Renders
+		// happen at most once per 0.1 seconds regardless of call rate.
+		public void RequestRender()
+		{
+			renderRequested = true;
+		}
+
 		private void LateUpdate()
 		{
-			Camera camera = ResolveWorldCamera();
+			Camera camera = WorldCamera.Resolve();
 			if (camera == null)
 			{
 				return;
 			}
 			transform.position = camera.transform.position;
-			if (Time.unscaledTime >= nextRenderTime)
+			bool flag = renderRequested && Time.unscaledTime >= lastRenderTime + MinSecondsBetweenRequestedRenders;
+			if (flag || Time.unscaledTime >= nextRenderTime)
 			{
-				nextRenderTime = Time.unscaledTime + SecondsBetweenRenders;
+				renderRequested = false;
+				lastRenderTime = Time.unscaledTime;
+				nextRenderTime = lastRenderTime + SecondsBetweenRenders;
 				probe.RenderProbe();
 			}
-		}
-
-		// Camera.main is unreliable here: BOTH MenuCamera and GameCamera are
-		// tagged MainCamera, so it can return the (static) menu camera.
-		// Prefer the game's canonical camera; fall back to the lowest-depth
-		// enabled camera (the world base camera, per UrpCameraStacker).
-		private static Camera ResolveWorldCamera()
-		{
-			if (GameController.Instance != null && GameController.Instance.MainCamera != null && GameController.Instance.MainCamera.isActiveAndEnabled)
-			{
-				return GameController.Instance.MainCamera;
-			}
-			Camera[] array = Object.FindObjectsByType<Camera>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
-			Camera camera = null;
-			foreach (Camera camera2 in array)
-			{
-				if (camera == null || camera2.depth < camera.depth)
-				{
-					camera = camera2;
-				}
-			}
-			return camera;
 		}
 	}
 }

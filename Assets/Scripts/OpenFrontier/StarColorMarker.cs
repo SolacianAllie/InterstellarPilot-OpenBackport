@@ -78,7 +78,7 @@ namespace OpenFrontier
 				gameObject.tag = "EditorOnly";
 				gameObject.transform.SetParent(transform, worldPositionStays: false);
 				MeshFilter meshFilter = gameObject.AddComponent<MeshFilter>();
-				meshFilter.sharedMesh = SunBillboard.QuadMesh;
+				meshFilter.sharedMesh = SharedMeshes.Quad;
 				MeshRenderer meshRenderer = gameObject.AddComponent<MeshRenderer>();
 				meshRenderer.sharedMaterial = PreviewMaterial;
 				meshRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;

@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Rendering;
 
-namespace OpenFrontier
+namespace OpenFrontier.IP.Engine
 {
 	/// <summary>
 	/// Open Frontier: the sector's directional light has no visible source.
@@ -29,21 +29,9 @@ namespace OpenFrontier
 
 		private const float GlowAngularDiameter = 60f;
 
-		private static Mesh quadMesh;
-
 		// Shared unit quad (XY plane, -Z front face); also used by the
 		// StarColorMarker editor preview.
-		public static Mesh QuadMesh
-		{
-			get
-			{
-				if (quadMesh == null)
-				{
-					quadMesh = BuildQuadMesh();
-				}
-				return quadMesh;
-			}
-		}
+		public static Mesh QuadMesh => SharedMeshes.Quad;
 
 		// The sun quads live on the DeepSpace layer so the space reflection
 		// probe (and only background-aware systems) can see them.
@@ -98,42 +86,8 @@ namespace OpenFrontier
 		// are built lazily on the first LateUpdate that has them.
 		private void Build()
 		{
-			Mesh sharedMesh = QuadMesh;
 			coreTransform = CreateQuad("SunCore", CoreMaterial, out coreRenderer);
 			glowTransform = CreateQuad("SunGlow", GlowMaterial, out glowRenderer);
-		}
-
-		// Unit quad in the XY plane, front face looking down -Z (same
-		// orientation as Unity's builtin Quad, but with no dependency on
-		// builtin resource names).
-		private static Mesh BuildQuadMesh()
-		{
-			Mesh mesh = new Mesh();
-			mesh.name = "SunQuad";
-			mesh.vertices = new Vector3[]
-			{
-				new Vector3(-0.5f, -0.5f, 0f),
-				new Vector3(0.5f, -0.5f, 0f),
-				new Vector3(0.5f, 0.5f, 0f),
-				new Vector3(-0.5f, 0.5f, 0f)
-			};
-			mesh.normals = new Vector3[]
-			{
-				-Vector3.forward,
-				-Vector3.forward,
-				-Vector3.forward,
-				-Vector3.forward
-			};
-			mesh.uv = new Vector2[]
-			{
-				new Vector2(0f, 0f),
-				new Vector2(1f, 0f),
-				new Vector2(1f, 1f),
-				new Vector2(0f, 1f)
-			};
-			mesh.triangles = new int[] { 0, 3, 2, 0, 2, 1 };
-			mesh.RecalculateBounds();
-			return mesh;
 		}
 
 		private Transform CreateQuad(string objectName, Material material, out MeshRenderer meshRenderer)
@@ -145,7 +99,7 @@ namespace OpenFrontier
 				gameObject.layer = DeepSpaceLayer;
 			}
 			MeshFilter meshFilter = gameObject.AddComponent<MeshFilter>();
-			meshFilter.sharedMesh = quadMesh;
+			meshFilter.sharedMesh = SharedMeshes.Quad;
 			meshRenderer = gameObject.AddComponent<MeshRenderer>();
 			meshRenderer.sharedMaterial = material;
 			meshRenderer.shadowCastingMode = ShadowCastingMode.Off;
