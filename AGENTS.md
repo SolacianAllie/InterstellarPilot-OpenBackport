@@ -49,6 +49,12 @@ exit 198) — the user performs all editor actions.
   (reflection probes!) gets a lopsided or missing sky — capture from the
   SECTOR ANCHOR instead (see `SpaceReflectionProbe`), with far plane
   ~100000.
+- **Play-mode edits to the URP asset can PERSIST in the editor:**
+  `ShadowQualitySync` writes `mainLightShadowmapResolution` at runtime;
+  the editor re-serialized the asset mid-session and the value stuck
+  (4096), while an unrelated setting (`m_PrefilterSoftShadows`) silently
+  reverted. After play sessions, diff `Assets/Settings/OpenFrontier-URP.asset`
+  before committing — accept intentional drift, restore the rest.
 - **URP material postprocessor strips hand-edited YAML** for materials whose
   shader has a known URP ShaderID. Recreate those materials natively via the
   `Material` API; never hand-edit their YAML.

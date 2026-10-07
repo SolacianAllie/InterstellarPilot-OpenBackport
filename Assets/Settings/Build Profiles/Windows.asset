@@ -49,7 +49,7 @@ MonoBehaviour:
           m_BuildProfileEngineDiagnosticsState: 2
         m_AdaptivePerformanceEnabled: 0
         m_WindowsBuildAndRunDeployTarget: 0
-        m_Architecture: 0
+        m_Architecture: 3
         m_CreateSolution: 0
         m_CopyPDBFiles: 0
         m_WindowsDevicePortalAddress: 
