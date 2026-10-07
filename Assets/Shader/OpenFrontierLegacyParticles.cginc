@@ -41,14 +41,14 @@ v2f_legacy_particle vert_legacy_particle(appdata_legacy_particle input)
 	return output;
 }
 
-// The legacy soft-particle fade: alpha falls off over _InvFade units
-// of depth difference against scene geometry.
+// The legacy soft-particle fade is DISABLED on this project: on the
+// OpenGL stack the depth texture reads 0 behind empty space (see
+// AGENTS.md - the same reason soft particles are standardized
+// Near=1/Far=0), which made sceneZ - partZ negative and killed alpha
+// entirely - additive particles (lasers!) against open space rendered
+// invisible. The _InvFade property stays for material compatibility.
 fixed4 apply_soft_fade(v2f_legacy_particle input, fixed4 col)
 {
-	float rawDepth = SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture, input.screenPos.xy / input.screenPos.w);
-	float sceneZ = LinearEyeDepth(rawDepth);
-	float partZ = input.eyeDepth;
-	col.a *= saturate(_InvFade * (sceneZ - partZ));
 	return col;
 }
 
