@@ -34,6 +34,31 @@ namespace OpenFrontier
 #endif
 		}
 
+		// Physical pixel density of the current display, from Android's
+		// DisplayMetrics - Screen.dpi can return 0 on foldables, which
+		// silently breaks DPI-scaled touch thresholds. Returns 0 when
+		// unavailable.
+		public static float GetDensityDpi()
+		{
+#if UNITY_ANDROID && !UNITY_EDITOR
+			try
+			{
+				using (AndroidJavaObject activity = CurrentActivity())
+				using (AndroidJavaObject resources = activity.Call<AndroidJavaObject>("getResources"))
+				using (AndroidJavaObject metrics = resources.Call<AndroidJavaObject>("getDisplayMetrics"))
+				{
+					return metrics.Get<int>("densityDpi");
+				}
+			}
+			catch (System.Exception)
+			{
+				return 0f;
+			}
+#else
+			return Screen.dpi;
+#endif
+		}
+
 #if UNITY_ANDROID && !UNITY_EDITOR
 		private static AndroidJavaObject CurrentActivity()
 		{

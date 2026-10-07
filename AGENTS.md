@@ -43,3 +43,16 @@ exit 198) — the user performs all editor actions.
   directory) is a read-only reference of the original game — never modify it.
 - **Soft particles are standardized Near=1/Far=0** (empirically verified on
   this OpenGL stack; URP's formula reads 0 behind empty space here).
+- **`Screen.dpi` can return 0** (Android foldables, Linux editor). Never feed
+  it into touch/drag thresholds directly — it once set
+  `EventSystem.pixelDragThreshold` to 0 and ate every tap on the sector map.
+  Use `OpenFrontier.ScreenDpi.Value` (Screen.dpi → JNI DisplayMetrics → 200
+  fallback). Fingers.dll reads `Screen.dpi` in its Awake and falls back to
+  its serialized DefaultDPI with a red error; `FingersDpiFix` on the
+  GameController prefab's EventSystem object overrides `DeviceInfo` after
+  each scene load. The one-time red error at startup is cosmetic and cannot
+  be silenced without patching the DLL.
+- **uGUI positions on ScreenSpace-Overlay canvases are in screen pixels**;
+  any hit-test radius authored in "pixels" must be multiplied by
+  `Canvas.scaleFactor` or it shrinks physically on high-DPI screens (see
+  `SectorMapUnitSelector`).

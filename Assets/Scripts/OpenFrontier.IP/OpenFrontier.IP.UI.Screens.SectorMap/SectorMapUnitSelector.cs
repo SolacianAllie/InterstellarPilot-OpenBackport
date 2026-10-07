@@ -25,6 +25,15 @@ namespace OpenFrontier.IP.UI.Screens.SectorMap
 				return;
 			}
 			Vector3 mousePosition = Input.mousePosition;
+			// Open Frontier: MaxSelectDistance is authored in canvas pixels
+			// (scaleFactor 1). Scale it by the canvas factor so the touch
+			// radius keeps its physical size on high-DPI mobile screens.
+			float maxSelectDistance = MaxSelectDistance;
+			Canvas componentInParent = SectorMap.MapAreaTransform.GetComponentInParent<Canvas>();
+			if (componentInParent != null)
+			{
+				maxSelectDistance *= componentInParent.scaleFactor;
+			}
 			SectorMapItem sectorMapItem = null;
 			float num = 0f;
 			foreach (SectorMapItem item2 in SectorMap.Items)
@@ -32,7 +41,7 @@ namespace OpenFrontier.IP.UI.Screens.SectorMap
 				if (item2 is SectorMapUnitItem sectorMapUnitItem && item2.Image != null && item2.Image.enabled && SectorMap.CanSelectUnit(sectorMapUnitItem.Unit))
 				{
 					float num2 = Vector3.Distance(item2.Image.transform.position, mousePosition);
-					if (num2 < MaxSelectDistance && (sectorMapItem == null || num2 < num))
+					if (num2 < maxSelectDistance && (sectorMapItem == null || num2 < num))
 					{
 						sectorMapItem = item2;
 						num = num2;
