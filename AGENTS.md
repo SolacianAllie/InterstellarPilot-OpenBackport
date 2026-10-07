@@ -60,3 +60,10 @@ exit 198) — the user performs all editor actions.
   `UnityEngine.Input`: `Mouse.current` is null/stale on touch-only devices,
   so `mousePosition` must mirror the primary touch (fixed in the shim —
   keep that behaviour when migrating the remaining ~60 call sites).
+- **No Unity native calls in MonoBehaviour field initializers / static
+  constructors** (`LayerMask.NameToLayer`, `Shader.Find`, etc.): type
+  initialization can run during serialization, where native calls are
+  forbidden — the resulting `TypeInitializationException` poisons the
+  whole type (every `AddComponent` fails silently). Look them up lazily
+  in Awake/OnEnable. The harness cannot catch this; check Editor.log for
+  "is not allowed to be called from a MonoBehaviour constructor".

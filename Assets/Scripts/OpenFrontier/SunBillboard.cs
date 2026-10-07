@@ -47,7 +47,22 @@ namespace OpenFrontier
 
 		// The sun quads live on the DeepSpace layer so the space reflection
 		// probe (and only background-aware systems) can see them.
-		private static readonly int DeepSpaceLayer = LayerMask.NameToLayer("DeepSpace");
+		// NOTE: looked up lazily - NameToLayer (a native call) is forbidden
+		// from a MonoBehaviour's type initializer; a static readonly there
+		// throws TypeInitializationException and poisons the whole type.
+		private static int deepSpaceLayer = -2;
+
+		private static int DeepSpaceLayer
+		{
+			get
+			{
+				if (deepSpaceLayer == -2)
+				{
+					deepSpaceLayer = LayerMask.NameToLayer("DeepSpace");
+				}
+				return deepSpaceLayer;
+			}
+		}
 
 		private Light cachedLight;
 
