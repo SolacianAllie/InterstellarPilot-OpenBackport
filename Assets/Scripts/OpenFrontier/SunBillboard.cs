@@ -24,6 +24,11 @@ namespace OpenFrontier
 		// Per-sector star color (set by ActiveSectorData); defaults to white.
 		public Color StarTint = Color.white;
 
+		// True for runtime-attached suns (ActiveSectorData re-tints them on
+		// sector change and retires them when a hand-placed sun exists).
+		// False on hand-placed Sun.prefab instances - the author owns them.
+		public bool AutoTintFromSector;
+
 		private const float CoreAngularDiameter = 6.6f;
 
 		private const float GlowAngularDiameter = 60f;
@@ -50,6 +55,18 @@ namespace OpenFrontier
 		{
 			cachedLight = GetComponent<Light>();
 			propertyBlock = new MaterialPropertyBlock();
+		}
+
+		private void OnDestroy()
+		{
+			if (coreTransform != null)
+			{
+				Object.Destroy(coreTransform.gameObject);
+			}
+			if (glowTransform != null)
+			{
+				Object.Destroy(glowTransform.gameObject);
+			}
 		}
 
 		// Materials are assigned AFTER AddComponent runs Awake, so the quads
