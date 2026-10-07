@@ -4,7 +4,7 @@ Shader "OpenFrontier/Planet Atmosphere" {
 		_Size ("Size", Float) = 0.1
 		_Falloff ("Falloff", Float) = 5
 		_Transparency ("Transparency", Float) = 15
-		[Header(Open Frontier day-night scattering)]
+		[Header(OpenFrontierDayNight)]
 		_TerminatorColor ("Terminator Color", Color) = (1,0.55,0.3,1)
 		_TerminatorBoost ("Terminator Boost", Range(0, 3)) = 0.8
 		_TerminatorFalloff ("Terminator Falloff", Range(1, 16)) = 4
