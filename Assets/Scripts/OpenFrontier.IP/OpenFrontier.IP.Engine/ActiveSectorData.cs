@@ -60,7 +60,7 @@ namespace OpenFrontier.IP.Engine
 		// Open Frontier: give the sector's directional light a visible sun,
 		// and tint both it and the scene lighting with the sector's star
 		// color (full strength on the sun, gentle on the light).
-		private const float LightStarTintAmount = 0.35f;
+		private const float LightStarTintAmount = 0.5f;
 
 		private Color baseLightColor = Color.white;
 
