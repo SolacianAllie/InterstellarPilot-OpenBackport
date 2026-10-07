@@ -2769,7 +2769,7 @@ MonoBehaviour:
   m_StartAxis: 1
   m_CellSize: {x: 160, y: 43.3}
   m_Spacing: {x: 0, y: 0}
-  m_Constraint: 0
+  m_Constraint: 1
   m_ConstraintCount: 2
 --- !u!224 &224167524263268962
 RectTransform:
@@ -3624,7 +3624,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3eba6bd382687def8667dce149b76f99, type: 3}
   m_Name:
   m_EditorClassIdentifier:
-  CustomFormat: Hue 0.00
+  CustomFormat: 
   Label: {fileID: 910000000000010014}
 
 --- !u!114 &910000000000010012
@@ -3668,7 +3668,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Stars Intensity
+  m_text: Sun Hue
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: aefad2323caa07c409a285aad750d046, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: e3d74bbb34a47d84796bfb4a92431d69, type: 2}
@@ -4354,7 +4354,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3eba6bd382687def8667dce149b76f99, type: 3}
   m_Name:
   m_EditorClassIdentifier:
-  CustomFormat: Saturation 0.00
+  CustomFormat: 
   Label: {fileID: 910000000000010043}
 
 --- !u!114 &910000000000010041
@@ -4398,7 +4398,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Stars Intensity
+  m_text: Sun Saturation
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: aefad2323caa07c409a285aad750d046, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: e3d74bbb34a47d84796bfb4a92431d69, type: 2}
@@ -5084,7 +5084,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3eba6bd382687def8667dce149b76f99, type: 3}
   m_Name:
   m_EditorClassIdentifier:
-  CustomFormat: Brightness 0.00
+  CustomFormat: 
   Label: {fileID: 910000000000010072}
 
 --- !u!114 &910000000000010070
@@ -5128,7 +5128,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Stars Intensity
+  m_text: Sun Value
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: aefad2323caa07c409a285aad750d046, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: e3d74bbb34a47d84796bfb4a92431d69, type: 2}

@@ -284,7 +284,10 @@ namespace OpenFrontier.IP.Engine.GasClouds
 				Color? desiredDirectionLightColor = GetDesiredDirectionLightColor();
 				if (desiredDirectionLightColor.HasValue)
 				{
-					EngineASX.Instance.DirectionalLight.color = Color.Lerp(EngineASX.Instance.DirectionalLight.color, desiredDirectionLightColor.Value, GetDeltaTime());
+					// Open Frontier: color snaps (matches the sun, which
+					// changes instantly); intensity still fades smoothly
+					// for the gas cloud light-blocking.
+					EngineASX.Instance.DirectionalLight.color = desiredDirectionLightColor.Value;
 					EngineASX.Instance.DirectionalLight.intensity = Mathf.Lerp(EngineASX.Instance.DirectionalLight.intensity, GetDesiredDirectionLightIntensity(), GetDeltaTime());
 				}
 			}
