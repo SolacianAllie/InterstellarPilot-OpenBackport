@@ -11,6 +11,12 @@ namespace OpenFrontier.IP.UI.Screens.Hud
 
 		private float desiredCameraAngleY;
 
+		// Open Frontier: free-look pitch for the orbit drag (matches
+		// CameraSpectator's manual orbit: clamped to +/-75 degrees).
+		private const float MaxManualOrbitAngleX = 75f;
+
+		private float desiredCameraAngleX;
+
 		public PanGestureRecognizer OrbitPanGesture { get; private set; }
 
 		private void OnEnable()
@@ -29,6 +35,7 @@ namespace OpenFrontier.IP.UI.Screens.Hud
 				{
 					EngineASX.Instance.Hud.CameraMode = HudCameraMode.Free;
 					desiredCameraAngleY = GameController.Instance.MainCamera.transform.eulerAngles.y;
+					desiredCameraAngleX = Mathf.DeltaAngle(0f, GameController.Instance.MainCamera.transform.eulerAngles.x);
 				}
 				if (r.State == GestureRecognizerState.Executing)
 				{
@@ -41,9 +48,10 @@ namespace OpenFrontier.IP.UI.Screens.Hud
 					float num = Mathf.Lerp(hudCameraSettings.OrbitPanGestureMinRotationSpeed, hudCameraSettings.OrbitPanGestureMaxRotationSpeed, GameController.Instance.CameraDragRotateSensitivity) * hudCameraSettings.OrbitPanGestureSpeedMultiplier;
 					num *= GameController.Instance.GetCameraDragRotateSensitivityMultiplier();
 					desiredCameraAngleY += DeviceInfo.PixelsToUnits(velocityX) * num;
-					float num2 = Mathf.Lerp(hudCameraSettings.OrbitPanGestureMinElevationSpeed, hudCameraSettings.OrbitPanGestureMaxElevationSpeed, GameController.Instance.CameraDragRotateSensitivity) * hudCameraSettings.OrbitPanGestureSpeedMultiplier;
-					EngineASX.Instance.HudCamera.CameraElevation -= DeviceInfo.PixelsToUnits(velocityY) * num2;
-					EngineASX.Instance.HudCamera.SetCameraDesiredRotationY(desiredCameraAngleY);
+					// Vertical drag now pitches the camera (free look up/down)
+					// instead of changing elevation; elevation stays on its button.
+					desiredCameraAngleX = Mathf.Clamp(desiredCameraAngleX + DeviceInfo.PixelsToUnits(velocityY) * num, 0f - MaxManualOrbitAngleX, MaxManualOrbitAngleX);
+					EngineASX.Instance.HudCamera.SetCameraDesiredRotation(desiredCameraAngleX, desiredCameraAngleY);
 				}
 			}
 		}

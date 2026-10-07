@@ -45,6 +45,11 @@ namespace OpenFrontier.IP.UI.Screens.SectorMap
 
 		public Sector Sector;
 
+		// Open Frontier: played when a unit is selected on the map (same clip
+		// the 3D view's HudTargetChangeSoundPlay uses; the HUD screen is
+		// deactivated while the map is open, so its watcher can't cover this).
+		public AudioClip SelectUnitSound;
+
 		private const string NoTargetText = "[None]";
 
 		public Func<SectorMapSelectionItem, bool> OnSelecting;
@@ -139,12 +144,22 @@ namespace OpenFrontier.IP.UI.Screens.SectorMap
 			{
 				return false;
 			}
+			SectorMapSelectionItem? selectedObject = SelectedObject;
 			SelectedObject = item;
 			RefreshContextButtons();
 			RefreshSelectedConditionControllerUI();
 			if (SyncSelectionWithHud && SelectedUnit != null && Sector.IsActive)
 			{
 				EngineASX.Instance.Hud.CurrentTarget = SelectedUnit;
+			}
+			// Open Frontier: target-select beep, matching the 3D view's
+			// HudTargetChangeSoundPlay. The HUD screen is deactivated while
+			// the map is open, so its watcher never covers map selections -
+			// play unconditionally on an actual selection change, like the
+			// HUD's watcher does for 3D-view target changes.
+			if (SelectedUnit != null && SelectUnitSound != null && GameController.Instance.PlayButtonSounds && (!selectedObject.HasValue || selectedObject.Value.Unit != item.Unit || selectedObject.Value.SectorPosition != item.SectorPosition))
+			{
+				AudioHelper.PlaySound(SelectUnitSound);
 			}
 			Refresh();
 			if (SelectedObjectChanged != null)

@@ -43,3 +43,27 @@ exit 198) — the user performs all editor actions.
   directory) is a read-only reference of the original game — never modify it.
 - **Soft particles are standardized Near=1/Far=0** (empirically verified on
   this OpenGL stack; URP's formula reads 0 behind empty space here).
+- **`Screen.dpi` can return 0** (Android foldables, Linux editor). Never feed
+  it into touch/drag thresholds directly — it once set
+  `EventSystem.pixelDragThreshold` to 0 and ate every tap on the sector map.
+  Use `OpenFrontier.ScreenDpi.Value` (Screen.dpi → JNI DisplayMetrics → 200
+  fallback). Fingers.dll reads `Screen.dpi` in its Awake and falls back to
+  its serialized DefaultDPI with a red error; `FingersDpiFix` on the
+  GameController prefab's EventSystem object overrides `DeviceInfo` after
+  each scene load. The one-time red error at startup is cosmetic and cannot
+  be silenced without patching the DLL.
+- **uGUI positions on ScreenSpace-Overlay canvases are in screen pixels**;
+  any hit-test radius authored in "pixels" must be multiplied by
+  `Canvas.scaleFactor` or it shrinks physically on high-DPI screens (see
+  `SectorMapUnitSelector`).
+- **`OpenFrontier.LegacyInput` is a shim over the NEW Input System**, not
+  `UnityEngine.Input`: `Mouse.current` is null/stale on touch-only devices,
+  so `mousePosition` must mirror the primary touch (fixed in the shim —
+  keep that behaviour when migrating the remaining ~60 call sites).
+- **No Unity native calls in MonoBehaviour field initializers / static
+  constructors** (`LayerMask.NameToLayer`, `Shader.Find`, etc.): type
+  initialization can run during serialization, where native calls are
+  forbidden — the resulting `TypeInitializationException` poisons the
+  whole type (every `AddComponent` fails silently). Look them up lazily
+  in Awake/OnEnable. The harness cannot catch this; check Editor.log for
+  "is not allowed to be called from a MonoBehaviour constructor".

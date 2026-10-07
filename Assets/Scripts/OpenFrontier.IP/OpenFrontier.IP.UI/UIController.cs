@@ -52,13 +52,11 @@ namespace OpenFrontier.IP.UI
 		{
 			instance = this;
 			DockUIHeader.gameObject.SetActive(value: false);
+			// Open Frontier: the alpha watermark is retired - the main menu
+			// version text carries the (project-driven) version and alpha tag.
 			if (VersionWatermarkLabel != null)
 			{
-				VersionWatermarkLabel.enabled = Versioning.IsAlphaVersion;
-				if (Versioning.IsAlphaVersion)
-				{
-					VersionWatermarkLabel.text = $"Alpha v{Versioning.Version}";
-				}
+				VersionWatermarkLabel.enabled = false;
 			}
 		}
 

@@ -90,9 +90,12 @@ Shader "SpaceUnity/PlanetStandard" {
 				float nightMask = saturate(-ndl * 2.0);
 				half3 emission = lightsTex * _LightScale * nightMask;
 
-				// rim atmosphere
+				// rim atmosphere - Open Frontier: day/night aware (bright on
+				// the day side, essentially gone at night) instead of a
+				// uniform rim light
+				float atmoDay = smoothstep(-0.2, 0.3, ndl);
 				float fres = pow(saturate(1.0 - dot(normalWS, viewDirWS)), _AtmosFalloff);
-				half3 atmo = lerp(_AtmosFar.rgb, _AtmosNear.rgb, fres) * fres;
+				half3 atmo = lerp(_AtmosFar.rgb, _AtmosNear.rgb, fres) * fres * (atmoDay + 0.03);
 				emission += atmo;
 
 				SurfaceData surfaceData = (SurfaceData)0;
