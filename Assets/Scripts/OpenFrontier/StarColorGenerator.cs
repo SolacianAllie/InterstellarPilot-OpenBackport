@@ -10,33 +10,83 @@ namespace OpenFrontier
 	/// </summary>
 	public static class StarColorGenerator
 	{
-		// Resolves the star color for the given sector: a StarColorMarker on
-		// the sector's own object tree (a child of a scenario's Sector<name>
-		// object = that sector's hand-crafted star) wins; then a scene-wide
-		// marker; otherwise the deterministic per-sector color.
-		public static Color ResolveCurrent(int sectorUniqueId, GameObject sectorObject)
+		public struct StarColorResult
 		{
+			// The sun's visual tint.
+			public Color StarColor;
+
+			// Multiplied into the sector's (or gas cloud's) base light
+			// color. White when the author already picked a chromatic
+			// DirectionLightColor - that color IS the intended light, so
+			// tinting again would apply the hue twice.
+			public Color LightMultiplier;
+		}
+
+		// Resolves the sector's star identity, in priority order:
+		// 1. a StarColorMarker under the sector's own object (child of a
+		//    scenario's Sector<name> object = that sector's crafted star)
+		// 2. a scene-wide StarColorMarker
+		// 3. a chromatic DirectionLightColor on the Sector (an author picked
+		//    a hue; the procedural default is achromatic grey)
+		// 4. the deterministic seeded color
+		public static StarColorResult ResolveCurrent(int sectorUniqueId, GameObject sectorObject, Color sectorLightColor)
+		{
+			Color? markerColor = null;
 			if (sectorObject != null)
 			{
 				StarColorMarker componentInChildren = sectorObject.GetComponentInChildren<StarColorMarker>();
 				if (componentInChildren != null)
 				{
-					return componentInChildren.StarColor;
+					markerColor = componentInChildren.StarColor;
 				}
 			}
-			return ResolveCurrent(sectorUniqueId);
+			if (!markerColor.HasValue && StarColorMarker.ActiveMarker != null)
+			{
+				markerColor = StarColorMarker.ActiveMarker.StarColor;
+			}
+			if (markerColor.HasValue)
+			{
+				return new StarColorResult
+				{
+					StarColor = markerColor.Value,
+					LightMultiplier = markerColor.Value
+				};
+			}
+			if (IsChromatic(sectorLightColor))
+			{
+				return new StarColorResult
+				{
+					StarColor = NormalizeStarColor(sectorLightColor),
+					LightMultiplier = Color.white
+				};
+			}
+			Color color = ForSector(sectorUniqueId);
+			return new StarColorResult
+			{
+				StarColor = color,
+				LightMultiplier = color
+			};
 		}
 
-		// Resolves the star color for the current scene: a hand-placed
-		// StarColorMarker (hand-crafted universes) wins; otherwise the
-		// deterministic per-sector color (procedural universes).
-		public static Color ResolveCurrent(int sectorUniqueId)
+		// True when the value carries an actual hue (an author picked a
+		// color, not just a brightness). The sector default (0.8 grey) and
+		// brightness-only tweaks are achromatic.
+		public static bool IsChromatic(Color color)
 		{
-			if (StarColorMarker.ActiveMarker != null)
+			float num = Mathf.Max(color.r, Mathf.Max(color.g, color.b));
+			return num - Mathf.Min(color.r, Mathf.Min(color.g, color.b)) > 0.03f;
+		}
+
+		// Same hue/saturation with the brightness normalised to 1, so an
+		// author-picked light color reads as a bright star.
+		public static Color NormalizeStarColor(Color color)
+		{
+			float num = Mathf.Max(color.r, Mathf.Max(color.g, color.b));
+			if (num <= 0f)
 			{
-				return StarColorMarker.ActiveMarker.StarColor;
+				return color;
 			}
-			return ForSector(sectorUniqueId);
+			return new Color(color.r / num, color.g / num, color.b / num, 1f);
 		}
 
 		public static Color ForSector(int sectorUniqueId)

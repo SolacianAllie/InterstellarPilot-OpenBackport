@@ -278,14 +278,17 @@ namespace OpenFrontier.IP.Engine.GasClouds
 			// Open Frontier: multiply the sector's star color into the light
 			// color pipeline (this controller drives DirectionalLight.color
 			// every frame, so tinting the light anywhere else gets stomped).
-			Color starColor = StarColorGenerator.ResolveCurrent((EngineASX.Instance.ActiveSector != null) ? EngineASX.Instance.ActiveSector.UniqueId : 0, (EngineASX.Instance.ActiveSector != null) ? EngineASX.Instance.ActiveSector.gameObject : null);
+			// LightMultiplier is white when the author picked a chromatic
+			// DirectionLightColor - that color IS the intended light.
+			Color color = ((EngineASX.Instance.ActiveSector != null) ? EngineASX.Instance.ActiveSector.DirectionLightColor : Color.white);
+			StarColorGenerator.StarColorResult starColorResult = StarColorGenerator.ResolveCurrent((EngineASX.Instance.ActiveSector != null) ? EngineASX.Instance.ActiveSector.UniqueId : 0, (EngineASX.Instance.ActiveSector != null) ? EngineASX.Instance.ActiveSector.gameObject : null, color);
 			if (activeGasCloud != null)
 			{
-				return activeGasCloud.GasCloudData.DirectionLightColor * starColor;
+				return activeGasCloud.GasCloudData.DirectionLightColor * starColorResult.LightMultiplier;
 			}
 			if (EngineASX.Instance.ActiveSector != null)
 			{
-				return EngineASX.Instance.ActiveSector.DirectionLightColor * starColor;
+				return EngineASX.Instance.ActiveSector.DirectionLightColor * starColorResult.LightMultiplier;
 			}
 			return null;
 		}
