@@ -80,10 +80,14 @@ namespace OpenFrontier.IP.Engine
 			// sun tint, recaptures the reflection probe.
 			EngineASX.Instance.ActiveSectorData.OnSectorChanged();
 			SpawnGuaranteedPlanetWithMoon(sector);
-			SpawnHeroShipAndSpectate(sector);
 			PopulateMenuSystem(sector);
+			SpawnHeroShipAndSpectate(sector);
 			Debug.Log("[MainMenuWorldController] rolled menu system, seed " + num);
 		}
+
+		// The trader faction that owns the stations and traffic; the hero
+		// ship joins it so the faction AI hands it trade runs.
+		private static Faction civilianFaction;
 
 		// The MenuScreenScene's hand-placed world content - replaced by the
 		// random composition below on every visit.
@@ -102,6 +106,18 @@ namespace OpenFrontier.IP.Engine
 					list.Add(rootUnit);
 				}
 			}, (Unit e) => e.IsValidAndNotDestroyed);
+			// Menu-only: the gas clouds go too - clearer belts and a
+			// cleaner backdrop for the random system.
+			List<Unit> list2 = new List<Unit>();
+			EngineASX.Instance.EnumerateUnitsWithPredicate(delegate(Unit unit)
+			{
+				Unit rootUnit2 = unit.GetRootUnit();
+				if (rootUnit2 != null && rootUnit2.GetComponent<UnitGasCloud>() != null)
+				{
+					list2.Add(rootUnit2);
+				}
+			}, (Unit e) => e.IsValidAndNotDestroyed);
+			list.AddRange(list2);
 			foreach (Unit item in list)
 			{
 				// Notify first (fleets and AI processors drop their
@@ -148,32 +164,49 @@ namespace OpenFrontier.IP.Engine
 		}
 
 		// The menu ALWAYS has a planet, and it ALWAYS has a moon.
+		// (Mirrors CreatePlanetsSeeder's direct instantiate + Init path -
+		// SpawnUtils.SpawnUnit is for regular units and drops planets.)
 		private static void SpawnGuaranteedPlanetWithMoon(Sector sector)
 		{
 			string[] planetNames = new string[10] { "ActiveUnitPlanetAlienAshyGreen", "ActiveUnitPlanetAlienPurple", "ActiveUnitPlanetDevoidOfLife", "ActiveUnitPlanetEarthLike", "ActiveUnitPlanetEarth", "ActiveUnitPlanetFrozenTundras", "ActiveUnitPlanetJupitersCousin", "ActiveUnitPlanetOrangeWithImpacts", "ActiveUnitPlanetVolcanica", "ActiveUnitPlanetWinterWorld" };
 			Unit unitPrefab = UnityObjectHelper.Load<Unit>("Prefabs/WorldData/ActiveUnits/Environment/" + planetNames[UnityEngine.Random.Range(0, planetNames.Length)]);
 			if (unitPrefab == null)
 			{
+				Debug.LogWarning("[MainMenuWorldController] planet prefab failed to load");
 				return;
 			}
-			Unit planet = SpawnUtils.SpawnUnit(unitPrefab, sector, sector.GetRandomSectorPositionWithinGateDistance(0.5f), null);
-			Unit unitPrefab2 = UnityObjectHelper.Load<Unit>("Prefabs/WorldData/ActiveUnits/Environment/ActiveUnitMoon" + UnityEngine.Random.Range(1, 5));
-			if (planet != null && unitPrefab2 != null)
+			Unit unit = UnityObjectHelper.InstantiateAndGetComponent(unitPrefab);
+			unit.transform.SetParent(sector.transform, worldPositionStays: true);
+			unit.transform.localPosition = sector.GetRandomSectorPositionWithinGateDistance(0.5f);
+			UnitPlanet component = unit.GetComponent<UnitPlanet>();
+			if (component != null)
 			{
-				Unit unit = SpawnUtils.SpawnUnit(unitPrefab2, sector, planet.SectorPosition, null);
-				Moon component = unit.GetComponent<Moon>();
-				if (component != null)
-				{
-					component.OrbitingAroundUnit = planet;
-					float y = UnityEngine.Random.value * 360f;
-					float x = UnityEngine.Random.Range(-30f, 30f);
-					component.OffsetFromPlanet = Quaternion.Euler(x, y, 0f) * Vector3.forward * (planet.Radius * UnityEngine.Random.Range(2.5f, 4f));
-				}
+				component.Rotation = new Vector3(UnityEngine.Random.Range(-30f, 30f), UnityEngine.Random.Range(0f, 360f), 0f);
+			}
+			unit.GetComponent<Unit>().Init();
+			Unit unitPrefab2 = UnityObjectHelper.Load<Unit>("Prefabs/WorldData/ActiveUnits/Environment/ActiveUnitMoon" + UnityEngine.Random.Range(1, 5));
+			if (unitPrefab2 == null)
+			{
+				return;
+			}
+			Unit unit2 = UnityObjectHelper.InstantiateAndGetComponent(unitPrefab2);
+			Moon component2 = unit2.GetComponent<Moon>();
+			if (component2 != null)
+			{
+				component2.OrbitingAroundUnit = unit;
+				float y = UnityEngine.Random.value * 360f;
+				float x = UnityEngine.Random.Range(-30f, 30f);
+				component2.OffsetFromPlanet = Quaternion.Euler(x, y, 0f) * Vector3.forward * (unit.Radius * UnityEngine.Random.Range(2.5f, 4f));
+				unit2.GetComponent<Unit>().Init(autoFindParents: false);
+				unit2.Sector = sector;
 			}
 		}
 
 		// The camera's opening view: a random ship from the whole pool, so
-		// over time the menu shows off every ship class in the game.
+		// over time the menu shows off every ship class in the game. It
+		// joins the trader faction as a fleet of one, so the faction AI
+		// gives it the old shuttle's life: exploring the system and
+		// periodically docking at stations.
 		private static void SpawnHeroShipAndSpectate(Sector sector)
 		{
 			var list = GameController.Instance.LoadedUnitClasses.Where((UnitClass e) => e.IsUsable && e.UnitType == UnitType.Ship).ToList();
@@ -181,10 +214,17 @@ namespace OpenFrontier.IP.Engine
 			{
 				return;
 			}
-			Unit unit = SpawnUtils.SpawnUnit(list[UnityEngine.Random.Range(0, list.Count)].UnitPrefab, sector, sector.GetRandomSectorPositionWithinGateDistance(0.3f), null);
-			if (unit != null && EngineASX.Instance.World != null)
+			Unit unit = SpawnUtils.SpawnUnit(list[UnityEngine.Random.Range(0, list.Count)].UnitPrefab, sector, sector.GetRandomSectorPositionWithinGateDistance(0.3f), civilianFaction);
+			if (unit != null)
 			{
-				EngineASX.Instance.World.Engine.CameraStartSpectateUnit(unit, allowFlyby: true, allowViewport: false, allowOrbit: true);
+				if (civilianFaction != null)
+				{
+					SpawnUtils.SpawnGenericFleetWithUnits(civilianFaction, new List<Unit> { unit });
+				}
+				if (EngineASX.Instance.World != null)
+				{
+					EngineASX.Instance.World.Engine.CameraStartSpectateUnit(unit, allowFlyby: true, allowViewport: false, allowOrbit: true);
+				}
 			}
 		}
 
@@ -197,7 +237,8 @@ namespace OpenFrontier.IP.Engine
 				return;
 			}
 			// 2-3 civilian stations: trade hubs and task targets.
-			Faction civilian = CreateAIFaction(FactionType.Trader);
+			civilianFaction = CreateAIFaction(FactionType.Trader);
+			Faction civilian = civilianFaction;
 			var list = GameController.Instance.LoadedUnitClasses.Where((UnitClass e) => e.IsUsable && e.UnitType == UnitType.Station && e.SeedInSandbox && e.StationPurpose != StationPurpose.SectorControl).ToList();
 			int num = UnityEngine.Random.Range(2, 4);
 			for (int i = 0; i < num && list.Count > 0; i++)
