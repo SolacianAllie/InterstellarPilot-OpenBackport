@@ -714,6 +714,16 @@ namespace OpenFrontier.IP.Discord
 			int shipCount = CountShips(player);
 			int fleetCount = player != null && player.Fleets != null ? player.Fleets.Count : 0;
 
+			// Docked is a state, not a fact, so it leads the deck and
+			// the icon beside it already shows what you're inside.
+			// The player's own unit carries the flag - the station or
+			// carrier hosting them isn't itself docked.
+			if (ship != null && ship.IsDocked)
+			{
+				presenceCards.Add(new PresenceCard(
+					"Docked", BuildStateLine(sector, player, shipCount)));
+			}
+
 			// What the player is carrying. (The unit itself is the
 			// small image and its tooltip - the text never names it.)
 			AddCargoCards(ship);
