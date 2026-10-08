@@ -490,11 +490,37 @@ namespace OpenFrontier.IP.Engine
 			{
 				return;
 			}
-			Unit unit = SpawnUtils.SpawnUnit(list[UnityEngine.Random.Range(0, list.Count)].UnitPrefab, sector, sector.GetRandomSectorPositionWithinGateDistance(0.3f), civilianFaction);
+			// Spawn out in the deep black: sample candidates on the
+			// sector's outer rim and keep the one farthest from any
+			// station, so the hero ship has to FLY IN before it can
+			// work. Its faction gets a few million credits of working
+			// capital for the trip.
+			Vector3 vector = sector.GetRandomSectorPositionWithinGateDistance(0.9f);
+			float num = 0f;
+			List<Unit> list2 = sector.GetUnitsByType(UnitType.Station);
+			for (int i = 0; i < 6; i++)
+			{
+				Vector3 vector2 = Geometry.RandomXZUnitVector() * (sector.GetActualGateDistance() * UnityEngine.Random.Range(0.85f, 1.15f));
+				float num2 = float.MaxValue;
+				if (list2 != null)
+				{
+					foreach (Unit item in list2)
+					{
+						num2 = Mathf.Min(num2, Vector3.Distance(vector2, item.SectorPosition));
+					}
+				}
+				if (num2 > num)
+				{
+					num = num2;
+					vector = vector2;
+				}
+			}
+			Unit unit = SpawnUtils.SpawnUnit(list[UnityEngine.Random.Range(0, list.Count)].UnitPrefab, sector, vector, civilianFaction);
 			if (unit != null)
 			{
 				if (civilianFaction != null)
 				{
+					civilianFaction.Credits += UnityEngine.Random.Range(2000000, 5000001);
 					SpawnUtils.SpawnGenericFleetWithUnits(civilianFaction, new List<Unit> { unit });
 				}
 				if (EngineASX.Instance.World != null)
