@@ -84,14 +84,25 @@ camera into it:
   camera can actually see it.
 - Asteroid belts most visits, filled with REAL mineable rocks -
   and a refinery parked nearby so the miners have somewhere to
-  sell. Every cluster gets its own miner fleet.
+  sell. Every rock gets 1-2 miners flying in from the belt's
+  edge, so the gold rush starts staggered, not all at once.
+  The decorative rocks in belts now slowly tumble, and some
+  belts are dusty while others stay clean.
 - Twenty station types, one of each, spread around the system -
-  every station with its own faction, its own trade fleet, and
-  sometimes a security patrol. Everyone's friendly (mostly).
-  Sometimes bandits show up. When they do, EVERYONE notices.
-- The camera got curious: it now jumps around the system on its
+  every station with its own faction, STOCKED shelves and a
+  trade fleet running real routes that loop forever. Factions
+  occasionally build NEW stations of their own, security
+  patrols form organically, everyone's friendly (mostly), and
+  sometimes bandits show up. When they do, EVERYONE notices.
+- The opening shot follows a lone hero ship spawning out on
+  the rim with a few million credits to its faction's name -
+  it has to fly in before it can work.
+- The camera got curious: it jumps around the system on its
   own, preferring ships that are actually DOING something -
-  mining, trading, fighting - over parked ones.
+  mining, trading, fighting - over parked ones. Swaps hide
+  behind a quick black fade, the camera holds each target for
+  a proper dwell, and its orbit eases smoothly instead of
+  lurching, with pitch locked to a tidy band.
 - The menu's star system is now its own dedicated sector asset,
   fully decoupled from anything the battle scenarios use.
 
@@ -139,6 +150,12 @@ the sun it sees is clamped to sane brightness. Ships look like ships
 again.
 THIS TOOK SEVERAL FUCKING HOURS TO FIND AND I SKIPPED ON SLEEP X3
 
+PLOT TWIST: it came back one more time, and the TRUE final
+culprit surfaced: the sun core material's color was serialized
+at 1.27e+30 - an infinity-adjacent value nuking every capture
+the probe ever took. Now clamped to sane values (core 2, glow 1)
+and the probe's HDR capture is safely back ON.
+
 Other notable things
 ------------------------------------------------------------
 - The loading screen picks a random unit thumbnail every time
@@ -160,6 +177,25 @@ Other notable things
 - The godmode sun slider's minimum brightness is now 1, matching
   the generator (no more accidentally dim stars).
 - 32-bit and 64-bit builds verified for Android and Windows.
+- Decorative belt rocks slowly tumble - each rock its own random
+  axis, speed scaled by size (2-10 deg/s).
+- Universe generation: about 2 in 3 asteroid belts are dust-free
+  BY DESIGN (new dust-free belt variants), dusty types roll
+  per-belt - and the sandbox "Asteroid Dust Clouds" slider now
+  only affects dusty types.
+- Story scenarios (Uncharted Space & co): sectors with several
+  hand-placed gas clouds trimmed to one each.
+- Menu belts keep a minimum separation - the same rule custom
+  universes already used. No more fused double belts.
+- Fixed a ghost of the old menu diorama: three leftover station
+  hulks that registered as traders without ever initializing,
+  crashing the menu's economy seeding.
+- Universe generation hardened: one bad station's cargo seeding
+  can no longer abort the whole seeding pipeline.
+- Fixed menu NPCs idling forever: the "assign strategies" pass
+  never actually ran (a null check against a non-nullable enum).
+  Strategy-less fleets now get real work - trade runs, mining,
+  patrols, even station construction.
 
 
 ## NOTICE FOR MIGRATING PLAYERS FROM IP2:
