@@ -111,15 +111,20 @@ namespace OpenFrontier.IP
 				// feeds bloom), gone in 0.4s.
 				color = new Color(2f, 0.05f, 0.05f, num2);
 			}
+			else if (num < 0.06f)
+			{
+				// Phase 1: a very brief WHITE impact flash (~0.12s),
+				// only mildly HDR - a stronger pulse overdrives the
+				// additive shader into white through the whole effect.
+				color = new Color(1.4f, 1.4f, 1.4f, num2);
+			}
 			else
 			{
-				// LIVE health color, exactly like the UI widgets read it
-				// (no snapshot: damage lands before the effect request,
-				// so a snapshot is always one hit stale). An HDR pulse
-				// (1.8x -> 1x over the life) makes the impact flash.
+				// Phase 2: the section's LIVE health color, exactly as
+				// the UI widgets read it - no brightness overdrive, so
+				// the shield shows its true health color.
 				Color unitShieldColor = EngineASX.Instance.GetUnitShieldColor(hitInfo.TargetUnit, hitInfo.ShieldIndex);
-				float num3 = 1f + 0.8f * (1f - num);
-				color = new Color(unitShieldColor.r * num3, unitShieldColor.g * num3, unitShieldColor.b * num3, num2);
+				color = new Color(unitShieldColor.r, unitShieldColor.g, unitShieldColor.b, num2);
 			}
 			// The runtime shader is Legacy Particles/Additive: it tints
 			// via _TintColor (NOT _Color or _BaseColor).
