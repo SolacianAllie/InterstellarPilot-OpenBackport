@@ -324,10 +324,13 @@ namespace OpenFrontier.IP.Engine
 
 		private void UpdateShieldImpact()
 		{
-			if (lastShieldHitInfo != null)
-			{
-				lastShieldHitInfo.StartExpiryTime = Time.time;
-			}
+			// Open Frontier: the stock behavior reset the shield hit
+			// effect's StartExpiryTime every frame the beam held,
+			// pinning the envelope at t=0 (a permanent white flicker
+			// while lased) - and once the effect died and its pool slot
+			// was reused, this stale reference restarted OTHER effects'
+			// timers. The flash now plays its full envelope once per
+			// contact; the beam's own visual carries the sustained glow.
 		}
 
 		private void CreateImpactParticles()
