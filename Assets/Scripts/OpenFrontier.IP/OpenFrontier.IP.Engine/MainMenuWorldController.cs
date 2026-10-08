@@ -114,37 +114,37 @@ namespace OpenFrontier.IP.Engine
 					array[i] = array[num3];
 					array[num3] = nebulaColour;
 				}
-				// Rarity ladder (cumulative): >=1 always, >=2 70%,
-				// >=3 50%, >=4 35%, >=5 25%, >=6 18%, >=7 13%, all 8
-				// (rainbow) 10%. Exact: 1=30 2=20 3=15 4=10 5=7 6=5
-				// 7=3 8=10.
+				// Even rarity ladder: cumulative P(>=N) drops linearly
+				// from 100% (N=1) to 10% (N=8) - 12.86% per step, so
+				// every exact count 1-7 lands at ~12.9% and the rainbow
+				// stays the 10% jackpot.
 				float value = UnityEngine.Random.value;
 				int num4;
 				if (value < 0.1f)
 				{
 					num4 = 8;
 				}
-				else if (value < 0.13f)
+				else if (value < 0.2286f)
 				{
 					num4 = 7;
 				}
-				else if (value < 0.18f)
+				else if (value < 0.3571f)
 				{
 					num4 = 6;
 				}
-				else if (value < 0.25f)
+				else if (value < 0.4857f)
 				{
 					num4 = 5;
 				}
-				else if (value < 0.35f)
+				else if (value < 0.6143f)
 				{
 					num4 = 4;
 				}
-				else if (value < 0.5f)
+				else if (value < 0.7429f)
 				{
 					num4 = 3;
 				}
-				else if (value < 0.7f)
+				else if (value < 0.8714f)
 				{
 					num4 = 2;
 				}
