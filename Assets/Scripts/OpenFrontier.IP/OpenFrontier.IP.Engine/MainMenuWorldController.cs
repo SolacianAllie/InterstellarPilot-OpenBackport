@@ -98,10 +98,15 @@ namespace OpenFrontier.IP.Engine
 		private System.Collections.IEnumerator WarmUpWorld()
 		{
 			float timeScale = Time.timeScale;
+			float volume = AudioListener.volume;
 			WarmUpInProgress = true;
+			// Mute while the world fast-forwards - engines, AI and combat
+			// sounds shouldn't leak out before the reveal.
+			AudioListener.volume = 0f;
 			Time.timeScale = 12f;
 			yield return new WaitForSecondsRealtime(2.5f);
 			Time.timeScale = timeScale;
+			AudioListener.volume = volume;
 			WarmUpInProgress = false;
 		}
 

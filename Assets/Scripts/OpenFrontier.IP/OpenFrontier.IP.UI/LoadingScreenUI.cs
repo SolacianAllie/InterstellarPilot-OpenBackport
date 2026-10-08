@@ -45,7 +45,10 @@ namespace OpenFrontier.IP.UI
 				isDestroying = true;
 				Object.Destroy(gameObject);
 			}
-			LoadingWidget.gameObject.SetActive(EngineASX.IsLoading);
+			// Keep the full loading visuals (text + backdrop) up for the
+			// warm-up too - without this the widget vanishes and the
+			// screen reads as plain black until the burst ends.
+			LoadingWidget.gameObject.SetActive(EngineASX.IsLoading || MainMenuWorldController.WarmUpInProgress);
 		}
 	}
 }
