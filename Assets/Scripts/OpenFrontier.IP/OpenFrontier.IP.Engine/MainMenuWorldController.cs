@@ -77,7 +77,7 @@ namespace OpenFrontier.IP.Engine
 			// stations/ships/planet/shuttle/clusters go, everything comes
 			// back randomly below.
 			ClearPresetMenuContent();
-			RandomizeAsteroidClusterTypes(sector);
+			SpawnAsteroidClusters(sector);
 			// Applies everything: regenerates the backdrop, refreshes the
 			// sun tint, recaptures the reflection probe.
 			EngineASX.Instance.ActiveSectorData.OnSectorChanged();
@@ -103,7 +103,7 @@ namespace OpenFrontier.IP.Engine
 			EngineASX.Instance.EnumerateUnitsWithPredicate(delegate(Unit unit)
 			{
 				Unit rootUnit = unit.GetRootUnit();
-				if (rootUnit != null && System.Array.IndexOf(PresetUnitNames, rootUnit.gameObject.name) >= 0)
+				if (rootUnit != null && (System.Array.IndexOf(PresetUnitNames, rootUnit.gameObject.name) >= 0 || rootUnit.UnitType == UnitType.AsteroidCluster))
 				{
 					list.Add(rootUnit);
 				}
@@ -147,21 +147,25 @@ namespace OpenFrontier.IP.Engine
 			}
 		}
 
-		private static void RandomizeAsteroidClusterTypes(Sector sector)
+		// Fresh belts every visit (1-2, no gas clouds in the menu), so the
+		// sector always has at least one.
+		private static void SpawnAsteroidClusters(Sector sector)
 		{
 			AsteroidType[] array = Resources.LoadAll<AsteroidType>("Prefabs/WorldData/AsteroidTypes");
-			List<Unit> unitsByType = sector.GetUnitsByType(UnitType.AsteroidCluster);
-			if (array.Length == 0 || unitsByType == null)
+			if (array.Length == 0)
 			{
 				return;
 			}
-			foreach (Unit item in unitsByType)
+			int num = UnityEngine.Random.Range(1, 3);
+			for (int i = 0; i < num; i++)
 			{
-				AsteroidCluster component = item.GetComponent<AsteroidCluster>();
-				if (component != null)
-				{
-					component.AsteroidType = array[UnityEngine.Random.Range(0, array.Length)];
-				}
+				AsteroidType asteroidType = array[UnityEngine.Random.Range(0, array.Length)];
+				AsteroidCluster asteroidClusterPrefab = asteroidType.AsteroidClusterPrefabs[UnityEngine.Random.Range(0, asteroidType.AsteroidClusterPrefabs.Count)];
+				AsteroidCluster asteroidCluster = UnityObjectHelper.InstantiateAndGetComponent(asteroidClusterPrefab);
+				asteroidCluster.Unit.Radius = UnityEngine.Random.Range(2500f, 4000f);
+				asteroidCluster.transform.SetParent(sector.transform, worldPositionStays: true);
+				asteroidCluster.transform.localPosition = sector.GetRandomSectorPositionWithinGateDistance(0.75f);
+				asteroidCluster.GetComponent<Unit>().Init();
 			}
 		}
 
@@ -245,24 +249,32 @@ namespace OpenFrontier.IP.Engine
 			{
 				return;
 			}
-			// 2-3 civilian stations: trade hubs and task targets.
+			// 2-3 stations, EACH with its own faction - factions trading
+			// with each other is what makes the system feel alive.
 			civilianFaction = CreateAIFaction(FactionType.Trader);
-			Faction civilian = civilianFaction;
 			var list = GameController.Instance.LoadedUnitClasses.Where((UnitClass e) => e.IsUsable && e.UnitType == UnitType.Station && e.SeedInSandbox && e.StationPurpose != StationPurpose.SectorControl).ToList();
+			List<Faction> list2 = new List<Faction>();
 			int num = UnityEngine.Random.Range(2, 4);
 			for (int i = 0; i < num && list.Count > 0; i++)
 			{
-				SpawnUtils.SpawnUnit(list[UnityEngine.Random.Range(0, list.Count)].UnitPrefab, sector, sector.GetRandomSectorPositionWithinGateDistance(0.75f), civilian);
+				Faction faction = ((i == 0) ? civilianFaction : CreateAIFaction(FactionType.Trader));
+				if (faction != null)
+				{
+					list2.Add(faction);
+				}
+				SpawnUtils.SpawnUnit(list[UnityEngine.Random.Range(0, list.Count)].UnitPrefab, sector, sector.GetRandomSectorPositionWithinGateDistance(0.75f), faction);
 			}
-			// Trader traffic between the stations.
-			if (civilian != null)
+			// Trader traffic between the stations, with strategies assigned
+			// at creation so fleets get to work immediately.
+			foreach (Faction item in list2)
 			{
-				int num2 = UnityEngine.Random.Range(2, 4);
+				int num2 = UnityEngine.Random.Range(1, 3);
 				for (int j = 0; j < num2; j++)
 				{
-					SpawnUtils.SpawnFleetWithSmallUnits(civilian, sector, sector.GetRandomSectorPositionWithinGateDistance(0.75f), UnityEngine.Random.Range(3, 6));
+					SpawnUtils.SpawnFleetWithSmallUnits(item, sector, sector.GetRandomSectorPositionWithinGateDistance(0.75f), UnityEngine.Random.Range(3, 6));
 				}
 			}
+			AssignStrategiesToIdleFleets();
 			// Miners working the clusters.
 			Faction faction = CreateAIFaction(FactionType.Miner);
 			if (faction != null)
@@ -284,6 +296,27 @@ namespace OpenFrontier.IP.Engine
 			if (UnityEngine.Random.value < 0.4f)
 			{
 				SpawnUtils.SpawnBanditHordesAtSectorPosition(sector, sector.GetRandomSectorPositionWithinGateDistance(0.75f), 1, 2);
+			}
+		}
+
+		// The "ships sitting around doing nothing" fix: generic fleets
+		// spawn strategy-less and wait for the AI's periodic idle pass -
+		// assign strategies at creation so everyone works immediately.
+		private static void AssignStrategiesToIdleFleets()
+		{
+			foreach (Faction faction in EngineASX.Instance.Factions)
+			{
+				if (faction.FactionAI == null)
+				{
+					continue;
+				}
+				foreach (Fleet fleet in faction.Fleets)
+				{
+					if (fleet != null && fleet.FleetStrategy == null)
+					{
+						fleet.FleetStrategy = FactionAIStrategyModule.GetBestStrategyForFleet(fleet, faction.FactionAI);
+					}
+				}
 			}
 		}
 
