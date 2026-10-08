@@ -257,6 +257,17 @@ namespace OpenFrontier.IP.Engine
 				return list;
 			}
 			int num = UnityEngine.Random.Range(1, 3);
+			// Mirror the sandbox generator's spacing rule (same settings
+			// source, CreateAsteroidClustersSeeder): a new belt's edge must
+			// clear every placed belt's edge by MinDistanceBetweenAsteroidClusters.
+			// The menu used to place blind, so two 4000-radius belts could
+			// land on top of each other.
+			float num2 = 400f;
+			CreateAsteroidClustersSeederSettings createAsteroidClustersSeederSettings = GameController.Instance.GameSettings.DefaultWorldSeedSettings.CreateAsteroidClustersSeederSettings;
+			if (createAsteroidClustersSeederSettings != null)
+			{
+				num2 = createAsteroidClustersSeederSettings.MinDistanceBetweenAsteroidClusters;
+			}
 			for (int i = 0; i < num; i++)
 			{
 				AsteroidType asteroidType = array[UnityEngine.Random.Range(0, array.Length)];
@@ -264,7 +275,24 @@ namespace OpenFrontier.IP.Engine
 				AsteroidCluster asteroidCluster = UnityObjectHelper.InstantiateAndGetComponent(asteroidClusterPrefab);
 				asteroidCluster.Unit.Radius = UnityEngine.Random.Range(2500f, 4000f);
 				asteroidCluster.transform.SetParent(sector.transform, worldPositionStays: true);
-				asteroidCluster.transform.localPosition = sector.GetRandomSectorPositionWithinGateDistance(0.75f);
+				Vector3 localPosition = sector.GetRandomSectorPositionWithinGateDistance(0.75f);
+				int j = 0;
+				for (; j < 6; j++)
+				{
+					if (!list.Any((AsteroidCluster e) => Vector3.Distance(e.Unit.SectorPosition, localPosition) < num2 + e.Unit.Radius + asteroidCluster.Unit.Radius))
+					{
+						break;
+					}
+					localPosition = sector.GetRandomSectorPositionWithinGateDistance(0.75f);
+				}
+				if (j == 6)
+				{
+					// No clear spot in 6 tries (sandbox seeder behaviour):
+					// drop this belt rather than overlap a placed one.
+					Object.Destroy(asteroidCluster.gameObject);
+					continue;
+				}
+				asteroidCluster.transform.localPosition = localPosition;
 				asteroidCluster.GetComponent<Unit>().Init();
 				SeedRealAsteroids(asteroidCluster);
 				list.Add(asteroidCluster);
