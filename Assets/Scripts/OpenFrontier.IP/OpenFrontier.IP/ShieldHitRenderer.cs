@@ -81,8 +81,11 @@ namespace OpenFrontier.IP
 
 		// Shared property block: the shield hit shader tints via
 		// _BaseColor (material.color's _Color is unused by it), and a
-		// block avoids per-frame material instancing.
-		private static readonly MaterialPropertyBlock ShieldHitPropertyBlock = new MaterialPropertyBlock();
+		// block avoids per-frame material instancing. Lazy-created:
+		// 'new MaterialPropertyBlock()' is a native call, forbidden in
+		// field initializers (TypeInitializationException poisons the
+		// whole type).
+		private static MaterialPropertyBlock shieldHitPropertyBlock;
 
 		private void UpdateShieldHitMaterial(ShieldHitInfo hitInfo, float expiryTime)
 		{
@@ -93,8 +96,12 @@ namespace OpenFrontier.IP
 			float num2 = (1f - Mathf.Clamp01(num / ShieldScaleDuration)) * hitInfo.MaxScale;
 			hitInfo.transform.localScale = new Vector3(num2, num2, num2);
 			// Snapshot tint from impact time + the stock alpha fade.
-			ShieldHitPropertyBlock.SetColor("_BaseColor", new Color(hitInfo.HitColor.r, hitInfo.HitColor.g, hitInfo.HitColor.b, a));
-			hitInfo.Renderer.SetPropertyBlock(ShieldHitPropertyBlock);
+			if (shieldHitPropertyBlock == null)
+			{
+				shieldHitPropertyBlock = new MaterialPropertyBlock();
+			}
+			shieldHitPropertyBlock.SetColor("_BaseColor", new Color(hitInfo.HitColor.r, hitInfo.HitColor.g, hitInfo.HitColor.b, a));
+			hitInfo.Renderer.SetPropertyBlock(shieldHitPropertyBlock);
 		}
 
 		private ShieldHitInfo GetPooledShieldHit()

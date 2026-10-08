@@ -63,6 +63,13 @@ exit 198) — the user performs all editor actions.
   (4096), while an unrelated setting (`m_PrefilterSoftShadows`) silently
   reverted. After play sessions, diff `Assets/Settings/OpenFrontier-URP.asset`
   before committing — accept intentional drift, restore the rest.
+- **No Unity native calls in MonoBehaviour field initializers / static
+  constructors** (`new MaterialPropertyBlock()`, `LayerMask.NameToLayer`,
+  etc.): `CreateImpl is not allowed to be called from a MonoBehaviour
+  constructor` → `TypeInitializationException` poisons the WHOLE type
+  (every use throws). Lazy-init with a null check instead
+  (`ShieldHitRenderer` was bitten — shield hits errored and rendered
+  white/black).
 - **URP material postprocessor strips hand-edited YAML** for materials whose
   shader has a known URP ShaderID. Recreate those materials natively via the
   `Material` API; never hand-edit their YAML.
