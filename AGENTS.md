@@ -109,7 +109,9 @@ exit 198) — the user performs all editor actions.
   types (`UniversalRenderPipelineAsset`, etc.) MUST live in the OpenFrontier
   assembly. The harness links every package into every csproj, so a missing
   asmdef reference passes the harness and fails in the editor with CS0234
-  (`ShadowQualitySync` was bitten by this).
+  (`ShadowQualitySync` was bitten by this). The Core RP assembly
+  (`Unity.RenderPipelines.Core.Runtime`, home of `Volume`/`VolumeProfile`)
+  is referenced separately — `PostProcessingQualitySync` needed it added.
 - **uGUI positions on ScreenSpace-Overlay canvases are in screen pixels**;
   any hit-test radius authored in "pixels" must be multiplied by
   `Canvas.scaleFactor` or it shrinks physically on high-DPI screens (see
