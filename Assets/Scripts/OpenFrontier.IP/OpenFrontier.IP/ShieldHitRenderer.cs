@@ -73,9 +73,8 @@ namespace OpenFrontier.IP
 						shieldHitInfo.StartExpiryTime = Time.time;
 						shieldHitInfo.DepletedFlash = unit.Components != null && unit.Components.ShieldComponent != null && unit.Components.ShieldComponent.GetShieldPointNormalized(shieldIndex) <= 0f;
 						shieldHitInfo.Duration = (shieldHitInfo.DepletedFlash ? 0.25f : 5f);
-						// Repeat hit while the visual lives: flash only,
-						// no re-scaling.
-						shieldHitInfo.ScaleIn = false;
+						// Repeat hit while the visual lives: flash only -
+						// the scale-in keeps running off its own clock.
 						return shieldHitInfo;
 					}
 				}
@@ -99,8 +98,9 @@ namespace OpenFrontier.IP
 					// 5s envelope: flash choreography up front, then
 					// the health color lingers and slowly fades.
 					pooledShieldHit.Duration = (pooledShieldHit.DepletedFlash ? 0.25f : 5f);
-					// Fresh spawn = scale-in from 0; resets keep size.
-					pooledShieldHit.ScaleIn = true;
+					// Fresh spawn = scale-in from 0 on its own clock;
+					// envelope resets never touch it.
+					pooledShieldHit.ScaleInStartTime = Time.time;
 					// Cache the instanced material once per pooled object -
 					// the property block tint never reached the shader on
 					// this stack, so the color is set directly on it.
@@ -153,14 +153,16 @@ namespace OpenFrontier.IP
 			float num2 = Time.time - hitInfo.StartExpiryTime;
 			hitInfo.transform.position = hitInfo.TargetUnit.transform.TransformPoint(hitInfo.LocalTranslation);
 			hitInfo.transform.rotation = hitInfo.TargetUnit.transform.rotation * hitInfo.LocalRotation;
-			// Scale: grow from 0 to full over the first 0.5s on a fresh
-			// spawn (ScaleIn) - quadratic ease-out: fast linear start,
-			// decelerating into full size. Resets keep full size.
+			// Scale: grow from 0 to full over 0.25s on a fresh spawn -
+			// quadratic ease-out: fast start, decelerating into full
+			// size. Runs off the spawn clock, so envelope resets
+			// (repeat hits) can't snap or restart it.
 			float num5 = hitInfo.MaxScale;
-			if (hitInfo.ScaleIn && num2 < 0.5f)
+			float num6 = Time.time - hitInfo.ScaleInStartTime;
+			if (num6 < 0.25f)
 			{
-				float num6 = num2 / 0.5f;
-				num5 = hitInfo.MaxScale * (1f - (1f - num6) * (1f - num6));
+				float num7 = num6 / 0.25f;
+				num5 = hitInfo.MaxScale * (1f - (1f - num7) * (1f - num7));
 			}
 			hitInfo.transform.localScale = new Vector3(num5, num5, num5);
 			Color color;
