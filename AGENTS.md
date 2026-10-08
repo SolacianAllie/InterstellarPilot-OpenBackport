@@ -39,12 +39,12 @@ exit 198) — the user performs all editor actions.
   clips into the skybox", worse at 1.6× size). All 338 nebula materials
   are now queue 2999 — the sun always draws after the backdrop, while
   gameplay particles (3000) still distance-sort over it correctly.
-- **Mipmap streaming renders textures at their smallest mip IN THE
-  LINUX EDITOR on this OpenGL stack** (ships read as flat grey, blown
-  to white by sun+bloom). Mipmaps themselves are fine. Streaming is
-  currently ON because the user is testing whether DEVICE builds
-  behave differently — if it stays editor-only-broken, gate it:
-  `QualitySettings.streamingMipmapsActive = Application.isEditor ? false : true`.
+- **Mipmap streaming: reduction depth washes ships out, not streaming
+  itself.** With maxLevelReduction 2-3 + tight budgets, texture-heavy
+  scenes (Instant Action's capital fleets) render hulls at quarter/
+  eighth res = "white ships" (user-verified: 4096MB/0-reduction is
+  clean). Final config: reduction capped at 1 everywhere (worst case
+  half-res), budgets 768-2048MB by tier. Mipmaps themselves are fine.
 - **Script GUIDs are deterministic:** `Guid(MD5(assemblyName + namespace + className))`
   (AssetRipper decompile scheme). Never regenerate .meta files; renaming
   namespaces/assemblies is safe because GUIDs live in the .meta files, but the
