@@ -51,6 +51,6 @@ MonoBehaviour:
   - {fileID: 114618682377417806, guid: 8cd4f47dcdc1ff94e8da9af0322664ba, type: 2}
   AsteroidClusterPrefabs:
   - {fileID: 114618682377417806, guid: a88b863c980d31349a6bd873627a53d6, type: 2}
-  PreferredWeighting: 2
+  PreferredWeighting: 1
   GasCloudPrefabs:
   - {fileID: 114724804207875695, guid: 57ce071503fbdfd45a6a2bc9fb672228, type: 2}
