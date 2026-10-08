@@ -257,12 +257,12 @@ namespace OpenFrontier.IP.Engine
 			int num = UnityEngine.Random.Range(2, 4);
 			for (int i = 0; i < num && list.Count > 0; i++)
 			{
-				Faction faction = ((i == 0) ? civilianFaction : CreateAIFaction(FactionType.Trader));
-				if (faction != null)
+				Faction stationFaction = ((i == 0) ? civilianFaction : CreateAIFaction(FactionType.Trader));
+				if (stationFaction != null)
 				{
-					list2.Add(faction);
+					list2.Add(stationFaction);
 				}
-				SpawnUtils.SpawnUnit(list[UnityEngine.Random.Range(0, list.Count)].UnitPrefab, sector, sector.GetRandomSectorPositionWithinGateDistance(0.75f), faction);
+				SpawnUtils.SpawnUnit(list[UnityEngine.Random.Range(0, list.Count)].UnitPrefab, sector, sector.GetRandomSectorPositionWithinGateDistance(0.75f), stationFaction);
 			}
 			// Trader traffic between the stations, with strategies assigned
 			// at creation so fleets get to work immediately.
