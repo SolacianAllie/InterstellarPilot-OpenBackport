@@ -4,6 +4,7 @@ using UnityEngine;
 using Discord.Sdk;
 using OpenFrontier.IP.Engine;
 using OpenFrontier.IP.Engine.Factions;
+using OpenFrontier.IP.Engine.UnitComponents;
 
 namespace OpenFrontier.IP.Discord
 {
@@ -704,9 +705,9 @@ namespace OpenFrontier.IP.Discord
 			int shipCount = CountShips(player);
 			int fleetCount = player != null && player.Fleets != null ? player.Fleets.Count : 0;
 
-			// The ship card - who you are right now.
-			presenceCards.Add(new PresenceCard(BuildShipLine(ship),
-				BuildStateLine(sector, player, shipCount)));
+			// What the player is carrying. (The unit itself is the
+			// small image and its tooltip - the text never names it.)
+			AddCargoCard(ship);
 
 			// Where you are, and how friendly the neighbourhood is.
 			if (sector != null)
@@ -747,6 +748,20 @@ namespace OpenFrontier.IP.Discord
 					sector.Name + " surveyed", sector.Description));
 			}
 
+			// How much of the universe the faction has mapped.
+			if (player != null && player.Intel != null && engine != null && engine.Sectors != null)
+			{
+				int charted = player.Intel.DiscoveredScenesCount;
+				int total = engine.Sectors.Count;
+				if (charted > 0 && total > 0)
+				{
+					presenceCards.Add(new PresenceCard(
+						charted.ToString("N0") + " sectors charted",
+						"of " + total.ToString("N0") + " in the universe - "
+							+ (charted * 100 / total) + "% explored"));
+				}
+			}
+
 			// Finally the scenario itself.
 			if (!string.IsNullOrEmpty(scenarioTitle))
 			{
@@ -766,6 +781,45 @@ namespace OpenFrontier.IP.Discord
 				presenceCards[i].Details = Truncate(presenceCards[i].Details);
 				presenceCards[i].State = Truncate(presenceCards[i].State);
 			}
+		}
+
+		/// <summary>
+		/// What the player is hauling: total units and the top cargo
+		/// types. Skipped entirely for an empty hold.
+		/// </summary>
+		private void AddCargoCard(Unit ship)
+		{
+			if (ship == null || !ship.IsValidAndNotDestroyed || ship.Components == null)
+			{
+				return;
+			}
+			CargoBayComponent cargoBay = ship.Components.CargoBayComponent;
+			if (cargoBay == null || cargoBay.DistintCount == 0)
+			{
+				return;
+			}
+			int total = 0;
+			var top = new List<KeyValuePair<CargoClass, int>>();
+			foreach (KeyValuePair<CargoClass, int> entry in cargoBay.Cargos)
+			{
+				total += entry.Value;
+				top.Add(entry);
+			}
+			if (total <= 0)
+			{
+				return;
+			}
+			top.Sort((a, b) => b.Value.CompareTo(a.Value));
+			var names = new List<string>();
+			for (int i = 0; i < top.Count && i < 3; i++)
+			{
+				string cargoName = top[i].Key != null ? top[i].Key.ClassName : null;
+				names.Add(string.IsNullOrEmpty(cargoName) ? top[i].Key.ShortName : cargoName);
+			}
+			presenceCards.Add(new PresenceCard(
+				"Hauling " + total.ToString("N0") + " units",
+				cargoBay.DistintCount + " cargo type" + (cargoBay.DistintCount == 1 ? "" : "s")
+					+ " - " + string.Join(", ", names)));
 		}
 
 		private static string SecurityLabel(Sector sector)
@@ -872,25 +926,6 @@ namespace OpenFrontier.IP.Discord
 			{
 				assets.SetSmallText(tooltip);
 			}
-		}
-
-		/// <summary>
-		/// Details line: what the player is flying. A docked ship
-		/// reads as such rather than pretending to fly.
-		/// </summary>
-		/// <summary>
-		/// Details line: the class of whatever the player is flying
-		/// or manning. The unit's NAME deliberately stays out of the
-		/// text - the small image and its tooltip already carry it,
-		/// and the text half is reserved for rotating information.
-		/// </summary>
-		private static string BuildShipLine(Unit ship)
-		{
-			if (ship == null || !ship.IsValidAndNotDestroyed)
-			{
-				return "In flight";
-			}
-			return ship.IsDocked ? "Docked" : ship.GetClassAndSeriesName(false);
 		}
 
 		/// <summary>
