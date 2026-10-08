@@ -605,6 +605,18 @@ namespace OpenFrontier.IP.Engine
 			{
 				SpawnUtils.SpawnBanditHordesAtSectorPosition(sector, sector.GetRandomSectorPositionWithinGateDistance(0.75f), 1, 2);
 			}
+			// Stock the shelves: menu stations spawn AFTER world seeding,
+			// so they miss WorldTraderCargoSeeder and open with EMPTY
+			// cargo bays - no sellable stock = no trade routes = traders
+			// "finding trade route" forever. Run the stock pipeline's fill.
+			WorldTraderCargoSeederSettings worldTraderCargoSeederSettings = GameController.Instance.GameSettings.DefaultWorldSeedSettings.WorldTraderCargoSeederSettings;
+			if (worldTraderCargoSeederSettings != null)
+			{
+				foreach (CargoTrader trader in EngineASX.Instance.Traders)
+				{
+					WorldTraderCargoSeeder.TrySpawnCargo(trader.UnitComponents, worldTraderCargoSeederSettings);
+				}
+			}
 			DiscoverMenuSectorForAllFactions(sector);
 			AssignStrategiesToIdleFleets();
 			MakeMenuFactionsPeaceful();
