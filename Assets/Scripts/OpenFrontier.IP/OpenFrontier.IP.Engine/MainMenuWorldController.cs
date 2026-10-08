@@ -103,8 +103,11 @@ namespace OpenFrontier.IP.Engine
 			// Mute while the world fast-forwards - engines, AI and combat
 			// sounds shouldn't leak out before the reveal.
 			AudioListener.volume = 0f;
-			Time.timeScale = 12f;
-			yield return new WaitForSecondsRealtime(2.5f);
+			// 20x for 1.5s = ~30s of simulation, compressed inside the
+			// natural loading window (Time.maximumDeltaTime caps the
+			// effective rate around 20x at 60fps anyway).
+			Time.timeScale = 20f;
+			yield return new WaitForSecondsRealtime(1.5f);
 			Time.timeScale = timeScale;
 			AudioListener.volume = volume;
 			WarmUpInProgress = false;
