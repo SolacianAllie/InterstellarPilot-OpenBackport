@@ -1940,6 +1940,7 @@ MonoBehaviour:
   connectOnStartup: 1
   updateInterval: 5
   rotateInterval: 10
+  cargoRotateInterval: 4
   largeImageAsset: openfrontier
   fallbackImageAsset: 
   buttonOneLabel: 
