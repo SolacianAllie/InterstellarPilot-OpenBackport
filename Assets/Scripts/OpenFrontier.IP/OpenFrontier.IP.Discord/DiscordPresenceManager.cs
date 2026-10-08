@@ -61,13 +61,9 @@ namespace OpenFrontier.IP.Discord
 		[SerializeField]
 		private float updateInterval = 5f;
 
-		[Tooltip("How often the presence rotates to the next piece of information, in seconds. The ship icon and its tooltip stay put; only the two text lines rotate, cycling through the sector, the treasury and any scenario briefing the game has data for.")]
+		[Tooltip("How often the presence rotates to the next piece of information, in seconds. The ship icon and its tooltip stay put; only the two text lines rotate, cycling through the ship, the sector, the treasury and any scenario briefing the game has data for.")]
 		[SerializeField]
 		private float rotateInterval = 10f;
-
-		[Tooltip("Dwell time for the cargo cards specifically. A manifest cycles faster than the rest of the deck, since watching a trader work through their hold is the most interesting thing happening.")]
-		[SerializeField]
-		private float cargoRotateInterval = 4f;
 
 		[Tooltip("Activity asset name for the large image, exactly as uploaded to the application's Rich Presence assets in the Discord Developer Portal.")]
 		[SerializeField]
@@ -135,9 +131,9 @@ namespace OpenFrontier.IP.Discord
 		/// One "screen" of presence text. Discord gives us two short
 		/// text lines, so instead of cramming everything into one
 		/// static pair, the presence rotates through several of these
-		/// - the cargo manifest, the sector, the treasury - and shows
+		/// - the ship you fly, where you are, what you own - and shows
 		/// each for a while. Cards whose data isn't available (no
-		/// description, no cargo, menu instead of flight) are simply
+		/// description, no faction, menu instead of flight) are simply
 		/// left out of the cycle.
 		/// </summary>
 		private class PresenceCard
@@ -145,14 +141,10 @@ namespace OpenFrontier.IP.Discord
 			public string Details;
 			public string State;
 
-			/// <summary>How long this card holds the screen. Zero uses the general rotate interval.</summary>
-			public float Seconds;
-
-			public PresenceCard(string details, string state, float seconds = 0f)
+			public PresenceCard(string details, string state)
 			{
 				Details = details;
 				State = state;
-				Seconds = seconds;
 			}
 		}
 
@@ -164,7 +156,7 @@ namespace OpenFrontier.IP.Discord
 
 		private readonly List<PresenceCard> presenceCards = new List<PresenceCard>();
 		private int presenceCardIndex;
-		private float cardShownSince;
+		private float nextCardRotationTime;
 
 		private Client client;
 		private bool statusReady;
@@ -194,9 +186,9 @@ namespace OpenFrontier.IP.Discord
 		private void Awake()
 		{
 			sessionStartEpoch = (ulong)DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-			// The first push shows the opening card; it starts its
-			// dwell now, so it gets its full time before rotating.
-			cardShownSince = Time.time;
+			// The first push shows the opening card; rotation starts
+			// one interval later so the hero card gets its full time.
+			nextCardRotationTime = Time.time + Math.Max(updateInterval, rotateInterval);
 		}
 
 		private void Start()
@@ -239,31 +231,13 @@ namespace OpenFrontier.IP.Discord
 			if (Time.time >= nextPresenceUpdate)
 			{
 				nextPresenceUpdate = Time.time + Math.Max(MinUpdateInterval, updateInterval);
-				if (Time.time - cardShownSince >= GetCurrentDwell())
+				if (Time.time >= nextCardRotationTime)
 				{
+					nextCardRotationTime = Time.time + Math.Max(updateInterval, rotateInterval);
 					presenceCardIndex++;
-					cardShownSince = Time.time;
 				}
 				PushPresence();
 			}
-		}
-
-		/// <summary>
-		/// How long the card currently on screen stays there. Cargo
-		/// cards carry their own faster interval; everything else uses
-		/// the general rotation.
-		/// </summary>
-		private float GetCurrentDwell()
-		{
-			if (presenceCards.Count > 0)
-			{
-				float seconds = presenceCards[WrapIndex(presenceCardIndex, presenceCards.Count)].Seconds;
-				if (seconds > 0f)
-				{
-					return Math.Max(MinUpdateInterval, seconds);
-				}
-			}
-			return Math.Max(MinUpdateInterval, rotateInterval);
 		}
 
 		/// <summary>
@@ -287,7 +261,7 @@ namespace OpenFrontier.IP.Discord
 			}
 			lastStateSignature = signature;
 			presenceCardIndex = 0;
-			cardShownSince = Time.time;
+			nextCardRotationTime = Time.time + Math.Max(updateInterval, rotateInterval);
 			nextPresenceUpdate = Time.time;
 		}
 
@@ -862,7 +836,7 @@ namespace OpenFrontier.IP.Discord
 				{
 					state += " (+" + (top.Count - last) + " more)";
 				}
-				presenceCards.Add(new PresenceCard(details, state, cargoRotateInterval));
+				presenceCards.Add(new PresenceCard(details, state));
 			}
 		}
 
