@@ -713,7 +713,17 @@ namespace OpenFrontier.IP.Engine
 			{
 				foreach (CargoTrader trader in EngineASX.Instance.Traders)
 				{
-					WorldTraderCargoSeeder.TrySpawnCargo(trader.UnitComponents, worldTraderCargoSeederSettings);
+					// One bad station must not abort the fill (an NRE here
+					// once killed the whole roll tail: no intel, no
+					// strategies, no peace - the idle-ship bug).
+					try
+					{
+						WorldTraderCargoSeeder.TrySpawnCargo(trader.UnitComponents, worldTraderCargoSeederSettings);
+					}
+					catch (System.Exception ex)
+					{
+						Debug.LogWarning("[MainMenuWorldController] cargo fill failed for " + trader.name + ": " + ex.Message);
+					}
 				}
 			}
 			DiscoverMenuSectorForAllFactions(sector);
@@ -818,7 +828,10 @@ namespace OpenFrontier.IP.Engine
 				}
 				foreach (Fleet fleet in faction.Fleets)
 				{
-					if (fleet != null && fleet.FleetStrategy == null)
+					// FleetStrategy is a non-nullable enum FIELD - "== null"
+					// compiled to always-false (CS0472), so this whole pass
+					// was dead code and strategy-less fleets idled forever.
+					if (fleet != null && fleet.FleetStrategy == FactionStrategy.Unspecified)
 					{
 						fleet.FleetStrategy = FactionAIStrategyModule.GetBestStrategyForFleet(fleet, faction.FactionAI);
 					}

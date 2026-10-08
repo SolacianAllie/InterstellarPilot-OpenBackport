@@ -90,6 +90,13 @@ namespace OpenFrontier.IP.Engine.WorldSeeding.WorldSeedingLayers
 			foreach (KeyValuePair<int, CargoTraderStockLevels> stockLevel in component.GetStockLevels())
 			{
 				CargoClass cargoClassById = unit.Engine.GetCargoClassById(stockLevel.Key);
+				// Open Frontier: guard - a stock entry whose cargo id no
+				// longer resolves (legacy/modded station classes) used to
+				// NRE here and abort the whole cargo fill.
+				if (cargoClassById == null)
+				{
+					continue;
+				}
 				float num = (float)stockLevel.Value.HighStockMax * cargoClassById.WorldSeedQuantityFudge;
 				float num2 = settings.DefaultCargoPowerMultiplier;
 				if (component.IsConsumer)
