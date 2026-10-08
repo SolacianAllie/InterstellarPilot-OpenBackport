@@ -642,6 +642,11 @@ namespace OpenFrontier.IP.Engine
 			AutonomousTradeOrder autonomousTradeOrder = UnityObjectHelper.NewGameObject<AutonomousTradeOrder>();
 			autonomousTradeOrder.MaxJumpDistance = 4;
 			autonomousTradeOrder.MaxDuration = 0f;
+			// Repeat (not Requeue): Requeue silently drops the order when
+			// it's the fleet's ONLY one (it re-appends to the back of a
+			// non-empty queue); Repeat re-inserts at the front - a solo
+			// trader's trade run loops forever.
+			autonomousTradeOrder.CompletionMode = FleetOrderCompletionMode.Repeat;
 			fleet.EnqueueOrder(autonomousTradeOrder);
 		}
 
@@ -656,11 +661,15 @@ namespace OpenFrontier.IP.Engine
 			}
 			MineOrder mineOrder = UnityObjectHelper.NewGameObject<MineOrder>();
 			mineOrder.MaxJumpDistance = 2;
-			mineOrder.CompletionMode = FleetOrderCompletionMode.Destroy;
+			// Requeue (not Destroy): on completion the order goes to the
+			// back of the queue, so [mine, sell] cycles forever - the same
+			// pattern the game's own OrdersHelper uses. With Destroy the
+			// fleet went permanently idle after its first cycle.
+			mineOrder.CompletionMode = FleetOrderCompletionMode.Requeue;
 			mineOrder.MaxDuration = mineOrder.AIDefaultMaxDuration;
 			fleet.EnqueueOrder(mineOrder);
 			SellCargoOrder sellCargoOrder = UnityObjectHelper.NewGameObject<SellCargoOrder>();
-			sellCargoOrder.CompletionMode = FleetOrderCompletionMode.Destroy;
+			sellCargoOrder.CompletionMode = FleetOrderCompletionMode.Requeue;
 			sellCargoOrder.SellEquipment = false;
 			sellCargoOrder.MaxJumpDistance = 4;
 			sellCargoOrder.MaxDuration = sellCargoOrder.AIDefaultMaxDuration;
