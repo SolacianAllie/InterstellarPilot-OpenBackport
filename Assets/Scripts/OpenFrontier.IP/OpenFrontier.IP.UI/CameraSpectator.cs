@@ -129,7 +129,7 @@ namespace OpenFrontier.IP.UI
 		public float TransitNoiseFactor = 0.1f;
 
 		[Tooltip("How fast the camera turns toward its subject in transit (deg/sec).")]
-		public float TransitRotationSpeed = 75f;
+		public float TransitRotationSpeed = 55f;
 
 		[Tooltip("Bank angle per unit of lateral acceleration while turning in transit.")]
 		public float TransitBankFactor = 0.015f;
@@ -475,7 +475,7 @@ namespace OpenFrontier.IP.UI
 			CurrentOrbitDistance = CalculateOrbitDistance();
 			transitOffsetDirection = Quaternion.Euler(GetOrbitCameraAngle()) * Vector3.forward;
 			transitInitialDistance = Mathf.Max(Vector3.Distance(transform.position, GetTargetRootPosition()), 1f);
-			transitMaxSpeedCurrent = Mathf.Clamp(transitInitialDistance / 2f, TransitMinSpeed, TransitMaxSpeed);
+			transitMaxSpeedCurrent = Mathf.Clamp(transitInitialDistance / 3f, TransitMinSpeed, TransitMaxSpeed);
 			transitLiftSign = ((Random.value < 0.5f) ? (-1f) : 1f);
 			transitVelocity = Vector3.zero;
 			if (previousTarget != null)
@@ -507,18 +507,21 @@ namespace OpenFrontier.IP.UI
 				// thrust-limited acceleration toward a desired velocity
 				// that cruises by distance, slows on arrival, and matches
 				// the target ship's own motion for the dock.
-				Vector3 vector4 = ((targetUnit != null && targetUnit.GetRootUnit().RBody != null) ? targetUnit.GetRootUnit().RBody.velocity : Vector3.zero);
-				float num6 = Mathf.Min(transitMaxSpeedCurrent, num * 1.5f + 30f);
+				Vector3 vector4 = ((targetUnit != null && targetUnit.GetRootUnit().RBody != null) ? targetUnit.GetRootUnit().RBody.linearVelocity : Vector3.zero);
+				float num6 = Mathf.Min(transitMaxSpeedCurrent, num * 1.2f + 25f);
 				Vector3 vector7 = vector4 + (vector3 - transform.position).normalized * num6;
-				float num8 = Mathf.Clamp(transitMaxSpeedCurrent * 0.6f, 400f, 6000f);
+				// Throttle ramps up over the first ~1.5s - gentle
+				// departure instead of a punch off the mark.
+				float num8 = Mathf.Clamp(transitMaxSpeedCurrent * 0.35f, 250f, 3500f) * Mathf.Clamp01((Time.time - transitStartTime) / 1.5f);
 				Vector3 vector9 = transitVelocity;
 				transitVelocity = Vector3.MoveTowards(transitVelocity, vector7, num8 * realDeltaTime);
 				transform.position += transitVelocity * realDeltaTime;
 				// Smooth turn toward the subject (turn-rate limited),
-				// banking into the turn like a ship.
+				// banking into the turn like a ship - the bank fades out
+				// on final approach so there's no roll snap at the dock.
 				Quaternion quaternion = Quaternion.LookRotation(targetRootPosition - transform.position);
 				transform.rotation = Quaternion.RotateTowards(transform.rotation, quaternion, TransitRotationSpeed * realDeltaTime);
-				float num10 = Mathf.Clamp(Vector3.Dot(transform.right, (transitVelocity - vector9) / Mathf.Max(realDeltaTime, 0.001f)) * TransitBankFactor, -30f, 30f);
+				float num10 = Mathf.Clamp(Vector3.Dot(transform.right, (transitVelocity - vector9) / Mathf.Max(realDeltaTime, 0.001f)) * TransitBankFactor, -30f, 30f) * (1f - num2);
 				transform.Rotate(Vector3.forward, 0f - num10, Space.Self);
 				// Dock when close AND velocity-matched (timeout fallback
 				// for a target that keeps outrunning the camera).
@@ -533,8 +536,16 @@ namespace OpenFrontier.IP.UI
 					skipOrbitEntryRandomization = true;
 					Vector3 vector10 = transform.position - targetRootPosition;
 					CurrentOrbitDistance = vector10.magnitude;
-					Vector3 euler = Quaternion.LookRotation(vector10.normalized).eulerAngles;
-					cameraAngle = new Vector3(euler.x, euler.y, 0f);
+					// Exact orbit-angle reconstruction: LookRotation's
+					// euler decomposition is ambiguous at steep angles
+					// and can land the orbit anchor a hair off the
+					// arrival point (a visible snap). atan2 maps the
+					// offset direction to the SAME euler ApplyOrbit
+					// reconstructs, so the handoff is bit-exact.
+					Vector3 normalized = vector10.normalized;
+					float y = Mathf.Atan2(normalized.x, normalized.z) * 57.29578f;
+					float x = (0f - Mathf.Asin(Mathf.Clamp(normalized.y, -1f, 1f))) * 57.29578f;
+					cameraAngle = new Vector3(x, y, 0f);
 					CurrentState = SpectateState.Orbit;
 					SetNextStateChangeTime();
 					CameraMoved();
