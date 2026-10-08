@@ -73,6 +73,9 @@ namespace OpenFrontier.IP
 						shieldHitInfo.StartExpiryTime = Time.time;
 						shieldHitInfo.DepletedFlash = unit.Components != null && unit.Components.ShieldComponent != null && unit.Components.ShieldComponent.GetShieldPointNormalized(shieldIndex) <= 0f;
 						shieldHitInfo.Duration = (shieldHitInfo.DepletedFlash ? 0.25f : 5f);
+						// Repeat hit while the visual lives: flash only,
+						// no re-scaling.
+						shieldHitInfo.ScaleIn = false;
 						return shieldHitInfo;
 					}
 				}
@@ -96,6 +99,8 @@ namespace OpenFrontier.IP
 					// 5s envelope: flash choreography up front, then
 					// the health color lingers and slowly fades.
 					pooledShieldHit.Duration = (pooledShieldHit.DepletedFlash ? 0.25f : 5f);
+					// Fresh spawn = scale-in from 0; resets keep size.
+					pooledShieldHit.ScaleIn = true;
 					// Cache the instanced material once per pooled object -
 					// the property block tint never reached the shader on
 					// this stack, so the color is set directly on it.
@@ -112,7 +117,7 @@ namespace OpenFrontier.IP
 					// ghost that reads as a flicker before the flash.
 					pooledShieldHit.transform.position = unit.transform.TransformPoint(pooledShieldHit.LocalTranslation);
 					pooledShieldHit.transform.rotation = unit.transform.rotation * pooledShieldHit.LocalRotation;
-					pooledShieldHit.transform.localScale = new Vector3(pooledShieldHit.MaxScale, pooledShieldHit.MaxScale, pooledShieldHit.MaxScale);
+					pooledShieldHit.transform.localScale = Vector3.zero;
 					if (pooledShieldHit.CachedMaterial != null)
 					{
 						pooledShieldHit.CachedMaterial.SetColor("_TintColor", new Color(1.4f, 1.4f, 1.4f, 0f));
@@ -145,13 +150,13 @@ namespace OpenFrontier.IP
 
 		private void UpdateShieldHitMaterial(ShieldHitInfo hitInfo, float expiryTime)
 		{
-			float num = Mathf.Clamp01((Time.time - hitInfo.StartExpiryTime) / (expiryTime - hitInfo.StartExpiryTime));
+			float num2 = Time.time - hitInfo.StartExpiryTime;
 			hitInfo.transform.position = hitInfo.TargetUnit.transform.TransformPoint(hitInfo.LocalTranslation);
 			hitInfo.transform.rotation = hitInfo.TargetUnit.transform.rotation * hitInfo.LocalRotation;
-			// Constant size for the whole life - the fade is carried by
-			// alpha now, not by shrinking away.
-			hitInfo.transform.localScale = new Vector3(hitInfo.MaxScale, hitInfo.MaxScale, hitInfo.MaxScale);
-			float num2 = Time.time - hitInfo.StartExpiryTime;
+			// Scale: grow from 0 to full over the first 0.5s on a fresh
+			// spawn (ScaleIn); resets keep full size.
+			float num5 = ((!hitInfo.ScaleIn || num2 >= 0.5f) ? hitInfo.MaxScale : (hitInfo.MaxScale * (num2 / 0.5f)));
+			hitInfo.transform.localScale = new Vector3(num5, num5, num5);
 			Color color;
 			if (hitInfo.DepletedFlash)
 			{
@@ -177,11 +182,11 @@ namespace OpenFrontier.IP
 				Color color4 = unitShieldColor * 2.5f;
 				if (num2 < 0.2f)
 				{
-					// 0.0-0.2s: the flash fades in from health color to
-					// the overdriven peak; the alpha fade-in (0.1s)
-					// overlaps its first half.
+					// 0.0-0.2s: the flash builds from health color to
+					// the overdriven peak - NO alpha fade (the scale-in
+					// carries the entrance now).
 					Color color2 = Color.Lerp(unitShieldColor, color4, num2 / 0.2f);
-					color = new Color(color2.r, color2.g, color2.b, Mathf.Clamp01(num2 / 0.1f));
+					color = new Color(color2.r, color2.g, color2.b, 1f);
 				}
 				else if (num2 < 0.7f)
 				{

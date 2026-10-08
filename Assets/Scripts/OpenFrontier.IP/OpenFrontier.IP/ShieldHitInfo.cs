@@ -27,6 +27,12 @@ namespace OpenFrontier.IP
 		// red and dies fast instead of playing the full fade.
 		public bool DepletedFlash;
 
+		// True only for a freshly spawned effect: the visual grows from
+		// 0 to full size over its first 0.5s. Envelope resets (repeat
+		// hits while the visual lives) clear this - no re-scaling until
+		// the shield has fully faded away.
+		public bool ScaleIn;
+
 		// Effect lifetime in seconds (short for DepletedFlash, else the
 		// renderer's ShieldHitDuration).
 		public float Duration;
