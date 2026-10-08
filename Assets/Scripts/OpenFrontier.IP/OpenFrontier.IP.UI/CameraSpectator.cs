@@ -15,7 +15,8 @@ namespace OpenFrontier.IP.UI
 			Viewpoint,
 			Orbit,
 			Flyby,
-			ManualOrbit
+			ManualOrbit,
+			Transit
 		}
 
 		public float OrbitDistanceMultiplier = 1f;
@@ -106,6 +107,26 @@ namespace OpenFrontier.IP.UI
 		private Unit targetUnit;
 
 		private Unit lastTargetRootUnit;
+
+		// Open Frontier: when the spectate TARGET changes, fly to the new
+		// subject instead of teleporting to it. The camera SmoothDamps
+		// from wherever it is to an approach anchor near the new target
+		// while looking at it, then settles into a normal orbit. Player
+		// pan/zoom gestures still seize control mid-flight (they enter
+		// ManualOrbit, cancelling the transit).
+		public bool SmoothTargetTransitions = true;
+
+		public float TransitSmoothTime = 1.1f;
+
+		public float TransitMinSpeed = 800f;
+
+		public float TransitMaxSpeed = 12000f;
+
+		private Vector3 transitVelocity;
+
+		private Vector3 transitOffsetDirection;
+
+		private float transitMaxSpeedCurrent;
 
 		private double lastStateChangeTime;
 
@@ -227,11 +248,19 @@ namespace OpenFrontier.IP.UI
 			{
 				if (target != value)
 				{
+					bool hadValidPreviousTarget = target != null && currentState != SpectateState.None;
 					target = value;
 					if (target != null)
 					{
 						targetUnit = target.GetComponent<Unit>();
-						ChooseState();
+						if (SmoothTargetTransitions && hadValidPreviousTarget && targetUnit != null)
+						{
+							BeginTransit();
+						}
+						else
+						{
+							ChooseState();
+						}
 						ApplyState();
 						CameraMoved();
 						UpdateLastTargetPosition();
@@ -368,7 +397,7 @@ namespace OpenFrontier.IP.UI
 			{
 				return;
 			}
-			if (currentState != SpectateState.ManualOrbit)
+			if (currentState != SpectateState.ManualOrbit && currentState != SpectateState.Transit)
 			{
 				if (CurrentGameTime() > nextStateChangeTime)
 				{
@@ -406,10 +435,38 @@ namespace OpenFrontier.IP.UI
 			lastTargetPosition = target.transform.position;
 		}
 
+		// Smooth transition entry: pick a fixed approach direction at
+		// orbit distance from the new target; the anchor tracks the
+		// (moving) ship while SmoothDamp flies us to it. Speed scales
+		// with distance so rim-to-core jumps take a few seconds, not
+		// minutes.
+		private void BeginTransit()
+		{
+			CurrentOrbitDistance = CalculateOrbitDistance();
+			transitOffsetDirection = Quaternion.Euler(GetOrbitCameraAngle()) * Vector3.forward;
+			transitVelocity = Vector3.zero;
+			transitMaxSpeedCurrent = Mathf.Clamp(Vector3.Distance(transform.position, GetTargetRootPosition()) / 2.5f, TransitMinSpeed, TransitMaxSpeed);
+			CurrentState = SpectateState.Transit;
+		}
+
 		private void ApplyState()
 		{
 			switch (currentState)
 			{
+			case SpectateState.Transit:
+			{
+				Vector3 targetRootPosition = GetTargetRootPosition();
+				Vector3 vector2 = targetRootPosition + transitOffsetDirection * CurrentOrbitDistance;
+				transform.position = Vector3.SmoothDamp(transform.position, vector2, ref transitVelocity, TransitSmoothTime, transitMaxSpeedCurrent);
+				gameObject.transform.LookAt(targetRootPosition);
+				if (Vector3.Distance(transform.position, vector2) < Mathf.Max(30f, CurrentOrbitDistance * 0.15f))
+				{
+					CurrentState = SpectateState.Orbit;
+					SetNextStateChangeTime();
+					CameraMoved();
+				}
+				break;
+			}
 			case SpectateState.ManualOrbit:
 				ApplyOrbit();
 				break;
