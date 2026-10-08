@@ -38,9 +38,11 @@ namespace OpenFrontier.IP.Engine
 	{
 		private ScenarioInfo appliedScenario;
 
-		// DIAGNOSTIC: one-shot fleet censuses after each roll (20s/60s)
+		// DIAGNOSTIC: one-shot fleet censuses after each roll (15s/20s/60s)
 		// so "ships sitting idly" can be attributed to an actual order
 		// state instead of guessed at.
+		private float censusAt15s = -1f;
+
 		private float censusAt20s = -1f;
 
 		private float censusAt60s = -1f;
@@ -59,6 +61,11 @@ namespace OpenFrontier.IP.Engine
 				{
 					RollMenuSystem();
 				}
+			}
+			if (censusAt15s > 0f && Time.time >= censusAt15s)
+			{
+				censusAt15s = -1f;
+				LogEveryShipOrder();
 			}
 			if (censusAt20s > 0f && Time.time >= censusAt20s)
 			{
@@ -94,6 +101,31 @@ namespace OpenFrontier.IP.Engine
 				}
 			}
 			Debug.Log("[MainMenuWorldController] census " + tag + ": " + num + " fleets :: " + string.Join(", ", dictionary.Select((KeyValuePair<string, int> e) => e.Value + "x " + e.Key)));
+		}
+
+		// DIAGNOSTIC: verbose per-ship dump - every fleet, its active
+		// order + queue, and the names of its ships.
+		private static void LogEveryShipOrder()
+		{
+			System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+			stringBuilder.AppendLine("[MainMenuWorldController] ship orders:");
+			foreach (Faction faction in EngineASX.Instance.Factions)
+			{
+				if (faction == null)
+				{
+					continue;
+				}
+				foreach (Fleet fleet in faction.Fleets)
+				{
+					if (fleet != null)
+					{
+						string text = ((fleet.ActiveOrder != null) ? fleet.ActiveOrder.GetType().Name : "IDLE");
+						string text2 = string.Join(", ", fleet.Ships.Where((UnitComponentHolder s) => s?.Unit != null).Select((UnitComponentHolder s) => s.Unit.name));
+						stringBuilder.AppendLine("  " + fleet.name + " [" + faction.FactionType + "] " + text + "(+q" + fleet.OrderQueue.Count + "): " + text2);
+					}
+				}
+			}
+			Debug.Log(stringBuilder.ToString());
 		}
 
 		private static bool IsMainMenuScenario(ScenarioInfo scenarioInfo)
@@ -219,6 +251,7 @@ namespace OpenFrontier.IP.Engine
 			SpawnHeroShipAndSpectate(sector);
 			MakeMenuAIAggressive();
 			Debug.Log("[MainMenuWorldController] rolled menu system, seed " + sector.RandomSeed);
+			censusAt15s = Time.time + 15f;
 			censusAt20s = Time.time + 20f;
 			censusAt60s = Time.time + 60f;
 		}
@@ -628,14 +661,37 @@ namespace OpenFrontier.IP.Engine
 					int num5 = 0;
 					foreach (AsteroidCluster cluster in clusters)
 					{
-						int num4 = UnityEngine.Random.Range(1, 3);
-						for (int l = 0; l < num4; l++)
+						// 1-2 miners PER ASTEROID in the belt, each dropped
+						// beside its rock: the belt visibly crawls with
+						// workers instead of one lonely hauler.
+						List<Unit> list2 = sector.GetUnitsByType(UnitType.Asteroid)?.Where((Unit u) => u != null && Vector3.Distance(u.SectorPosition, cluster.Unit.SectorPosition) <= cluster.Unit.Radius * 1.1f).ToList() ?? new List<Unit>();
+						if (list2.Count == 0)
 						{
-							Fleet fleet = SpawnSoloShipFleet(faction2, sector, cluster.Unit.SectorPosition + UnityEngine.Random.onUnitSphere * (cluster.Unit.Radius * 0.5f), GameController.Instance.UnitClasses.Hauler_M.UnitPrefab);
-							ForceMineOrders(fleet);
-							if (fleet != null)
+							// Belt somehow rockless - old 1-2 per-cluster
+							// behaviour as a fallback.
+							int num6 = UnityEngine.Random.Range(1, 3);
+							for (int m = 0; m < num6; m++)
 							{
-								num5++;
+								Fleet fleet2 = SpawnSoloShipFleet(faction2, sector, cluster.Unit.SectorPosition + UnityEngine.Random.onUnitSphere * (cluster.Unit.Radius * 0.5f), GameController.Instance.UnitClasses.Hauler_M.UnitPrefab);
+								ForceMineOrders(fleet2);
+								if (fleet2 != null)
+								{
+									num5++;
+								}
+							}
+							continue;
+						}
+						foreach (Unit item2 in list2)
+						{
+							int num4 = UnityEngine.Random.Range(1, 3);
+							for (int l = 0; l < num4; l++)
+							{
+								Fleet fleet = SpawnSoloShipFleet(faction2, sector, item2.SectorPosition + UnityEngine.Random.onUnitSphere * 300f, GameController.Instance.UnitClasses.Hauler_M.UnitPrefab);
+								ForceMineOrders(fleet);
+								if (fleet != null)
+								{
+									num5++;
+								}
 							}
 						}
 					}
