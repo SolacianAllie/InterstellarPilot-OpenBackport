@@ -2520,7 +2520,14 @@ namespace OpenFrontier.IP.Engine
 					cameraSpectator.AllowViewport = allowViewport;
 					cameraSpectator.AllowOrbit = allowOrbit;
 					cameraSpectator.Target = unit.gameObject;
-					cameraSpectator.ChooseState();
+					// Don't clobber a smooth transit: the Target setter
+					// may have entered Transit to FLY to the new subject;
+					// an unconditional ChooseState here snapped the camera
+					// instantly and the transit never survived the frame.
+					if (cameraSpectator.CurrentState != CameraSpectator.SpectateState.Transit)
+					{
+						cameraSpectator.ChooseState();
+					}
 					Instance.OnCameraMoved();
 				}
 				else
