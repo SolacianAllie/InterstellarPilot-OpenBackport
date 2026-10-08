@@ -306,6 +306,10 @@ namespace OpenFrontier.IP.Engine
 				}
 				list.Add(asteroidCluster);
 			}
+			// DIAGNOSTIC: settle "are the belts actually seeded?" from the
+			// console instead of guessing.
+			int num4 = sector.GetUnitsByType(UnitType.Asteroid)?.Count ?? 0;
+			Debug.Log($"[MainMenuWorldController] belts spawned: {list.Count}, mineable rocks in sector: {num4}");
 			return list;
 		}
 
@@ -578,14 +582,21 @@ namespace OpenFrontier.IP.Engine
 				Faction faction2 = CreateAIFaction(FactionType.Miner);
 				if (faction2 != null)
 				{
+					int num5 = 0;
 					foreach (AsteroidCluster cluster in clusters)
 					{
 						int num4 = UnityEngine.Random.Range(1, 3);
 						for (int l = 0; l < num4; l++)
 						{
-							ForceMineOrders(SpawnSoloShipFleet(faction2, sector, cluster.Unit.SectorPosition + UnityEngine.Random.onUnitSphere * (cluster.Unit.Radius * 0.5f), GameController.Instance.UnitClasses.Hauler_M.UnitPrefab));
+							Fleet fleet = SpawnSoloShipFleet(faction2, sector, cluster.Unit.SectorPosition + UnityEngine.Random.onUnitSphere * (cluster.Unit.Radius * 0.5f), GameController.Instance.UnitClasses.Hauler_M.UnitPrefab);
+							ForceMineOrders(fleet);
+							if (fleet != null)
+							{
+								num5++;
+							}
 						}
 					}
+					Debug.Log("[MainMenuWorldController] miners spawned: " + num5);
 				}
 			}
 			// Bandits are a rare event now - the easter egg trigger can
