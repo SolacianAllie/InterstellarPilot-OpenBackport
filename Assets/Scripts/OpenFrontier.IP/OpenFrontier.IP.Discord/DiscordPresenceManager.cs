@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Discord.Sdk;
 using OpenFrontier.IP.Engine;
@@ -59,6 +60,10 @@ namespace OpenFrontier.IP.Discord
 		[SerializeField]
 		private float updateInterval = 15f;
 
+		[Tooltip("How often the presence rotates to the next piece of information, in seconds. The ship icon and its tooltip stay put; only the two text lines rotate, cycling through the ship, the sector, the treasury and any scenario briefing the game has data for.")]
+		[SerializeField]
+		private float rotateInterval = 30f;
+
 		[Tooltip("Activity asset name for the large image, exactly as uploaded to the application's Rich Presence assets in the Discord Developer Portal.")]
 		[SerializeField]
 		private string largeImageAsset = "openfrontier";
@@ -110,6 +115,33 @@ namespace OpenFrontier.IP.Discord
 			Prompting,
 		}
 
+		/// <summary>
+		/// One "screen" of presence text. Discord gives us two short
+		/// text lines, so instead of cramming everything into one
+		/// static pair, the presence rotates through several of these
+		/// - the ship you fly, where you are, what you own - and shows
+		/// each for a while. Cards whose data isn't available (no
+		/// description, no faction, menu instead of flight) are simply
+		/// left out of the cycle.
+		/// </summary>
+		private class PresenceCard
+		{
+			public string Details;
+			public string State;
+
+			public PresenceCard(string details, string state)
+			{
+				Details = details;
+				State = state;
+			}
+		}
+
+		private const int MaxLineLength = 128;
+
+		private readonly List<PresenceCard> presenceCards = new List<PresenceCard>();
+		private int presenceCardIndex;
+		private float nextCardRotationTime;
+
 		private Client client;
 		private bool statusReady;
 		private bool directRpcActive;
@@ -136,6 +168,9 @@ namespace OpenFrontier.IP.Discord
 		private void Awake()
 		{
 			sessionStartEpoch = (ulong)DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+			// The first push shows the opening card; rotation starts
+			// one interval later so the hero card gets its full time.
+			nextCardRotationTime = Time.time + Math.Max(MinUpdateInterval, rotateInterval);
 		}
 
 		private void Start()
@@ -173,6 +208,11 @@ namespace OpenFrontier.IP.Discord
 			if (Time.time >= nextPresenceUpdate)
 			{
 				nextPresenceUpdate = Time.time + Math.Max(MinUpdateInterval, updateInterval);
+				if (Time.time >= nextCardRotationTime)
+				{
+					nextCardRotationTime = Time.time + Math.Max(MinUpdateInterval, rotateInterval);
+					presenceCardIndex++;
+				}
 				PushPresence();
 			}
 		}
@@ -517,16 +557,18 @@ namespace OpenFrontier.IP.Discord
 				return;
 			}
 			EngineASX engine = EngineASX.Instance;
-			Unit ship = IsInMainMenu() ? null : GetPlayerShip(engine);
+			bool inMenu = IsInMainMenu();
+			Unit ship = inMenu ? null : GetPlayerShip(engine);
 			Faction player = FindPlayerFaction(engine);
 			Sector sector = engine != null ? engine.ActiveSector : null;
 			string scenarioTitle = GetScenarioTitle(engine);
-			int shipCount = CountShips(player);
 
-			string details = IsInMainMenu()
-				? "Cruising the open frontier"
-				: BuildShipLine(ship);
-			string state = BuildStateLine(sector, player, shipCount);
+			BuildPresenceCards(inMenu, engine, ship, player, sector, scenarioTitle);
+			if (presenceCards.Count == 0)
+			{
+				return;
+			}
+			PresenceCard card = presenceCards[WrapIndex(presenceCardIndex, presenceCards.Count)];
 
 			try
 			{
@@ -535,8 +577,8 @@ namespace OpenFrontier.IP.Discord
 					activity.SetName("Open Frontier");
 					activity.SetType(ActivityTypes.Playing);
 					activity.SetSupportedPlatforms(ActivityGamePlatforms.Desktop | ActivityGamePlatforms.Android);
-					activity.SetDetails(details);
-					activity.SetState(state);
+					activity.SetDetails(card.Details);
+					activity.SetState(card.State);
 					using (var assets = new ActivityAssets())
 					{
 						assets.SetLargeImage(largeImageAsset);
@@ -576,6 +618,109 @@ namespace OpenFrontier.IP.Discord
 			{
 				Debug.LogWarning("[Discord] Presence update threw: " + e.Message);
 			}
+		}
+
+		/// <summary>
+		/// Builds the rotation: every card the current game state can
+		/// fill in, in reading order. Cards with no data are skipped,
+		/// so a player in the menu simply cycles a single card.
+		/// </summary>
+		private void BuildPresenceCards(bool inMenu, EngineASX engine, Unit ship,
+			Faction player, Sector sector, string scenarioTitle)
+		{
+			presenceCards.Clear();
+			if (inMenu)
+			{
+				presenceCards.Add(new PresenceCard("Cruising the open frontier", "Main menu"));
+				return;
+			}
+
+			int shipCount = CountShips(player);
+			int fleetCount = player != null && player.Fleets != null ? player.Fleets.Count : 0;
+
+			// The ship card - who you are right now.
+			presenceCards.Add(new PresenceCard(BuildShipLine(ship),
+				BuildStateLine(sector, player, shipCount)));
+
+			// Where you are, and how friendly the neighbourhood is.
+			if (sector != null)
+			{
+				var location = new List<string>();
+				if (!string.IsNullOrEmpty(scenarioTitle))
+				{
+					location.Add(scenarioTitle);
+				}
+				location.Add(SecurityLabel(sector));
+				int stations = sector.GetCountOfUnitType(UnitType.Station);
+				if (stations > 0)
+				{
+					location.Add(stations.ToString("N0") + " station" + (stations == 1 ? "" : "s"));
+				}
+				int jumps = sector.JumpDistanceToNearestControlledSector;
+				if (jumps > 0)
+				{
+					location.Add(jumps + (jumps == 1 ? " jump from the frontier" : " jumps from the frontier"));
+				}
+				presenceCards.Add(new PresenceCard("In " + sector.Name, string.Join(" - ", location)));
+			}
+
+			// The treasury - what your faction is worth.
+			if (player != null)
+			{
+				string fleets = fleetCount + " fleet" + (fleetCount == 1 ? "" : "s");
+				presenceCards.Add(new PresenceCard(
+					player.Credits.ToString("N0") + " credits",
+					player.Name + " treasury - " + shipCount.ToString("N0")
+						+ " ship" + (shipCount == 1 ? "" : "s") + " in " + fleets));
+			}
+
+			// The sector's own blurb, when the scenario wrote one.
+			if (sector != null && !string.IsNullOrWhiteSpace(sector.Description))
+			{
+				presenceCards.Add(new PresenceCard(
+					sector.Name + " surveyed", sector.Description));
+			}
+
+			// Finally the scenario itself.
+			if (!string.IsNullOrEmpty(scenarioTitle))
+			{
+				ScenarioInfo scenario = engine != null && engine.World != null
+					? engine.World.ScenarioInfo
+					: null;
+				string blurb = scenario != null && !string.IsNullOrWhiteSpace(scenario.Description)
+					? scenario.Description
+					: scenario != null && !string.IsNullOrWhiteSpace(scenario.Objectives)
+						? scenario.Objectives
+						: "Open Frontier";
+				presenceCards.Add(new PresenceCard(scenarioTitle, blurb));
+			}
+
+			for (int i = 0; i < presenceCards.Count; i++)
+			{
+				presenceCards[i].Details = Truncate(presenceCards[i].Details);
+				presenceCards[i].State = Truncate(presenceCards[i].State);
+			}
+		}
+
+		private static string SecurityLabel(Sector sector)
+		{
+			float level = Mathf.Clamp01(sector.AdjustedSecurityLevel01);
+			string label = level < 0.34f ? "Low security" : level < 0.67f ? "Mid security" : "High security";
+			return label + " (" + Mathf.RoundToInt(level * 100f) + "%)";
+		}
+
+		private static string Truncate(string text)
+		{
+			if (string.IsNullOrEmpty(text) || text.Length <= MaxLineLength)
+			{
+				return text;
+			}
+			return text.Substring(0, MaxLineLength - 1) + "…";
+		}
+
+		private static int WrapIndex(int index, int count)
+		{
+			return ((index % count) + count) % count;
 		}
 
 		/// <summary>

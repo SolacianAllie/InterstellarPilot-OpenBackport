@@ -1939,6 +1939,7 @@ MonoBehaviour:
   useDirectRpc: 1
   connectOnStartup: 1
   updateInterval: 15
+  rotateInterval: 30
   largeImageAsset: openfrontier
   fallbackImageAsset: 
   buttonOneLabel: 
