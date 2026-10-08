@@ -368,6 +368,7 @@ MonoBehaviour:
   NextButton: {fileID: 114924050743934937}
   AvailableScenarios:
   - {fileID: 114724804207875695, guid: d90afe8f6406b0040907fb0a22bbeadd, type: 2}
+  - {fileID: 114724804207875695, guid: eca02e286a8303945ac0b8c6a49c0100, type: 2}
 --- !u!224 &224256069497284392
 RectTransform:
   m_ObjectHideFlags: 0
