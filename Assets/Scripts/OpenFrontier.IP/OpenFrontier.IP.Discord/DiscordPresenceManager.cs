@@ -63,6 +63,28 @@ namespace OpenFrontier.IP.Discord
 		[SerializeField]
 		private string largeImageAsset = "openfrontier";
 
+		[Tooltip("Optional activity asset name for the small image (the icon beside the presence text). Leave empty to show none. Upload e.g. 'ship' to your app's Rich Presence assets to use it.")]
+		[SerializeField]
+		private string smallImageAsset = "";
+
+		[Tooltip("Activity asset name shown as the small image while the player's ship is docked. Upload an icon under this name to your app's Rich Presence assets.")]
+		[SerializeField]
+		private string dockedImageAsset = "docked";
+
+		[Tooltip("Optional first presence button label (with its URL below). Leave either empty to show no buttons.")]
+		[SerializeField]
+		private string buttonOneLabel = "";
+
+		[SerializeField]
+		private string buttonOneUrl = "";
+
+		[Tooltip("Optional second presence button label (with its URL below).")]
+		[SerializeField]
+		private string buttonTwoLabel = "";
+
+		[SerializeField]
+		private string buttonTwoUrl = "";
+
 		private const string EnabledKey = "DiscordPresenceEnabled";
 		private const string AccessTokenKey = "DiscordAccessToken";
 		private const string RefreshTokenKey = "DiscordRefreshToken";
@@ -498,23 +520,17 @@ namespace OpenFrontier.IP.Discord
 			{
 				return;
 			}
-			string details;
-			string state;
-			if (IsInMainMenu())
-			{
-				details = "Cruising the open frontier";
-				state = "Main menu";
-			}
-			else
-			{
-				EngineASX engine = EngineASX.Instance;
-				Sector sector = engine != null ? engine.ActiveSector : null;
-				Faction player = FindPlayerFaction(engine);
-				details = sector != null ? sector.Name : "Open Frontier";
-				state = player != null
-					? player.Name + " - " + player.Credits.ToString("N0") + " credits"
-					: "In flight";
-			}
+			EngineASX engine = EngineASX.Instance;
+			Unit ship = IsInMainMenu() ? null : GetPlayerShip(engine);
+			Faction player = FindPlayerFaction(engine);
+			Sector sector = engine != null ? engine.ActiveSector : null;
+			string scenarioTitle = GetScenarioTitle(engine);
+			int shipCount = CountShips(player);
+
+			string details = IsInMainMenu()
+				? "Cruising the open frontier"
+				: BuildShipLine(ship);
+			string state = BuildStateLine(sector, player, shipCount);
 
 			try
 			{
@@ -528,7 +544,22 @@ namespace OpenFrontier.IP.Discord
 					using (var assets = new ActivityAssets())
 					{
 						assets.SetLargeImage(largeImageAsset);
-						assets.SetLargeText("Open Frontier");
+						assets.SetLargeText(string.IsNullOrEmpty(scenarioTitle)
+							? "Open Frontier"
+							: scenarioTitle);
+						// The small image doubles as a docked flag -
+						// one asset, two pieces of information.
+						bool docked = ship != null && ship.IsDocked;
+						if (!string.IsNullOrEmpty(smallImageAsset))
+						{
+							assets.SetSmallImage(smallImageAsset);
+							assets.SetSmallText(docked ? "Docked" : "In flight");
+						}
+						else if (docked)
+						{
+							assets.SetSmallImage(dockedImageAsset);
+							assets.SetSmallText("Docked");
+						}
 						activity.SetAssets(assets);
 					}
 					using (var timestamps = new ActivityTimestamps())
@@ -536,6 +567,8 @@ namespace OpenFrontier.IP.Discord
 						timestamps.SetStart(sessionStartEpoch);
 						activity.SetTimestamps(timestamps);
 					}
+					AddButton(activity, buttonOneLabel, buttonOneUrl);
+					AddButton(activity, buttonTwoLabel, buttonTwoUrl);
 					client.UpdateRichPresence(activity, result =>
 					{
 						if (result.Successful())
@@ -554,6 +587,94 @@ namespace OpenFrontier.IP.Discord
 			catch (Exception e)
 			{
 				Debug.LogWarning("[Discord] Presence update threw: " + e.Message);
+			}
+		}
+
+		/// <summary>
+		/// Details line: what the player is flying. A docked ship
+		/// reads as such rather than pretending to fly.
+		/// </summary>
+		private static string BuildShipLine(Unit ship)
+		{
+			if (ship == null || !ship.IsValidAndNotDestroyed)
+			{
+				return "In flight";
+			}
+			string line = ship.IsDocked ? "Docked" : ship.GetClassAndSeriesName(true);
+			if (!string.IsNullOrEmpty(ship.UnitName))
+			{
+				line += " \"" + ship.UnitName + "\"";
+			}
+			return line;
+		}
+
+		/// <summary>
+		/// State line: where they are, who they are, what they
+		/// command and what they're worth.
+		/// </summary>
+		private static string BuildStateLine(Sector sector, Faction player, int shipCount)
+		{
+			string line = sector != null ? sector.Name : "Open Frontier";
+			if (player != null)
+			{
+				line += " - " + player.Name;
+				if (shipCount > 0)
+				{
+					line += " - " + shipCount.ToString("N0") + " ship" + (shipCount == 1 ? "" : "s");
+				}
+				line += " - " + player.Credits.ToString("N0") + " cr";
+			}
+			return line;
+		}
+
+		private static string GetScenarioTitle(EngineASX engine)
+		{
+			if (engine == null || engine.World == null || engine.World.ScenarioInfo == null)
+			{
+				return string.Empty;
+			}
+			return engine.World.ScenarioInfo.Title;
+		}
+
+		private static int CountShips(Faction faction)
+		{
+			if (faction == null || faction.Fleets == null)
+			{
+				return 0;
+			}
+			int total = 0;
+			for (int i = 0; i < faction.Fleets.Count; i++)
+			{
+				Fleet fleet = faction.Fleets[i];
+				if (fleet != null && fleet.Ships != null)
+				{
+					total += fleet.Ships.Count;
+				}
+			}
+			return total;
+		}
+
+		private static Unit GetPlayerShip(EngineASX engine)
+		{
+			if (engine == null)
+			{
+				return null;
+			}
+			Unit ship = engine.PlayerUnit;
+			return ship != null && ship.IsValidAndNotDestroyed ? ship : null;
+		}
+
+		private static void AddButton(Activity activity, string label, string url)
+		{
+			if (string.IsNullOrEmpty(label) || string.IsNullOrEmpty(url))
+			{
+				return;
+			}
+			using (var button = new ActivityButton())
+			{
+				button.SetLabel(label);
+				button.SetUrl(url);
+				activity.AddButton(button);
 			}
 		}
 
