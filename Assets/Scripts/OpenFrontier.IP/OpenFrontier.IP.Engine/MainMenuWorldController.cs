@@ -88,6 +88,7 @@ namespace OpenFrontier.IP.Engine
 			SpawnGuaranteedPlanetWithMoon(sector);
 			PopulateMenuSystem(sector, clusters);
 			SpawnHeroShipAndSpectate(sector);
+			MakeMenuAIAggressive();
 			Debug.Log("[MainMenuWorldController] rolled menu system, seed " + num);
 		}
 
@@ -370,6 +371,28 @@ namespace OpenFrontier.IP.Engine
 					if (fleet != null && fleet.FleetStrategy == null)
 					{
 						fleet.FleetStrategy = FactionAIStrategyModule.GetBestStrategyForFleet(fleet, faction.FactionAI);
+					}
+				}
+			}
+		}
+
+		// Menu spectacle: max everyone's aggression so hostiles on sensors
+		// get engaged regardless of target score - the whole system piles
+		// onto the bandits instead of waiting to be attacked. Aggression
+		// 1 zeroes the attack/intercept score thresholds; unarmed ships
+		// still can't intercept (no weapons), and the 2km interception
+		// distance gate stays stock. Runs after ALL spawning so even the
+		// hero ship's one-ship fleet is covered. FleetSettings is a
+		// per-fleet component - safe to write, nothing leaks.
+		private static void MakeMenuAIAggressive()
+		{
+			foreach (Faction faction in EngineASX.Instance.Factions)
+			{
+				foreach (Fleet fleet in faction.Fleets)
+				{
+					if (fleet != null && fleet.Settings != null)
+					{
+						fleet.Settings.Aggression = 1f;
 					}
 				}
 			}
