@@ -49,7 +49,7 @@ namespace OpenFrontier.IP
 					pooledShieldHit.MaxScale = Mathf.Clamp(shieldDamage * DamageScaleMultiplier, MinShieldHitScale, MaxShieldHitScale);
 					pooledShieldHit.gameObject.SetActive(value: true);
 					pooledShieldHit.TargetUnit = unit;
-					pooledShieldHit.ShieldIndex = unit.GetShieldIndex(damageSourceWorldPosition);
+					pooledShieldHit.HitColor = EngineASX.Instance.GetUnitShieldColor(unit, unit.GetShieldIndex(damageSourceWorldPosition));
 					pooledShieldHit.StartExpiryTime = Time.time;
 					pooledShieldHit.StartTime = Time.time;
 					pooledShieldHit.SetShieldHitOrientation(damageSourceWorldPosition);
@@ -79,22 +79,22 @@ namespace OpenFrontier.IP
 			}
 		}
 
+		// Shared property block: the shield hit shader tints via
+		// _BaseColor (material.color's _Color is unused by it), and a
+		// block avoids per-frame material instancing.
+		private static readonly MaterialPropertyBlock ShieldHitPropertyBlock = new MaterialPropertyBlock();
+
 		private void UpdateShieldHitMaterial(ShieldHitInfo hitInfo, float expiryTime)
 		{
 			float num = Mathf.Clamp01((Time.time - hitInfo.StartExpiryTime) / (expiryTime - hitInfo.StartExpiryTime));
 			float a = 1f - num;
-			// Open Frontier: tint with the hit shield section's LIVE
-			// health color (the same GetUnitShieldColor the UI widgets
-			// use) - blue while the section holds, shifting as it
-			// depletes, so shield state reads in the world, not just on
-			// the HUD. Alpha keeps the stock fade.
-			Color unitShieldColor = EngineASX.Instance.GetUnitShieldColor(hitInfo.TargetUnit, hitInfo.ShieldIndex);
-			Color color = new Color(unitShieldColor.r, unitShieldColor.g, unitShieldColor.b, a);
 			hitInfo.transform.position = hitInfo.TargetUnit.transform.TransformPoint(hitInfo.LocalTranslation);
 			hitInfo.transform.rotation = hitInfo.TargetUnit.transform.rotation * hitInfo.LocalRotation;
 			float num2 = (1f - Mathf.Clamp01(num / ShieldScaleDuration)) * hitInfo.MaxScale;
 			hitInfo.transform.localScale = new Vector3(num2, num2, num2);
-			hitInfo.Renderer.material.color = color;
+			// Snapshot tint from impact time + the stock alpha fade.
+			ShieldHitPropertyBlock.SetColor("_BaseColor", new Color(hitInfo.HitColor.r, hitInfo.HitColor.g, hitInfo.HitColor.b, a));
+			hitInfo.Renderer.SetPropertyBlock(ShieldHitPropertyBlock);
 		}
 
 		private ShieldHitInfo GetPooledShieldHit()
