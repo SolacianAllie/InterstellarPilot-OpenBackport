@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using OpenFrontier.IP.Common.Factions;
+using OpenFrontier.IP.Common.FleetOrders;
 using OpenFrontier.IP.Engine.Core.Units;
 using OpenFrontier.IP.Engine.Factions;
+using OpenFrontier.IP.Engine.Fleets.FleetOrders;
 using OpenFrontier.IP.Engine.WorldSeeding.WorldSeedingLayers;
 using OpenFrontier.IP.Scenarios;
 using OpenFrontier.IP.Testing.Spawning;
@@ -326,8 +328,14 @@ namespace OpenFrontier.IP.Engine
 				}
 				Unit unit = SpawnUtils.SpawnUnit(unitClass.UnitPrefab, sector, vector, faction);
 				Vector3 vector2 = ((unit != null) ? unit.SectorPosition : vector);
-				// One trade fleet per station, working out of home.
-				SpawnUtils.SpawnFleetWithSmallUnits(faction, sector, vector2 + UnityEngine.Random.onUnitSphere * 900f, UnityEngine.Random.Range(3, 6));
+				// 2-3 SOLO traders working out of home - each its own
+				// one-ship fleet with a standing trade order, so ships
+				// run independent routes instead of flying formation.
+				int num3 = UnityEngine.Random.Range(2, 4);
+				for (int k = 0; k < num3; k++)
+				{
+					ForceTradeOrders(SpawnSoloShipFleet(faction, sector, vector2 + UnityEngine.Random.onUnitSphere * 900f, TraderPrefabs[UnityEngine.Random.Range(0, TraderPrefabs.Length)]));
+				}
 				// ...and sometimes a patrol on station.
 				if (UnityEngine.Random.value < 0.35f)
 				{
@@ -341,8 +349,8 @@ namespace OpenFrontier.IP.Engine
 					}
 				}
 			}
-			// Every cluster gets at least one miner fleet, placed in the
-			// rocks so it starts working immediately.
+			// Every cluster gets 1-2 SOLO miners, dropped in the rocks
+			// and force-ordered to mine then sell.
 			if (flag)
 			{
 				Faction faction2 = CreateAIFaction(FactionType.Miner);
@@ -350,7 +358,11 @@ namespace OpenFrontier.IP.Engine
 				{
 					foreach (AsteroidCluster cluster in clusters)
 					{
-						SpawnUtils.SpawnFleetWithLargerMiningUnits(faction2, sector, cluster.Unit.SectorPosition + UnityEngine.Random.onUnitSphere * (cluster.Unit.Radius * 0.5f), UnityEngine.Random.Range(3, 6));
+						int num4 = UnityEngine.Random.Range(1, 3);
+						for (int l = 0; l < num4; l++)
+						{
+							ForceMineOrders(SpawnSoloShipFleet(faction2, sector, cluster.Unit.SectorPosition + UnityEngine.Random.onUnitSphere * (cluster.Unit.Radius * 0.5f), GameController.Instance.UnitClasses.Hauler_M.UnitPrefab));
+						}
 					}
 				}
 			}
@@ -360,8 +372,84 @@ namespace OpenFrontier.IP.Engine
 			{
 				SpawnUtils.SpawnBanditHordesAtSectorPosition(sector, sector.GetRandomSectorPositionWithinGateDistance(0.75f), 1, 2);
 			}
+			DiscoverMenuSectorForAllFactions(sector);
 			AssignStrategiesToIdleFleets();
 			MakeMenuFactionsPeaceful();
+		}
+
+		// Trade-ship sets mirroring SpawnUtils' hardcoded menu picks.
+		private static Unit[] TraderPrefabs => new Unit[3]
+		{
+			GameController.Instance.UnitClasses.Hauler_A.UnitPrefab,
+			GameController.Instance.UnitClasses.Venture_A.UnitPrefab,
+			GameController.Instance.UnitClasses.Shuttle_A.UnitPrefab
+		};
+
+		// One ship, its own fleet - orders only live on fleets, so a
+		// "lone" ship is a fleet of one. Uses the generic fleet prefab
+		// (SpawnUtils' fleet helpers build from the PLAYER fleet prefab).
+		private static Fleet SpawnSoloShipFleet(Faction faction, Sector sector, Vector3 sectorPosition, Unit prefab)
+		{
+			Unit unit = SpawnUtils.SpawnUnit(prefab, sector, sectorPosition, faction);
+			if (unit == null)
+			{
+				return null;
+			}
+			return SpawnUtils.SpawnGenericFleetWithUnits(faction, new List<Unit> { unit });
+		}
+
+		// Mirrors FactionAIBase's Trade strategy: a standing autonomous
+		// trade order (repeatable - loops forever).
+		private static void ForceTradeOrders(Fleet fleet)
+		{
+			if (fleet == null)
+			{
+				return;
+			}
+			AutonomousTradeOrder autonomousTradeOrder = UnityObjectHelper.NewGameObject<AutonomousTradeOrder>();
+			autonomousTradeOrder.MaxJumpDistance = 4;
+			autonomousTradeOrder.MaxDuration = 0f;
+			fleet.EnqueueOrder(autonomousTradeOrder);
+		}
+
+		// Mirrors FactionAIBase's Mine strategy verbatim: mine until the
+		// hold is full, then sell the haul. One-shot orders; the faction
+		// AI's idle pass re-orders when they complete.
+		private static void ForceMineOrders(Fleet fleet)
+		{
+			if (fleet == null)
+			{
+				return;
+			}
+			MineOrder mineOrder = UnityObjectHelper.NewGameObject<MineOrder>();
+			mineOrder.MaxJumpDistance = 2;
+			mineOrder.CompletionMode = FleetOrderCompletionMode.Destroy;
+			mineOrder.MaxDuration = mineOrder.AIDefaultMaxDuration;
+			fleet.EnqueueOrder(mineOrder);
+			SellCargoOrder sellCargoOrder = UnityObjectHelper.NewGameObject<SellCargoOrder>();
+			sellCargoOrder.CompletionMode = FleetOrderCompletionMode.Destroy;
+			sellCargoOrder.SellEquipment = false;
+			sellCargoOrder.MaxJumpDistance = 4;
+			sellCargoOrder.MaxDuration = sellCargoOrder.AIDefaultMaxDuration;
+			sellCargoOrder.CompleteWhenNoCargoToSell = true;
+			sellCargoOrder.CompleteWhenNoBuyerFound = false;
+			sellCargoOrder.MinBuyPriceMultiplier = 0.05f;
+			fleet.EnqueueOrder(sellCargoOrder);
+		}
+
+		// The AI genuinely needs discovery: a faction with zero discovered
+		// asteroids gets EXPLORE orders instead of mine orders (stock
+		// FactionAIBase behavior). Reveal the whole sector to every menu
+		// faction so trade/mine target searches work from frame one.
+		private static void DiscoverMenuSectorForAllFactions(Sector sector)
+		{
+			foreach (Faction faction in EngineASX.Instance.Factions)
+			{
+				if (faction != null && faction.Intel != null)
+				{
+					faction.Intel.DiscoverEverythingInSector(sector);
+				}
+			}
 		}
 
 		// The "ships sitting around doing nothing" fix: generic fleets
