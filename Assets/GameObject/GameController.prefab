@@ -1920,3 +1920,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier:
   PlanetsSettings: {fileID: 114967328832014496, guid: 319862f2d128cea429c7859530ecce94, type: 2}
+  AsteroidsSettings: {fileID: 114472185465350827, guid: 319862f2d128cea429c7859530ecce94, type: 2}

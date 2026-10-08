@@ -26,7 +26,18 @@ namespace OpenFrontier.IP.Engine
 	{
 		public static SpaceReflectionProbe Instance { get; private set; }
 
-		private const float SecondsBetweenRenders = 1f;
+		// Steady-state capture interval (user-tuned). Cheap because the
+		// mask is sky layers only and timeSlicingMode spreads the six
+		// faces across frames.
+		private const float SecondsBetweenRenders = 0.5f;
+
+		// Just after world ready the sky may still be generating - a
+		// capture then bakes a white/empty void. Burst-capture for the
+		// first few seconds so a good capture lands as soon as there is
+		// anything real to see.
+		private const float SettlingSecondsBetweenRenders = 0.25f;
+
+		private const float SettlingDuration = 4f;
 
 		private const float MinSecondsBetweenRequestedRenders = 0.1f;
 
@@ -64,6 +75,9 @@ namespace OpenFrontier.IP.Engine
 			reflectionProbe.boxProjection = false;
 			reflectionProbe.importance = importance;
 			reflectionProbe.size = size;
+			// One face per frame: no single-frame spike from the 6-face
+			// capture, which is what makes the 0.5s interval affordable.
+			reflectionProbe.timeSlicingMode = ReflectionProbeTimeSlicingMode.IndividualFaces;
 			return reflectionProbe;
 		}
 
@@ -82,8 +96,28 @@ namespace OpenFrontier.IP.Engine
 			renderRequested = true;
 		}
 
+		private bool wasLoadedAndReady;
+
+		private float readyTime = -1f;
+
 		private void LateUpdate()
 		{
+			// Never capture before the world is ready: a mid-load capture
+			// grabs the empty/initializing sky (white void / unloaded
+			// starfield) and every smooth surface wears it as a sheen.
+			// When readiness flips true, force a fresh capture so any
+			// early garbage never survives a frame longer than needed.
+			if (!EngineASX.LoadedAndReady)
+			{
+				wasLoadedAndReady = false;
+				return;
+			}
+			if (!wasLoadedAndReady)
+			{
+				wasLoadedAndReady = true;
+				readyTime = Time.unscaledTime;
+				renderRequested = true;
+			}
 			// The probe sits at the sector anchor (the SpaceCamera's
 			// viewpoint); fall back to the camera when no sector is loaded.
 			if (EngineASX.Instance != null && EngineASX.Instance.ActiveSector != null)
@@ -103,7 +137,7 @@ namespace OpenFrontier.IP.Engine
 			{
 				renderRequested = false;
 				lastRenderTime = Time.unscaledTime;
-				nextRenderTime = lastRenderTime + SecondsBetweenRenders;
+				nextRenderTime = lastRenderTime + ((Time.unscaledTime - readyTime < SettlingDuration) ? SettlingSecondsBetweenRenders : SecondsBetweenRenders);
 				if (skyProbe.RenderProbe() == -1)
 				{
 					Debug.LogWarning("[SpaceReflectionProbe] RenderProbe scheduling failed", this);

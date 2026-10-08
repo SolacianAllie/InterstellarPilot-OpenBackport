@@ -8,6 +8,7 @@ structure. Add new ones as they are found.
 C# changes are verified outside the editor with a generated .NET harness:
 
 - Regenerate: `python3 /tmp/opencode/gen_harness2.py` (rebuilds csprojs against live `Assets/Scripts`)
+- **New `.cs` files are INVISIBLE to the harness until regen** — a stale csproj silently skips them, so their errors only surface in the editor (`MainMenuWorldController.cs` hid three missing-using bugs this way). Always regen after creating files.
 - Build: `cd /tmp/opencode/harness && dotnet build All.csproj -v q -nologo`
 
 **Known blind spot:** the harness compiles against a UnityEngine *reference stub*,
@@ -32,6 +33,20 @@ exit 198) — the user performs all editor actions.
 
 ## Non-obvious traps
 
+- **Sun/backdrop render order:** the sun quads (layer 16, queue 3000)
+  sit at 0.95×far (~8075); nebula quads (layer 0) were ALSO queue 3000,
+  so transparent distance-sort drew nearer nebulae OVER the sun ("sun
+  clips into the skybox", worse at 1.6× size). All 338 nebula materials
+  are now queue 2999 — the sun always draws after the backdrop, while
+  gameplay particles (3000) still distance-sort over it correctly.
+- **Mipmap streaming is OFF for good — budget starvation, not
+  reduction depth.** This game's working set is enormous (an Instant
+  Action capital fleet ≈ 2.3GB+ of 2K maps); any mobile-sane budget
+  starves the streamer and textures sit at their smallest loaded mip
+  = "white ships". Verified matrix: OFF=fine, 256MB=white (even
+  menu), 768-2048MB=white (Instant Action), 4096MB=fine, OFF=fine.
+  Mipmaps themselves stay ON (all 746 textures) — only streaming is
+  disabled. Do not re-enable.
 - **Script GUIDs are deterministic:** `Guid(MD5(assemblyName + namespace + className))`
   (AssetRipper decompile scheme). Never regenerate .meta files; renaming
   namespaces/assemblies is safe because GUIDs live in the .meta files, but the
@@ -62,6 +77,13 @@ exit 198) — the user performs all editor actions.
   (4096), while an unrelated setting (`m_PrefilterSoftShadows`) silently
   reverted. After play sessions, diff `Assets/Settings/OpenFrontier-URP.asset`
   before committing — accept intentional drift, restore the rest.
+- **No Unity native calls in MonoBehaviour field initializers / static
+  constructors** (`new MaterialPropertyBlock()`, `LayerMask.NameToLayer`,
+  etc.): `CreateImpl is not allowed to be called from a MonoBehaviour
+  constructor` → `TypeInitializationException` poisons the WHOLE type
+  (every use throws). Lazy-init with a null check instead
+  (`ShieldHitRenderer` was bitten — shield hits errored and rendered
+  white/black).
 - **URP material postprocessor strips hand-edited YAML** for materials whose
   shader has a known URP ShaderID. Recreate those materials natively via the
   `Material` API; never hand-edit their YAML.
@@ -87,7 +109,9 @@ exit 198) — the user performs all editor actions.
   types (`UniversalRenderPipelineAsset`, etc.) MUST live in the OpenFrontier
   assembly. The harness links every package into every csproj, so a missing
   asmdef reference passes the harness and fails in the editor with CS0234
-  (`ShadowQualitySync` was bitten by this).
+  (`ShadowQualitySync` was bitten by this). The Core RP assembly
+  (`Unity.RenderPipelines.Core.Runtime`, home of `Volume`/`VolumeProfile`)
+  is referenced separately — `PostProcessingQualitySync` needed it added.
 - **uGUI positions on ScreenSpace-Overlay canvases are in screen pixels**;
   any hit-test radius authored in "pixels" must be multiplied by
   `Canvas.scaleFactor` or it shrinks physically on high-DPI screens (see

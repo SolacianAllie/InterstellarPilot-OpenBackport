@@ -51,7 +51,7 @@ MonoBehaviour:
   DateMinute: 0
   DateHour: 0
   Description:
-  InitialScene: {fileID: 114061268324235159, guid: 7010122eacfd0a24db51e1a72e23d159, type: 2}
+  InitialScene: {fileID: 114061268324235159, guid: 5aa162d0f719423dbf2d8645b7b1a547, type: 2}
   IsTutorial: 0
   MissionLog:
   Objectives:

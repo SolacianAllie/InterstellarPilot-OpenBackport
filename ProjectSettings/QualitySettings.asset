@@ -39,10 +39,10 @@ QualitySettings:
     enableLODCrossFade: 1
     streamingMipmapsActive: 0
     streamingMipmapsAddAllCameras: 1
-    streamingMipmapsMemoryBudget: 512
+    streamingMipmapsMemoryBudget: 768
     streamingMipmapsRenderersPerFrame: 512
-    streamingMipmapsMaxLevelReduction: 2
-    streamingMipmapsMaxFileIORequests: 1024
+    streamingMipmapsMaxLevelReduction: 1
+    streamingMipmapsMaxFileIORequests: 512
     particleRaycastBudget: 4
     asyncUploadTimeSlice: 2
     asyncUploadBufferSize: 4
@@ -92,10 +92,10 @@ QualitySettings:
     enableLODCrossFade: 1
     streamingMipmapsActive: 0
     streamingMipmapsAddAllCameras: 1
-    streamingMipmapsMemoryBudget: 512
+    streamingMipmapsMemoryBudget: 896
     streamingMipmapsRenderersPerFrame: 512
-    streamingMipmapsMaxLevelReduction: 2
-    streamingMipmapsMaxFileIORequests: 1024
+    streamingMipmapsMaxLevelReduction: 1
+    streamingMipmapsMaxFileIORequests: 768
     particleRaycastBudget: 16
     asyncUploadTimeSlice: 2
     asyncUploadBufferSize: 4
@@ -145,9 +145,9 @@ QualitySettings:
     enableLODCrossFade: 1
     streamingMipmapsActive: 0
     streamingMipmapsAddAllCameras: 1
-    streamingMipmapsMemoryBudget: 512
+    streamingMipmapsMemoryBudget: 1024
     streamingMipmapsRenderersPerFrame: 512
-    streamingMipmapsMaxLevelReduction: 2
+    streamingMipmapsMaxLevelReduction: 1
     streamingMipmapsMaxFileIORequests: 1024
     particleRaycastBudget: 64
     asyncUploadTimeSlice: 2
@@ -198,9 +198,9 @@ QualitySettings:
     enableLODCrossFade: 1
     streamingMipmapsActive: 0
     streamingMipmapsAddAllCameras: 1
-    streamingMipmapsMemoryBudget: 512
+    streamingMipmapsMemoryBudget: 1280
     streamingMipmapsRenderersPerFrame: 512
-    streamingMipmapsMaxLevelReduction: 2
+    streamingMipmapsMaxLevelReduction: 1
     streamingMipmapsMaxFileIORequests: 1024
     particleRaycastBudget: 256
     asyncUploadTimeSlice: 2
@@ -251,10 +251,10 @@ QualitySettings:
     enableLODCrossFade: 1
     streamingMipmapsActive: 0
     streamingMipmapsAddAllCameras: 1
-    streamingMipmapsMemoryBudget: 512
+    streamingMipmapsMemoryBudget: 2048
     streamingMipmapsRenderersPerFrame: 512
-    streamingMipmapsMaxLevelReduction: 2
-    streamingMipmapsMaxFileIORequests: 1024
+    streamingMipmapsMaxLevelReduction: 1
+    streamingMipmapsMaxFileIORequests: 2048
     particleRaycastBudget: 4096
     asyncUploadTimeSlice: 2
     asyncUploadBufferSize: 4

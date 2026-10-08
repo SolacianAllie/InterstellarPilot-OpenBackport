@@ -15,16 +15,13 @@ namespace OpenFrontier.IP.UI.Screens.UniverseSelect
 
 		public void Next()
 		{
+			// Open Frontier: the alpha gate ("temporarily unavailable"
+			// for anything but Unchartered Space) is removed - every
+			// scenario in AvailableScenarios is playable, including
+			// A Wormhole Too Far.
 			if (ScenarioList.FirstSelectedItem != null)
 			{
-				if (ScenarioList.FirstSelectedItem.Title != "Unchartered Space")
-				{
-					UIController.Instance.ShowMessageBox("Alpha version: this feature is temporarily unavailable");
-				}
-				else
-				{
-					UIController.Instance.ScreenNavigator.ShowUniverseGameTypeScreen(ScenarioList.FirstSelectedItem);
-				}
+				UIController.Instance.ScreenNavigator.ShowUniverseGameTypeScreen(ScenarioList.FirstSelectedItem);
 			}
 		}
 

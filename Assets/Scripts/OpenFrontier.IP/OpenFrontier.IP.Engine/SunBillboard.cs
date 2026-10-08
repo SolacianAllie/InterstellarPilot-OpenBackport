@@ -111,10 +111,13 @@ namespace OpenFrontier.IP.Engine
 
 		private MaterialPropertyBlock propertyBlock;
 
+		private MaterialPropertyBlock anchorPropertyBlock;
+
 		private void Awake()
 		{
 			cachedLight = GetComponent<Light>();
 			propertyBlock = new MaterialPropertyBlock();
+			anchorPropertyBlock = new MaterialPropertyBlock();
 		}
 
 		private void OnDestroy()
@@ -204,38 +207,56 @@ namespace OpenFrontier.IP.Engine
 			Vector3 vector3 = position - main.transform.position;
 			Quaternion rotation = ((vector3.sqrMagnitude > 0.0001f) ? Quaternion.LookRotation(vector3, main.transform.up) : Quaternion.identity);
 			float num2 = Vector3.Distance(main.transform.position, position);
-			float num3 = 2f * num2 * Mathf.Tan(CoreAngularDiameter * 0.5f * (Mathf.PI / 180f));
+			// Open Frontier: sun size scales with the star's INTENSITY
+			// (the 1-3 brightness the generator/slider writes into the
+			// sector's DirectionLightColor, game-wide) - hue and
+			// saturation play no part. Light.intensity is NOT this: it
+			// is a cloud-dimmed base multiplier, not the star's output.
+			StarColorGenerator.RgbToHsv(StarTint, out float _, out float _, out float v);
+			float num3 = Mathf.Lerp(0.7f, 1.6f, Mathf.InverseLerp(0.5f, 3f, v));
+			float num4 = 2f * num2 * Mathf.Tan(CoreAngularDiameter * 0.5f * (Mathf.PI / 180f)) * num3;
 			coreTransform.SetPositionAndRotation(position, rotation);
-			coreTransform.localScale = new Vector3(num3, num3, 1f);
+			coreTransform.localScale = new Vector3(num4, num4, 1f);
 			glowTransform.SetPositionAndRotation(position + vector, rotation);
-			float num4 = num3 * (GlowAngularDiameter / CoreAngularDiameter);
-			glowTransform.localScale = new Vector3(num4, num4, 1f);
+			float num5 = num4 * (GlowAngularDiameter / CoreAngularDiameter);
+			glowTransform.localScale = new Vector3(num5, num5, 1f);
 			// The probe-only anchor sun (SkyProbe layer): rides the light
 			// axis from the sector anchor so the anchor-positioned
 			// reflection probe captures a sun that matches the lighting.
+			// NOT intensity-scaled: it is invisible to players and only
+			// feeds the reflection capture - scaling it up injected
+			// extra HDR energy into ship reflections (white blowout).
 			Vector3 vector4 = (EngineASX.Instance != null && EngineASX.Instance.ActiveSector != null) ? EngineASX.Instance.ActiveSector.transform.position : main.transform.position;
 			Vector3 position2 = vector4 + vector * AnchorSunDistance;
 			Quaternion rotation2 = Quaternion.LookRotation(position2 - vector4, main.transform.up);
-			float num5 = 2f * AnchorSunDistance * Mathf.Tan(CoreAngularDiameter * 0.5f * (Mathf.PI / 180f));
+			float num6 = 2f * AnchorSunDistance * Mathf.Tan(CoreAngularDiameter * 0.5f * (Mathf.PI / 180f));
 			anchorCoreTransform.SetPositionAndRotation(position2, rotation2);
-			anchorCoreTransform.localScale = new Vector3(num5, num5, 1f);
+			anchorCoreTransform.localScale = new Vector3(num6, num6, 1f);
 			anchorGlowTransform.SetPositionAndRotation(position2 + vector, rotation2);
-			anchorGlowTransform.localScale = new Vector3(num5 * (GlowAngularDiameter / CoreAngularDiameter), num5 * (GlowAngularDiameter / CoreAngularDiameter), 1f);
+			anchorGlowTransform.localScale = new Vector3(num6 * (GlowAngularDiameter / CoreAngularDiameter), num6 * (GlowAngularDiameter / CoreAngularDiameter), 1f);
 			// Dim with the cloud's starlight block: the visible sun
 			// breathes with the same lerped factor the directional
 			// light drops to inside gas clouds (additive quads scale
 			// with color).
-			float num6 = ((EngineASX.Instance != null && EngineASX.Instance.EnvironmentController != null) ? EngineASX.Instance.EnvironmentController.CurrentDirectionalLightFactor : 1f);
-			Color starTint = StarTint * num6;
+			float num7 = ((EngineASX.Instance != null && EngineASX.Instance.EnvironmentController != null) ? EngineASX.Instance.EnvironmentController.CurrentDirectionalLightFactor : 1f);
+			Color starTint = StarTint * num7;
 			// Material base color x star tint; the core is additionally
 			// pulled towards white so it reads as the blinding disk.
 			Color value = new Color((starTint.r + 1f) * 0.5f, (starTint.g + 1f) * 0.5f, (starTint.b + 1f) * 0.5f, 1f);
 			propertyBlock.SetColor("_Color", CoreMaterial.GetColor("_Color") * value);
 			coreRenderer.SetPropertyBlock(propertyBlock);
-			anchorCoreRenderer.SetPropertyBlock(propertyBlock);
 			propertyBlock.SetColor("_Color", GlowMaterial.GetColor("_Color") * starTint);
 			glowRenderer.SetPropertyBlock(propertyBlock);
-			anchorGlowRenderer.SetPropertyBlock(propertyBlock);
+			// The ANCHOR sun feeds the reflection probe: an HDR tint in
+			// the capture blurs across the cubemap's low mips and every
+			// smooth ship wears it as a white sheen. Clamp the captured
+			// color to LDR - a 1.0 sun still reads as a glint.
+			Color value2 = new Color(Mathf.Min(value.r, 1f), Mathf.Min(value.g, 1f), Mathf.Min(value.b, 1f), 1f);
+			anchorPropertyBlock.SetColor("_Color", CoreMaterial.GetColor("_Color") * value2);
+			anchorCoreRenderer.SetPropertyBlock(anchorPropertyBlock);
+			Color starTint2 = new Color(Mathf.Min(starTint.r, 1f), Mathf.Min(starTint.g, 1f), Mathf.Min(starTint.b, 1f), 1f);
+			anchorPropertyBlock.SetColor("_Color", GlowMaterial.GetColor("_Color") * starTint2);
+			anchorGlowRenderer.SetPropertyBlock(anchorPropertyBlock);
 		}
 	}
 }

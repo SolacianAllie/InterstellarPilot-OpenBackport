@@ -168,7 +168,11 @@ namespace OpenFrontier.IP.Engine
 					if (components != null && GameController.Instance.GameSettings.DebugSettings.ShieldsEnabled && damageType.ShieldDamageType != ShieldDamageType.Ignore && components.ShieldEnabled)
 					{
 						components.DamageShields(damage, shieldIndex, damageType.ShieldDamageType, ref damageInfo, ref remainingDamage);
-						if (shieldIndex > -1 && !components.ShieldComponent.IsShieldDepleted(shieldIndex) && damageInfo.ShieldDamage > 0f && unit.IsActiveInEngine)
+						// Open Frontier: the stock !IsShieldDepleted gate
+						// suppressed the effect on the very hit that breaks
+						// the shield - the one hit that SHOULD flash (the
+						// depletion pop). Gate removed.
+						if (shieldIndex > -1 && damageInfo.ShieldDamage > 0f && unit.IsActiveInEngine)
 						{
 							CreateShieldHitEffectIfNeeded(sourceWorldPosition, instance, ref damageInfo);
 						}

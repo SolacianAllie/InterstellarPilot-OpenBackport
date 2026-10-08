@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using OpenFrontier.IP.Common.Factions;
+using OpenFrontier.IP.Common.FleetOrders;
 using OpenFrontier.IP.Engine.Core.Units;
 using OpenFrontier.IP.Engine.Factions;
+using OpenFrontier.IP.Engine.Fleets.FleetOrders;
 using OpenFrontier.IP.Engine.WorldSeeding.WorldSeedingLayers;
 using OpenFrontier.IP.Scenarios;
 using OpenFrontier.IP.Testing.Spawning;
@@ -66,25 +68,116 @@ namespace OpenFrontier.IP.Engine
 			{
 				return;
 			}
-			int num = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
-			System.Random random = new System.Random(num);
-			// Fresh backdrop (nebulae/starfield re-rolled from the new seed)
-			// and a fresh star color from the seeded generator.
-			sector.RandomSeed = num;
-			sector.DirectionLightColor = StarColorGenerator.ForSector(num);
-			sector.SkyExposure = Mathf.Lerp(0.7f, 1.3f, (float)random.NextDouble());
+			// WorldBase re-seeds Unity's RNG with the scenario's
+			// CustomSeed on load, and the menu's is FIXED - so every
+			// UnityEngine.Random call below (and Sector.Init's
+			// AssignRandomSeed before us) replayed the same sequence
+			// every visit: same sector seed, same sun, same nebulae.
+			// Re-seed from entropy or nothing actually re-rolls.
+			UnityEngine.Random.InitState(System.Environment.TickCount ^ (int)System.DateTime.Now.Ticks);
+			// The sector self-assigns a fresh RandomSeed at load (prefab
+			// seed -1 = stock "random per visit" behavior) and the
+			// backdrop recipe lives in the prefab's SpaceConstructorParams.
+			// We only derive the star color from that seed (keeps
+			// sky/sun/star coherent) and jitter the exposure. The guard
+			// covers init ordering - if Init hasn't run yet, roll it here.
+			// NOTE: Init may have run BEFORE this re-seed (fixed
+			// sequence) - force a re-roll regardless so the seed is
+			// post-entropy.
+			sector.AssignRandomSeed();
+			sector.DirectionLightColor = StarColorGenerator.ForSector(sector.RandomSeed);
+			sector.SkyExposure = Mathf.Lerp(0.7f, 1.3f, UnityEngine.Random.value);
+			// The backdrop recipe (Hellemus clone) pins NebulaColors to
+			// flag value 1 = BLUE only, NebulaCount 39, StarsIntensity
+			// ~0.3. Re-roll all three per visit. Colors use a rarity
+			// ladder (the more colors, the rarer the system, 10% full
+			// rainbow); density and star intensity use the godmode
+			// menu's own min/max (0-64 nebulae, 0-2 star intensity).
+			CustomSectorAppearance component = sector.GetComponent<CustomSectorAppearance>();
+			if (component != null && component.SpaceConstructorParams != null)
+			{
+				Common.NebulaColour[] array = new Common.NebulaColour[8]
+				{
+					Common.NebulaColour.BLUE,
+					Common.NebulaColour.PINK,
+					Common.NebulaColour.PURPLE,
+					Common.NebulaColour.GREEN,
+					Common.NebulaColour.YELLOW,
+					Common.NebulaColour.ORANGE,
+					Common.NebulaColour.RED,
+					Common.NebulaColour.CYAN
+				};
+				for (int i = array.Length - 1; i > 0; i--)
+				{
+					int num3 = UnityEngine.Random.Range(0, i + 1);
+					Common.NebulaColour nebulaColour = array[i];
+					array[i] = array[num3];
+					array[num3] = nebulaColour;
+				}
+				// Even rarity ladder: cumulative P(>=N) drops linearly
+				// from 100% (N=1) to 10% (N=8) - 12.86% per step, so
+				// every exact count 1-7 lands at ~12.9% and the rainbow
+				// stays the 10% jackpot.
+				float value = UnityEngine.Random.value;
+				int num4;
+				if (value < 0.1f)
+				{
+					num4 = 8;
+				}
+				else if (value < 0.2286f)
+				{
+					num4 = 7;
+				}
+				else if (value < 0.3571f)
+				{
+					num4 = 6;
+				}
+				else if (value < 0.4857f)
+				{
+					num4 = 5;
+				}
+				else if (value < 0.6143f)
+				{
+					num4 = 4;
+				}
+				else if (value < 0.7429f)
+				{
+					num4 = 3;
+				}
+				else if (value < 0.8714f)
+				{
+					num4 = 2;
+				}
+				else
+				{
+					num4 = 1;
+				}
+				Common.NebulaColour nebulaColors = (Common.NebulaColour)0;
+				for (int j = 0; j < num4; j++)
+				{
+					nebulaColors |= array[j];
+				}
+				component.SpaceConstructorParams.NebulaColors = nebulaColors;
+				component.SpaceConstructorParams.NebulaCount = UnityEngine.Random.Range(0, 65);
+				component.SpaceConstructorParams.StarsIntensity = UnityEngine.Random.Range(0f, 2f);
+			}
 			// Replace the preset dressing before regenerating: stock
 			// stations/ships/planet/shuttle/clusters go, everything comes
 			// back randomly below.
 			ClearPresetMenuContent();
-			SpawnAsteroidClusters(sector);
+			// Belts are a chance, not a guarantee: a belted system gets
+			// real mineable asteroids, a refinery within reach and miner
+			// fleets working the rocks; a beltless one is stations and
+			// traders only - so some menus have miners, some don't.
+			List<AsteroidCluster> clusters = ((UnityEngine.Random.value < 0.7f) ? SpawnAsteroidClusters(sector) : new List<AsteroidCluster>());
 			// Applies everything: regenerates the backdrop, refreshes the
 			// sun tint, recaptures the reflection probe.
 			EngineASX.Instance.ActiveSectorData.OnSectorChanged();
 			SpawnGuaranteedPlanetWithMoon(sector);
-			PopulateMenuSystem(sector);
+			PopulateMenuSystem(sector, clusters);
 			SpawnHeroShipAndSpectate(sector);
-			Debug.Log("[MainMenuWorldController] rolled menu system, seed " + num);
+			MakeMenuAIAggressive();
+			Debug.Log("[MainMenuWorldController] rolled menu system, seed " + sector.RandomSeed);
 		}
 
 		// The trader faction that owns the stations and traffic; the hero
@@ -92,9 +185,12 @@ namespace OpenFrontier.IP.Engine
 		private static Faction civilianFaction;
 
 		// The MenuScreenScene's hand-placed world content - replaced by the
-		// random composition below on every visit.
-		private static readonly string[] PresetUnitNames = new string[6] { "unit_space_station_tef (1)", "UnitRefinery", "unit_shuttle_a", "UnitPlanetOrangeWithImpacts", "UnitAsteroidClusterTypeA", "UnitHypersleepPodFactory" };
-
+		// random composition below on every visit. EVERY unit goes: the
+		// old name/prefix list missed preset fleet SHIPS, because the
+		// fleet roots (GenericGroupNoCloak*) carry Fleet+DestructableUnit
+		// but no Unit component, and their ships reparent to the sector
+		// at Init - destroying the root orphaned live ships, which then
+		// sat around doing nothing (the idle Hornet). No name filtering.
 		private static readonly string[] PresetRootPrefixes = new string[5] { "Bay_", "Dock", "AIGenericPilotController", "GenericNpc", "GenericGroupNoCloak" };
 
 		private static void ClearPresetMenuContent()
@@ -103,23 +199,11 @@ namespace OpenFrontier.IP.Engine
 			EngineASX.Instance.EnumerateUnitsWithPredicate(delegate(Unit unit)
 			{
 				Unit rootUnit = unit.GetRootUnit();
-				if (rootUnit != null && (System.Array.IndexOf(PresetUnitNames, rootUnit.gameObject.name) >= 0 || rootUnit.UnitType == UnitType.AsteroidCluster))
+				if (rootUnit != null && !list.Contains(rootUnit))
 				{
 					list.Add(rootUnit);
 				}
 			}, (Unit e) => e.IsValidAndNotDestroyed);
-			// Menu-only: the gas clouds go too - clearer belts and a
-			// cleaner backdrop for the random system.
-			List<Unit> list2 = new List<Unit>();
-			EngineASX.Instance.EnumerateUnitsWithPredicate(delegate(Unit unit)
-			{
-				Unit rootUnit2 = unit.GetRootUnit();
-				if (rootUnit2 != null && rootUnit2.GetComponent<UnitGasCloud>() != null)
-				{
-					list2.Add(rootUnit2);
-				}
-			}, (Unit e) => e.IsValidAndNotDestroyed);
-			list.AddRange(list2);
 			foreach (Unit item in list)
 			{
 				// Notify first (fleets and AI processors drop their
@@ -128,6 +212,9 @@ namespace OpenFrontier.IP.Engine
 				EngineASX.Instance.RegisterDestroyedUnit(item);
 				item.SafeDestroy();
 			}
+			// Non-unit preset shells: fleet roots (no Unit component -
+			// their ships died above), pilot controllers and npc
+			// spawners.
 			foreach (GameObject gameObject in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
 			{
 				string name = gameObject.name;
@@ -145,16 +232,29 @@ namespace OpenFrontier.IP.Engine
 					}
 				}
 			}
+			// The easter egg bandit-horde trigger lives UNDER the NewGame
+			// flow object, so the root pass above never sees it - and its
+			// condition is Trigger_Always evaluated during the intro
+			// state: a GUARANTEED horde on every menu visit. Destroy it;
+			// bandits now come only from the rare roll in
+			// PopulateMenuSystem.
+			GameObject gameObject2 = GameObject.Find("Trigger_EasterEgg_SpawnBanditHorde");
+			if (gameObject2 != null)
+			{
+				Object.Destroy(gameObject2);
+			}
 		}
 
-		// Fresh belts every visit (1-2, no gas clouds in the menu), so the
-		// sector always has at least one.
-		private static void SpawnAsteroidClusters(Sector sector)
+		// Fresh belts (1-2, no gas clouds in the menu), each filled with
+		// REAL mineable asteroid units so miner fleets have something to
+		// work - the decorative cluster rocks alone aren't harvestable.
+		private List<AsteroidCluster> SpawnAsteroidClusters(Sector sector)
 		{
+			List<AsteroidCluster> list = new List<AsteroidCluster>();
 			AsteroidType[] array = Resources.LoadAll<AsteroidType>("Prefabs/WorldData/AsteroidTypes");
 			if (array.Length == 0)
 			{
-				return;
+				return list;
 			}
 			int num = UnityEngine.Random.Range(1, 3);
 			for (int i = 0; i < num; i++)
@@ -166,7 +266,28 @@ namespace OpenFrontier.IP.Engine
 				asteroidCluster.transform.SetParent(sector.transform, worldPositionStays: true);
 				asteroidCluster.transform.localPosition = sector.GetRandomSectorPositionWithinGateDistance(0.75f);
 				asteroidCluster.GetComponent<Unit>().Init();
+				SeedRealAsteroids(asteroidCluster);
+				list.Add(asteroidCluster);
 			}
+			return list;
+		}
+
+		// The stock CreateAsteroidsSeeder world layer, run per-cluster:
+		// scatters real asteroid units through the cluster volume.
+		public CreateAsteroidsSeederSettings AsteroidsSettings;
+
+		private void SeedRealAsteroids(AsteroidCluster cluster)
+		{
+			if (AsteroidsSettings == null)
+			{
+				Debug.LogWarning("[MainMenuWorldController] AsteroidsSettings not wired - belt has decorative rocks only");
+				return;
+			}
+			GameObject gameObject = new GameObject("MenuAsteroidSeeder");
+			CreateAsteroidsSeeder createAsteroidsSeeder = gameObject.AddComponent<CreateAsteroidsSeeder>();
+			createAsteroidsSeeder.CreateAsteroidsSeederSettings = AsteroidsSettings;
+			createAsteroidsSeeder.PopulateAsteroidsAroundCluster(cluster);
+			Object.Destroy(gameObject);
 		}
 
 		// The menu ALWAYS has a planet, and it ALWAYS has a moon. Uses the
@@ -187,21 +308,29 @@ namespace OpenFrontier.IP.Engine
 			createPlanetsSeeder.CreatePlanetsSeederSettings = PlanetsSettings;
 			createPlanetsSeeder.CreateScenePlanets(sector);
 			Object.Destroy(gameObject);
-			// Guarantee the moon (the settings roll it at 0.8).
-			bool flag = false;
+			// Moon ladder (user-tuned): 1 guaranteed, then keep rolling -
+			// 85% for a 2nd, 65% for a 3rd, 45% for a 4th, 25% for a
+			// 5th, then 5% for each further one, hard-capped at 8. The
+			// stock 0.8 roll may already have produced one, which counts.
+			int num = RollMenuMoonTargetCount();
+			int num2 = 0;
+			List<Unit> list = new List<Unit>();
 			EngineASX.Instance.EnumerateUnitsWithPredicate(delegate(Unit unit)
 			{
 				if (unit.GetComponent<Moon>() != null && unit.Sector == sector)
 				{
-					flag = true;
+					num2++;
 				}
-			}, (Unit e) => e.IsValidAndNotDestroyed);
-			if (!flag && PlanetsSettings.MoonPrefabs.Count > 0)
-			{
-				List<Unit> unitsByType = sector.GetUnitsByType(UnitType.Planet);
-				if (unitsByType != null && unitsByType.Count > 0)
+				else if (unit.Sector == sector)
 				{
-					Unit unit2 = unitsByType[unitsByType.Count - 1];
+					list.Add(unit);
+				}
+			}, (Unit e) => e.IsValidAndNotDestroyed && e.UnitType == UnitType.Planet);
+			if (list.Count > 0 && PlanetsSettings.MoonPrefabs.Count > 0)
+			{
+				Unit unit2 = list[list.Count - 1];
+				for (int i = num2; i < num; i++)
+				{
 					Unit unit3 = UnityObjectHelper.InstantiateAndGetComponent(PlanetsSettings.MoonPrefabs[UnityEngine.Random.Range(0, PlanetsSettings.MoonPrefabs.Count)]);
 					Moon component = unit3.GetComponent<Moon>();
 					if (component != null)
@@ -212,6 +341,98 @@ namespace OpenFrontier.IP.Engine
 						unit3.Sector = sector;
 					}
 				}
+			}
+			PlaceMoonsBesideTheDisc(sector);
+			int num3 = 0;
+			int num4 = 0;
+			EngineASX.Instance.EnumerateUnitsWithPredicate(delegate(Unit unit)
+			{
+				if (unit.GetComponent<Moon>() != null)
+				{
+					num4++;
+				}
+				else
+				{
+					num3++;
+				}
+			}, (Unit e) => e.IsValidAndNotDestroyed && e.Sector == sector && e.UnitType == UnitType.Planet);
+			Debug.Log(string.Format("[MainMenuWorldController] planet system: {0} planet(s), {1} moon(s)", num3, num4));
+		}
+
+		// Menu moon ladder: chance to ADD the Nth moon (conditional
+		// rolls). 6+ keeps rolling 5%, hard-capped at 8.
+		private static readonly float[] MoonAddChances = new float[7] { 0.85f, 0.65f, 0.45f, 0.25f, 0.05f, 0.05f, 0.05f };
+
+		private static int RollMenuMoonTargetCount()
+		{
+			int num = 1;
+			while (num - 1 < MoonAddChances.Length && UnityEngine.Random.value < MoonAddChances[num - 1])
+			{
+				num++;
+			}
+			return num;
+		}
+
+		// The stock settings park moons 40000u from their planet -
+		// authored for the sector map, not a camera. The planet stays at
+		// its stock ~20000u backdrop spot (moving it close let it
+		// swallow the spectating camera), so moons are placed hugging
+		// the disc: innermost at ~1.5x the planet's TRUE visual radius
+		// (renderer bounds - the serialized Unit.Radius is a placeholder
+		// 1), each next one further out, spread evenly around the disc
+		// starting 90 degrees off the planet->camera line so nothing
+		// starts hidden behind the planet. The orbit phase is unit.Seed
+		// % 360 in ActiveUnitMoon.Reposition - zeroed so these offsets
+		// apply as-authored (the slow stock orbit drifts on from here).
+		private static void PlaceMoonsBesideTheDisc(Sector sector)
+		{
+			Dictionary<Unit, List<Unit>> dictionary = new Dictionary<Unit, List<Unit>>();
+			EngineASX.Instance.EnumerateUnitsWithPredicate(delegate(Unit unit)
+			{
+				Moon component = unit.GetComponent<Moon>();
+				if (component != null && component.OrbitingAroundUnit != null)
+				{
+					if (!dictionary.TryGetValue(component.OrbitingAroundUnit, out var value))
+					{
+						value = new List<Unit>();
+						dictionary[component.OrbitingAroundUnit] = value;
+					}
+					value.Add(unit);
+				}
+			}, (Unit e) => e.IsValidAndNotDestroyed && e.Sector == sector && e.UnitType == UnitType.Planet);
+			foreach (KeyValuePair<Unit, List<Unit>> item in dictionary)
+			{
+				float num = 0f;
+				Renderer componentInChildren = item.Key.GetComponentInChildren<Renderer>();
+				if (componentInChildren != null)
+				{
+					// extents.magnitude of a sphere = radius * sqrt(3)
+					num = componentInChildren.bounds.extents.magnitude / 1.732f;
+				}
+				if (num <= 0f)
+				{
+					num = Mathf.Max(1000f, item.Key.Radius);
+				}
+				Vector3 vector = -item.Key.transform.localPosition;
+				vector.y = 0f;
+				vector = ((vector.sqrMagnitude < 1f) ? Vector3.forward : vector.normalized);
+				Vector3 vector2 = Quaternion.Euler(0f, 90f * ((UnityEngine.Random.value < 0.5f) ? 1f : (-1f)), 0f) * vector;
+				for (int i = 0; i < item.Value.Count; i++)
+				{
+					Unit unit2 = item.Value[i];
+					Moon component2 = unit2.GetComponent<Moon>();
+					float num2 = num * Mathf.Min(1.5f * Mathf.Pow(1.35f, i), 7f);
+					float num3 = (float)i * (360f / (float)item.Value.Count) + UnityEngine.Random.Range(-10f, 10f);
+					Vector3 vector3 = Quaternion.Euler(0f, num3, 0f) * vector2;
+					component2.OffsetFromPlanet = (vector3 + Vector3.up * UnityEngine.Random.Range(-0.08f, 0.08f)).normalized * num2;
+					unit2.Seed = 0;
+					// Size variety: 0.5-4x per moon (user-calibrated on
+					// screen), so a multi-moon system reads as distinct
+					// bodies, not clones. Orbit math uses the PLANET's
+					// radius, so scale never hides a moon inside it.
+					unit2.transform.localScale = Vector3.one * UnityEngine.Random.Range(0.5f, 4f);
+				}
+				Debug.Log(string.Format("[MainMenuWorldController] planet '{0}' visual radius {1:0}: {2} moon(s) placed", item.Key.name, num, item.Value.Count));
 			}
 		}
 
@@ -241,61 +462,174 @@ namespace OpenFrontier.IP.Engine
 			}
 		}
 
-		// Light custom-universe population: everything the local AI needs
-		// to exist and work inside this one system.
-		private static void PopulateMenuSystem(Sector sector)
+		// Light custom-universe population: ONE OF EVERY station type,
+		// spread around the sector, each with its own faction + trade
+		// fleet and sometimes a patrol. Refineries park near the belt so
+		// miners have somewhere close to haul ore, and every cluster gets
+		// at least one miner fleet dropped right into the rocks.
+		private static void PopulateMenuSystem(Sector sector, List<AsteroidCluster> clusters)
 		{
 			if (EngineASX.Instance.FactionSpawner == null || EngineASX.Instance.FactionSpawner.Settings == null)
 			{
 				return;
 			}
-			// 2-3 stations, EACH with its own faction - factions trading
-			// with each other is what makes the system feel alive.
-			civilianFaction = CreateAIFaction(FactionType.Trader);
-			var list = GameController.Instance.LoadedUnitClasses.Where((UnitClass e) => e.IsUsable && e.UnitType == UnitType.Station && e.SeedInSandbox && e.StationPurpose != StationPurpose.SectorControl).ToList();
-			List<Faction> list2 = new List<Faction>();
-			int num = UnityEngine.Random.Range(2, 4);
-			for (int i = 0; i < num && list.Count > 0; i++)
+			bool flag = clusters.Count > 0;
+			float actualGateDistance = sector.GetActualGateDistance();
+			var list = GameController.Instance.LoadedUnitClasses.Where((UnitClass e) => e.IsUsable && e.UnitType == UnitType.Station && e.SeedInSandbox && e.StationPurpose != StationPurpose.SectorControl).OrderBy((UnitClass e) => UnityEngine.Random.value).ToList();
+			civilianFaction = null;
+			Faction securityFaction = null;
+			float num = 6.2831855f / Mathf.Max(1, list.Count);
+			for (int i = 0; i < list.Count; i++)
 			{
-				Faction stationFaction = ((i == 0) ? civilianFaction : CreateAIFaction(FactionType.Trader));
-				if (stationFaction != null)
+				Faction faction = CreateAIFaction(FactionType.Trader);
+				if (faction == null)
 				{
-					list2.Add(stationFaction);
+					break;
 				}
-				SpawnUtils.SpawnUnit(list[UnityEngine.Random.Range(0, list.Count)].UnitPrefab, sector, sector.GetRandomSectorPositionWithinGateDistance(0.75f), stationFaction);
-			}
-			// Trader traffic between the stations, with strategies assigned
-			// at creation so fleets get to work immediately.
-			foreach (Faction item in list2)
-			{
-				int num2 = UnityEngine.Random.Range(1, 3);
-				for (int j = 0; j < num2; j++)
+				if (civilianFaction == null)
 				{
-					SpawnUtils.SpawnFleetWithSmallUnits(item, sector, sector.GetRandomSectorPositionWithinGateDistance(0.75f), UnityEngine.Random.Range(3, 6));
+					civilianFaction = faction;
 				}
-			}
-			AssignStrategiesToIdleFleets();
-			// Miners working the clusters.
-			Faction faction = CreateAIFaction(FactionType.Miner);
-			if (faction != null)
-			{
-				int num3 = UnityEngine.Random.Range(1, 3);
+				UnitClass unitClass = list[i];
+				Vector3 vector;
+				if ((unitClass.StationPurpose & StationPurpose.Refinery) != 0 && flag)
+				{
+					// Refineries try for the belt: just outside a random
+					// cluster, a short ore haul for the miners.
+					AsteroidCluster asteroidCluster = clusters[UnityEngine.Random.Range(0, clusters.Count)];
+					vector = asteroidCluster.Unit.SectorPosition + UnityEngine.Random.onUnitSphere * (asteroidCluster.Unit.Radius + 1500f);
+				}
+				else
+				{
+					// Ring spread: even angular slots with a little
+					// jitter, radius in a mid-band so nothing clumps.
+					float f = (float)i * num + UnityEngine.Random.Range(-0.3f, 0.3f) * num;
+					float num2 = actualGateDistance * UnityEngine.Random.Range(0.35f, 0.8f);
+					vector = new Vector3(Mathf.Cos(f), 0f, Mathf.Sin(f)) * num2;
+				}
+				Unit unit = SpawnUtils.SpawnUnit(unitClass.UnitPrefab, sector, vector, faction);
+				Vector3 vector2 = ((unit != null) ? unit.SectorPosition : vector);
+				// 2-3 SOLO traders working out of home - each its own
+				// one-ship fleet with a standing trade order, so ships
+				// run independent routes instead of flying formation.
+				int num3 = UnityEngine.Random.Range(2, 4);
 				for (int k = 0; k < num3; k++)
 				{
-					SpawnUtils.SpawnFleetWithLargerMiningUnits(faction, sector, sector.GetRandomSectorPositionWithinGateDistance(0.75f), UnityEngine.Random.Range(3, 6));
+					ForceTradeOrders(SpawnSoloShipFleet(faction, sector, vector2 + UnityEngine.Random.onUnitSphere * 900f, TraderPrefabs[UnityEngine.Random.Range(0, TraderPrefabs.Length)]));
+				}
+				// ...and sometimes a patrol on station.
+				if (UnityEngine.Random.value < 0.35f)
+				{
+					if (securityFaction == null)
+					{
+						securityFaction = CreateAIFaction(FactionType.Security);
+					}
+					if (securityFaction != null)
+					{
+						SpawnUtils.SpawnFleetWithLargerUnits(securityFaction, sector, vector2 + UnityEngine.Random.onUnitSphere * 1200f, UnityEngine.Random.Range(3, 6));
+					}
 				}
 			}
-			// A security patrol.
-			Faction faction2 = CreateAIFaction(FactionType.Security);
-			if (faction2 != null)
+			// Every cluster gets 1-2 SOLO miners, dropped in the rocks
+			// and force-ordered to mine then sell.
+			if (flag)
 			{
-				SpawnUtils.SpawnFleetWithLargerUnits(faction2, sector, sector.GetRandomSectorPositionWithinGateDistance(0.75f), UnityEngine.Random.Range(4, 7));
+				Faction faction2 = CreateAIFaction(FactionType.Miner);
+				if (faction2 != null)
+				{
+					foreach (AsteroidCluster cluster in clusters)
+					{
+						int num4 = UnityEngine.Random.Range(1, 3);
+						for (int l = 0; l < num4; l++)
+						{
+							ForceMineOrders(SpawnSoloShipFleet(faction2, sector, cluster.Unit.SectorPosition + UnityEngine.Random.onUnitSphere * (cluster.Unit.Radius * 0.5f), GameController.Instance.UnitClasses.Hauler_M.UnitPrefab));
+						}
+					}
+				}
 			}
-			// 40% chance of a hostile bandit horde - HostileWithAll, so the
-			// locals spot and engage them on their own.
-			if (UnityEngine.Random.value < 0.4f)
+			// Bandits are a rare event now - the easter egg trigger can
+			// also still fire one off on its own.
+			if (UnityEngine.Random.value < 0.15f)
 			{
 				SpawnUtils.SpawnBanditHordesAtSectorPosition(sector, sector.GetRandomSectorPositionWithinGateDistance(0.75f), 1, 2);
+			}
+			DiscoverMenuSectorForAllFactions(sector);
+			AssignStrategiesToIdleFleets();
+			MakeMenuFactionsPeaceful();
+		}
+
+		// Trade-ship sets mirroring SpawnUtils' hardcoded menu picks.
+		private static Unit[] TraderPrefabs => new Unit[3]
+		{
+			GameController.Instance.UnitClasses.Hauler_A.UnitPrefab,
+			GameController.Instance.UnitClasses.Venture_A.UnitPrefab,
+			GameController.Instance.UnitClasses.Shuttle_A.UnitPrefab
+		};
+
+		// One ship, its own fleet - orders only live on fleets, so a
+		// "lone" ship is a fleet of one. Uses the generic fleet prefab
+		// (SpawnUtils' fleet helpers build from the PLAYER fleet prefab).
+		private static Fleet SpawnSoloShipFleet(Faction faction, Sector sector, Vector3 sectorPosition, Unit prefab)
+		{
+			Unit unit = SpawnUtils.SpawnUnit(prefab, sector, sectorPosition, faction);
+			if (unit == null)
+			{
+				return null;
+			}
+			return SpawnUtils.SpawnGenericFleetWithUnits(faction, new List<Unit> { unit });
+		}
+
+		// Mirrors FactionAIBase's Trade strategy: a standing autonomous
+		// trade order (repeatable - loops forever).
+		private static void ForceTradeOrders(Fleet fleet)
+		{
+			if (fleet == null)
+			{
+				return;
+			}
+			AutonomousTradeOrder autonomousTradeOrder = UnityObjectHelper.NewGameObject<AutonomousTradeOrder>();
+			autonomousTradeOrder.MaxJumpDistance = 4;
+			autonomousTradeOrder.MaxDuration = 0f;
+			fleet.EnqueueOrder(autonomousTradeOrder);
+		}
+
+		// Mirrors FactionAIBase's Mine strategy verbatim: mine until the
+		// hold is full, then sell the haul. One-shot orders; the faction
+		// AI's idle pass re-orders when they complete.
+		private static void ForceMineOrders(Fleet fleet)
+		{
+			if (fleet == null)
+			{
+				return;
+			}
+			MineOrder mineOrder = UnityObjectHelper.NewGameObject<MineOrder>();
+			mineOrder.MaxJumpDistance = 2;
+			mineOrder.CompletionMode = FleetOrderCompletionMode.Destroy;
+			mineOrder.MaxDuration = mineOrder.AIDefaultMaxDuration;
+			fleet.EnqueueOrder(mineOrder);
+			SellCargoOrder sellCargoOrder = UnityObjectHelper.NewGameObject<SellCargoOrder>();
+			sellCargoOrder.CompletionMode = FleetOrderCompletionMode.Destroy;
+			sellCargoOrder.SellEquipment = false;
+			sellCargoOrder.MaxJumpDistance = 4;
+			sellCargoOrder.MaxDuration = sellCargoOrder.AIDefaultMaxDuration;
+			sellCargoOrder.CompleteWhenNoCargoToSell = true;
+			sellCargoOrder.CompleteWhenNoBuyerFound = false;
+			sellCargoOrder.MinBuyPriceMultiplier = 0.05f;
+			fleet.EnqueueOrder(sellCargoOrder);
+		}
+
+		// The AI genuinely needs discovery: a faction with zero discovered
+		// asteroids gets EXPLORE orders instead of mine orders (stock
+		// FactionAIBase behavior). Reveal the whole sector to every menu
+		// faction so trade/mine target searches work from frame one.
+		private static void DiscoverMenuSectorForAllFactions(Sector sector)
+		{
+			foreach (Faction faction in EngineASX.Instance.Factions)
+			{
+				if (faction != null && faction.Intel != null)
+				{
+					faction.Intel.DiscoverEverythingInSector(sector);
+				}
 			}
 		}
 
@@ -320,15 +654,61 @@ namespace OpenFrontier.IP.Engine
 			}
 		}
 
+		// Menu spectacle: max everyone's aggression so hostiles on sensors
+		// get engaged regardless of target score - the whole system piles
+		// onto the bandits instead of waiting to be attacked. Aggression
+		// 1 zeroes the attack/intercept score thresholds; unarmed ships
+		// still can't intercept (no weapons), and the 2km interception
+		// distance gate stays stock. Runs after ALL spawning so even the
+		// hero ship's one-ship fleet is covered. FleetSettings is a
+		// per-fleet component - safe to write, nothing leaks.
+		private static void MakeMenuAIAggressive()
+		{
+			foreach (Faction faction in EngineASX.Instance.Factions)
+			{
+				foreach (Fleet fleet in faction.Fleets)
+				{
+					if (fleet != null && fleet.Settings != null)
+					{
+						fleet.Settings.Aggression = 1f;
+					}
+				}
+			}
+		}
+
 		private static Faction CreateAIFaction(FactionType factionType)
 		{
-			FactionSpawnerSpawnType factionSpawnerSpawnType = EngineASX.Instance.FactionSpawner.Settings.FactionTypes.FirstOrDefault((FactionSpawnerSpawnType e) => e.TypeInfo.FactionType == factionType && !e.IsFreelancer);
+			// Exact-flag match, outlaws excluded: a flag subset match can
+			// pick up outlaw-flavoured variants ("outlaw trader").
+			FactionSpawnerSpawnType factionSpawnerSpawnType = EngineASX.Instance.FactionSpawner.Settings.FactionTypes.FirstOrDefault((FactionSpawnerSpawnType e) => e.TypeInfo.FactionType == factionType && (e.TypeInfo.FactionType & FactionType.Outlaw) == 0 && !e.IsFreelancer);
 			if (factionSpawnerSpawnType == null)
 			{
 				Debug.LogWarning("[MainMenuWorldController] no AI faction type available for " + factionType);
 				return null;
 			}
 			return FactionSpawner.CreateFactionAndAIAndAssignName(factionSpawnerSpawnType);
+		}
+
+		// Everyone in the menu coexists peacefully - the bandit horde is
+		// the only sanctioned hostility. Also stops the ambient faction
+		// spawner dropping random (possibly outlaw) factions into the menu.
+		private static void MakeMenuFactionsPeaceful()
+		{
+			if (EngineASX.Instance.FactionSpawner != null)
+			{
+				EngineASX.Instance.FactionSpawner.enabled = false;
+			}
+			List<Faction> list = EngineASX.Instance.Factions.Where((Faction e) => e != null && e.FactionType != FactionType.Bandit).ToList();
+			foreach (Faction faction in list)
+			{
+				foreach (Faction faction2 in list)
+				{
+					if (faction != faction2)
+					{
+						faction.SetNeutralityWith(faction2, Neutrality.Neutral);
+					}
+				}
+			}
 		}
 	}
 }
