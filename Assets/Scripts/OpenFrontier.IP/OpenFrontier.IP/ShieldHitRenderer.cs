@@ -48,19 +48,33 @@ namespace OpenFrontier.IP
 			if (Vector3.Distance(unit.transform.position, GameController.Instance.MainCamera.transform.position) < EngineASX.Instance.PerformanceSettings.MaxShieldHitDist)
 			{
 				int shieldIndex = unit.GetShieldIndex(damageSourceWorldPosition);
-				// One flash per CONTACT: a sustained beam lands a damage
-				// tick every frame, and without a latch each tick after
-				// the flash would re-trigger it - strobing for as long
-				// as the beam holds. Allow a new flash only when this
-				// section has gone 0.6s without a hit; the latch updates
-				// on every request, so a continuous beam flashes once.
+				// Streams vs shots: a laser's damage ticks arrive every
+				// frame (<0.1s apart), discrete shots arrive slower.
+				// Streams RIDE the playing envelope (one flash per
+				// contact, no strobing); a shot RESETS it, so back-to-
+				// back projectiles each get their own flash.
 				(Unit, int) key = (unit, shieldIndex);
 				float num;
-				bool flag = LastFlashRequestTimes.TryGetValue(key, out num) && Time.time - num < 1f;
+				bool flag = LastFlashRequestTimes.TryGetValue(key, out num) && Time.time - num < 0.1f;
 				LastFlashRequestTimes[key] = Time.time;
 				if (LastFlashRequestTimes.Count > 1024)
 				{
 					LastFlashRequestTimes.Clear();
+				}
+				for (int i = 0; i < pooledObjects.Count; i++)
+				{
+					ShieldHitInfo shieldHitInfo = pooledObjects[i];
+					if (shieldHitInfo.gameObject.activeSelf && shieldHitInfo.TargetUnit == unit && shieldHitInfo.ShieldIndex == shieldIndex)
+					{
+						if (flag)
+						{
+							return shieldHitInfo;
+						}
+						shieldHitInfo.StartExpiryTime = Time.time;
+						shieldHitInfo.DepletedFlash = unit.Components != null && unit.Components.ShieldComponent != null && unit.Components.ShieldComponent.GetShieldPointNormalized(shieldIndex) <= 0f;
+						shieldHitInfo.Duration = (shieldHitInfo.DepletedFlash ? 0.25f : 1.15f);
+						return shieldHitInfo;
+					}
 				}
 				if (flag)
 				{
