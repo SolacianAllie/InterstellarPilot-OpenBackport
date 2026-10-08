@@ -62,10 +62,11 @@ namespace OpenFrontier
 				universalRenderPipelineAsset.mainLightShadowmapResolution = num;
 			}
 			// Tiers 0 and 1 are UNTOUCHED (off / stock 250u with 5/25/75
-			// splits). Tiers 2 and 3 keep tier 1's exact near field
+			// splits). Tiers 2, 3 AND 4 keep tier 1's exact near field
 			// (5/25/75u) and stretch only cascade 3 from that cutoff
 			// out to the sector's end (~3000u gate distance): the split
-			// fractions below are 5/25/75 of 3000.
+			// fractions below are 5/25/75 of 3000. (Highest = 4096 map
+			// + full reach; Low = small map + short reach.)
 			float num2;
 			Vector3 vector;
 			switch (qualityLevel)
@@ -74,14 +75,13 @@ namespace OpenFrontier
 				num2 = 0f;
 				vector = new Vector3(0.02f, 0.1f, 0.3f);
 				break;
-			case 2:
-			case 3:
-				num2 = 3000f;
-				vector = new Vector3(5f / 3000f, 25f / 3000f, 75f / 3000f);
-				break;
-			default:
+			case 1:
 				num2 = 250f;
 				vector = new Vector3(0.02f, 0.1f, 0.3f);
+				break;
+			default:
+				num2 = 3000f;
+				vector = new Vector3(5f / 3000f, 25f / 3000f, 75f / 3000f);
 				break;
 			}
 			if (universalRenderPipelineAsset.shadowDistance != num2)
