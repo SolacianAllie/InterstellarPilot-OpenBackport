@@ -165,18 +165,19 @@ namespace OpenFrontier.IP.Engine
 		}
 
 		// The menu ALWAYS has a planet, and it ALWAYS has a moon.
-		// (Mirrors CreatePlanetsSeeder's direct instantiate + Init path -
-		// SpawnUtils.SpawnUnit is for regular units and drops planets.)
-		private static void SpawnGuaranteedPlanetWithMoon(Sector sector)
+		// Prefabs are serialized (they live in Assets/GameObject, not
+		// Resources) and mirror the seeder's direct instantiate + Init path.
+		public Unit[] PlanetPrefabs;
+
+		public Unit[] MoonPrefabs;
+
+		private void SpawnGuaranteedPlanetWithMoon(Sector sector)
 		{
-			string[] planetNames = new string[10] { "ActiveUnitPlanetAlienAshyGreen", "ActiveUnitPlanetAlienPurple", "ActiveUnitPlanetDevoidOfLife", "ActiveUnitPlanetEarthLike", "ActiveUnitPlanetEarth", "ActiveUnitPlanetFrozenTundras", "ActiveUnitPlanetJupitersCousin", "ActiveUnitPlanetOrangeWithImpacts", "ActiveUnitPlanetVolcanica", "ActiveUnitPlanetWinterWorld" };
-			Unit unitPrefab = UnityObjectHelper.Load<Unit>("Prefabs/WorldData/ActiveUnits/Environment/" + planetNames[UnityEngine.Random.Range(0, planetNames.Length)]);
-			if (unitPrefab == null)
+			if (PlanetPrefabs == null || PlanetPrefabs.Length == 0)
 			{
-				Debug.LogWarning("[MainMenuWorldController] planet prefab failed to load");
 				return;
 			}
-			Unit unit = UnityObjectHelper.InstantiateAndGetComponent(unitPrefab);
+			Unit unit = UnityObjectHelper.InstantiateAndGetComponent(PlanetPrefabs[UnityEngine.Random.Range(0, PlanetPrefabs.Length)]);
 			unit.transform.SetParent(sector.transform, worldPositionStays: true);
 			unit.transform.localPosition = sector.GetRandomSectorPositionWithinGateDistance(0.5f);
 			UnitPlanet component = unit.GetComponent<UnitPlanet>();
@@ -185,12 +186,11 @@ namespace OpenFrontier.IP.Engine
 				component.Rotation = new Vector3(UnityEngine.Random.Range(-30f, 30f), UnityEngine.Random.Range(0f, 360f), 0f);
 			}
 			unit.GetComponent<Unit>().Init();
-			Unit unitPrefab2 = UnityObjectHelper.Load<Unit>("Prefabs/WorldData/ActiveUnits/Environment/ActiveUnitMoon" + UnityEngine.Random.Range(1, 5));
-			if (unitPrefab2 == null)
+			if (MoonPrefabs == null || MoonPrefabs.Length == 0)
 			{
 				return;
 			}
-			Unit unit2 = UnityObjectHelper.InstantiateAndGetComponent(unitPrefab2);
+			Unit unit2 = UnityObjectHelper.InstantiateAndGetComponent(MoonPrefabs[UnityEngine.Random.Range(0, MoonPrefabs.Length)]);
 			Moon component2 = unit2.GetComponent<Moon>();
 			if (component2 != null)
 			{
@@ -284,6 +284,7 @@ namespace OpenFrontier.IP.Engine
 			FactionSpawnerSpawnType factionSpawnerSpawnType = EngineASX.Instance.FactionSpawner.Settings.FactionTypes.FirstOrDefault((FactionSpawnerSpawnType e) => e.TypeInfo.FactionType == factionType && !e.IsFreelancer);
 			if (factionSpawnerSpawnType == null)
 			{
+				Debug.LogWarning("[MainMenuWorldController] no AI faction type available for " + factionType);
 				return null;
 			}
 			return FactionSpawner.CreateFactionAndAIAndAssignName(factionSpawnerSpawnType);
