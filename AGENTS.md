@@ -33,11 +33,12 @@ exit 198) — the user performs all editor actions.
 
 ## Non-obvious traps
 
-- **Mipmap STREAMING is broken on this OpenGL/Linux stack:** with
-  `streamingMipmapsActive` on, streamed textures render at their
-  smallest mip (ships read as flat grey, blown to white by sun+bloom).
-  Mipmaps themselves are fine (all 746 textures have them on) — keep
-  streaming OFF everywhere (reverted after user confirmation).
+- **Mipmap streaming renders textures at their smallest mip IN THE
+  LINUX EDITOR on this OpenGL stack** (ships read as flat grey, blown
+  to white by sun+bloom). Mipmaps themselves are fine. Streaming is
+  currently ON because the user is testing whether DEVICE builds
+  behave differently — if it stays editor-only-broken, gate it:
+  `QualitySettings.streamingMipmapsActive = Application.isEditor ? false : true`.
 - **Script GUIDs are deterministic:** `Guid(MD5(assemblyName + namespace + className))`
   (AssetRipper decompile scheme). Never regenerate .meta files; renaming
   namespaces/assemblies is safe because GUIDs live in the .meta files, but the
