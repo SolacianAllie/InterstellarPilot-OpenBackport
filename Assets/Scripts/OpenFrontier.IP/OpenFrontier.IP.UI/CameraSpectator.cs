@@ -122,11 +122,23 @@ namespace OpenFrontier.IP.UI
 
 		public float TransitMaxSpeed = 12000f;
 
+		[Tooltip("Vertical arc height as a fraction of the transit distance (clamped 600-6000u).")]
+		public float TransitLiftFactor = 0.18f;
+
+		[Tooltip("Path noise amplitude as a fraction of the transit distance (clamped 100-1500u); fades out on final approach.")]
+		public float TransitNoiseFactor = 0.1f;
+
 		private Vector3 transitVelocity;
 
 		private Vector3 transitOffsetDirection;
 
 		private float transitMaxSpeedCurrent;
+
+		private float transitInitialDistance;
+
+		private float transitLiftSign;
+
+		private bool skipOrbitEntryRandomization;
 
 		private double lastStateChangeTime;
 
@@ -166,9 +178,16 @@ namespace OpenFrontier.IP.UI
 						break;
 					}
 					case SpectateState.Orbit:
-						cameraAngle = GetOrbitCameraAngle();
+						// After a transit the camera is ALREADY at the
+						// orbit point with matching angle+distance -
+						// randomizing here would snap at the dock.
+						if (!skipOrbitEntryRandomization)
+						{
+							cameraAngle = GetOrbitCameraAngle();
+							SetRandomOrbitDistance();
+						}
+						skipOrbitEntryRandomization = false;
 						currentRotRate = new Vector3(0f - OrbitSpeed + Random.value * OrbitSpeed * 2f * OrbitRotationRateMultiplierX, 0f - OrbitSpeed + Random.value * OrbitSpeed * 2f, 0f);
-						SetRandomOrbitDistance();
 						break;
 					}
 				}
@@ -249,13 +268,14 @@ namespace OpenFrontier.IP.UI
 				if (target != value)
 				{
 					bool hadValidPreviousTarget = target != null && currentState != SpectateState.None;
+					GameObject previousTarget = target;
 					target = value;
 					if (target != null)
 					{
 						targetUnit = target.GetComponent<Unit>();
 						if (SmoothTargetTransitions && hadValidPreviousTarget && targetUnit != null)
 						{
-							BeginTransit();
+							BeginTransit(previousTarget);
 						}
 						else
 						{
@@ -437,15 +457,23 @@ namespace OpenFrontier.IP.UI
 
 		// Smooth transition entry: pick a fixed approach direction at
 		// orbit distance from the new target; the anchor tracks the
-		// (moving) ship while SmoothDamp flies us to it. Speed scales
-		// with distance so rim-to-core jumps take a few seconds, not
-		// minutes.
-		private void BeginTransit()
+		// (moving) ship while SmoothDamp flies us to it. The camera
+		// inherits the OLD subject's velocity (momentum breakaway),
+		// lifts off the world plane in a sine arc with gentle noise,
+		// then matches the new ship's motion on final approach. Speed
+		// scales with distance so rim-to-core jumps take seconds.
+		private void BeginTransit(GameObject previousTarget)
 		{
 			CurrentOrbitDistance = CalculateOrbitDistance();
 			transitOffsetDirection = Quaternion.Euler(GetOrbitCameraAngle()) * Vector3.forward;
+			transitInitialDistance = Mathf.Max(Vector3.Distance(transform.position, GetTargetRootPosition()), 1f);
+			transitMaxSpeedCurrent = Mathf.Clamp(transitInitialDistance / 2f, TransitMinSpeed, TransitMaxSpeed);
+			transitLiftSign = ((Random.value < 0.5f) ? (-1f) : 1f);
 			transitVelocity = Vector3.zero;
-			transitMaxSpeedCurrent = Mathf.Clamp(Vector3.Distance(transform.position, GetTargetRootPosition()) / 2.5f, TransitMinSpeed, TransitMaxSpeed);
+			if (previousTarget != null)
+			{
+				transitVelocity = Vector3.ClampMagnitude((previousTarget.transform.position - lastTargetPosition) / Mathf.Max(Time.deltaTime, 0.001f), 3000f);
+			}
 			CurrentState = SpectateState.Transit;
 		}
 
@@ -457,10 +485,29 @@ namespace OpenFrontier.IP.UI
 			{
 				Vector3 targetRootPosition = GetTargetRootPosition();
 				Vector3 vector2 = targetRootPosition + transitOffsetDirection * CurrentOrbitDistance;
-				transform.position = Vector3.SmoothDamp(transform.position, vector2, ref transitVelocity, TransitSmoothTime, transitMaxSpeedCurrent);
+				float num = Vector3.Distance(transform.position, vector2);
+				float num2 = 1f - Mathf.Clamp01(num / transitInitialDistance);
+				// Sine arc off the world plane + perlin wander on the path
+				// and a little roll - all fading to zero on final
+				// approach so the dock is seamless.
+				float num3 = Mathf.Clamp(transitInitialDistance * TransitLiftFactor, 600f, 6000f) * transitLiftSign * Mathf.Sin(Mathf.PI * Mathf.Min(num2 * 1.2f, 1f));
+				float num4 = Time.time * 0.35f;
+				float num5 = Mathf.Clamp(transitInitialDistance * TransitNoiseFactor, 100f, 1500f) * (1f - num2);
+				Vector3 vector3 = vector2 + Vector3.up * num3 + new Vector3(Mathf.PerlinNoise(num4, 0.3f) - 0.5f, (Mathf.PerlinNoise(num4, 7.7f) - 0.5f) * 0.6f, Mathf.PerlinNoise(3.1f, num4) - 0.5f) * num5;
+				transform.position = Vector3.SmoothDamp(transform.position, vector3, ref transitVelocity, TransitSmoothTime, transitMaxSpeedCurrent);
 				gameObject.transform.LookAt(targetRootPosition);
-				if (Vector3.Distance(transform.position, vector2) < Mathf.Max(30f, CurrentOrbitDistance * 0.15f))
+				transform.Rotate(Vector3.forward, (Mathf.PerlinNoise(num4, 13.3f) - 0.5f) * 6f * (1f - num2), Space.Self);
+				if (num < Mathf.Max(30f, CurrentOrbitDistance * 0.12f))
 				{
+					// Hand Orbit the ACTUAL arrival angle and distance
+					// (and suppress its entry randomization) so the
+					// camera continues from exactly where the flight
+					// ended - no snap at the dock.
+					skipOrbitEntryRandomization = true;
+					Vector3 vector4 = transform.position - targetRootPosition;
+					CurrentOrbitDistance = vector4.magnitude;
+					Vector3 euler = Quaternion.LookRotation(vector4.normalized).eulerAngles;
+					cameraAngle = new Vector3(euler.x, euler.y, 0f);
 					CurrentState = SpectateState.Orbit;
 					SetNextStateChangeTime();
 					CameraMoved();
