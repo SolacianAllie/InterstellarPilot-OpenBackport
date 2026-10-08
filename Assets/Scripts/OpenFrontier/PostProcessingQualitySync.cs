@@ -35,30 +35,29 @@ namespace OpenFrontier
 
 		private void Apply(int qualityLevel)
 		{
+			// Post stays ON at every tier: the ACES tonemap + exposure
+			// grade is integral to the look, and in URP the grade is
+			// baked into the single final color-grading pass - nearly
+			// free. What low tiers shed is BLOOM (the expensive
+			// multi-pass pyramid), not the grade.
 			if (Camera.main != null)
 			{
-				Camera.main.GetUniversalAdditionalCameraData().renderPostProcessing = qualityLevel > 0;
-			}
-			if (qualityLevel == 0)
-			{
-				return;
+				Camera.main.GetUniversalAdditionalCameraData().renderPostProcessing = true;
 			}
 			EnsureVolume();
+			if (qualityLevel <= 2)
+			{
+				// Lowest/Low/Normal: bloom off entirely; the authored
+				// tonemap + color adjustments carry the look alone.
+				bloom.active = false;
+				return;
+			}
+			bloom.active = true;
 			float value;
 			bool value2;
 			int value3;
 			switch (qualityLevel)
 			{
-			case 1:
-				value = 2.5f;
-				value2 = false;
-				value3 = 4;
-				break;
-			case 2:
-				value = 3.5f;
-				value2 = false;
-				value3 = 6;
-				break;
 			case 3:
 				value = 5f;
 				value2 = true;
