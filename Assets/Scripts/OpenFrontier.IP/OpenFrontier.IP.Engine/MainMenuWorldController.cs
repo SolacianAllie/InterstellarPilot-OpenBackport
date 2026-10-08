@@ -275,6 +275,7 @@ namespace OpenFrontier.IP.Engine
 				}
 			}
 			AssignStrategiesToIdleFleets();
+			MakeMenuFactionsPeaceful();
 			// Miners working the clusters.
 			Faction faction = CreateAIFaction(FactionType.Miner);
 			if (faction != null)
@@ -322,13 +323,37 @@ namespace OpenFrontier.IP.Engine
 
 		private static Faction CreateAIFaction(FactionType factionType)
 		{
-			FactionSpawnerSpawnType factionSpawnerSpawnType = EngineASX.Instance.FactionSpawner.Settings.FactionTypes.FirstOrDefault((FactionSpawnerSpawnType e) => e.TypeInfo.FactionType == factionType && !e.IsFreelancer);
+			// Exact-flag match, outlaws excluded: a flag subset match can
+			// pick up outlaw-flavoured variants ("outlaw trader").
+			FactionSpawnerSpawnType factionSpawnerSpawnType = EngineASX.Instance.FactionSpawner.Settings.FactionTypes.FirstOrDefault((FactionSpawnerSpawnType e) => e.TypeInfo.FactionType == factionType && (e.TypeInfo.FactionType & FactionType.Outlaw) == 0 && !e.IsFreelancer);
 			if (factionSpawnerSpawnType == null)
 			{
 				Debug.LogWarning("[MainMenuWorldController] no AI faction type available for " + factionType);
 				return null;
 			}
 			return FactionSpawner.CreateFactionAndAIAndAssignName(factionSpawnerSpawnType);
+		}
+
+		// Everyone in the menu coexists peacefully - the bandit horde is
+		// the only sanctioned hostility. Also stops the ambient faction
+		// spawner dropping random (possibly outlaw) factions into the menu.
+		private static void MakeMenuFactionsPeaceful()
+		{
+			if (EngineASX.Instance.FactionSpawner != null)
+			{
+				EngineASX.Instance.FactionSpawner.enabled = false;
+			}
+			List<Faction> list = EngineASX.Instance.Factions.Where((Faction e) => e != null && e.FactionType != FactionType.Bandit).ToList();
+			foreach (Faction faction in list)
+			{
+				foreach (Faction faction2 in list)
+				{
+					if (faction != faction2)
+					{
+						faction.SetNeutralityWith(faction2, Neutrality.Neutral);
+					}
+				}
+			}
 		}
 	}
 }
