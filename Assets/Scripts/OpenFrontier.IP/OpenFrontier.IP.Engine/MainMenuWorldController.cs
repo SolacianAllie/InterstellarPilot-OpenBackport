@@ -68,16 +68,23 @@ namespace OpenFrontier.IP.Engine
 			{
 				return;
 			}
+			// WorldBase re-seeds Unity's RNG with the scenario's
+			// CustomSeed on load, and the menu's is FIXED - so every
+			// UnityEngine.Random call below (and Sector.Init's
+			// AssignRandomSeed before us) replayed the same sequence
+			// every visit: same sector seed, same sun, same nebulae.
+			// Re-seed from entropy or nothing actually re-rolls.
+			UnityEngine.Random.InitState(System.Environment.TickCount ^ (int)System.DateTime.Now.Ticks);
 			// The sector self-assigns a fresh RandomSeed at load (prefab
 			// seed -1 = stock "random per visit" behavior) and the
 			// backdrop recipe lives in the prefab's SpaceConstructorParams.
 			// We only derive the star color from that seed (keeps
 			// sky/sun/star coherent) and jitter the exposure. The guard
 			// covers init ordering - if Init hasn't run yet, roll it here.
-			if (sector.RandomSeed == -1)
-			{
-				sector.AssignRandomSeed();
-			}
+			// NOTE: Init may have run BEFORE this re-seed (fixed
+			// sequence) - force a re-roll regardless so the seed is
+			// post-entropy.
+			sector.AssignRandomSeed();
 			sector.DirectionLightColor = StarColorGenerator.ForSector(sector.RandomSeed);
 			sector.SkyExposure = Mathf.Lerp(0.7f, 1.3f, UnityEngine.Random.value);
 			// Replace the preset dressing before regenerating: stock
