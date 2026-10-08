@@ -186,6 +186,7 @@ namespace OpenFrontier.IP.Engine
 		{
 			if (AsteroidsSettings == null)
 			{
+				Debug.LogWarning("[MainMenuWorldController] AsteroidsSettings not wired - belt has decorative rocks only");
 				return;
 			}
 			GameObject gameObject = new GameObject("MenuAsteroidSeeder");
