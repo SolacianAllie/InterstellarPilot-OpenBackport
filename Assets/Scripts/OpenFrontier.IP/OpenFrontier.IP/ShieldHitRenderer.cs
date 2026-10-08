@@ -50,6 +50,7 @@ namespace OpenFrontier.IP
 					pooledShieldHit.gameObject.SetActive(value: true);
 					pooledShieldHit.TargetUnit = unit;
 					pooledShieldHit.HitColor = EngineASX.Instance.GetUnitShieldColor(unit, unit.GetShieldIndex(damageSourceWorldPosition));
+					Debug.Log(string.Format("[ShieldHit] unit={0} section={1} snapshot=({2:0.00},{3:0.00},{4:0.00})", unit.name, unit.GetShieldIndex(damageSourceWorldPosition), pooledShieldHit.HitColor.r, pooledShieldHit.HitColor.g, pooledShieldHit.HitColor.b));
 					pooledShieldHit.StartExpiryTime = Time.time;
 					pooledShieldHit.StartTime = Time.time;
 					pooledShieldHit.SetShieldHitOrientation(damageSourceWorldPosition);
