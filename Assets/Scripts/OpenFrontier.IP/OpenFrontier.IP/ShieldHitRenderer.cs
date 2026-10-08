@@ -22,6 +22,10 @@ namespace OpenFrontier.IP
 
 		public int InitialPoolSize = 25;
 
+		// Per (unit, section) contact latch for the one-flash-per-contact
+		// rule (pure C# dictionary - no native calls, safe as a static).
+		private static readonly Dictionary<(Unit, int), float> LastFlashRequestTimes = new Dictionary<(Unit, int), float>();
+
 		private void Awake()
 		{
 			for (int i = 0; i < InitialPoolSize; i++)
@@ -44,18 +48,23 @@ namespace OpenFrontier.IP
 			if (Vector3.Distance(unit.transform.position, GameController.Instance.MainCamera.transform.position) < EngineASX.Instance.PerformanceSettings.MaxShieldHitDist)
 			{
 				int shieldIndex = unit.GetShieldIndex(damageSourceWorldPosition);
-				// A sustained beam re-requests the effect EVERY damage
-				// tick, restarting the envelope and pinning it in the
-				// white flash phase for the whole beam. If this section
-				// already has a young effect playing, let it ride -
-				// only a nearly-done effect may re-flash (pulse fire).
-				for (int i = 0; i < pooledObjects.Count; i++)
+				// One flash per CONTACT: a sustained beam lands a damage
+				// tick every frame, and without a latch each tick after
+				// the flash would re-trigger it - strobing for as long
+				// as the beam holds. Allow a new flash only when this
+				// section has gone 0.6s without a hit; the latch updates
+				// on every request, so a continuous beam flashes once.
+				(Unit, int) key = (unit, shieldIndex);
+				float num;
+				bool flag = LastFlashRequestTimes.TryGetValue(key, out num) && Time.time - num < 0.6f;
+				LastFlashRequestTimes[key] = Time.time;
+				if (LastFlashRequestTimes.Count > 1024)
 				{
-					ShieldHitInfo shieldHitInfo = pooledObjects[i];
-					if (shieldHitInfo.gameObject.activeSelf && shieldHitInfo.TargetUnit == unit && shieldHitInfo.ShieldIndex == shieldIndex && Time.time - shieldHitInfo.StartExpiryTime < 0.25f)
-					{
-						return shieldHitInfo;
-					}
+					LastFlashRequestTimes.Clear();
+				}
+				if (flag)
+				{
+					return null;
 				}
 				ShieldHitInfo pooledShieldHit = GetPooledShieldHit();
 				if (pooledShieldHit != null)
