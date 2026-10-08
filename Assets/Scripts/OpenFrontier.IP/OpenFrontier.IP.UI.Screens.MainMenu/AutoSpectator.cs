@@ -131,11 +131,19 @@ namespace OpenFrontier.IP.UI.Screens.MainMenu
 				lastKnownTargetRoot = cameraSpectator.TargetRootUnit;
 				lastSwitchTime = Time.time;
 			}
+			// The CAMERA is the source of truth for what we're watching.
+			// Externally attached targets (the hero ship at roll) never
+			// touch our cached field - the watchdog read that as "no
+			// target" and swapped the hero out after 2 seconds.
+			if (cameraSpectator != null)
+			{
+				spectatingUnit = cameraSpectator.TargetRootUnit;
+			}
 			// Watchdog: a target that docked, died or left the sector
 			// leaves the camera staring at empty space (or the cargo
-			// crates it just dumped). Retarget quickly; the short
+			// crates it just dumped). Retarget after a grace period; the
 			// cooldown stops thrash while EVERYTHING is docked.
-			if ((spectatingUnit == null || !spectatingUnit.IsValidAndNotDestroyed || spectatingUnit.IsDocked) && Time.time > lastSwitchTime + 2f)
+			if ((spectatingUnit == null || !spectatingUnit.IsValidAndNotDestroyed || spectatingUnit.IsDocked) && Time.time > lastSwitchTime + 5f)
 			{
 				RequestSwitch();
 				return;
