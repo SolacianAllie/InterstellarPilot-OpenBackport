@@ -15,8 +15,7 @@ namespace OpenFrontier.IP.UI
 			Viewpoint,
 			Orbit,
 			Flyby,
-			ManualOrbit,
-			Transit
+			ManualOrbit
 		}
 
 		public float OrbitDistanceMultiplier = 1f;
@@ -108,46 +107,6 @@ namespace OpenFrontier.IP.UI
 
 		private Unit lastTargetRootUnit;
 
-		// Open Frontier: when the spectate TARGET changes, fly to the new
-		// subject instead of teleporting to it. The camera SmoothDamps
-		// from wherever it is to an approach anchor near the new target
-		// while looking at it, then settles into a normal orbit. Player
-		// pan/zoom gestures still seize control mid-flight (they enter
-		// ManualOrbit, cancelling the transit).
-		public bool SmoothTargetTransitions = true;
-
-		public float TransitSmoothTime = 1.1f;
-
-		public float TransitMinSpeed = 800f;
-
-		public float TransitMaxSpeed = 12000f;
-
-		[Tooltip("Vertical arc height as a fraction of the transit distance (clamped 600-6000u).")]
-		public float TransitLiftFactor = 0.18f;
-
-		[Tooltip("Path noise amplitude as a fraction of the transit distance (clamped 100-1500u); fades out on final approach.")]
-		public float TransitNoiseFactor = 0.1f;
-
-		[Tooltip("How fast the camera turns toward its subject in transit (deg/sec).")]
-		public float TransitRotationSpeed = 55f;
-
-		[Tooltip("Bank angle per unit of lateral acceleration while turning in transit.")]
-		public float TransitBankFactor = 0.015f;
-
-		private float transitStartTime;
-
-		private Vector3 transitVelocity;
-
-		private Vector3 transitOffsetDirection;
-
-		private float transitMaxSpeedCurrent;
-
-		private float transitInitialDistance;
-
-		private float transitLiftSign;
-
-		private bool skipOrbitEntryRandomization;
-
 		private double lastStateChangeTime;
 
 		private Vector3 lastTargetPosition = Vector3.zero;
@@ -186,16 +145,9 @@ namespace OpenFrontier.IP.UI
 						break;
 					}
 					case SpectateState.Orbit:
-						// After a transit the camera is ALREADY at the
-						// orbit point with matching angle+distance -
-						// randomizing here would snap at the dock.
-						if (!skipOrbitEntryRandomization)
-						{
-							cameraAngle = GetOrbitCameraAngle();
-							SetRandomOrbitDistance();
-						}
-						skipOrbitEntryRandomization = false;
+						cameraAngle = GetOrbitCameraAngle();
 						currentRotRate = new Vector3(0f - OrbitSpeed + Random.value * OrbitSpeed * 2f * OrbitRotationRateMultiplierX, 0f - OrbitSpeed + Random.value * OrbitSpeed * 2f, 0f);
+						SetRandomOrbitDistance();
 						break;
 					}
 				}
@@ -275,20 +227,11 @@ namespace OpenFrontier.IP.UI
 			{
 				if (target != value)
 				{
-					bool hadValidPreviousTarget = target != null && currentState != SpectateState.None;
-					GameObject previousTarget = target;
 					target = value;
 					if (target != null)
 					{
 						targetUnit = target.GetComponent<Unit>();
-						if (SmoothTargetTransitions && hadValidPreviousTarget && targetUnit != null)
-						{
-							BeginTransit(previousTarget);
-						}
-						else
-						{
-							ChooseState();
-						}
+						ChooseState();
 						ApplyState();
 						CameraMoved();
 						UpdateLastTargetPosition();
@@ -425,7 +368,7 @@ namespace OpenFrontier.IP.UI
 			{
 				return;
 			}
-			if (currentState != SpectateState.ManualOrbit && currentState != SpectateState.Transit)
+			if (currentState != SpectateState.ManualOrbit)
 			{
 				if (CurrentGameTime() > nextStateChangeTime)
 				{
@@ -463,95 +406,10 @@ namespace OpenFrontier.IP.UI
 			lastTargetPosition = target.transform.position;
 		}
 
-		// Smooth transition entry: pick a fixed approach direction at
-		// orbit distance from the new target; the anchor tracks the
-		// (moving) ship while SmoothDamp flies us to it. The camera
-		// inherits the OLD subject's velocity (momentum breakaway),
-		// lifts off the world plane in a sine arc with gentle noise,
-		// then matches the new ship's motion on final approach. Speed
-		// scales with distance so rim-to-core jumps take seconds.
-		private void BeginTransit(GameObject previousTarget)
-		{
-			CurrentOrbitDistance = CalculateOrbitDistance();
-			transitOffsetDirection = Quaternion.Euler(GetOrbitCameraAngle()) * Vector3.forward;
-			transitInitialDistance = Mathf.Max(Vector3.Distance(transform.position, GetTargetRootPosition()), 1f);
-			transitMaxSpeedCurrent = Mathf.Clamp(transitInitialDistance / 3f, TransitMinSpeed, TransitMaxSpeed);
-			transitLiftSign = ((Random.value < 0.5f) ? (-1f) : 1f);
-			transitVelocity = Vector3.zero;
-			if (previousTarget != null)
-			{
-				transitVelocity = Vector3.ClampMagnitude((previousTarget.transform.position - lastTargetPosition) / Mathf.Max(Time.deltaTime, 0.001f), 3000f);
-			}
-			transitStartTime = Time.time;
-			CurrentState = SpectateState.Transit;
-		}
-
 		private void ApplyState()
 		{
 			switch (currentState)
 			{
-			case SpectateState.Transit:
-			{
-				float realDeltaTime = (float)GameController.Instance.RealDeltaTime;
-				Vector3 targetRootPosition = GetTargetRootPosition();
-				Vector3 vector2 = targetRootPosition + transitOffsetDirection * CurrentOrbitDistance;
-				float num = Vector3.Distance(transform.position, vector2);
-				float num2 = 1f - Mathf.Clamp01(num / transitInitialDistance);
-				// Sine arc off the world plane + perlin wander, fading
-				// out on final approach.
-				float num3 = Mathf.Clamp(transitInitialDistance * TransitLiftFactor, 600f, 6000f) * transitLiftSign * Mathf.Sin(Mathf.PI * Mathf.Min(num2 * 1.2f, 1f));
-				float num4 = Time.time * 0.35f;
-				float num5 = Mathf.Clamp(transitInitialDistance * TransitNoiseFactor, 100f, 1500f) * (1f - num2);
-				Vector3 vector3 = vector2 + Vector3.up * num3 + new Vector3(Mathf.PerlinNoise(num4, 0.3f) - 0.5f, (Mathf.PerlinNoise(num4, 7.7f) - 0.5f) * 0.6f, Mathf.PerlinNoise(3.1f, num4) - 0.5f) * num5;
-				// Ship-like flight: the velocity is STEERED, not damped -
-				// thrust-limited acceleration toward a desired velocity
-				// that cruises by distance, slows on arrival, and matches
-				// the target ship's own motion for the dock.
-				Vector3 vector4 = ((targetUnit != null && targetUnit.GetRootUnit().RBody != null) ? targetUnit.GetRootUnit().RBody.linearVelocity : Vector3.zero);
-				float num6 = Mathf.Min(transitMaxSpeedCurrent, num * 1.2f + 25f);
-				Vector3 vector7 = vector4 + (vector3 - transform.position).normalized * num6;
-				// Throttle ramps up over the first ~1.5s - gentle
-				// departure instead of a punch off the mark.
-				float num8 = Mathf.Clamp(transitMaxSpeedCurrent * 0.35f, 250f, 3500f) * Mathf.Clamp01((Time.time - transitStartTime) / 1.5f);
-				Vector3 vector9 = transitVelocity;
-				transitVelocity = Vector3.MoveTowards(transitVelocity, vector7, num8 * realDeltaTime);
-				transform.position += transitVelocity * realDeltaTime;
-				// Smooth turn toward the subject (turn-rate limited),
-				// banking into the turn like a ship - the bank fades out
-				// on final approach so there's no roll snap at the dock.
-				Quaternion quaternion = Quaternion.LookRotation(targetRootPosition - transform.position);
-				transform.rotation = Quaternion.RotateTowards(transform.rotation, quaternion, TransitRotationSpeed * realDeltaTime);
-				float num10 = Mathf.Clamp(Vector3.Dot(transform.right, (transitVelocity - vector9) / Mathf.Max(realDeltaTime, 0.001f)) * TransitBankFactor, -30f, 30f) * (1f - num2);
-				transform.Rotate(Vector3.forward, 0f - num10, Space.Self);
-				// Dock when close AND velocity-matched (timeout fallback
-				// for a target that keeps outrunning the camera).
-				bool flag = num < Mathf.Max(25f, CurrentOrbitDistance * 0.1f) && (transitVelocity - vector4).magnitude < Mathf.Max(40f, vector4.magnitude * 0.5f);
-				bool flag2 = Time.time > transitStartTime + transitInitialDistance / TransitMinSpeed + 10f;
-				if (flag || flag2)
-				{
-					// Hand Orbit the ACTUAL arrival angle and distance
-					// (and suppress its entry randomization) so the
-					// camera continues from exactly where the flight
-					// ended - no snap at the dock.
-					skipOrbitEntryRandomization = true;
-					Vector3 vector10 = transform.position - targetRootPosition;
-					CurrentOrbitDistance = vector10.magnitude;
-					// Exact orbit-angle reconstruction: LookRotation's
-					// euler decomposition is ambiguous at steep angles
-					// and can land the orbit anchor a hair off the
-					// arrival point (a visible snap). atan2 maps the
-					// offset direction to the SAME euler ApplyOrbit
-					// reconstructs, so the handoff is bit-exact.
-					Vector3 normalized = vector10.normalized;
-					float y = Mathf.Atan2(normalized.x, normalized.z) * 57.29578f;
-					float x = (0f - Mathf.Asin(Mathf.Clamp(normalized.y, -1f, 1f))) * 57.29578f;
-					cameraAngle = new Vector3(x, y, 0f);
-					CurrentState = SpectateState.Orbit;
-					SetNextStateChangeTime();
-					CameraMoved();
-				}
-				break;
-			}
 			case SpectateState.ManualOrbit:
 				ApplyOrbit();
 				break;

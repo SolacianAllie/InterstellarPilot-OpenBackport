@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using OpenFrontier.IP.Engine;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace OpenFrontier.IP.UI.Screens.MainMenu
 {
@@ -18,6 +19,13 @@ namespace OpenFrontier.IP.UI.Screens.MainMenu
 		private Unit spectatingUnit;
 
 		public float MinStateTimeUntilChange = 5f;
+
+		// Target switches hard-snap by design (stock CameraSpectator), so
+		// the snap is hidden behind a full-screen black UI fade: 0.35s
+		// out, switch at full black, 0.6s back in.
+		private bool fadeInProgress;
+
+		private Image fadeImage;
 
 		private void Awake()
 		{
@@ -99,7 +107,7 @@ namespace OpenFrontier.IP.UI.Screens.MainMenu
 
 		private void Update()
 		{
-			if (!EngineASX.LoadedAndReady)
+			if (!EngineASX.LoadedAndReady || fadeInProgress)
 			{
 				return;
 			}
@@ -109,23 +117,74 @@ namespace OpenFrontier.IP.UI.Screens.MainMenu
 			// cooldown stops thrash while EVERYTHING is docked.
 			if ((spectatingUnit == null || !spectatingUnit.IsValidAndNotDestroyed || spectatingUnit.IsDocked) && Time.time > lastSwitchTime + 2f)
 			{
-				Unit unit2 = spectatingUnit;
-				FindAndSpectateShip();
-				if (spectatingUnit != unit2)
-				{
-					lastSwitchTime = Time.time;
-				}
+				StartCoroutine(FadeSwitchRoutine());
 				return;
 			}
 			if (IsReadyToSwitchUnit())
 			{
-				Unit unit = spectatingUnit;
-				FindAndSpectateShip();
-				if (spectatingUnit != unit)
-				{
-					lastSwitchTime = Time.time;
-				}
+				StartCoroutine(FadeSwitchRoutine());
 			}
+		}
+
+		private System.Collections.IEnumerator FadeSwitchRoutine()
+		{
+			fadeInProgress = true;
+			EnsureFadeCanvas();
+			yield return FadeTo(1f, 0.35f);
+			Unit unit = spectatingUnit;
+			FindAndSpectateShip();
+			if (spectatingUnit != unit)
+			{
+				lastSwitchTime = Time.time;
+			}
+			// One frame at full black so the camera attaches unseen.
+			yield return null;
+			yield return FadeTo(0f, 0.6f);
+			fadeInProgress = false;
+		}
+
+		private System.Collections.IEnumerator FadeTo(float targetAlpha, float duration)
+		{
+			float a = fadeImage.color.a;
+			for (float num = 0f; num < duration; num += Time.unscaledDeltaTime)
+			{
+				SetFadeAlpha(Mathf.Lerp(a, targetAlpha, num / duration));
+				yield return null;
+			}
+			SetFadeAlpha(targetAlpha);
+		}
+
+		private void SetFadeAlpha(float alpha)
+		{
+			Color color = fadeImage.color;
+			color.a = Mathf.Clamp01(alpha);
+			fadeImage.color = color;
+		}
+
+		// The blackout layer: unlit full-screen black Image on an overlay
+		// canvas, raycast-free so the menu stays clickable under it.
+		// Created lazily (native UI calls are forbidden in initializers).
+		private void EnsureFadeCanvas()
+		{
+			if (fadeImage != null)
+			{
+				return;
+			}
+			GameObject gameObject = new GameObject("SpectateFadeCanvas");
+			gameObject.transform.SetParent(transform, worldPositionStays: false);
+			Canvas canvas = gameObject.AddComponent<Canvas>();
+			canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+			canvas.sortingOrder = 5000;
+			GameObject gameObject2 = new GameObject("FadeImage");
+			gameObject2.transform.SetParent(gameObject.transform, worldPositionStays: false);
+			fadeImage = gameObject2.AddComponent<Image>();
+			fadeImage.color = new Color(0f, 0f, 0f, 0f);
+			fadeImage.raycastTarget = false;
+			RectTransform rectTransform = fadeImage.rectTransform;
+			rectTransform.anchorMin = Vector2.zero;
+			rectTransform.anchorMax = Vector2.one;
+			rectTransform.offsetMin = Vector2.zero;
+			rectTransform.offsetMax = Vector2.zero;
 		}
 
 		private bool IsReadyToSwitchUnit()
