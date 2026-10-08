@@ -128,6 +128,14 @@ namespace OpenFrontier.IP.UI
 		[Tooltip("Path noise amplitude as a fraction of the transit distance (clamped 100-1500u); fades out on final approach.")]
 		public float TransitNoiseFactor = 0.1f;
 
+		[Tooltip("How fast the camera turns toward its subject in transit (deg/sec).")]
+		public float TransitRotationSpeed = 75f;
+
+		[Tooltip("Bank angle per unit of lateral acceleration while turning in transit.")]
+		public float TransitBankFactor = 0.015f;
+
+		private float transitStartTime;
+
 		private Vector3 transitVelocity;
 
 		private Vector3 transitOffsetDirection;
@@ -474,6 +482,7 @@ namespace OpenFrontier.IP.UI
 			{
 				transitVelocity = Vector3.ClampMagnitude((previousTarget.transform.position - lastTargetPosition) / Mathf.Max(Time.deltaTime, 0.001f), 3000f);
 			}
+			transitStartTime = Time.time;
 			CurrentState = SpectateState.Transit;
 		}
 
@@ -483,30 +492,48 @@ namespace OpenFrontier.IP.UI
 			{
 			case SpectateState.Transit:
 			{
+				float realDeltaTime = (float)GameController.Instance.RealDeltaTime;
 				Vector3 targetRootPosition = GetTargetRootPosition();
 				Vector3 vector2 = targetRootPosition + transitOffsetDirection * CurrentOrbitDistance;
 				float num = Vector3.Distance(transform.position, vector2);
 				float num2 = 1f - Mathf.Clamp01(num / transitInitialDistance);
-				// Sine arc off the world plane + perlin wander on the path
-				// and a little roll - all fading to zero on final
-				// approach so the dock is seamless.
+				// Sine arc off the world plane + perlin wander, fading
+				// out on final approach.
 				float num3 = Mathf.Clamp(transitInitialDistance * TransitLiftFactor, 600f, 6000f) * transitLiftSign * Mathf.Sin(Mathf.PI * Mathf.Min(num2 * 1.2f, 1f));
 				float num4 = Time.time * 0.35f;
 				float num5 = Mathf.Clamp(transitInitialDistance * TransitNoiseFactor, 100f, 1500f) * (1f - num2);
 				Vector3 vector3 = vector2 + Vector3.up * num3 + new Vector3(Mathf.PerlinNoise(num4, 0.3f) - 0.5f, (Mathf.PerlinNoise(num4, 7.7f) - 0.5f) * 0.6f, Mathf.PerlinNoise(3.1f, num4) - 0.5f) * num5;
-				transform.position = Vector3.SmoothDamp(transform.position, vector3, ref transitVelocity, TransitSmoothTime, transitMaxSpeedCurrent);
-				gameObject.transform.LookAt(targetRootPosition);
-				transform.Rotate(Vector3.forward, (Mathf.PerlinNoise(num4, 13.3f) - 0.5f) * 6f * (1f - num2), Space.Self);
-				if (num < Mathf.Max(30f, CurrentOrbitDistance * 0.12f))
+				// Ship-like flight: the velocity is STEERED, not damped -
+				// thrust-limited acceleration toward a desired velocity
+				// that cruises by distance, slows on arrival, and matches
+				// the target ship's own motion for the dock.
+				Vector3 vector4 = ((targetUnit != null && targetUnit.GetRootUnit().RBody != null) ? targetUnit.GetRootUnit().RBody.velocity : Vector3.zero);
+				float num6 = Mathf.Min(transitMaxSpeedCurrent, num * 1.5f + 30f);
+				Vector3 vector7 = vector4 + (vector3 - transform.position).normalized * num6;
+				float num8 = Mathf.Clamp(transitMaxSpeedCurrent * 0.6f, 400f, 6000f);
+				Vector3 vector9 = transitVelocity;
+				transitVelocity = Vector3.MoveTowards(transitVelocity, vector7, num8 * realDeltaTime);
+				transform.position += transitVelocity * realDeltaTime;
+				// Smooth turn toward the subject (turn-rate limited),
+				// banking into the turn like a ship.
+				Quaternion quaternion = Quaternion.LookRotation(targetRootPosition - transform.position);
+				transform.rotation = Quaternion.RotateTowards(transform.rotation, quaternion, TransitRotationSpeed * realDeltaTime);
+				float num10 = Mathf.Clamp(Vector3.Dot(transform.right, (transitVelocity - vector9) / Mathf.Max(realDeltaTime, 0.001f)) * TransitBankFactor, -30f, 30f);
+				transform.Rotate(Vector3.forward, 0f - num10, Space.Self);
+				// Dock when close AND velocity-matched (timeout fallback
+				// for a target that keeps outrunning the camera).
+				bool flag = num < Mathf.Max(25f, CurrentOrbitDistance * 0.1f) && (transitVelocity - vector4).magnitude < Mathf.Max(40f, vector4.magnitude * 0.5f);
+				bool flag2 = Time.time > transitStartTime + transitInitialDistance / TransitMinSpeed + 10f;
+				if (flag || flag2)
 				{
 					// Hand Orbit the ACTUAL arrival angle and distance
 					// (and suppress its entry randomization) so the
 					// camera continues from exactly where the flight
 					// ended - no snap at the dock.
 					skipOrbitEntryRandomization = true;
-					Vector3 vector4 = transform.position - targetRootPosition;
-					CurrentOrbitDistance = vector4.magnitude;
-					Vector3 euler = Quaternion.LookRotation(vector4.normalized).eulerAngles;
+					Vector3 vector10 = transform.position - targetRootPosition;
+					CurrentOrbitDistance = vector10.magnitude;
+					Vector3 euler = Quaternion.LookRotation(vector10.normalized).eulerAngles;
 					cameraAngle = new Vector3(euler.x, euler.y, 0f);
 					CurrentState = SpectateState.Orbit;
 					SetNextStateChangeTime();
