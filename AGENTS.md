@@ -39,12 +39,14 @@ exit 198) — the user performs all editor actions.
   clips into the skybox", worse at 1.6× size). All 338 nebula materials
   are now queue 2999 — the sun always draws after the backdrop, while
   gameplay particles (3000) still distance-sort over it correctly.
-- **Mipmap streaming: reduction depth washes ships out, not streaming
-  itself.** With maxLevelReduction 2-3 + tight budgets, texture-heavy
-  scenes (Instant Action's capital fleets) render hulls at quarter/
-  eighth res = "white ships" (user-verified: 4096MB/0-reduction is
-  clean). Final config: reduction capped at 1 everywhere (worst case
-  half-res), budgets 768-2048MB by tier. Mipmaps themselves are fine.
+- **Mipmap streaming is OFF for good — budget starvation, not
+  reduction depth.** This game's working set is enormous (an Instant
+  Action capital fleet ≈ 2.3GB+ of 2K maps); any mobile-sane budget
+  starves the streamer and textures sit at their smallest loaded mip
+  = "white ships". Verified matrix: OFF=fine, 256MB=white (even
+  menu), 768-2048MB=white (Instant Action), 4096MB=fine, OFF=fine.
+  Mipmaps themselves stay ON (all 746 textures) — only streaming is
+  disabled. Do not re-enable.
 - **Script GUIDs are deterministic:** `Guid(MD5(assemblyName + namespace + className))`
   (AssetRipper decompile scheme). Never regenerate .meta files; renaming
   namespaces/assemblies is safe because GUIDs live in the .meta files, but the
