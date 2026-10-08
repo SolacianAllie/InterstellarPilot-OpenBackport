@@ -1,6 +1,7 @@
 using System.Linq;
 using OpenFrontier.IP.Common.Factions;
 using OpenFrontier.IP.Engine.Factions;
+using OpenFrontier.IP.Scenarios;
 using OpenFrontier.IP.Testing.Spawning;
 using UnityEngine;
 
