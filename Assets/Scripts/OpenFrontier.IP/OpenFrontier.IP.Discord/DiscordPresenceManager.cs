@@ -7,19 +7,29 @@ using OpenFrontier.IP.Engine.Factions;
 namespace OpenFrontier.IP.Discord
 {
 	/// <summary>
-	/// Discord Rich Presence for Open Frontier, powered by the Discord
-	/// Social SDK (com.discord.partnersdk).
+	/// Discord Rich Presence for Open Frontier, powered by the
+	/// Discord Social SDK (com.discord.partnersdk).
 	///
-	/// The SDK authenticates through a one-time device authorization
-	/// flow: the first launch asks the player to approve the app with
-	/// their Discord account, and the resulting tokens are stored in
-	/// PlayerPrefs. Later launches refresh the stored token silently.
-	/// If anything in that chain fails, presence simply stays offline -
-	/// the game is never blocked on Discord.
+	/// The SDK authenticates through a device authorization
+	/// flow: the first launch asks the player to approve the
+	/// app with their Discord account, and the resulting
+	/// tokens are stored in PlayerPrefs. Later launches detect
+	/// the stored credentials and refresh them silently.
 	///
-	/// The SDK pumps its own callbacks through the Unity player loop
-	/// (see NativeMethods' static constructor in the package), so every
-	/// callback below already runs on the main thread.
+	/// Authentication runs as a chain with a watchdog: stored
+	/// refresh token -> stored access token -> interactive
+	/// re-prompt. Each stage that fails (including a stored
+	/// token the Discord server has rejected, which only shows
+	/// up as an async socket drop) advances to the next stage,
+	/// so a player who loses their data, revokes the app, or
+	/// switches accounts is re-prompted instead of silently
+	/// losing presence. A declined prompt is not nagged - the
+	/// chain gives up for the launch and re-prompts next time.
+	///
+	/// The SDK pumps its own callbacks through the Unity player
+	/// loop (see NativeMethods' static constructor in the
+	/// package), so every callback below already runs on the
+	/// main thread.
 	/// </summary>
 	public class DiscordPresenceManager : MonoBehaviour
 	{
@@ -46,16 +56,46 @@ namespace OpenFrontier.IP.Discord
 		// Presence updates are throttled; a failure is logged once
 		// so a persistent Discord outage can't flood the console.
 		private const float MinUpdateInterval = 5f;
-		private const float RefreshRetryCooldown = 60f;
+
+		// How long a token handshake may take before the auth
+		// chain assumes it failed and advances.
+		private const float TokenConnectTimeout = 10f;
+
+		// How long the authorization prompt may go unanswered
+		// (the player has to approve it in Discord) before the
+		// chain gives up for this launch.
+		private const float AuthorizationPromptTimeout = 120f;
+
+		// Minimum spacing between silent recovery attempts while
+		// the game runs, so a dead connection can't spam the
+		// auth chain (or the re-prompt) every few seconds.
+		private const float RecoveryCooldown = 60f;
+
+		private enum AuthStage
+		{
+			Idle,
+			TokenConnect,
+			Prompting,
+		}
 
 		private Client client;
 		private bool statusReady;
-		private bool authInProgress;
+		private AuthStage authStage;
+		private bool triedRefresh;
+		private bool triedAccessToken;
+		private bool triedPrompt;
+		private float authStageDeadline = float.MaxValue;
+		private float lastRecoveryAttempt = -RecoveryCooldown;
 		private bool reportedPresenceFailure;
 		private string pendingCodeVerifier;
-		private float lastRefreshAttempt = -RefreshRetryCooldown;
 		private float nextPresenceUpdate;
 		private ulong sessionStartEpoch;
+
+		/// <summary>True while the SDK reports the connection as Ready (authorized and live).</summary>
+		public bool IsAuthorized => statusReady;
+
+		/// <summary>True when credentials from a previous authorization are stored on this device.</summary>
+		public bool HasStoredCredentials => !string.IsNullOrEmpty(PlayerPrefs.GetString(AccessTokenKey, ""));
 
 		private void Awake()
 		{
@@ -73,11 +113,13 @@ namespace OpenFrontier.IP.Discord
 				Debug.LogWarning("[Discord] Rich Presence is not configured: set an Application ID in the DiscordPresenceConfig asset. Presence will stay offline.");
 				return;
 			}
-			CreateClientAndAuthenticate();
+			CreateClient();
+			BeginAuthentication();
 		}
 
 		private void Update()
 		{
+			UpdateAuthWatchdog();
 			if (!statusReady || client == null)
 			{
 				return;
@@ -90,10 +132,10 @@ namespace OpenFrontier.IP.Discord
 		}
 
 		// ------------------------------------------------------------------
-		// Authentication
+		// Authentication chain
 		// ------------------------------------------------------------------
 
-		private void CreateClientAndAuthenticate()
+		private void CreateClient()
 		{
 			if (client != null)
 			{
@@ -108,74 +150,92 @@ namespace OpenFrontier.IP.Discord
 			{
 				client = null;
 				Debug.LogWarning("[Discord] Failed to create the Social SDK client: " + e.Message);
-				return;
-			}
-
-			// Prefer a silent token refresh, then a stored access
-			// token, and only fall back to the interactive device
-			// authorization flow when nothing is stored.
-			string refreshToken = PlayerPrefs.GetString(RefreshTokenKey, "");
-			string accessToken = PlayerPrefs.GetString(AccessTokenKey, "");
-			if (!string.IsNullOrEmpty(refreshToken))
-			{
-				RefreshAndConnect(refreshToken, () => ContinueAuthentication(accessToken));
-			}
-			else
-			{
-				ContinueAuthentication(accessToken);
 			}
 		}
 
-		private void ContinueAuthentication(string accessToken)
+		/// <summary>
+		/// (Re)runs the authentication chain from the beginning,
+		/// remembering which stages already failed this launch.
+		/// </summary>
+		private void BeginAuthentication()
+		{
+			triedRefresh = false;
+			triedAccessToken = false;
+			triedPrompt = false;
+			AdvanceAuthentication();
+		}
+
+		/// <summary>
+		/// Clears any stored credentials and authenticates again -
+		/// for players who want to switch accounts or recover from
+		/// a rejected app authorization.
+		/// </summary>
+		public void RestartAuthentication()
+		{
+			PlayerPrefs.DeleteKey(AccessTokenKey);
+			PlayerPrefs.DeleteKey(RefreshTokenKey);
+			PlayerPrefs.Save();
+			if (client != null)
+			{
+				try
+				{
+					client.Disconnect();
+				}
+				catch
+				{
+					// Re-authenticating - the old socket is irrelevant.
+				}
+			}
+			statusReady = false;
+			BeginAuthentication();
+		}
+
+		private void AdvanceAuthentication()
 		{
 			if (client == null)
 			{
 				return;
 			}
-			if (!string.IsNullOrEmpty(accessToken))
+			// Order: silent refresh, then the stored access
+			// token, then the interactive re-prompt.
+			if (!triedRefresh && HasStoredRefreshToken())
 			{
-				client.UpdateToken(AuthorizationTokenType.Bearer, accessToken, result =>
-				{
-					if (result.Successful())
-					{
-						client.Connect();
-					}
-					else
-					{
-						StartDeviceAuthorization();
-					}
-				});
+				triedRefresh = true;
+				RefreshAndConnect(
+					PlayerPrefs.GetString(RefreshTokenKey, ""),
+					AdvanceAuthentication);
+				return;
 			}
-			else
+			if (!triedAccessToken && HasStoredCredentials)
 			{
+				triedAccessToken = true;
+				ConnectWithStoredAccessToken();
+				return;
+			}
+			if (!triedPrompt)
+			{
+				triedPrompt = true;
 				StartDeviceAuthorization();
+				return;
 			}
+			authStage = AuthStage.Idle;
+			Debug.Log("[Discord] Authentication attempts exhausted; presence stays offline until the next launch.");
+		}
+
+		private static bool HasStoredRefreshToken()
+		{
+			return !string.IsNullOrEmpty(PlayerPrefs.GetString(RefreshTokenKey, ""));
 		}
 
 		private void RefreshAndConnect(string refreshToken, Action onFailure)
 		{
-			if (client == null)
-			{
-				onFailure?.Invoke();
-				return;
-			}
 			client.RefreshToken(config.ApplicationId, refreshToken,
 				(result, accessToken, newRefreshToken, tokenType, expiresIn, scopes) =>
 				{
 					if (result.Successful() && !string.IsNullOrEmpty(accessToken))
 					{
 						StoreTokens(accessToken, newRefreshToken);
-						client.UpdateToken(AuthorizationTokenType.Bearer, accessToken, updateResult =>
-						{
-							if (updateResult.Successful())
-							{
-								client.Connect();
-							}
-							else
-							{
-								onFailure?.Invoke();
-							}
-						});
+						ConnectWithAccessToken(accessToken);
 					}
 					else
 					{
@@ -184,13 +244,54 @@ namespace OpenFrontier.IP.Discord
 				});
 		}
 
+		private void ConnectWithStoredAccessToken()
+		{
+			client.UpdateToken(AuthorizationTokenType.Bearer,
+				PlayerPrefs.GetString(AccessTokenKey, ""),
+				result =>
+				{
+					if (result.Successful())
+					{
+						ConnectWithAccessToken(null);
+					}
+					else
+					{
+						AdvanceAuthentication();
+					}
+				});
+		}
+
+		/// <summary>
+		/// Hands the (already stored) access token to the SDK and
+		/// opens the socket. The token's validity only shows up
+		/// asynchronously, so the watchdog watches for Ready - or
+		/// a socket drop - and advances the chain on failure.
+		/// </summary>
+		private void ConnectWithAccessToken(string accessToken)
+		{
+			Action connect = () =>
+			{
+				client.Connect();
+				authStage = AuthStage.TokenConnect;
+				authStageDeadline = Time.time + TokenConnectTimeout;
+			};
+			if (!string.IsNullOrEmpty(accessToken))
+			{
+				// The socket must not open before the token is
+				// set, so connect from inside the UpdateToken
+				// callback (the SDK sample's pattern).
+				client.UpdateToken(AuthorizationTokenType.Bearer, accessToken, _ => connect());
+			}
+			else
+			{
+				connect();
+			}
+		}
+
 		private void StartDeviceAuthorization()
 		{
-			if (authInProgress || client == null)
-			{
-				return;
-			}
-			authInProgress = true;
+			authStage = AuthStage.Prompting;
+			authStageDeadline = Time.time + AuthorizationPromptTimeout;
 			try
 			{
 				AuthorizationCodeVerifier verifier = client.CreateAuthorizationCodeVerifier();
@@ -203,20 +304,26 @@ namespace OpenFrontier.IP.Discord
 			}
 			catch (Exception e)
 			{
-				authInProgress = false;
+				authStage = AuthStage.Idle;
 				Debug.LogWarning("[Discord] Device authorization could not start: " + e.Message);
 			}
 		}
 
 		private void OnAuthorizeCompleted(ClientResult result, string code, string redirectUri)
 		{
-			authInProgress = false;
+			if (authStage == AuthStage.Prompting)
+			{
+				authStage = AuthStage.Idle;
+				authStageDeadline = float.MaxValue;
+			}
 			if (client == null)
 			{
 				return;
 			}
 			if (!result.Successful())
 			{
+				// Declined or timed out: no nag this launch -
+				// the chain restarts (and re-prompts) next time.
 				Debug.Log("[Discord] Authorization not completed (" + result.Error() + "). Presence stays offline until the next launch.");
 				return;
 			}
@@ -226,13 +333,7 @@ namespace OpenFrontier.IP.Discord
 					if (tokenResult.Successful() && !string.IsNullOrEmpty(accessToken))
 					{
 						StoreTokens(accessToken, refreshToken);
-						client.UpdateToken(AuthorizationTokenType.Bearer, accessToken, updateResult =>
-						{
-							if (updateResult.Successful())
-							{
-								client.Connect();
-							}
-						});
+						ConnectWithAccessToken(accessToken);
 					}
 					else
 					{
@@ -251,26 +352,66 @@ namespace OpenFrontier.IP.Discord
 			PlayerPrefs.Save();
 		}
 
+		/// <summary>
+		/// The chain's watchdog: a token handshake that neither
+		/// reaches Ready nor drops within the timeout has failed,
+		/// so the chain moves on (eventually to the re-prompt).
+		/// </summary>
+		private void UpdateAuthWatchdog()
+		{
+			if (authStage != AuthStage.Idle && Time.time >= authStageDeadline)
+			{
+				if (authStage == AuthStage.Prompting)
+				{
+					// The prompt went unanswered: give up for
+					// this launch rather than nagging.
+					authStage = AuthStage.Idle;
+					authStageDeadline = float.MaxValue;
+					Debug.Log("[Discord] Authorization prompt unanswered; presence stays offline until the next launch.");
+				}
+				else
+				{
+					AdvanceAuthentication();
+				}
+			}
+		}
+
 		private void OnDiscordStatusChanged(Client.Status status, Client.Error error, int errorDetail)
 		{
+			bool wasReady = statusReady;
 			statusReady = (status == Client.Status.Ready);
 			switch (status)
 			{
 			case Client.Status.Ready:
+				authStage = AuthStage.Idle;
+				authStageDeadline = float.MaxValue;
 				Debug.Log("[Discord] Connected - Rich Presence active.");
 				PushPresence();
 				break;
 			case Client.Status.Disconnected:
-				// A dropped socket with a stored refresh token is
-				// usually an expired access token: refresh once,
-				// throttled, instead of leaving presence dead.
-				if (error != Client.Error.None && Time.time - lastRefreshAttempt > RefreshRetryCooldown)
+				if (authStage == AuthStage.TokenConnect)
 				{
-					string refreshToken = PlayerPrefs.GetString(RefreshTokenKey, "");
-					if (!string.IsNullOrEmpty(refreshToken))
+					// The stored token was rejected (or the
+					// socket never came up): advance the chain.
+					AdvanceAuthentication();
+				}
+				else if (wasReady && error != Client.Error.None
+				         && Time.time - lastRecoveryAttempt > RecoveryCooldown)
+				{
+					// Was authorized and the connection dropped
+					// (expired token, revoked app, network blip):
+					// refresh silently first; on failure the full
+					// chain runs, re-prompting if needed.
+					lastRecoveryAttempt = Time.time;
+					if (HasStoredRefreshToken())
 					{
-						lastRefreshAttempt = Time.time;
-						RefreshAndConnect(refreshToken, null);
+						RefreshAndConnect(
+							PlayerPrefs.GetString(RefreshTokenKey, ""),
+							AdvanceAuthentication);
+					}
+					else
+					{
+						AdvanceAuthentication();
 					}
 				}
 				break;
