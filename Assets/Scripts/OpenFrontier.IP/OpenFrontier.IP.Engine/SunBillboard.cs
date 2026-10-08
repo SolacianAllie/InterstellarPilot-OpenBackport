@@ -111,10 +111,13 @@ namespace OpenFrontier.IP.Engine
 
 		private MaterialPropertyBlock propertyBlock;
 
+		private MaterialPropertyBlock anchorPropertyBlock;
+
 		private void Awake()
 		{
 			cachedLight = GetComponent<Light>();
 			propertyBlock = new MaterialPropertyBlock();
+			anchorPropertyBlock = new MaterialPropertyBlock();
 		}
 
 		private void OnDestroy()
@@ -242,10 +245,18 @@ namespace OpenFrontier.IP.Engine
 			Color value = new Color((starTint.r + 1f) * 0.5f, (starTint.g + 1f) * 0.5f, (starTint.b + 1f) * 0.5f, 1f);
 			propertyBlock.SetColor("_Color", CoreMaterial.GetColor("_Color") * value);
 			coreRenderer.SetPropertyBlock(propertyBlock);
-			anchorCoreRenderer.SetPropertyBlock(propertyBlock);
 			propertyBlock.SetColor("_Color", GlowMaterial.GetColor("_Color") * starTint);
 			glowRenderer.SetPropertyBlock(propertyBlock);
-			anchorGlowRenderer.SetPropertyBlock(propertyBlock);
+			// The ANCHOR sun feeds the reflection probe: an HDR tint in
+			// the capture blurs across the cubemap's low mips and every
+			// smooth ship wears it as a white sheen. Clamp the captured
+			// color to LDR - a 1.0 sun still reads as a glint.
+			Color value2 = new Color(Mathf.Min(value.r, 1f), Mathf.Min(value.g, 1f), Mathf.Min(value.b, 1f), 1f);
+			anchorPropertyBlock.SetColor("_Color", CoreMaterial.GetColor("_Color") * value2);
+			anchorCoreRenderer.SetPropertyBlock(anchorPropertyBlock);
+			Color starTint2 = new Color(Mathf.Min(starTint.r, 1f), Mathf.Min(starTint.g, 1f), Mathf.Min(starTint.b, 1f), 1f);
+			anchorPropertyBlock.SetColor("_Color", GlowMaterial.GetColor("_Color") * starTint2);
+			anchorGlowRenderer.SetPropertyBlock(anchorPropertyBlock);
 		}
 	}
 }

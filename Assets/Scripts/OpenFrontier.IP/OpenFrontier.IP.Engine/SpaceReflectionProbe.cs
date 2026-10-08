@@ -82,8 +82,25 @@ namespace OpenFrontier.IP.Engine
 			renderRequested = true;
 		}
 
+		private bool wasLoadedAndReady;
+
 		private void LateUpdate()
 		{
+			// Never capture before the world is ready: a mid-load capture
+			// grabs the empty/initializing sky (white void / unloaded
+			// starfield) and every smooth surface wears it as a sheen.
+			// When readiness flips true, force a fresh capture so any
+			// early garbage never survives a frame longer than needed.
+			if (!EngineASX.LoadedAndReady)
+			{
+				wasLoadedAndReady = false;
+				return;
+			}
+			if (!wasLoadedAndReady)
+			{
+				wasLoadedAndReady = true;
+				renderRequested = true;
+			}
 			// The probe sits at the sector anchor (the SpaceCamera's
 			// viewpoint); fall back to the camera when no sector is loaded.
 			if (EngineASX.Instance != null && EngineASX.Instance.ActiveSector != null)

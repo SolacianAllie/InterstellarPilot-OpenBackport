@@ -323,13 +323,27 @@ namespace OpenFrontier.IP.Engine.GasClouds
 			// sector at universe creation by SectorCreator.)
 			if (activeGasCloud != null)
 			{
-				return activeGasCloud.GasCloudData.DirectionLightColor;
+				return NormalizeLightColor(activeGasCloud.GasCloudData.DirectionLightColor);
 			}
 			if (EngineASX.Instance.ActiveSector != null)
 			{
-				return EngineASX.Instance.ActiveSector.DirectionLightColor;
+				return NormalizeLightColor(EngineASX.Instance.ActiveSector.DirectionLightColor);
 			}
 			return null;
+		}
+
+		// Generated star colors are HDR (V up to 3) - as LIGHT color that is
+		// 3x light energy: lit ships and planets overexpose and bloom blows
+		// them out to white. Cap the light at 1x, hue preserved; the HDR
+		// brightness lives in the sun billboard tint where it belongs.
+		private static Color NormalizeLightColor(Color color)
+		{
+			float num = Mathf.Max(color.r, Mathf.Max(color.g, color.b));
+			if (num > 1f)
+			{
+				return new Color(color.r / num, color.g / num, color.b / num, color.a);
+			}
+			return color;
 		}
 
 		private bool GetDesiredFogOn()
