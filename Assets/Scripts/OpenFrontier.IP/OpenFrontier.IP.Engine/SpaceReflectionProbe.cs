@@ -66,6 +66,11 @@ namespace OpenFrontier.IP.Engine
 			ReflectionProbe reflectionProbe = gameObject.AddComponent<ReflectionProbe>();
 			reflectionProbe.mode = ReflectionProbeMode.Realtime;
 			reflectionProbe.refreshMode = ReflectionProbeRefreshMode.ViaScripting;
+			// LDR capture: an HDR capture lets hot pixels (the sun)
+			// bleed through the blurred low mips and sheen ships white.
+			// The probe is runtime-spawned, so this must live in code -
+			// editor toggles die with the session.
+			reflectionProbe.hdr = false;
 			// Mobile gets a cheaper probe; reflections are blurry by nature.
 			reflectionProbe.resolution = (Application.isMobilePlatform ? 64 : 128);
 			reflectionProbe.farClipPlane = farClip;

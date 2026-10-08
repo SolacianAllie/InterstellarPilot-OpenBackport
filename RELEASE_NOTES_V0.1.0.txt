@@ -1,95 +1,4 @@
-OPEN FRONTIER — V0.1.0 "EVERY VISIT, A NEW SKY" (in development)
-===============================================
-
-The main menu stops being a menu. Plus shield visuals that actually
-tell you something, sector-wide shadows, and the great white-ship
-hunt of 2026.
-
-THE MENU IS ALIVE
-------------------------------------------------------------
-The old menu was a diorama: same station, same shuttle, same sky,
-forever. Now every visit rolls a brand-new system and drops the
-camera into it:
-
-- Fresh sky every time: new starfield, new star color, new exposure,
-  and nebulae that finally come in every color the engine owns.
-  Nebula colors roll on a rarity ladder - most skies get a few,
-  and one visit in ten goes full rainbow.
-- A guaranteed planet with GUARANTEED MOONS. Moon count rolls its
-  own rarity ladder (1 always, up to 8 for the luckiest visits),
-  each moon a different size, parked beside the disc where the
-  camera can actually see it.
-- Asteroid belts most visits, filled with REAL mineable rocks -
-  and a refinery parked nearby so the miners have somewhere to
-  sell. Every cluster gets its own miner fleet.
-- Twenty station types, one of each, spread around the system -
-  every station with its own faction, its own trade fleet, and
-  sometimes a security patrol. Everyone's friendly (mostly).
-  Sometimes bandits show up. When they do, EVERYONE notices.
-- The camera got curious: it now jumps around the system on its
-  own, preferring ships that are actually DOING something -
-  mining, trading, fighting - over parked ones.
-- The menu's star system is now its own dedicated sector asset,
-  fully decoupled from anything the battle scenarios use.
-
-SHIELDS SHOW THEIR HEALTH
-------------------------------------------------------------
-Shield impacts now wear the shield section's health - the exact
-same colors as the HUD widgets, always at full saturation. A hit
-flashes in with a quick scale-up and an HDR overdrive of the
-section's color, settles back, and the health color lingers on the
-hull for a few seconds as it fades. Rapid hits each get their own
-flash; a laser held on target flashes once and behaves. And when a
-section finally breaks, the shield pops a hard bright red and is
-gone - you'll know the exact moment a facing dies.
-
-GRAPHICS LADDERS, TUNED
-------------------------------------------------------------
-- Shadows: Normal, High and Highest now reach across the ENTIRE
-  sector (3000u), while keeping the same crisp near-field Low
-  always had. Lowest tier remains shadows-off for the potato
-  brigade.
-- Post-processing: the ACES tonemap and exposure grade now run at
-  EVERY quality level (they're nearly free and they're the look).
-  Bloom is what low tiers give up instead - off below High.
-- The sun itself scales with its star's intensity: dim stars are
-  small discs, bright ones loom (1-3 brightness, 0.7-1.6x size).
-- Every texture in the game now has mipmaps enabled.
-
-THE GREAT WHITE-SHIP HUNT
-------------------------------------------------------------
-Ships intermittently rendered solid white. The investigation went
-through mipmaps, streaming budgets, materials and stars before the
-culprit confessed: the reflection probe was capturing an empty sky
-too early in the load and feeding it to every smooth hull. The probe
-now waits for the world to be ready, captures on a fast settling
-burst then a steady cadence, time-slices its work across frames, and
-the sun it sees is clamped to sane brightness. Ships look like ships
-again.
-
-A WORMHOLE TOO FAR, UNLOCKED
-------------------------------------------------------------
-The second universe scenario shipped complete but hidden: missing
-from the universe list and locked behind an alpha-era
-"temporarily unavailable" gate. Both removed. It's in the New Game
-menu where it always belonged.
-
-ALSO IN THIS CYCLE
-------------------------------------------------------------
-- Wormhole jumps fully restored: the tunnel, the cap, the particles,
-  the HDR glow - plus a rogue camera that used to wipe the whole
-  transition to black.
-- Lasers and legacy particles render properly again under URP
-  (7 rebuilt shaders, 29 materials re-pointed).
-- New title card on the menu - with a rainbow that slowly cycles.
-- New app icon.
-- The godmode sun slider's minimum brightness is now 1, matching
-  the generator (no more accidentally dim stars).
-- 32-bit and 64-bit builds verified for Android and Windows.
-
-
-===============================================================
-ORIGINAL DRAFT — V0.1.0 "STARS & SKIES"
+OPEN FRONTIER — V0.1.0 "STARS & SKIES"
 ===============================================
 
 The first major release for Open Frontier is here, and it's all about
@@ -159,7 +68,78 @@ Both are fixed, which also repairs tap-to-target in the 3D view and the
 scratchcard minigame. Selecting a unit on the map now also plays the
 target beep like it should.
 
-QUALITY OF LIFE
+THE MENU IS ALIVE
+------------------------------------------------------------
+The old menu was a diorama: same station, same shuttle, same sky,
+forever. Now every visit rolls a brand-new system and drops the
+camera into it:
+
+- Fresh sky every time: new starfield, new star color, new exposure,
+  and nebulae that finally come in every color the engine owns.
+  Nebula colors roll on a rarity ladder - most skies get a few,
+  and one visit in ten goes full rainbow.
+- A guaranteed planet with GUARANTEED MOONS. Moon count rolls its
+  own rarity ladder (1 always, up to 8 for the luckiest visits),
+  each moon a different size, parked beside the disc where the
+  camera can actually see it.
+- Asteroid belts most visits, filled with REAL mineable rocks -
+  and a refinery parked nearby so the miners have somewhere to
+  sell. Every cluster gets its own miner fleet.
+- Twenty station types, one of each, spread around the system -
+  every station with its own faction, its own trade fleet, and
+  sometimes a security patrol. Everyone's friendly (mostly).
+  Sometimes bandits show up. When they do, EVERYONE notices.
+- The camera got curious: it now jumps around the system on its
+  own, preferring ships that are actually DOING something -
+  mining, trading, fighting - over parked ones.
+- The menu's star system is now its own dedicated sector asset,
+  fully decoupled from anything the battle scenarios use.
+
+SHIELDS SHOW THEIR HEALTH
+------------------------------------------------------------
+Shield impacts now wear the shield section's health - the exact
+same colors as the HUD widgets, always at full saturation. A hit
+flashes in with a quick scale-up and an HDR overdrive of the
+section's color, settles back, and the health color lingers on the
+hull for a few seconds as it fades. Rapid hits each get their own
+flash; a laser held on target flashes once and behaves. And when a
+section finally breaks, the shield pops a hard bright red and is
+gone - you'll know the exact moment a facing dies.
+
+
+GRAPHICS LADDERS, TUNED
+------------------------------------------------------------
+- Shadows: Normal, High and Highest now reach across the ENTIRE
+  sector (3000u), while keeping the same crisp near-field Low
+  always had. Lowest tier remains shadows-off for the potato
+  brigade.
+- Post-processing: the ACES tonemap and exposure grade now run at
+  EVERY quality level (they're nearly free and they're the look).
+  Bloom is what low tiers give up instead - off below High.
+- The sun itself scales with its star's intensity: dim stars are
+  small discs, bright ones loom (1-3 brightness, 0.7-1.6x size).
+- Every texture in the game now has mipmaps enabled.
+
+A WORMHOLE TOO FAR, UNLOCKED
+------------------------------------------------------------
+The second universe scenario shipped complete but hidden: missing
+from the universe list and locked behind an alpha-era
+"temporarily unavailable" gate. Both removed. It's in the New Game
+menu where it always belonged.
+
+BUG THAT TOOK SO FUCKING LONG TO FIND AND MURDER
+------------------------------------------------------------
+Ships intermittently rendered solid white. The investigation went
+through mipmaps, streaming budgets, materials and stars before the
+culprit confessed: the reflection probe was capturing an empty sky
+too early in the load and feeding it to every smooth hull. The probe
+now waits for the world to be ready, captures on a fast settling
+burst then a steady cadence, time-slices its work across frames, and
+the sun it sees is clamped to sane brightness. Ships look like ships
+again.
+THIS TOOK SEVERAL FUCKING HOURS TO FIND AND I SKIPPED ON SLEEP X3
+
+Other notable things
 ------------------------------------------------------------
 - The loading screen picks a random unit thumbnail every time
   (34 possible guests)
@@ -170,14 +150,25 @@ QUALITY OF LIFE
 - The version counter is now a single main-menu label driven by the
   project's own version number, with Alpha/Beta/Legacy stage tags
   ready for the road ahead
+-Wormhole jumps fully restored: the tunnel, the cap, the particles,
+  the HDR glow - plus a rogue camera that used to wipe the whole
+  transition to black.
+- Lasers and legacy particles render properly again under URP
+  (7 rebuilt shaders, 29 materials re-pointed).
+- New title card on the menu - with a rainbow that slowly cycles.
+- New app icon.
+- The godmode sun slider's minimum brightness is now 1, matching
+  the generator (no more accidentally dim stars).
+- 32-bit and 64-bit builds verified for Android and Windows.
 
-Known notes:
+
+## NOTICE FOR MIGRATING PLAYERS FROM IP2:
 - Saves from before this update: their sectors keep the old near-white
   light, so their stars come from the new seeded palette on first load.
   New universes bake their stars in from the start.
 - The godmode sun sliders edit the current sector only (saved with the
   game).
-  
+
 PLATFORM SUPPORT
 ------------------------------------------------------------
 This release is **playable on all platforms**
