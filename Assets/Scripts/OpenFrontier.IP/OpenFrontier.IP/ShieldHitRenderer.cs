@@ -46,11 +46,20 @@ namespace OpenFrontier.IP
 				ShieldHitInfo pooledShieldHit = GetPooledShieldHit();
 				if (pooledShieldHit != null)
 				{
-					pooledShieldHit.MaxScale = Mathf.Clamp(shieldDamage * DamageScaleMultiplier, MinShieldHitScale, MaxShieldHitScale);
+					// Open Frontier: constant size - the stock damage-scaled
+					// sizing made depleted-shield hits (which absorb almost
+					// nothing) spawn tiny and vanish fast. Always max.
+					pooledShieldHit.MaxScale = MaxShieldHitScale;
 					pooledShieldHit.gameObject.SetActive(value: true);
 					pooledShieldHit.TargetUnit = unit;
 					pooledShieldHit.HitColor = EngineASX.Instance.GetUnitShieldColor(unit, unit.GetShieldIndex(damageSourceWorldPosition));
-					Debug.Log(string.Format("[ShieldHit] unit={0} section={1} snapshot=({2:0.00},{3:0.00},{4:0.00})", unit.name, unit.GetShieldIndex(damageSourceWorldPosition), pooledShieldHit.HitColor.r, pooledShieldHit.HitColor.g, pooledShieldHit.HitColor.b));
+					// Cache the instanced material once per pooled object -
+					// the property block tint never reached the shader on
+					// this stack, so the color is set directly on it.
+					if (pooledShieldHit.CachedMaterial == null)
+					{
+						pooledShieldHit.CachedMaterial = pooledShieldHit.Renderer.material;
+					}
 					pooledShieldHit.StartExpiryTime = Time.time;
 					pooledShieldHit.StartTime = Time.time;
 					pooledShieldHit.SetShieldHitOrientation(damageSourceWorldPosition);
@@ -80,14 +89,6 @@ namespace OpenFrontier.IP
 			}
 		}
 
-		// Shared property block: the shield hit shader tints via
-		// _BaseColor (material.color's _Color is unused by it), and a
-		// block avoids per-frame material instancing. Lazy-created:
-		// 'new MaterialPropertyBlock()' is a native call, forbidden in
-		// field initializers (TypeInitializationException poisons the
-		// whole type).
-		private static MaterialPropertyBlock shieldHitPropertyBlock;
-
 		private void UpdateShieldHitMaterial(ShieldHitInfo hitInfo, float expiryTime)
 		{
 			float num = Mathf.Clamp01((Time.time - hitInfo.StartExpiryTime) / (expiryTime - hitInfo.StartExpiryTime));
@@ -96,13 +97,12 @@ namespace OpenFrontier.IP
 			hitInfo.transform.rotation = hitInfo.TargetUnit.transform.rotation * hitInfo.LocalRotation;
 			float num2 = (1f - Mathf.Clamp01(num / ShieldScaleDuration)) * hitInfo.MaxScale;
 			hitInfo.transform.localScale = new Vector3(num2, num2, num2);
-			// Snapshot tint from impact time + the stock alpha fade.
-			if (shieldHitPropertyBlock == null)
+			// Snapshot tint from impact time + the stock alpha fade, set
+			// directly on the cached instanced material.
+			if (hitInfo.CachedMaterial != null)
 			{
-				shieldHitPropertyBlock = new MaterialPropertyBlock();
+				hitInfo.CachedMaterial.SetColor("_BaseColor", new Color(hitInfo.HitColor.r, hitInfo.HitColor.g, hitInfo.HitColor.b, a));
 			}
-			shieldHitPropertyBlock.SetColor("_BaseColor", new Color(hitInfo.HitColor.r, hitInfo.HitColor.g, hitInfo.HitColor.b, a));
-			hitInfo.Renderer.SetPropertyBlock(shieldHitPropertyBlock);
 		}
 
 		private ShieldHitInfo GetPooledShieldHit()

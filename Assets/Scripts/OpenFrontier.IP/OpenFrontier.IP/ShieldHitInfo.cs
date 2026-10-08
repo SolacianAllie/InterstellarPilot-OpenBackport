@@ -24,6 +24,10 @@ namespace OpenFrontier.IP
 		// the UI widgets use).
 		public Color HitColor = Color.white;
 
+		// Per-pool-object instanced material (created once from
+		// Renderer.material) - the tint goes here.
+		public Material CachedMaterial;
+
 		public void SetShieldHitOrientation(Vector3 damageSourceWorldPosition)
 		{
 			if (TargetUnit != null)
