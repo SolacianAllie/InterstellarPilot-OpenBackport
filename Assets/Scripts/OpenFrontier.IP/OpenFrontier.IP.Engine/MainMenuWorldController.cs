@@ -253,6 +253,29 @@ namespace OpenFrontier.IP.Engine
 					}
 				}
 			}
+			PullMoonsCloseToPlanets(sector);
+		}
+
+		// The stock settings park moons 40000u from their planet (twice
+		// the sector's own gate distance!) - authored for the sector map,
+		// not a camera, so menu moons existed but were effectively
+		// invisible. Bring every moon into a close cinematic orbit.
+		// ActiveUnitMoon.Reposition reads OffsetFromPlanet live every
+		// FixedUpdate, so this applies immediately.
+		private static void PullMoonsCloseToPlanets(Sector sector)
+		{
+			EngineASX.Instance.EnumerateUnitsWithPredicate(delegate(Unit unit)
+			{
+				Moon component = unit.GetComponent<Moon>();
+				if (component != null && component.OrbitingAroundUnit != null)
+				{
+					float num = Mathf.Max(1000f, component.OrbitingAroundUnit.Radius);
+					float num2 = num * UnityEngine.Random.Range(2.2f, 3.2f);
+					float y = UnityEngine.Random.value * 360f;
+					float x = UnityEngine.Random.Range(-8f, 8f);
+					component.OffsetFromPlanet = Quaternion.Euler(x, y, 0f) * Vector3.forward * num2;
+				}
+			}, (Unit e) => e.IsValidAndNotDestroyed && e.Sector == sector && e.UnitType == UnitType.Planet);
 		}
 
 		// The camera's opening view: a random ship from the whole pool, so
