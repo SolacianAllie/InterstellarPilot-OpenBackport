@@ -43,6 +43,20 @@ namespace OpenFrontier.IP
 		{
 			if (Vector3.Distance(unit.transform.position, GameController.Instance.MainCamera.transform.position) < EngineASX.Instance.PerformanceSettings.MaxShieldHitDist)
 			{
+				int shieldIndex = unit.GetShieldIndex(damageSourceWorldPosition);
+				// A sustained beam re-requests the effect EVERY damage
+				// tick, restarting the envelope and pinning it in the
+				// white flash phase for the whole beam. If this section
+				// already has a young effect playing, let it ride -
+				// only a nearly-done effect may re-flash (pulse fire).
+				for (int i = 0; i < pooledObjects.Count; i++)
+				{
+					ShieldHitInfo shieldHitInfo = pooledObjects[i];
+					if (shieldHitInfo.gameObject.activeSelf && shieldHitInfo.TargetUnit == unit && shieldHitInfo.ShieldIndex == shieldIndex && Time.time - shieldHitInfo.StartExpiryTime < 0.25f)
+					{
+						return shieldHitInfo;
+					}
+				}
 				ShieldHitInfo pooledShieldHit = GetPooledShieldHit();
 				if (pooledShieldHit != null)
 				{
@@ -52,7 +66,7 @@ namespace OpenFrontier.IP
 					pooledShieldHit.MaxScale = MaxShieldHitScale;
 					pooledShieldHit.gameObject.SetActive(value: true);
 					pooledShieldHit.TargetUnit = unit;
-					pooledShieldHit.ShieldIndex = unit.GetShieldIndex(damageSourceWorldPosition);
+					pooledShieldHit.ShieldIndex = shieldIndex;
 					// A section this hit just emptied pops: bright red
 					// flash, short life.
 					pooledShieldHit.DepletedFlash = unit.Components != null && unit.Components.ShieldComponent != null && unit.Components.ShieldComponent.GetShieldPointNormalized(pooledShieldHit.ShieldIndex) <= 0f;
