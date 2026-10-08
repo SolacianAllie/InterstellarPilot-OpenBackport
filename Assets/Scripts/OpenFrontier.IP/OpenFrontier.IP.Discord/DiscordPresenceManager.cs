@@ -150,6 +150,10 @@ namespace OpenFrontier.IP.Discord
 
 		private const int MaxLineLength = 128;
 
+		// How many cargo types fit on one card before the manifest
+		// spills onto another card in the rotation.
+		private const int TypesPerCargoCard = 3;
+
 		private readonly List<PresenceCard> presenceCards = new List<PresenceCard>();
 		private int presenceCardIndex;
 		private float nextCardRotationTime;
@@ -707,7 +711,7 @@ namespace OpenFrontier.IP.Discord
 
 			// What the player is carrying. (The unit itself is the
 			// small image and its tooltip - the text never names it.)
-			AddCargoCard(ship);
+			AddCargoCards(ship);
 
 			// Where you are, and how friendly the neighbourhood is.
 			if (sector != null)
@@ -784,10 +788,13 @@ namespace OpenFrontier.IP.Discord
 		}
 
 		/// <summary>
-		/// What the player is hauling: total units and the top cargo
-		/// types. Skipped entirely for an empty hold.
+		/// What the player is hauling: total units, plus the top cargo
+		/// types. A hold with more types than fit on one card gets one
+		/// card per page, so the deck rotation walks through the whole
+		/// manifest instead of hiding all but the first three. Skipped
+		/// entirely for an empty hold.
 		/// </summary>
-		private void AddCargoCard(Unit ship)
+		private void AddCargoCards(Unit ship)
 		{
 			if (ship == null || !ship.IsValidAndNotDestroyed || ship.Components == null)
 			{
@@ -809,17 +816,28 @@ namespace OpenFrontier.IP.Discord
 			{
 				return;
 			}
+			// Biggest hauls first, so the most interesting cargo leads.
 			top.Sort((a, b) => b.Value.CompareTo(a.Value));
-			var names = new List<string>();
-			for (int i = 0; i < top.Count && i < 3; i++)
+
+			string details = "Hauling " + total.ToString("N0") + " units";
+			string typeLabel = cargoBay.DistintCount + " cargo type"
+				+ (cargoBay.DistintCount == 1 ? "" : "s");
+			for (int offset = 0; offset < top.Count; offset += TypesPerCargoCard)
 			{
-				string cargoName = top[i].Key != null ? top[i].Key.ClassName : null;
-				names.Add(string.IsNullOrEmpty(cargoName) ? top[i].Key.ShortName : cargoName);
+				var names = new List<string>();
+				int last = Math.Min(top.Count, offset + TypesPerCargoCard);
+				for (int i = offset; i < last; i++)
+				{
+					string cargoName = top[i].Key != null ? top[i].Key.ClassName : null;
+					names.Add(string.IsNullOrEmpty(cargoName) ? top[i].Key.ShortName : cargoName);
+				}
+				string state = typeLabel + " - " + string.Join(", ", names);
+				if (last < top.Count)
+				{
+					state += " (+" + (top.Count - last) + " more)";
+				}
+				presenceCards.Add(new PresenceCard(details, state));
 			}
-			presenceCards.Add(new PresenceCard(
-				"Hauling " + total.ToString("N0") + " units",
-				cargoBay.DistintCount + " cargo type" + (cargoBay.DistintCount == 1 ? "" : "s")
-					+ " - " + string.Join(", ", names)));
 		}
 
 		private static string SecurityLabel(Sector sector)
