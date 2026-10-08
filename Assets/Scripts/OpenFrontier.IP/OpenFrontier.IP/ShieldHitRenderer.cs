@@ -22,8 +22,6 @@ namespace OpenFrontier.IP
 
 		public int InitialPoolSize = 25;
 
-		private static bool readbackLogged;
-
 		private void Awake()
 		{
 			for (int i = 0; i < InitialPoolSize; i++)
@@ -54,7 +52,12 @@ namespace OpenFrontier.IP
 					pooledShieldHit.MaxScale = MaxShieldHitScale;
 					pooledShieldHit.gameObject.SetActive(value: true);
 					pooledShieldHit.TargetUnit = unit;
-					pooledShieldHit.HitColor = EngineASX.Instance.GetUnitShieldColor(unit, unit.GetShieldIndex(damageSourceWorldPosition));
+					pooledShieldHit.ShieldIndex = unit.GetShieldIndex(damageSourceWorldPosition);
+					pooledShieldHit.HitColor = EngineASX.Instance.GetUnitShieldColor(unit, pooledShieldHit.ShieldIndex);
+					// A section this hit just emptied pops: bright white
+					// flash, short life.
+					pooledShieldHit.DepletedFlash = unit.Components != null && unit.Components.ShieldComponent != null && unit.Components.ShieldComponent.GetShieldPointNormalized(pooledShieldHit.ShieldIndex) <= 0f;
+					pooledShieldHit.Duration = (pooledShieldHit.DepletedFlash ? 0.4f : ShieldHitDuration);
 					// Cache the instanced material once per pooled object -
 					// the property block tint never reached the shader on
 					// this stack, so the color is set directly on it.
@@ -62,7 +65,6 @@ namespace OpenFrontier.IP
 					{
 						pooledShieldHit.CachedMaterial = pooledShieldHit.Renderer.material;
 					}
-					Debug.Log(string.Format("[ShieldHit] mat={0} shader={1} snapshot=({2:0.00},{3:0.00},{4:0.00})", pooledShieldHit.CachedMaterial.name, pooledShieldHit.CachedMaterial.shader.name, pooledShieldHit.HitColor.r, pooledShieldHit.HitColor.g, pooledShieldHit.HitColor.b));
 					pooledShieldHit.StartExpiryTime = Time.time;
 					pooledShieldHit.StartTime = Time.time;
 					pooledShieldHit.SetShieldHitOrientation(damageSourceWorldPosition);
@@ -79,7 +81,7 @@ namespace OpenFrontier.IP
 				ShieldHitInfo shieldHitInfo = pooledObjects[i];
 				if (shieldHitInfo.gameObject.activeSelf)
 				{
-					float num = shieldHitInfo.StartExpiryTime + ShieldHitDuration;
+					float num = shieldHitInfo.StartExpiryTime + shieldHitInfo.Duration;
 					if (Time.time > num || shieldHitInfo.TargetUnit == null)
 					{
 						shieldHitInfo.gameObject.SetActive(value: false);
@@ -95,23 +97,33 @@ namespace OpenFrontier.IP
 		private void UpdateShieldHitMaterial(ShieldHitInfo hitInfo, float expiryTime)
 		{
 			float num = Mathf.Clamp01((Time.time - hitInfo.StartExpiryTime) / (expiryTime - hitInfo.StartExpiryTime));
-			float a = 1f - num;
 			hitInfo.transform.position = hitInfo.TargetUnit.transform.TransformPoint(hitInfo.LocalTranslation);
 			hitInfo.transform.rotation = hitInfo.TargetUnit.transform.rotation * hitInfo.LocalRotation;
-			float num2 = (1f - Mathf.Clamp01(num / ShieldScaleDuration)) * hitInfo.MaxScale;
-			hitInfo.transform.localScale = new Vector3(num2, num2, num2);
-			// Snapshot tint from impact time + the stock alpha fade, set
-			// directly on the cached instanced material.
+			// Constant size for the whole life - the fade is carried by
+			// alpha now, not by shrinking away.
+			hitInfo.transform.localScale = new Vector3(hitInfo.MaxScale, hitInfo.MaxScale, hitInfo.MaxScale);
+			// Quick fade-in, then bleed out over the rest of the life.
+			float num2 = Mathf.Clamp01(num / 0.12f) * (1f - num);
+			Color color;
+			if (hitInfo.DepletedFlash)
+			{
+				// Section emptied by the hit: bright white pop (HDR -
+				// feeds bloom), gone in 0.4s.
+				color = new Color(2f, 2f, 2f, num2);
+			}
+			else
+			{
+				// Snapshot health color at impact, fading toward the
+				// section's LIVE health color as the attack lands.
+				Color unitShieldColor = EngineASX.Instance.GetUnitShieldColor(hitInfo.TargetUnit, hitInfo.ShieldIndex);
+				color = Color.Lerp(hitInfo.HitColor, unitShieldColor, num);
+				color.a = num2;
+			}
+			// The runtime shader is Legacy Particles/Additive: it tints
+			// via _TintColor (NOT _Color or _BaseColor).
 			if (hitInfo.CachedMaterial != null)
 			{
-				Color color = new Color(hitInfo.HitColor.r, hitInfo.HitColor.g, hitInfo.HitColor.b, a);
-				hitInfo.CachedMaterial.SetColor("_BaseColor", color);
-				if (!readbackLogged)
-				{
-					readbackLogged = true;
-					Color color2 = hitInfo.CachedMaterial.GetColor("_BaseColor");
-					Debug.Log(string.Format("[ShieldHit] readback _BaseColor=({0:0.00},{1:0.00},{2:0.00},{3:0.00})", color2.r, color2.g, color2.b, color2.a));
-				}
+				hitInfo.CachedMaterial.SetColor("_TintColor", color);
 			}
 		}
 
