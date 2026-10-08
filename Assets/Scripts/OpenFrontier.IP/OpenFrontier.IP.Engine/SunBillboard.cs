@@ -204,11 +204,13 @@ namespace OpenFrontier.IP.Engine
 			Vector3 vector3 = position - main.transform.position;
 			Quaternion rotation = ((vector3.sqrMagnitude > 0.0001f) ? Quaternion.LookRotation(vector3, main.transform.up) : Quaternion.identity);
 			float num2 = Vector3.Distance(main.transform.position, position);
-			// Open Frontier: sun size scales with star intensity - dim
-			// stars are small discs, bright ones loom. V (max component)
-			// spans ~0.5-1 for authored LDR stars and 1-3 for generated
-			// ones; mapped to a 0.7-1.6x size factor.
-			float num3 = Mathf.Lerp(0.7f, 1.6f, Mathf.InverseLerp(0.5f, 3f, StarTint.maxColorComponent));
+			// Open Frontier: sun size scales with the star's INTENSITY
+			// (the 1-3 brightness the generator/slider writes into the
+			// sector's DirectionLightColor, game-wide) - hue and
+			// saturation play no part. Light.intensity is NOT this: it
+			// is a cloud-dimmed base multiplier, not the star's output.
+			StarColorGenerator.RgbToHsv(StarTint, out float _, out float _, out float v);
+			float num3 = Mathf.Lerp(0.7f, 1.6f, Mathf.InverseLerp(0.5f, 3f, v));
 			float num4 = 2f * num2 * Mathf.Tan(CoreAngularDiameter * 0.5f * (Mathf.PI / 180f)) * num3;
 			coreTransform.SetPositionAndRotation(position, rotation);
 			coreTransform.localScale = new Vector3(num4, num4, 1f);
