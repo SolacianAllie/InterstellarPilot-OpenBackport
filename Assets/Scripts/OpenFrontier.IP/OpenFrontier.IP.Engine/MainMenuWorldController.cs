@@ -352,6 +352,11 @@ namespace OpenFrontier.IP.Engine
 					Vector3 vector3 = Quaternion.Euler(0f, num3, 0f) * vector2;
 					component2.OffsetFromPlanet = (vector3 + Vector3.up * UnityEngine.Random.Range(-0.08f, 0.08f)).normalized * num2;
 					unit2.Seed = 0;
+					// Size variety: 0.55-1.75x, so a multi-moon system
+					// reads as distinct bodies, not clones. The orbit
+					// math above uses the PLANET's radius, so scale
+					// never hides a moon inside it.
+					unit2.transform.localScale = Vector3.one * UnityEngine.Random.Range(0.55f, 1.75f);
 				}
 				Debug.Log(string.Format("[MainMenuWorldController] planet '{0}' visual radius {1:0}: {2} moon(s) placed", item.Key.name, num, item.Value.Count));
 			}
