@@ -57,7 +57,12 @@ namespace OpenFrontier.IP.Engine.WorldSeeding.WorldSeedingLayers
 				AsteroidCluster asteroidCluster = TryGenerateAsteroidCluster(sector, asteroidClusterPrefab);
 				if (asteroidCluster != null && Random.value < CreateAsteroidClustersSeederSettings.ProbabilityOfGeneratingGasCloud)
 				{
-					Unit random = asteroidCluster.AsteroidType.GasCloudPrefabs.GetRandom();
+					// Roll gas from the SECTOR's assigned type, not the
+					// cluster prefab's: variants share one cluster prefab
+					// whose back-reference always points at the original
+					// (gassy) type - reading it here silently defeated the
+					// NoGas variants. An empty list returns null = clean.
+					Unit random = sector.AsteroidType.GasCloudPrefabs.GetRandom();
 					if (random != null)
 					{
 						CreateGasCloud(sector, asteroidCluster.Unit.Radius, asteroidCluster.transform.localPosition, random);

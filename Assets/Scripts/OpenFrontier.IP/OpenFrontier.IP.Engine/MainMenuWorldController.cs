@@ -299,7 +299,10 @@ namespace OpenFrontier.IP.Engine
 				asteroidCluster.transform.localPosition = localPosition;
 				asteroidCluster.GetComponent<Unit>().Init();
 				SeedRealAsteroids(asteroidCluster);
-				Unit random = asteroidCluster.AsteroidType.GasCloudPrefabs.GetRandom();
+				// Roll gas from the PICKED type, not the cluster prefab's
+				// back-referenced type (always the gassy original) - that's
+				// what makes the NoGas variants actually stay clean.
+				Unit random = asteroidType.GasCloudPrefabs.GetRandom();
 				if (random != null && UnityEngine.Random.value < num3)
 				{
 					CreateAsteroidClustersSeeder.CreateGasCloud(sector, asteroidCluster.Unit.Radius, localPosition, random);
