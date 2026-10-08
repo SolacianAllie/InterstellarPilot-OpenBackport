@@ -227,21 +227,29 @@ namespace OpenFrontier.IP.Engine
 			createPlanetsSeeder.CreatePlanetsSeederSettings = PlanetsSettings;
 			createPlanetsSeeder.CreateScenePlanets(sector);
 			Object.Destroy(gameObject);
-			// Guarantee the moon (the settings roll it at 0.8).
-			bool flag = false;
+			// Moon ladder (user-tuned): 1 guaranteed, then keep rolling -
+			// 85% for a 2nd, 65% for a 3rd, 45% for a 4th, 25% for a
+			// 5th, then 5% for each further one, hard-capped at 8. The
+			// stock 0.8 roll may already have produced one, which counts.
+			int num = RollMenuMoonTargetCount();
+			int num2 = 0;
+			List<Unit> list = new List<Unit>();
 			EngineASX.Instance.EnumerateUnitsWithPredicate(delegate(Unit unit)
 			{
 				if (unit.GetComponent<Moon>() != null && unit.Sector == sector)
 				{
-					flag = true;
+					num2++;
 				}
-			}, (Unit e) => e.IsValidAndNotDestroyed);
-			if (!flag && PlanetsSettings.MoonPrefabs.Count > 0)
-			{
-				List<Unit> unitsByType = sector.GetUnitsByType(UnitType.Planet);
-				if (unitsByType != null && unitsByType.Count > 0)
+				else if (unit.Sector == sector)
 				{
-					Unit unit2 = unitsByType[unitsByType.Count - 1];
+					list.Add(unit);
+				}
+			}, (Unit e) => e.IsValidAndNotDestroyed && e.UnitType == UnitType.Planet);
+			if (list.Count > 0 && PlanetsSettings.MoonPrefabs.Count > 0)
+			{
+				Unit unit2 = list[list.Count - 1];
+				for (int i = num2; i < num; i++)
+				{
 					Unit unit3 = UnityObjectHelper.InstantiateAndGetComponent(PlanetsSettings.MoonPrefabs[UnityEngine.Random.Range(0, PlanetsSettings.MoonPrefabs.Count)]);
 					Moon component = unit3.GetComponent<Moon>();
 					if (component != null)
@@ -253,7 +261,7 @@ namespace OpenFrontier.IP.Engine
 					}
 				}
 			}
-			PullMoonsCloseToPlanets(sector);
+			PlaceMoonsBesideTheDisc(sector);
 			int num3 = 0;
 			int num4 = 0;
 			EngineASX.Instance.EnumerateUnitsWithPredicate(delegate(Unit unit)
@@ -270,53 +278,76 @@ namespace OpenFrontier.IP.Engine
 			Debug.Log(string.Format("[MainMenuWorldController] planet system: {0} planet(s), {1} moon(s)", num3, num4));
 		}
 
+		// Menu moon ladder: chance to ADD the Nth moon (conditional
+		// rolls). 6+ keeps rolling 5%, hard-capped at 8.
+		private static readonly float[] MoonAddChances = new float[7] { 0.85f, 0.65f, 0.45f, 0.25f, 0.05f, 0.05f, 0.05f };
+
+		private static int RollMenuMoonTargetCount()
+		{
+			int num = 1;
+			while (num - 1 < MoonAddChances.Length && UnityEngine.Random.value < MoonAddChances[num - 1])
+			{
+				num++;
+			}
+			return num;
+		}
+
 		// The stock settings park moons 40000u from their planet -
 		// authored for the sector map, not a camera. The planet stays at
 		// its stock ~20000u backdrop spot (moving it close let it
-		// swallow the spectating camera), so for the moon to be SEEN it
-		// must hug the planet's disc: orbit at 1.4-1.9x the planet's
-		// TRUE visual radius from renderer bounds. The serialized
-		// Unit.Radius is a placeholder (1) - trusting it put the moon
-		// inside the planet's mesh. ActiveUnitMoon.Reposition reads
-		// OffsetFromPlanet live every FixedUpdate, so this applies
-		// immediately.
-		private static void PullMoonsCloseToPlanets(Sector sector)
+		// swallow the spectating camera), so moons are placed hugging
+		// the disc: innermost at ~1.5x the planet's TRUE visual radius
+		// (renderer bounds - the serialized Unit.Radius is a placeholder
+		// 1), each next one further out, spread evenly around the disc
+		// starting 90 degrees off the planet->camera line so nothing
+		// starts hidden behind the planet. The orbit phase is unit.Seed
+		// % 360 in ActiveUnitMoon.Reposition - zeroed so these offsets
+		// apply as-authored (the slow stock orbit drifts on from here).
+		private static void PlaceMoonsBesideTheDisc(Sector sector)
 		{
+			Dictionary<Unit, List<Unit>> dictionary = new Dictionary<Unit, List<Unit>>();
 			EngineASX.Instance.EnumerateUnitsWithPredicate(delegate(Unit unit)
 			{
 				Moon component = unit.GetComponent<Moon>();
 				if (component != null && component.OrbitingAroundUnit != null)
 				{
-					float num = 0f;
-					Renderer componentInChildren = component.OrbitingAroundUnit.GetComponentInChildren<Renderer>();
-					if (componentInChildren != null)
+					if (!dictionary.TryGetValue(component.OrbitingAroundUnit, out var value))
 					{
-						// extents.magnitude of a sphere = radius * sqrt(3)
-						num = componentInChildren.bounds.extents.magnitude / 1.732f;
+						value = new List<Unit>();
+						dictionary[component.OrbitingAroundUnit] = value;
 					}
-					if (num <= 0f)
-					{
-						num = Mathf.Max(1000f, component.OrbitingAroundUnit.Radius);
-					}
-					float num2 = num * UnityEngine.Random.Range(1.4f, 1.9f);
-					// Place the moon BESIDE the disc at startup: 90
-					// degrees off the planet->center line (the camera
-					// lives near the center, so this is the planet->
-					// camera line for any spectate target). A moon
-					// behind the planet is invisible; one 90 degrees
-					// around is maximally visible. The orbit phase is
-					// unit.Seed % 360 in ActiveUnitMoon.Reposition -
-					// zero the seed so this offset applies as-authored
-					// (the slow stock orbit drifts on from here).
-					Vector3 vector = -component.OrbitingAroundUnit.transform.localPosition;
-					vector.y = 0f;
-					vector = ((vector.sqrMagnitude < 1f) ? Vector3.forward : vector.normalized);
-					Vector3 vector2 = Quaternion.Euler(0f, 90f * ((UnityEngine.Random.value < 0.5f) ? 1f : (-1f)), 0f) * vector;
-					component.OffsetFromPlanet = (vector2 + Vector3.up * UnityEngine.Random.Range(-0.08f, 0.08f)).normalized * num2;
-					unit.Seed = 0;
-					Debug.Log(string.Format("[MainMenuWorldController] moon pulled in: planet '{0}' visual radius {1:0} at {2}, moon '{3}' orbit {4:0}", component.OrbitingAroundUnit.name, num, component.OrbitingAroundUnit.transform.localPosition, unit.name, num2));
+					value.Add(unit);
 				}
 			}, (Unit e) => e.IsValidAndNotDestroyed && e.Sector == sector && e.UnitType == UnitType.Planet);
+			foreach (KeyValuePair<Unit, List<Unit>> item in dictionary)
+			{
+				float num = 0f;
+				Renderer componentInChildren = item.Key.GetComponentInChildren<Renderer>();
+				if (componentInChildren != null)
+				{
+					// extents.magnitude of a sphere = radius * sqrt(3)
+					num = componentInChildren.bounds.extents.magnitude / 1.732f;
+				}
+				if (num <= 0f)
+				{
+					num = Mathf.Max(1000f, item.Key.Radius);
+				}
+				Vector3 vector = -item.Key.transform.localPosition;
+				vector.y = 0f;
+				vector = ((vector.sqrMagnitude < 1f) ? Vector3.forward : vector.normalized);
+				Vector3 vector2 = Quaternion.Euler(0f, 90f * ((UnityEngine.Random.value < 0.5f) ? 1f : (-1f)), 0f) * vector;
+				for (int i = 0; i < item.Value.Count; i++)
+				{
+					Unit unit2 = item.Value[i];
+					Moon component2 = unit2.GetComponent<Moon>();
+					float num2 = num * Mathf.Min(1.5f * Mathf.Pow(1.35f, i), 7f);
+					float num3 = (float)i * (360f / (float)item.Value.Count) + UnityEngine.Random.Range(-10f, 10f);
+					Vector3 vector3 = Quaternion.Euler(0f, num3, 0f) * vector2;
+					component2.OffsetFromPlanet = (vector3 + Vector3.up * UnityEngine.Random.Range(-0.08f, 0.08f)).normalized * num2;
+					unit2.Seed = 0;
+				}
+				Debug.Log(string.Format("[MainMenuWorldController] planet '{0}' visual radius {1:0}: {2} moon(s) placed", item.Key.name, num, item.Value.Count));
+			}
 		}
 
 		// The camera's opening view: a random ship from the whole pool, so
