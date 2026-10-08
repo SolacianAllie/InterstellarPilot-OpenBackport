@@ -38,15 +38,6 @@ namespace OpenFrontier.IP.Engine
 	{
 		private ScenarioInfo appliedScenario;
 
-		// DIAGNOSTIC: one-shot fleet censuses after each roll (15s/20s/60s)
-		// so "ships sitting idly" can be attributed to an actual order
-		// state instead of guessed at.
-		private float censusAt15s = -1f;
-
-		private float censusAt20s = -1f;
-
-		private float censusAt60s = -1f;
-
 		private void Update()
 		{
 			if (!EngineASX.LoadedAndReady || EngineASX.Instance.World == null || GameController.Instance == null)
@@ -62,70 +53,6 @@ namespace OpenFrontier.IP.Engine
 					RollMenuSystem();
 				}
 			}
-			if (censusAt15s > 0f && Time.time >= censusAt15s)
-			{
-				censusAt15s = -1f;
-				LogEveryShipOrder();
-			}
-			if (censusAt20s > 0f && Time.time >= censusAt20s)
-			{
-				censusAt20s = -1f;
-				LogFleetCensus("t+20s");
-			}
-			if (censusAt60s > 0f && Time.time >= censusAt60s)
-			{
-				censusAt60s = -1f;
-				LogFleetCensus("t+60s");
-			}
-		}
-
-		private static void LogFleetCensus(string tag)
-		{
-			Dictionary<string, int> dictionary = new Dictionary<string, int>();
-			int num = 0;
-			foreach (Faction faction in EngineASX.Instance.Factions)
-			{
-				if (faction == null)
-				{
-					continue;
-				}
-				foreach (Fleet fleet in faction.Fleets)
-				{
-					if (fleet != null)
-					{
-						num++;
-						string text = string.Concat(faction.FactionType, "/", (fleet.ActiveOrder != null) ? fleet.ActiveOrder.GetType().Name : "IDLE", "+q", fleet.OrderQueue.Count);
-						dictionary.TryGetValue(text, out var value);
-						dictionary[text] = value + 1;
-					}
-				}
-			}
-			Debug.Log("[MainMenuWorldController] census " + tag + ": " + num + " fleets :: " + string.Join(", ", dictionary.Select((KeyValuePair<string, int> e) => e.Value + "x " + e.Key)));
-		}
-
-		// DIAGNOSTIC: verbose per-ship dump - every fleet, its active
-		// order + queue, and the names of its ships.
-		private static void LogEveryShipOrder()
-		{
-			System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
-			stringBuilder.AppendLine("[MainMenuWorldController] ship orders:");
-			foreach (Faction faction in EngineASX.Instance.Factions)
-			{
-				if (faction == null)
-				{
-					continue;
-				}
-				foreach (Fleet fleet in faction.Fleets)
-				{
-					if (fleet != null)
-					{
-						string text = ((fleet.ActiveOrder != null) ? fleet.ActiveOrder.GetType().Name : "IDLE");
-						string text2 = string.Join(", ", fleet.Ships.Where((UnitComponentHolder s) => s?.Unit != null).Select((UnitComponentHolder s) => s.Unit.name));
-						stringBuilder.AppendLine("  " + fleet.name + " [" + faction.FactionType + "] " + text + "(+q" + fleet.OrderQueue.Count + "): " + text2);
-					}
-				}
-			}
-			Debug.Log(stringBuilder.ToString());
 		}
 
 		private static bool IsMainMenuScenario(ScenarioInfo scenarioInfo)
@@ -251,9 +178,6 @@ namespace OpenFrontier.IP.Engine
 			SpawnHeroShipAndSpectate(sector);
 			MakeMenuAIAggressive();
 			Debug.Log("[MainMenuWorldController] rolled menu system, seed " + sector.RandomSeed);
-			censusAt15s = Time.time + 15f;
-			censusAt20s = Time.time + 20f;
-			censusAt60s = Time.time + 60f;
 		}
 
 		// The trader faction that owns the stations and traffic; the hero
@@ -382,10 +306,6 @@ namespace OpenFrontier.IP.Engine
 				}
 				list.Add(asteroidCluster);
 			}
-			// DIAGNOSTIC: settle "are the belts actually seeded?" from the
-			// console instead of guessing.
-			int num4 = sector.GetUnitsByType(UnitType.Asteroid)?.Count ?? 0;
-			Debug.Log($"[MainMenuWorldController] belts spawned: {list.Count}, mineable rocks in sector: {num4}");
 			return list;
 		}
 
@@ -473,7 +393,6 @@ namespace OpenFrontier.IP.Engine
 					num3++;
 				}
 			}, (Unit e) => e.IsValidAndNotDestroyed && e.Sector == sector && e.UnitType == UnitType.Planet);
-			Debug.Log(string.Format("[MainMenuWorldController] planet system: {0} planet(s), {1} moon(s)", num3, num4));
 		}
 
 		// Menu moon ladder: chance to ADD the Nth moon (conditional
@@ -553,7 +472,6 @@ namespace OpenFrontier.IP.Engine
 					float num5 = ((i == 0) ? UnityEngine.Random.Range(0.5f, 1f) : UnityEngine.Random.Range(0.5f, 4f));
 					unit2.transform.localScale = Vector3.one * num5;
 				}
-				Debug.Log(string.Format("[MainMenuWorldController] planet '{0}' visual radius {1:0}: {2} moon(s) placed", item.Key.name, num, item.Value.Count));
 			}
 		}
 
@@ -649,7 +567,6 @@ namespace OpenFrontier.IP.Engine
 				Faction faction2 = CreateAIFaction(FactionType.Miner);
 				if (faction2 != null)
 				{
-					int num5 = 0;
 					foreach (AsteroidCluster cluster in clusters)
 					{
 						// 1-2 miners PER ASTEROID in the belt, each dropped
@@ -663,12 +580,7 @@ namespace OpenFrontier.IP.Engine
 							int num6 = UnityEngine.Random.Range(1, 3);
 							for (int m = 0; m < num6; m++)
 							{
-								Fleet fleet2 = SpawnSoloShipFleet(faction2, sector, cluster.Unit.SectorPosition + UnityEngine.Random.onUnitSphere * (cluster.Unit.Radius * 0.5f), GameController.Instance.UnitClasses.Hauler_M.UnitPrefab);
-								ForceMineOrders(fleet2);
-								if (fleet2 != null)
-								{
-									num5++;
-								}
+								ForceMineOrders(SpawnSoloShipFleet(faction2, sector, cluster.Unit.SectorPosition + UnityEngine.Random.onUnitSphere * (cluster.Unit.Radius * 0.5f), GameController.Instance.UnitClasses.Hauler_M.UnitPrefab));
 							}
 							continue;
 						}
@@ -682,16 +594,10 @@ namespace OpenFrontier.IP.Engine
 								// fly in over different distances and
 								// start work staggered, not all at once.
 								Vector3 vector3 = cluster.Unit.SectorPosition + Geometry.RandomXZUnitVector() * (cluster.Unit.Radius * UnityEngine.Random.Range(1f, 1.25f));
-								Fleet fleet = SpawnSoloShipFleet(faction2, sector, vector3, GameController.Instance.UnitClasses.Hauler_M.UnitPrefab);
-								ForceMineOrders(fleet);
-								if (fleet != null)
-								{
-									num5++;
-								}
+								ForceMineOrders(SpawnSoloShipFleet(faction2, sector, vector3, GameController.Instance.UnitClasses.Hauler_M.UnitPrefab));
 							}
 						}
 					}
-					Debug.Log("[MainMenuWorldController] miners spawned: " + num5);
 				}
 			}
 			// Bandits are a rare event now - the easter egg trigger can
