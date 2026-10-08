@@ -77,40 +77,18 @@ namespace OpenFrontier.IP.Engine
 			// stations/ships/planet/shuttle/clusters go, everything comes
 			// back randomly below.
 			ClearPresetMenuContent();
-			SpawnAsteroidClusters(sector);
+			// Belts are a chance, not a guarantee: a belted system gets
+			// real mineable asteroids, a refinery within reach and miner
+			// fleets working the rocks; a beltless one is stations and
+			// traders only - so some menus have miners, some don't.
+			List<AsteroidCluster> clusters = ((UnityEngine.Random.value < 0.7f) ? SpawnAsteroidClusters(sector) : new List<AsteroidCluster>());
 			// Applies everything: regenerates the backdrop, refreshes the
 			// sun tint, recaptures the reflection probe.
 			EngineASX.Instance.ActiveSectorData.OnSectorChanged();
 			SpawnGuaranteedPlanetWithMoon(sector);
-			PopulateMenuSystem(sector);
+			PopulateMenuSystem(sector, clusters);
 			SpawnHeroShipAndSpectate(sector);
 			Debug.Log("[MainMenuWorldController] rolled menu system, seed " + num);
-			StartCoroutine(WarmUpWorld());
-		}
-
-		// Fast-forward the fresh system behind the loading fade: ~12x for
-		// a couple of real seconds gives fleets half a minute to pick up
-		// orders and get underway, so the reveal shows a world already in
-		// motion instead of everyone parked at their spawn points. The
-		// loading screen holds until this completes (WarmUpInProgress).
-		public static bool WarmUpInProgress { get; private set; }
-
-		private System.Collections.IEnumerator WarmUpWorld()
-		{
-			float timeScale = Time.timeScale;
-			float volume = AudioListener.volume;
-			WarmUpInProgress = true;
-			// Mute while the world fast-forwards - engines, AI and combat
-			// sounds shouldn't leak out before the reveal.
-			AudioListener.volume = 0f;
-			// 20x for 1.5s = ~30s of simulation, compressed inside the
-			// natural loading window (Time.maximumDeltaTime caps the
-			// effective rate around 20x at 60fps anyway).
-			Time.timeScale = 20f;
-			yield return new WaitForSecondsRealtime(1.5f);
-			Time.timeScale = timeScale;
-			AudioListener.volume = volume;
-			WarmUpInProgress = false;
 		}
 
 		// The trader faction that owns the stations and traffic; the hero
@@ -173,14 +151,16 @@ namespace OpenFrontier.IP.Engine
 			}
 		}
 
-		// Fresh belts every visit (1-2, no gas clouds in the menu), so the
-		// sector always has at least one.
-		private static void SpawnAsteroidClusters(Sector sector)
+		// Fresh belts (1-2, no gas clouds in the menu), each filled with
+		// REAL mineable asteroid units so miner fleets have something to
+		// work - the decorative cluster rocks alone aren't harvestable.
+		private List<AsteroidCluster> SpawnAsteroidClusters(Sector sector)
 		{
+			List<AsteroidCluster> list = new List<AsteroidCluster>();
 			AsteroidType[] array = Resources.LoadAll<AsteroidType>("Prefabs/WorldData/AsteroidTypes");
 			if (array.Length == 0)
 			{
-				return;
+				return list;
 			}
 			int num = UnityEngine.Random.Range(1, 3);
 			for (int i = 0; i < num; i++)
@@ -192,7 +172,27 @@ namespace OpenFrontier.IP.Engine
 				asteroidCluster.transform.SetParent(sector.transform, worldPositionStays: true);
 				asteroidCluster.transform.localPosition = sector.GetRandomSectorPositionWithinGateDistance(0.75f);
 				asteroidCluster.GetComponent<Unit>().Init();
+				SeedRealAsteroids(asteroidCluster);
+				list.Add(asteroidCluster);
 			}
+			return list;
+		}
+
+		// The stock CreateAsteroidsSeeder world layer, run per-cluster:
+		// scatters real asteroid units through the cluster volume.
+		public CreateAsteroidsSeederSettings AsteroidsSettings;
+
+		private void SeedRealAsteroids(AsteroidCluster cluster)
+		{
+			if (AsteroidsSettings == null)
+			{
+				return;
+			}
+			GameObject gameObject = new GameObject("MenuAsteroidSeeder");
+			CreateAsteroidsSeeder createAsteroidsSeeder = gameObject.AddComponent<CreateAsteroidsSeeder>();
+			createAsteroidsSeeder.CreateAsteroidsSeederSettings = AsteroidsSettings;
+			createAsteroidsSeeder.PopulateAsteroidsAroundCluster(cluster);
+			Object.Destroy(gameObject);
 		}
 
 		// The menu ALWAYS has a planet, and it ALWAYS has a moon. Uses the
@@ -268,55 +268,80 @@ namespace OpenFrontier.IP.Engine
 		}
 
 		// Light custom-universe population: everything the local AI needs
-		// to exist and work inside this one system.
-		private static void PopulateMenuSystem(Sector sector)
+		// to exist and work inside this one system. Placement is economic:
+		// traders spawn around their station, miners spawn at the rocks
+		// (and only exist when there ARE rocks), and a belted system
+		// always gets a refinery within reach of the belt.
+		private static void PopulateMenuSystem(Sector sector, List<AsteroidCluster> clusters)
 		{
 			if (EngineASX.Instance.FactionSpawner == null || EngineASX.Instance.FactionSpawner.Settings == null)
 			{
 				return;
 			}
-			// 2-3 stations, EACH with its own faction - factions trading
-			// with each other is what makes the system feel alive.
+			bool flag = clusters.Count > 0;
 			civilianFaction = CreateAIFaction(FactionType.Trader);
 			var list = GameController.Instance.LoadedUnitClasses.Where((UnitClass e) => e.IsUsable && e.UnitType == UnitType.Station && e.SeedInSandbox && e.StationPurpose != StationPurpose.SectorControl).ToList();
-			List<Faction> list2 = new List<Faction>();
 			int num = UnityEngine.Random.Range(2, 4);
-			for (int i = 0; i < num && list.Count > 0; i++)
+			for (int i = 0; i < num; i++)
 			{
-				Faction stationFaction = ((i == 0) ? civilianFaction : CreateAIFaction(FactionType.Trader));
-				if (stationFaction != null)
+				Faction faction = ((i == 0) ? civilianFaction : CreateAIFaction(FactionType.Trader));
+				if (faction == null)
 				{
-					list2.Add(stationFaction);
+					continue;
 				}
-				SpawnUtils.SpawnUnit(list[UnityEngine.Random.Range(0, list.Count)].UnitPrefab, sector, sector.GetRandomSectorPositionWithinGateDistance(0.75f), stationFaction);
-			}
-			// Trader traffic between the stations, with strategies assigned
-			// at creation so fleets get to work immediately.
-			foreach (Faction item in list2)
-			{
+				UnitClass unitClass;
+				Vector3 vector;
+				if (i == 0 && flag)
+				{
+					// Belted system: station #1 is a guaranteed refinery
+					// parked just outside a cluster, so the miners have
+					// somewhere close to haul their ore.
+					unitClass = Resources.Load<UnitClass>("Prefabs/WorldData/UnitClasses/Stations/UnitClassRefinery");
+					AsteroidCluster asteroidCluster = clusters[UnityEngine.Random.Range(0, clusters.Count)];
+					vector = asteroidCluster.Unit.SectorPosition + UnityEngine.Random.onUnitSphere * (asteroidCluster.Unit.Radius + 1500f);
+					if (unitClass == null)
+					{
+						unitClass = list[UnityEngine.Random.Range(0, list.Count)];
+					}
+				}
+				else
+				{
+					if (list.Count == 0)
+					{
+						break;
+					}
+					unitClass = list[UnityEngine.Random.Range(0, list.Count)];
+					vector = sector.GetRandomSectorPositionWithinGateDistance(0.75f);
+				}
+				Unit unit = SpawnUtils.SpawnUnit(unitClass.UnitPrefab, sector, vector, faction);
+				// Trader traffic around THEIR station.
 				int num2 = UnityEngine.Random.Range(1, 3);
 				for (int j = 0; j < num2; j++)
 				{
-					SpawnUtils.SpawnFleetWithSmallUnits(item, sector, sector.GetRandomSectorPositionWithinGateDistance(0.75f), UnityEngine.Random.Range(3, 6));
+					Vector3 vector2 = ((unit != null) ? (unit.SectorPosition + UnityEngine.Random.onUnitSphere * 900f) : vector);
+					SpawnUtils.SpawnFleetWithSmallUnits(faction, sector, vector2, UnityEngine.Random.Range(3, 6));
 				}
 			}
-			AssignStrategiesToIdleFleets();
-			MakeMenuFactionsPeaceful();
-			// Miners working the clusters.
-			Faction faction = CreateAIFaction(FactionType.Miner);
-			if (faction != null)
+			// Miners only exist when there's something to mine - dropped
+			// right into the rocks so they start working immediately.
+			if (flag)
 			{
-				int num3 = UnityEngine.Random.Range(1, 3);
-				for (int k = 0; k < num3; k++)
+				Faction faction2 = CreateAIFaction(FactionType.Miner);
+				if (faction2 != null)
 				{
-					SpawnUtils.SpawnFleetWithLargerMiningUnits(faction, sector, sector.GetRandomSectorPositionWithinGateDistance(0.75f), UnityEngine.Random.Range(3, 6));
+					int num3 = UnityEngine.Random.Range(1, 3);
+					for (int k = 0; k < num3; k++)
+					{
+						AsteroidCluster asteroidCluster2 = clusters[UnityEngine.Random.Range(0, clusters.Count)];
+						SpawnUtils.SpawnFleetWithLargerMiningUnits(faction2, sector, asteroidCluster2.Unit.SectorPosition + UnityEngine.Random.onUnitSphere * (asteroidCluster2.Unit.Radius * 0.5f), UnityEngine.Random.Range(3, 6));
+					}
 				}
 			}
 			// A security patrol.
-			Faction faction2 = CreateAIFaction(FactionType.Security);
-			if (faction2 != null)
+			Faction faction3 = CreateAIFaction(FactionType.Security);
+			if (faction3 != null)
 			{
-				SpawnUtils.SpawnFleetWithLargerUnits(faction2, sector, sector.GetRandomSectorPositionWithinGateDistance(0.75f), UnityEngine.Random.Range(4, 7));
+				SpawnUtils.SpawnFleetWithLargerUnits(faction3, sector, sector.GetRandomSectorPositionWithinGateDistance(0.75f), UnityEngine.Random.Range(4, 7));
 			}
 			// 40% chance of a hostile bandit horde - HostileWithAll, so the
 			// locals spot and engage them on their own.
@@ -324,6 +349,8 @@ namespace OpenFrontier.IP.Engine
 			{
 				SpawnUtils.SpawnBanditHordesAtSectorPosition(sector, sector.GetRandomSectorPositionWithinGateDistance(0.75f), 1, 2);
 			}
+			AssignStrategiesToIdleFleets();
+			MakeMenuFactionsPeaceful();
 		}
 
 		// The "ships sitting around doing nothing" fix: generic fleets
