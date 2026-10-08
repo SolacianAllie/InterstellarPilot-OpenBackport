@@ -299,9 +299,21 @@ namespace OpenFrontier.IP.Engine
 						num = Mathf.Max(1000f, component.OrbitingAroundUnit.Radius);
 					}
 					float num2 = num * UnityEngine.Random.Range(1.4f, 1.9f);
-					float y = UnityEngine.Random.value * 360f;
-					float x = UnityEngine.Random.Range(-8f, 8f);
-					component.OffsetFromPlanet = Quaternion.Euler(x, y, 0f) * Vector3.forward * num2;
+					// Place the moon BESIDE the disc at startup: 90
+					// degrees off the planet->center line (the camera
+					// lives near the center, so this is the planet->
+					// camera line for any spectate target). A moon
+					// behind the planet is invisible; one 90 degrees
+					// around is maximally visible. The orbit phase is
+					// unit.Seed % 360 in ActiveUnitMoon.Reposition -
+					// zero the seed so this offset applies as-authored
+					// (the slow stock orbit drifts on from here).
+					Vector3 vector = -component.OrbitingAroundUnit.transform.localPosition;
+					vector.y = 0f;
+					vector = ((vector.sqrMagnitude < 1f) ? Vector3.forward : vector.normalized);
+					Vector3 vector2 = Quaternion.Euler(0f, 90f * ((UnityEngine.Random.value < 0.5f) ? 1f : (-1f)), 0f) * vector;
+					component.OffsetFromPlanet = (vector2 + Vector3.up * UnityEngine.Random.Range(-0.08f, 0.08f)).normalized * num2;
+					unit.Seed = 0;
 					Debug.Log(string.Format("[MainMenuWorldController] moon pulled in: planet '{0}' visual radius {1:0} at {2}, moon '{3}' orbit {4:0}", component.OrbitingAroundUnit.name, num, component.OrbitingAroundUnit.transform.localPosition, unit.name, num2));
 				}
 			}, (Unit e) => e.IsValidAndNotDestroyed && e.Sector == sector && e.UnitType == UnitType.Planet);
