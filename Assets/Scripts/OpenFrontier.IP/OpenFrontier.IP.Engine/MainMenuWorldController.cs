@@ -89,9 +89,10 @@ namespace OpenFrontier.IP.Engine
 			sector.SkyExposure = Mathf.Lerp(0.7f, 1.3f, UnityEngine.Random.value);
 			// The backdrop recipe (Hellemus clone) pins NebulaColors to
 			// flag value 1 = BLUE only, NebulaCount 39, StarsIntensity
-			// ~0.3. Re-roll all three per visit: 12% proper rainbow time
-			// (every color at once), otherwise 1-2 colors; density and
-			// star intensity from the universe generator's own ranges.
+			// ~0.3. Re-roll all three per visit. Colors use a rarity
+			// ladder (the more colors, the rarer the system, 10% full
+			// rainbow); density and star intensity use the godmode
+			// menu's own min/max (0-64 nebulae, 0-2 star intensity).
 			CustomSectorAppearance component = sector.GetComponent<CustomSectorAppearance>();
 			if (component != null && component.SpaceConstructorParams != null)
 			{
@@ -106,22 +107,51 @@ namespace OpenFrontier.IP.Engine
 					Common.NebulaColour.RED,
 					Common.NebulaColour.CYAN
 				};
-				Common.NebulaColour nebulaColors = (Common.NebulaColour)0;
-				foreach (Common.NebulaColour item in array)
+				for (int i = array.Length - 1; i > 0; i--)
 				{
-					nebulaColors |= item;
+					int num3 = UnityEngine.Random.Range(0, i + 1);
+					Common.NebulaColour nebulaColour = array[i];
+					array[i] = array[num3];
+					array[num3] = nebulaColour;
 				}
-				if (UnityEngine.Random.value >= 0.12f)
+				float value = UnityEngine.Random.value;
+				int num4;
+				if (value < 0.1f)
 				{
-					nebulaColors = array[UnityEngine.Random.Range(0, array.Length)];
-					if (UnityEngine.Random.value < 0.5f)
-					{
-						nebulaColors |= array[UnityEngine.Random.Range(0, array.Length)];
-					}
+					num4 = 8;
+				}
+				else if (value < 0.2f)
+				{
+					num4 = 7;
+				}
+				else if (value < 0.31f)
+				{
+					num4 = 6;
+				}
+				else if (value < 0.43f)
+				{
+					num4 = 5;
+				}
+				else if (value < 0.56f)
+				{
+					num4 = 4;
+				}
+				else if (value < 0.7f)
+				{
+					num4 = 3;
+				}
+				else
+				{
+					num4 = ((UnityEngine.Random.value < 0.5f) ? 1 : 2);
+				}
+				Common.NebulaColour nebulaColors = (Common.NebulaColour)0;
+				for (int j = 0; j < num4; j++)
+				{
+					nebulaColors |= array[j];
 				}
 				component.SpaceConstructorParams.NebulaColors = nebulaColors;
-				component.SpaceConstructorParams.NebulaCount = UnityEngine.Random.Range(15, 31);
-				component.SpaceConstructorParams.StarsIntensity = UnityEngine.Random.Range(0.6f, 1.5f);
+				component.SpaceConstructorParams.NebulaCount = UnityEngine.Random.Range(0, 65);
+				component.SpaceConstructorParams.StarsIntensity = UnityEngine.Random.Range(0f, 2f);
 			}
 			// Replace the preset dressing before regenerating: stock
 			// stations/ships/planet/shuttle/clusters go, everything comes
