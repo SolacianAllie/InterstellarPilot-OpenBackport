@@ -19,16 +19,12 @@ namespace OpenFrontier.IP
 
 		public float MaxScale;
 
-		// Open Frontier: the shield section's health color SNAPSHOT at
-		// the moment of impact (the same GetUnitShieldColor gradient
-		// the UI widgets use), and which of the 6 sections was hit (for
-		// the live color the effect fades toward).
-		public Color HitColor = Color.white;
-
+		// Open Frontier: which of the 6 shield sections was hit - the
+		// effect reads that section's LIVE UI health color every frame.
 		public int ShieldIndex;
 
 		// True when the hit emptied the section: the effect pops bright
-		// white and dies fast instead of playing the full fade.
+		// red and dies fast instead of playing the full fade.
 		public bool DepletedFlash;
 
 		// Effect lifetime in seconds (short for DepletedFlash, else the

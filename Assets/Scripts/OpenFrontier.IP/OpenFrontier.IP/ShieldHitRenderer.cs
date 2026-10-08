@@ -53,8 +53,7 @@ namespace OpenFrontier.IP
 					pooledShieldHit.gameObject.SetActive(value: true);
 					pooledShieldHit.TargetUnit = unit;
 					pooledShieldHit.ShieldIndex = unit.GetShieldIndex(damageSourceWorldPosition);
-					pooledShieldHit.HitColor = EngineASX.Instance.GetUnitShieldColor(unit, pooledShieldHit.ShieldIndex);
-					// A section this hit just emptied pops: bright white
+					// A section this hit just emptied pops: bright red
 					// flash, short life.
 					pooledShieldHit.DepletedFlash = unit.Components != null && unit.Components.ShieldComponent != null && unit.Components.ShieldComponent.GetShieldPointNormalized(pooledShieldHit.ShieldIndex) <= 0f;
 					pooledShieldHit.Duration = (pooledShieldHit.DepletedFlash ? 0.4f : ShieldHitDuration);
@@ -102,22 +101,25 @@ namespace OpenFrontier.IP
 			// Constant size for the whole life - the fade is carried by
 			// alpha now, not by shrinking away.
 			hitInfo.transform.localScale = new Vector3(hitInfo.MaxScale, hitInfo.MaxScale, hitInfo.MaxScale);
-			// Quick fade-in, then bleed out over the rest of the life.
-			float num2 = Mathf.Clamp01(num / 0.12f) * (1f - num);
+			// Bright at the moment of impact, then bleed out - no
+			// fade-in (a fade-in mutes the impact).
+			float num2 = 1f - num;
 			Color color;
 			if (hitInfo.DepletedFlash)
 			{
-				// Section emptied by the hit: bright white pop (HDR -
+				// Section emptied by the hit: very bright RED pop (HDR -
 				// feeds bloom), gone in 0.4s.
-				color = new Color(2f, 2f, 2f, num2);
+				color = new Color(2f, 0.05f, 0.05f, num2);
 			}
 			else
 			{
-				// Snapshot health color at impact, fading toward the
-				// section's LIVE health color as the attack lands.
+				// LIVE health color, exactly like the UI widgets read it
+				// (no snapshot: damage lands before the effect request,
+				// so a snapshot is always one hit stale). An HDR pulse
+				// (1.8x -> 1x over the life) makes the impact flash.
 				Color unitShieldColor = EngineASX.Instance.GetUnitShieldColor(hitInfo.TargetUnit, hitInfo.ShieldIndex);
-				color = Color.Lerp(hitInfo.HitColor, unitShieldColor, num);
-				color.a = num2;
+				float num3 = 1f + 0.8f * (1f - num);
+				color = new Color(unitShieldColor.r * num3, unitShieldColor.g * num3, unitShieldColor.b * num3, num2);
 			}
 			// The runtime shader is Legacy Particles/Additive: it tints
 			// via _TintColor (NOT _Color or _BaseColor).
