@@ -56,13 +56,13 @@ namespace OpenFrontier.IP.Discord
 		[SerializeField]
 		private bool connectOnStartup = true;
 
-		[Tooltip("How often the presence line is refreshed, in seconds.")]
+		[Tooltip("How often the presence is pushed to Discord, in seconds. This is just a keepalive - it must stay at or below the rotate interval, or cards would be skipped.")]
 		[SerializeField]
-		private float updateInterval = 15f;
+		private float updateInterval = 5f;
 
 		[Tooltip("How often the presence rotates to the next piece of information, in seconds. The ship icon and its tooltip stay put; only the two text lines rotate, cycling through the ship, the sector, the treasury and any scenario briefing the game has data for.")]
 		[SerializeField]
-		private float rotateInterval = 30f;
+		private float rotateInterval = 10f;
 
 		[Tooltip("Activity asset name for the large image, exactly as uploaded to the application's Rich Presence assets in the Discord Developer Portal.")]
 		[SerializeField]
@@ -90,6 +90,11 @@ namespace OpenFrontier.IP.Discord
 		private const string AccessTokenKey = "DiscordAccessToken";
 		private const string RefreshTokenKey = "DiscordRefreshToken";
 
+		// The name Discord shows above the presence. SetName
+		// overrides the application name registered in the portal,
+		// so this is what players actually see.
+		private const string GameDisplayName = "InterstellarPilot: Open Frontier";
+
 		// Presence updates are throttled; a failure is logged once
 		// so a persistent Discord outage can't flood the console.
 		private const float MinUpdateInterval = 5f;
@@ -107,6 +112,12 @@ namespace OpenFrontier.IP.Discord
 		// the game runs, so a dead connection can't spam the
 		// auth chain (or the re-prompt) every few seconds.
 		private const float RecoveryCooldown = 60f;
+
+		// Swapping ships, docking, jumping, entering or leaving the
+		// menu has to be on screen at once rather than up to a whole
+		// update interval later, so the state is polled this often and
+		// any change pushes immediately.
+		private const float StateCheckInterval = 0.5f;
 
 		private enum AuthStage
 		{
@@ -154,6 +165,8 @@ namespace OpenFrontier.IP.Discord
 		private bool reportedPresenceFailure;
 		private string pendingCodeVerifier;
 		private float nextPresenceUpdate;
+		private float nextStateCheckTime;
+		private string lastStateSignature;
 		private ulong sessionStartEpoch;
 
 		/// <summary>True while the SDK reports the authenticated connection as Ready.</summary>
@@ -170,7 +183,7 @@ namespace OpenFrontier.IP.Discord
 			sessionStartEpoch = (ulong)DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 			// The first push shows the opening card; rotation starts
 			// one interval later so the hero card gets its full time.
-			nextCardRotationTime = Time.time + Math.Max(MinUpdateInterval, rotateInterval);
+			nextCardRotationTime = Time.time + Math.Max(updateInterval, rotateInterval);
 		}
 
 		private void Start()
@@ -205,16 +218,66 @@ namespace OpenFrontier.IP.Discord
 			{
 				return;
 			}
+			if (Time.time >= nextStateCheckTime)
+			{
+				nextStateCheckTime = Time.time + StateCheckInterval;
+				CheckForStateChange();
+			}
 			if (Time.time >= nextPresenceUpdate)
 			{
 				nextPresenceUpdate = Time.time + Math.Max(MinUpdateInterval, updateInterval);
 				if (Time.time >= nextCardRotationTime)
 				{
-					nextCardRotationTime = Time.time + Math.Max(MinUpdateInterval, rotateInterval);
+					nextCardRotationTime = Time.time + Math.Max(updateInterval, rotateInterval);
 					presenceCardIndex++;
 				}
 				PushPresence();
 			}
+		}
+
+		/// <summary>
+		/// Anything that changes what the presence should say - a
+		/// different ship, docking, a jump, entering or leaving the
+		/// menu, a rename - pushes immediately and restarts the
+		/// rotation, so the new state leads with its most relevant card
+		/// and holds it for a full interval.
+		///
+		/// The state is polled twice a second rather than evented:
+		/// the engine object is recreated on every scenario change, so
+		/// event subscriptions would need constant re-wiring, while a
+		/// signature comparison survives all of it.
+		/// </summary>
+		private void CheckForStateChange()
+		{
+			string signature = BuildStateSignature();
+			if (string.Equals(signature, lastStateSignature, StringComparison.Ordinal))
+			{
+				return;
+			}
+			lastStateSignature = signature;
+			presenceCardIndex = 0;
+			nextCardRotationTime = Time.time + Math.Max(updateInterval, rotateInterval);
+			nextPresenceUpdate = Time.time;
+		}
+
+		private string BuildStateSignature()
+		{
+			EngineASX engine = EngineASX.Instance;
+			if (engine == null || engine.World == null)
+			{
+				return "no-world";
+			}
+			Unit ship = GetPlayerShip(engine);
+			Sector sector = engine.ActiveSector;
+			ScenarioInfo scenario = engine.World.ScenarioInfo;
+			return string.Concat(
+				engine.GetEntityId().ToString(), "|",
+				IsInMainMenu() ? "menu" : "game", "|",
+				ship != null ? ship.GetEntityId().ToString() : "-", "|",
+				ship != null && ship.IsDocked ? "docked" : "-", "|",
+				GetUnitName(ship), "|",
+				sector != null ? sector.UniqueId.ToString() : "-", "|",
+				scenario != null ? scenario.UniqueId.ToString() : "-");
 		}
 
 		// ------------------------------------------------------------------
@@ -570,11 +633,15 @@ namespace OpenFrontier.IP.Discord
 			}
 			PresenceCard card = presenceCards[WrapIndex(presenceCardIndex, presenceCards.Count)];
 
+			// What we just pushed IS the current state, so the
+			// signature check doesn't immediately push again.
+			lastStateSignature = BuildStateSignature();
+
 			try
 			{
 				using (var activity = new Activity())
 				{
-					activity.SetName("Open Frontier");
+					activity.SetName(GameDisplayName);
 					activity.SetType(ActivityTypes.Playing);
 					activity.SetSupportedPlatforms(ActivityGamePlatforms.Desktop | ActivityGamePlatforms.Android);
 					activity.SetDetails(card.Details);
@@ -583,7 +650,7 @@ namespace OpenFrontier.IP.Discord
 					{
 						assets.SetLargeImage(largeImageAsset);
 						assets.SetLargeText(string.IsNullOrEmpty(scenarioTitle)
-							? "Open Frontier"
+							? GameDisplayName
 							: scenarioTitle);
 						// The small image is whatever the player is
 						// actually piloting or manning: their ship,
@@ -599,8 +666,7 @@ namespace OpenFrontier.IP.Discord
 					}
 					AddButton(activity, buttonOneLabel, buttonOneUrl);
 					AddButton(activity, buttonTwoLabel, buttonTwoUrl);
-					client.UpdateRichPresence(activity, result =>
-					{
+					client.UpdateRichPresence(activity, result =>					{
 						if (result.Successful())
 						{
 							reportedPresenceFailure = false;
@@ -812,19 +878,19 @@ namespace OpenFrontier.IP.Discord
 		/// Details line: what the player is flying. A docked ship
 		/// reads as such rather than pretending to fly.
 		/// </summary>
+		/// <summary>
+		/// Details line: the class of whatever the player is flying
+		/// or manning. The unit's NAME deliberately stays out of the
+		/// text - the small image and its tooltip already carry it,
+		/// and the text half is reserved for rotating information.
+		/// </summary>
 		private static string BuildShipLine(Unit ship)
 		{
 			if (ship == null || !ship.IsValidAndNotDestroyed)
 			{
 				return "In flight";
 			}
-			string line = ship.IsDocked ? "Docked" : ship.GetClassAndSeriesName(true);
-			string name = GetUnitName(ship);
-			if (!string.IsNullOrEmpty(name))
-			{
-				line += " \"" + name + "\"";
-			}
-			return line;
+			return ship.IsDocked ? "Docked" : ship.GetClassAndSeriesName(false);
 		}
 
 		/// <summary>
