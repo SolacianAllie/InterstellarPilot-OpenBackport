@@ -38,6 +38,13 @@ namespace OpenFrontier.IP.Engine
 	{
 		private ScenarioInfo appliedScenario;
 
+		// DIAGNOSTIC: one-shot fleet censuses after each roll (20s/60s)
+		// so "ships sitting idly" can be attributed to an actual order
+		// state instead of guessed at.
+		private float censusAt20s = -1f;
+
+		private float censusAt60s = -1f;
+
 		private void Update()
 		{
 			if (!EngineASX.LoadedAndReady || EngineASX.Instance.World == null || GameController.Instance == null)
@@ -53,6 +60,40 @@ namespace OpenFrontier.IP.Engine
 					RollMenuSystem();
 				}
 			}
+			if (censusAt20s > 0f && Time.time >= censusAt20s)
+			{
+				censusAt20s = -1f;
+				LogFleetCensus("t+20s");
+			}
+			if (censusAt60s > 0f && Time.time >= censusAt60s)
+			{
+				censusAt60s = -1f;
+				LogFleetCensus("t+60s");
+			}
+		}
+
+		private static void LogFleetCensus(string tag)
+		{
+			Dictionary<string, int> dictionary = new Dictionary<string, int>();
+			int num = 0;
+			foreach (Faction faction in EngineASX.Instance.Factions)
+			{
+				if (faction == null)
+				{
+					continue;
+				}
+				foreach (Fleet fleet in faction.Fleets)
+				{
+					if (fleet != null)
+					{
+						num++;
+						string text = string.Concat(faction.FactionType, "/", (fleet.ActiveOrder != null) ? fleet.ActiveOrder.GetType().Name : "IDLE", "+q", fleet.OrderQueue.Count);
+						dictionary.TryGetValue(text, out var value);
+						dictionary[text] = value + 1;
+					}
+				}
+			}
+			Debug.Log("[MainMenuWorldController] census " + tag + ": " + num + " fleets :: " + string.Join(", ", dictionary.Select((KeyValuePair<string, int> e) => e.Value + "x " + e.Key)));
 		}
 
 		private static bool IsMainMenuScenario(ScenarioInfo scenarioInfo)
@@ -178,6 +219,8 @@ namespace OpenFrontier.IP.Engine
 			SpawnHeroShipAndSpectate(sector);
 			MakeMenuAIAggressive();
 			Debug.Log("[MainMenuWorldController] rolled menu system, seed " + sector.RandomSeed);
+			censusAt20s = Time.time + 20f;
+			censusAt60s = Time.time + 60f;
 		}
 
 		// The trader faction that owns the stations and traffic; the hero
