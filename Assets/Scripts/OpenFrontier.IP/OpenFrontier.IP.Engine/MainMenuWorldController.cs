@@ -430,7 +430,11 @@ namespace OpenFrontier.IP.Engine
 					// screen), so a multi-moon system reads as distinct
 					// bodies, not clones. Orbit math uses the PLANET's
 					// radius, so scale never hides a moon inside it.
-					unit2.transform.localScale = Vector3.one * UnityEngine.Random.Range(0.5f, 4f);
+					// The CLOSEST moon (i=0) is clamped to 1x max - it
+					// sits near the camera's beat and a giant there
+					// swallows the frame.
+					float num5 = ((i == 0) ? UnityEngine.Random.Range(0.5f, 1f) : UnityEngine.Random.Range(0.5f, 4f));
+					unit2.transform.localScale = Vector3.one * num5;
 				}
 				Debug.Log(string.Format("[MainMenuWorldController] planet '{0}' visual radius {1:0}: {2} moon(s) placed", item.Key.name, num, item.Value.Count));
 			}
