@@ -61,10 +61,36 @@ namespace OpenFrontier
 			{
 				universalRenderPipelineAsset.mainLightShadowmapResolution = num;
 			}
-			float num2 = ((qualityLevel == 0) ? 0f : 250f);
+			// Tiers 2 (Normal) and 3 (High) stretch shadows to fill the
+			// sector (gate distance ~3000u). The split is re-balanced so
+			// the near field stays tight (30/150/600/3000) instead of
+			// scaling the stock proportions (60/300/900 - too soft up
+			// close). Lowest = off, Low/Highest = stock 250u.
+			float num2;
+			Vector3 vector;
+			switch (qualityLevel)
+			{
+			case 0:
+				num2 = 0f;
+				vector = new Vector3(0.02f, 0.1f, 0.3f);
+				break;
+			case 2:
+			case 3:
+				num2 = 3000f;
+				vector = new Vector3(0.01f, 0.05f, 0.2f);
+				break;
+			default:
+				num2 = 250f;
+				vector = new Vector3(0.02f, 0.1f, 0.3f);
+				break;
+			}
 			if (universalRenderPipelineAsset.shadowDistance != num2)
 			{
 				universalRenderPipelineAsset.shadowDistance = num2;
+			}
+			if (universalRenderPipelineAsset.cascade4Split != vector)
+			{
+				universalRenderPipelineAsset.cascade4Split = vector;
 			}
 		}
 	}
