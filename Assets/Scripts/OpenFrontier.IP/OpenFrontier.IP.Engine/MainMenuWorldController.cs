@@ -97,10 +97,13 @@ namespace OpenFrontier.IP.Engine
 		private static Faction civilianFaction;
 
 		// The MenuScreenScene's hand-placed world content - replaced by the
-		// random composition below on every visit.
-		private static readonly string[] PresetUnitNames = new string[6] { "unit_space_station_tef (1)", "UnitRefinery", "unit_shuttle_a", "UnitPlanetOrangeWithImpacts", "UnitAsteroidClusterTypeA", "UnitHypersleepPodFactory" };
-
-		private static readonly string[] PresetRootPrefixes = new string[5] { "Bay_", "Dock", "AIGenericPilotController", "GenericNpc", "GenericGroupNoCloak" };
+		// random composition below on every visit. EVERY unit goes: the
+		// old name/prefix list missed preset fleet SHIPS, because the
+		// fleet roots (GenericGroupNoCloak*) carry Fleet+DestructableUnit
+		// but no Unit component, and their ships reparent to the sector
+		// at Init - destroying the root orphaned live ships, which then
+		// sat around doing nothing (the idle Hornet). No name filtering.
+		private static readonly string[] PresetRootPrefixes = new string[6] { "Bay_", "Dock", "AIGenericPilotController", "GenericNpc", "GenericGroupNoCloak", "Trigger_" };
 
 		private static void ClearPresetMenuContent()
 		{
@@ -108,23 +111,11 @@ namespace OpenFrontier.IP.Engine
 			EngineASX.Instance.EnumerateUnitsWithPredicate(delegate(Unit unit)
 			{
 				Unit rootUnit = unit.GetRootUnit();
-				if (rootUnit != null && (System.Array.IndexOf(PresetUnitNames, rootUnit.gameObject.name) >= 0 || rootUnit.UnitType == UnitType.AsteroidCluster))
+				if (rootUnit != null && !list.Contains(rootUnit))
 				{
 					list.Add(rootUnit);
 				}
 			}, (Unit e) => e.IsValidAndNotDestroyed);
-			// Menu-only: the gas clouds go too - clearer belts and a
-			// cleaner backdrop for the random system.
-			List<Unit> list2 = new List<Unit>();
-			EngineASX.Instance.EnumerateUnitsWithPredicate(delegate(Unit unit)
-			{
-				Unit rootUnit2 = unit.GetRootUnit();
-				if (rootUnit2 != null && rootUnit2.GetComponent<UnitGasCloud>() != null)
-				{
-					list2.Add(rootUnit2);
-				}
-			}, (Unit e) => e.IsValidAndNotDestroyed);
-			list.AddRange(list2);
 			foreach (Unit item in list)
 			{
 				// Notify first (fleets and AI processors drop their
@@ -133,6 +124,10 @@ namespace OpenFrontier.IP.Engine
 				EngineASX.Instance.RegisterDestroyedUnit(item);
 				item.SafeDestroy();
 			}
+			// Non-unit preset shells: fleet roots (no Unit component -
+			// their ships died above), pilot controllers, npc spawners,
+			// and the easter egg bandit-horde trigger (we roll our own
+			// bandits; a trigger-spawned horde would double up).
 			foreach (GameObject gameObject in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
 			{
 				string name = gameObject.name;
