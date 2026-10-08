@@ -99,7 +99,25 @@ namespace OpenFrontier.IP.UI.Screens.MainMenu
 
 		private void Update()
 		{
-			if (EngineASX.LoadedAndReady && IsReadyToSwitchUnit())
+			if (!EngineASX.LoadedAndReady)
+			{
+				return;
+			}
+			// Watchdog: a target that docked, died or left the sector
+			// leaves the camera staring at empty space (or the cargo
+			// crates it just dumped). Retarget quickly; the short
+			// cooldown stops thrash while EVERYTHING is docked.
+			if ((spectatingUnit == null || !spectatingUnit.IsValidAndNotDestroyed || spectatingUnit.IsDocked) && Time.time > lastSwitchTime + 2f)
+			{
+				Unit unit2 = spectatingUnit;
+				FindAndSpectateShip();
+				if (spectatingUnit != unit2)
+				{
+					lastSwitchTime = Time.time;
+				}
+				return;
+			}
+			if (IsReadyToSwitchUnit())
 			{
 				Unit unit = spectatingUnit;
 				FindAndSpectateShip();
