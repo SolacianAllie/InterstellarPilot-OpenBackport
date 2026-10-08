@@ -148,7 +148,7 @@ now waits for the world to be ready, captures on a fast settling
 burst then a steady cadence, time-slices its work across frames, and
 the sun it sees is clamped to sane brightness. Ships look like ships
 again.
-THIS TOOK SEVERAL FUCKING HOURS TO FIND AND I SKIPPED ON SLEEP X3
+THIS TOOK SEVERAL FUCKING HOURS TO FIND AND I SKIPPED ON SLEEP! X3
 
 PLOT TWIST: it came back one more time, and the TRUE final
 culprit surfaced: the sun core material's color was serialized
@@ -161,12 +161,12 @@ Other notable things
 - The loading screen picks a random unit thumbnail every time
   (34 possible guests)
 - The main menu is now randomized, it was getting pretty boring.
-- The main menu has its own dedicated theme
+- The main menu has its own dedicated theme.
 - The game no longer freezes when the window loses focus — the pause
-  button remains the one true way to pause (PC Only)
+  button remains the one true way to pause (PC Only).
 - The version counter is now a single main-menu label driven by the
   project's own version number, with Alpha/Beta/Legacy stage tags
-  ready for the road ahead
+  ready for the road ahead.
 -Wormhole jumps fully restored: the tunnel, the cap, the particles,
   the HDR glow - plus a rogue camera that used to wipe the whole
   transition to black.
