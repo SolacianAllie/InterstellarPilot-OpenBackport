@@ -36,6 +36,11 @@ namespace OpenFrontier.IP.UI
 
 		public GameObject OrbitScaleGesturePlatformSpecificView;
 
+		// Auto-orbit pitch band: spawns AND drift stay inside it. The
+		// drift re-rolls used to wander far outside the spawn range over
+		// a long watch (slowly going top-down or bottom-up).
+		public float MinOrbitAngleX = -30f;
+
 		public float MaxOrbitAngleX = 30f;
 
 		public float MaxManualOrbitAngleX = 75f;
@@ -437,6 +442,7 @@ namespace OpenFrontier.IP.UI
 				// of snapping the orbit's direction/speed instantly.
 				currentRotRate = Vector3.Lerp(currentRotRate, targetRotRate, 1f - Mathf.Exp(-1.5f * (float)GameController.Instance.RealDeltaTime));
 				cameraAngle += currentRotRate * (float)GameController.Instance.RealDeltaTime;
+				cameraAngle.x = Mathf.Clamp(cameraAngle.x, MinOrbitAngleX, MaxOrbitAngleX);
 				break;
 			case SpectateState.Flyby:
 				if (TargetSpeed == 0f)
@@ -504,7 +510,7 @@ namespace OpenFrontier.IP.UI
 
 		private Vector3 GetOrbitCameraAngle()
 		{
-			return new Vector3(0f - MaxOrbitAngleX + Random.value * MaxOrbitAngleX * 2f, Random.value * 360f, 0f);
+			return new Vector3(MinOrbitAngleX + Random.value * (MaxOrbitAngleX - MinOrbitAngleX), Random.value * 360f, 0f);
 		}
 
 		private void PopulateAvailableStates()
