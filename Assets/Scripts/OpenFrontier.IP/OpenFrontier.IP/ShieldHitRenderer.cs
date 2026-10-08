@@ -163,6 +163,15 @@ namespace OpenFrontier.IP
 			else
 			{
 				Color unitShieldColor = EngineASX.Instance.GetUnitShieldColor(hitInfo.TargetUnit, hitInfo.ShieldIndex);
+				// Full saturation always: the UI gradient reads washed
+				// out through the additive shader. Hue and brightness
+				// are preserved; achromatic greys (no-shield) pass
+				// through untouched.
+				Color.RGBToHSV(unitShieldColor, out float h, out float s, out float v);
+				if (s > 0.05f)
+				{
+					unitShieldColor = Color.HSVToRGB(h, 1f, v);
+				}
 				// The flash peak is the health color HDR-overdriven
 				// (x2.5), not white - a blue shield flashes bright blue.
 				Color color4 = unitShieldColor * 2.5f;
