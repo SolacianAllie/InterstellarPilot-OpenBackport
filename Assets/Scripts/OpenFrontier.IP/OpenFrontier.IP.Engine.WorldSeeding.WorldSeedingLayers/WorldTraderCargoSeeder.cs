@@ -24,7 +24,17 @@ namespace OpenFrontier.IP.Engine.WorldSeeding.WorldSeedingLayers
 		{
 			foreach (CargoTrader trader in world.Engine.Traders)
 			{
-				TrySpawnCargo(trader.UnitComponents, settings);
+				// Open Frontier: one bad trader must not abort this layer -
+				// SeedSpecialLayers runs unprotected, so an exception here
+				// would kill every layer after this one AND SetupFactions.
+				try
+				{
+					TrySpawnCargo(trader.UnitComponents, settings);
+				}
+				catch (System.Exception ex)
+				{
+					Debug.LogWarning("[WorldTraderCargoSeeder] cargo fill failed for " + trader.name + ": " + ex);
+				}
 			}
 		}
 
