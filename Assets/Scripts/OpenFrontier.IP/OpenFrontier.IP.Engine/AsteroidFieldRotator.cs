@@ -18,7 +18,7 @@ namespace OpenFrontier.IP.Engine
 		public const float MaxDegreesPerSecond = 10f;
 
 		// ...and for the LARGEST (they lumber). Sizes in between lerp.
-		public const float MinDegreesPerSecond = 0.15f;
+		public const float MinDegreesPerSecond = 2f;
 
 		private Quaternion baseRotation;
 		private Vector3 axis;
