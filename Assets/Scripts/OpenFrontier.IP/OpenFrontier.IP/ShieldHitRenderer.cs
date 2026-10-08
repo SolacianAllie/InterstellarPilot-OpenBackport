@@ -163,30 +163,26 @@ namespace OpenFrontier.IP
 			else
 			{
 				Color unitShieldColor = EngineASX.Instance.GetUnitShieldColor(hitInfo.TargetUnit, hitInfo.ShieldIndex);
-				if (num2 < 0.1f)
+				if (num2 < 0.2f)
 				{
-					// 0.0-0.1s: alpha fades in (white).
-					color = new Color(1.4f, 1.4f, 1.4f, num2 / 0.1f);
+					// 0.0-0.2s: the flash fades in from health color to
+					// the white peak; the alpha fade-in (0.1s) overlaps
+					// its first half.
+					Color color2 = Color.Lerp(unitShieldColor, new Color(2f, 2f, 2f), num2 / 0.2f);
+					color = new Color(color2.r, color2.g, color2.b, Mathf.Clamp01(num2 / 0.1f));
 				}
-				else if (num2 < 0.3f)
+				else if (num2 < 0.7f)
 				{
-					// 0.1-0.3s: the flash fades IN over 0.2s - health
-					// color rising to the white overdrive peak.
-					Color color2 = Color.Lerp(unitShieldColor, new Color(2f, 2f, 2f), (num2 - 0.1f) / 0.2f);
-					color = new Color(color2.r, color2.g, color2.b, 1f);
-				}
-				else if (num2 < 1.3f)
-				{
-					// 0.3-1.3s: the flash fades OUT over 1s - white
+					// 0.2-0.7s: the flash fades out over 0.5s - white
 					// settling back to the health color.
-					Color color3 = Color.Lerp(new Color(2f, 2f, 2f), unitShieldColor, (num2 - 0.3f) / 1f);
+					Color color3 = Color.Lerp(new Color(2f, 2f, 2f), unitShieldColor, (num2 - 0.2f) / 0.5f);
 					color = new Color(color3.r, color3.g, color3.b, 1f);
 				}
 				else
 				{
-					// 1.3-5.0s: the health color stays visible, slowly
+					// 0.7-5.0s: the health color stays visible, slowly
 					// fading out for the rest of the effect.
-					color = new Color(unitShieldColor.r, unitShieldColor.g, unitShieldColor.b, 1f - (num2 - 1.3f) / (hitInfo.Duration - 1.3f));
+					color = new Color(unitShieldColor.r, unitShieldColor.g, unitShieldColor.b, 1f - (num2 - 0.7f) / (hitInfo.Duration - 0.7f));
 				}
 			}
 			// The runtime shader is Legacy Particles/Additive: it tints
