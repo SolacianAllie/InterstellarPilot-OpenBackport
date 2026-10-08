@@ -41,11 +41,14 @@ namespace OpenFrontier.IP.Engine
 		// StarColorMarker editor preview.
 		public static Mesh QuadMesh => SharedMeshes.Quad;
 
-		// The sun quads live on the BackgroundObjects layer (16), which the
-		// moving GameCamera renders. NOT DeepSpace (30): that layer is
-		// rendered only by the pinned SpaceScene camera, which made the sun
-		// draw in the backdrop's frame instead of the world's - fine in
-		// scene view, offset in game view.
+		// The sun quads live on the BackgroundPlanet layer (26) - rendered
+		// by the PlanetCamera (far 500000, sandwiched between the starfield
+		// SpaceCamera and the world GameCamera), the same trick the planets
+		// use: the sun sits at 20000u, beyond the sky, with planets and
+		// world objects still occluding it naturally through the shared
+		// depth order. NOT DeepSpace (30): that layer is rendered only by
+		// the pinned SpaceScene camera, which made the sun draw in the
+		// backdrop's frame instead of the world's.
 		// NOTE: looked up lazily - NameToLayer (a native call) is forbidden
 		// from a MonoBehaviour's type initializer; a static readonly there
 		// throws TypeInitializationException and poisons the whole type.
@@ -57,7 +60,7 @@ namespace OpenFrontier.IP.Engine
 			{
 				if (sunLayer == -2)
 				{
-					sunLayer = LayerMask.NameToLayer("BackgroundObjects");
+					sunLayer = LayerMask.NameToLayer("BackgroundPlanet");
 				}
 				return sunLayer;
 			}
@@ -196,10 +199,12 @@ namespace OpenFrontier.IP.Engine
 			// Publish the sun direction for the planet atmosphere shader
 			// (day/night scattering follows the same light the sun shows).
 			Shader.SetGlobalVector("_SunDirectionWorld", new Vector4(vector.x, vector.y, vector.z, 0f));
-			// 0.95 of the far plane (~8075): beyond the asteroid field
-			// visuals (~5000+), which were drawing UNDER the closer sun -
-			// the sun now correctly hides behind passing asteroids.
-			float num = Mathf.Max(main.farClipPlane * 0.95f, 100f);
+			// 20000u on the planet layer: out with the planets, beyond
+			// the sky, so the sun can never clip into the backdrop.
+			// Asteroids/ships still occlude it (they render later in the
+			// stack), and the angular-size math keeps the apparent size
+			// identical at any distance.
+			float num = 20000f;
 			Vector3 position = main.transform.position + vector * num;
 			// True billboard: face the camera dead-on (forward along the view
 			// ray, up aligned to the camera's up) so the sun reads correctly
