@@ -88,8 +88,10 @@ namespace OpenFrontier.IP.Engine
 			sector.DirectionLightColor = StarColorGenerator.ForSector(sector.RandomSeed);
 			sector.SkyExposure = Mathf.Lerp(0.7f, 1.3f, UnityEngine.Random.value);
 			// The backdrop recipe (Hellemus clone) pins NebulaColors to
-			// flag value 1 = BLUE only - re-roll 1-2 colors per visit so
-			// the nebulae are as random as everything else.
+			// flag value 1 = BLUE only, NebulaCount 39, StarsIntensity
+			// ~0.3. Re-roll all three per visit: 12% proper rainbow time
+			// (every color at once), otherwise 1-2 colors; density and
+			// star intensity from the universe generator's own ranges.
 			CustomSectorAppearance component = sector.GetComponent<CustomSectorAppearance>();
 			if (component != null && component.SpaceConstructorParams != null)
 			{
@@ -104,12 +106,22 @@ namespace OpenFrontier.IP.Engine
 					Common.NebulaColour.RED,
 					Common.NebulaColour.CYAN
 				};
-				Common.NebulaColour nebulaColors = array[UnityEngine.Random.Range(0, array.Length)];
-				if (UnityEngine.Random.value < 0.5f)
+				Common.NebulaColour nebulaColors = (Common.NebulaColour)0;
+				foreach (Common.NebulaColour item in array)
 				{
-					nebulaColors |= array[UnityEngine.Random.Range(0, array.Length)];
+					nebulaColors |= item;
+				}
+				if (UnityEngine.Random.value >= 0.12f)
+				{
+					nebulaColors = array[UnityEngine.Random.Range(0, array.Length)];
+					if (UnityEngine.Random.value < 0.5f)
+					{
+						nebulaColors |= array[UnityEngine.Random.Range(0, array.Length)];
+					}
 				}
 				component.SpaceConstructorParams.NebulaColors = nebulaColors;
+				component.SpaceConstructorParams.NebulaCount = UnityEngine.Random.Range(15, 31);
+				component.SpaceConstructorParams.StarsIntensity = UnityEngine.Random.Range(0.6f, 1.5f);
 			}
 			// Replace the preset dressing before regenerating: stock
 			// stations/ships/planet/shuttle/clusters go, everything comes
