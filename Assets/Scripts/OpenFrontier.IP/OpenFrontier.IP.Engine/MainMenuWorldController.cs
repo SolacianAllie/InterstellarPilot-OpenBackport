@@ -103,7 +103,7 @@ namespace OpenFrontier.IP.Engine
 		// but no Unit component, and their ships reparent to the sector
 		// at Init - destroying the root orphaned live ships, which then
 		// sat around doing nothing (the idle Hornet). No name filtering.
-		private static readonly string[] PresetRootPrefixes = new string[6] { "Bay_", "Dock", "AIGenericPilotController", "GenericNpc", "GenericGroupNoCloak", "Trigger_" };
+		private static readonly string[] PresetRootPrefixes = new string[5] { "Bay_", "Dock", "AIGenericPilotController", "GenericNpc", "GenericGroupNoCloak" };
 
 		private static void ClearPresetMenuContent()
 		{
@@ -125,9 +125,8 @@ namespace OpenFrontier.IP.Engine
 				item.SafeDestroy();
 			}
 			// Non-unit preset shells: fleet roots (no Unit component -
-			// their ships died above), pilot controllers, npc spawners,
-			// and the easter egg bandit-horde trigger (we roll our own
-			// bandits; a trigger-spawned horde would double up).
+			// their ships died above), pilot controllers and npc
+			// spawners.
 			foreach (GameObject gameObject in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
 			{
 				string name = gameObject.name;
@@ -144,6 +143,17 @@ namespace OpenFrontier.IP.Engine
 						Object.Destroy(gameObject);
 					}
 				}
+			}
+			// The easter egg bandit-horde trigger lives UNDER the NewGame
+			// flow object, so the root pass above never sees it - and its
+			// condition is Trigger_Always evaluated during the intro
+			// state: a GUARANTEED horde on every menu visit. Destroy it;
+			// bandits now come only from the rare roll in
+			// PopulateMenuSystem.
+			GameObject gameObject2 = GameObject.Find("Trigger_EasterEgg_SpawnBanditHorde");
+			if (gameObject2 != null)
+			{
+				Object.Destroy(gameObject2);
 			}
 		}
 
@@ -264,11 +274,11 @@ namespace OpenFrontier.IP.Engine
 			}
 		}
 
-		// Light custom-universe population: everything the local AI needs
-		// to exist and work inside this one system. Placement is economic:
-		// traders spawn around their station, miners spawn at the rocks
-		// (and only exist when there ARE rocks), and a belted system
-		// always gets a refinery within reach of the belt.
+		// Light custom-universe population: ONE OF EVERY station type,
+		// spread around the sector, each with its own faction + trade
+		// fleet and sometimes a patrol. Refineries park near the belt so
+		// miners have somewhere close to haul ore, and every cluster gets
+		// at least one miner fleet dropped right into the rocks.
 		private static void PopulateMenuSystem(Sector sector, List<AsteroidCluster> clusters)
 		{
 			if (EngineASX.Instance.FactionSpawner == null || EngineASX.Instance.FactionSpawner.Settings == null)
@@ -276,73 +286,72 @@ namespace OpenFrontier.IP.Engine
 				return;
 			}
 			bool flag = clusters.Count > 0;
-			civilianFaction = CreateAIFaction(FactionType.Trader);
-			var list = GameController.Instance.LoadedUnitClasses.Where((UnitClass e) => e.IsUsable && e.UnitType == UnitType.Station && e.SeedInSandbox && e.StationPurpose != StationPurpose.SectorControl).ToList();
-			int num = UnityEngine.Random.Range(2, 4);
-			for (int i = 0; i < num; i++)
+			float actualGateDistance = sector.GetActualGateDistance();
+			var list = GameController.Instance.LoadedUnitClasses.Where((UnitClass e) => e.IsUsable && e.UnitType == UnitType.Station && e.SeedInSandbox && e.StationPurpose != StationPurpose.SectorControl).OrderBy((UnitClass e) => UnityEngine.Random.value).ToList();
+			civilianFaction = null;
+			Faction securityFaction = null;
+			float num = 6.2831855f / Mathf.Max(1, list.Count);
+			for (int i = 0; i < list.Count; i++)
 			{
-				Faction faction = ((i == 0) ? civilianFaction : CreateAIFaction(FactionType.Trader));
+				Faction faction = CreateAIFaction(FactionType.Trader);
 				if (faction == null)
 				{
-					continue;
+					break;
 				}
-				UnitClass unitClass;
-				Vector3 vector;
-				if (i == 0 && flag)
+				if (civilianFaction == null)
 				{
-					// Belted system: station #1 is a guaranteed refinery
-					// parked just outside a cluster, so the miners have
-					// somewhere close to haul their ore.
-					unitClass = Resources.Load<UnitClass>("Prefabs/WorldData/UnitClasses/Stations/UnitClassRefinery");
+					civilianFaction = faction;
+				}
+				UnitClass unitClass = list[i];
+				Vector3 vector;
+				if ((unitClass.StationPurpose & StationPurpose.Refinery) != 0 && flag)
+				{
+					// Refineries try for the belt: just outside a random
+					// cluster, a short ore haul for the miners.
 					AsteroidCluster asteroidCluster = clusters[UnityEngine.Random.Range(0, clusters.Count)];
 					vector = asteroidCluster.Unit.SectorPosition + UnityEngine.Random.onUnitSphere * (asteroidCluster.Unit.Radius + 1500f);
-					if (unitClass == null)
-					{
-						unitClass = list[UnityEngine.Random.Range(0, list.Count)];
-					}
 				}
 				else
 				{
-					if (list.Count == 0)
-					{
-						break;
-					}
-					unitClass = list[UnityEngine.Random.Range(0, list.Count)];
-					vector = sector.GetRandomSectorPositionWithinGateDistance(0.75f);
+					// Ring spread: even angular slots with a little
+					// jitter, radius in a mid-band so nothing clumps.
+					float f = (float)i * num + UnityEngine.Random.Range(-0.3f, 0.3f) * num;
+					float num2 = actualGateDistance * UnityEngine.Random.Range(0.35f, 0.8f);
+					vector = new Vector3(Mathf.Cos(f), 0f, Mathf.Sin(f)) * num2;
 				}
 				Unit unit = SpawnUtils.SpawnUnit(unitClass.UnitPrefab, sector, vector, faction);
-				// Trader traffic around THEIR station.
-				int num2 = UnityEngine.Random.Range(1, 3);
-				for (int j = 0; j < num2; j++)
+				Vector3 vector2 = ((unit != null) ? unit.SectorPosition : vector);
+				// One trade fleet per station, working out of home.
+				SpawnUtils.SpawnFleetWithSmallUnits(faction, sector, vector2 + UnityEngine.Random.onUnitSphere * 900f, UnityEngine.Random.Range(3, 6));
+				// ...and sometimes a patrol on station.
+				if (UnityEngine.Random.value < 0.35f)
 				{
-					Vector3 vector2 = ((unit != null) ? (unit.SectorPosition + UnityEngine.Random.onUnitSphere * 900f) : vector);
-					SpawnUtils.SpawnFleetWithSmallUnits(faction, sector, vector2, UnityEngine.Random.Range(3, 6));
+					if (securityFaction == null)
+					{
+						securityFaction = CreateAIFaction(FactionType.Security);
+					}
+					if (securityFaction != null)
+					{
+						SpawnUtils.SpawnFleetWithLargerUnits(securityFaction, sector, vector2 + UnityEngine.Random.onUnitSphere * 1200f, UnityEngine.Random.Range(3, 6));
+					}
 				}
 			}
-			// Miners only exist when there's something to mine - dropped
-			// right into the rocks so they start working immediately.
+			// Every cluster gets at least one miner fleet, placed in the
+			// rocks so it starts working immediately.
 			if (flag)
 			{
 				Faction faction2 = CreateAIFaction(FactionType.Miner);
 				if (faction2 != null)
 				{
-					int num3 = UnityEngine.Random.Range(1, 3);
-					for (int k = 0; k < num3; k++)
+					foreach (AsteroidCluster cluster in clusters)
 					{
-						AsteroidCluster asteroidCluster2 = clusters[UnityEngine.Random.Range(0, clusters.Count)];
-						SpawnUtils.SpawnFleetWithLargerMiningUnits(faction2, sector, asteroidCluster2.Unit.SectorPosition + UnityEngine.Random.onUnitSphere * (asteroidCluster2.Unit.Radius * 0.5f), UnityEngine.Random.Range(3, 6));
+						SpawnUtils.SpawnFleetWithLargerMiningUnits(faction2, sector, cluster.Unit.SectorPosition + UnityEngine.Random.onUnitSphere * (cluster.Unit.Radius * 0.5f), UnityEngine.Random.Range(3, 6));
 					}
 				}
 			}
-			// A security patrol.
-			Faction faction3 = CreateAIFaction(FactionType.Security);
-			if (faction3 != null)
-			{
-				SpawnUtils.SpawnFleetWithLargerUnits(faction3, sector, sector.GetRandomSectorPositionWithinGateDistance(0.75f), UnityEngine.Random.Range(4, 7));
-			}
-			// 40% chance of a hostile bandit horde - HostileWithAll, so the
-			// locals spot and engage them on their own.
-			if (UnityEngine.Random.value < 0.4f)
+			// Bandits are a rare event now - the easter egg trigger can
+			// also still fire one off on its own.
+			if (UnityEngine.Random.value < 0.15f)
 			{
 				SpawnUtils.SpawnBanditHordesAtSectorPosition(sector, sector.GetRandomSectorPositionWithinGateDistance(0.75f), 1, 2);
 			}
