@@ -677,7 +677,12 @@ namespace OpenFrontier.IP.Engine
 							int num4 = UnityEngine.Random.Range(1, 3);
 							for (int l = 0; l < num4; l++)
 							{
-								Fleet fleet = SpawnSoloShipFleet(faction2, sector, item2.SectorPosition + UnityEngine.Random.onUnitSphere * 300f, GameController.Instance.UnitClasses.Hauler_M.UnitPrefab);
+								// Spawn at the belt's EDGE (1.0-1.25x
+								// radius), not beside the rock: miners
+								// fly in over different distances and
+								// start work staggered, not all at once.
+								Vector3 vector3 = cluster.Unit.SectorPosition + Geometry.RandomXZUnitVector() * (cluster.Unit.Radius * UnityEngine.Random.Range(1f, 1.25f));
+								Fleet fleet = SpawnSoloShipFleet(faction2, sector, vector3, GameController.Instance.UnitClasses.Hauler_M.UnitPrefab);
 								ForceMineOrders(fleet);
 								if (fleet != null)
 								{

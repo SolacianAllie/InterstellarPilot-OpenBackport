@@ -97,9 +97,13 @@ namespace OpenFrontier.IP.Engine.WorldSeeding.WorldSeedingLayers
 			{
 				return;
 			}
+			// Open Frontier: a unit whose Init never ran (unregistered
+			// scene leftovers) has a null Engine - the class registry is
+			// the engine singleton anyway.
+			EngineASX engine = unit.Engine ?? EngineASX.Instance;
 			foreach (KeyValuePair<int, CargoTraderStockLevels> stockLevel in component.GetStockLevels())
 			{
-				CargoClass cargoClassById = unit.Engine.GetCargoClassById(stockLevel.Key);
+				CargoClass cargoClassById = engine.GetCargoClassById(stockLevel.Key);
 				// Open Frontier: guard - a stock entry whose cargo id no
 				// longer resolves (legacy/modded station classes) used to
 				// NRE here and abort the whole cargo fill.
