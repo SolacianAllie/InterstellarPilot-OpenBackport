@@ -579,6 +579,34 @@ namespace OpenFrontier.IP.Discord
 		}
 
 		/// <summary>
+		/// The unit's name, wherever the game keeps it. Ships store
+		/// their name in the ShipName component; stations, turrets,
+		/// satellites, storage lockers and every other structure use
+		/// UnitName (EngineASX.RenameUnit splits it the same way), so
+		/// both are checked and every unit type gets named presence.
+		/// </summary>
+		private static string GetUnitName(Unit unit)
+		{
+			if (unit == null)
+			{
+				return string.Empty;
+			}
+			UnitComponentHolder components = unit.Components;
+			if (unit.UnitType == UnitType.Ship && components != null
+				&& !string.IsNullOrEmpty(components.ShipName))
+			{
+				return components.ShipName;
+			}
+			if (!string.IsNullOrEmpty(unit.UnitName))
+			{
+				return unit.UnitName;
+			}
+			return components != null && !string.IsNullOrEmpty(components.ShipName)
+				? components.ShipName
+				: string.Empty;
+		}
+
+		/// <summary>
 		/// Small-image tooltip: the unit's full class, its variant and
 		/// its name - the long form of what the details line abbreviates.
 		/// Stations and structures have no variant, so they read as
@@ -591,13 +619,12 @@ namespace OpenFrontier.IP.Discord
 				return string.Empty;
 			}
 			string line = unit.GetClassAndSeriesName(false);
+			string name = GetUnitName(unit);
 			if (string.IsNullOrEmpty(line))
 			{
-				return unit.UnitName ?? string.Empty;
+				return name;
 			}
-			return string.IsNullOrEmpty(unit.UnitName)
-				? line
-				: line + " \"" + unit.UnitName + "\"";
+			return string.IsNullOrEmpty(name) ? line : line + " \"" + name + "\"";
 		}
 
 		/// <summary>
@@ -647,9 +674,10 @@ namespace OpenFrontier.IP.Discord
 				return "In flight";
 			}
 			string line = ship.IsDocked ? "Docked" : ship.GetClassAndSeriesName(true);
-			if (!string.IsNullOrEmpty(ship.UnitName))
+			string name = GetUnitName(ship);
+			if (!string.IsNullOrEmpty(name))
 			{
-				line += " \"" + ship.UnitName + "\"";
+				line += " \"" + name + "\"";
 			}
 			return line;
 		}
