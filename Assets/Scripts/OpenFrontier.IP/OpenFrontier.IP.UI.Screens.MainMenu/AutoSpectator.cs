@@ -12,7 +12,8 @@ namespace OpenFrontier.IP.UI.Screens.MainMenu
 
 		private float lastSwitchTime;
 
-		private float maxSwitchTime = 10f;
+		// Dwell time between camera swaps.
+		private float maxSwitchTime = 18f;
 
 		private WorldBase world;
 
@@ -21,8 +22,15 @@ namespace OpenFrontier.IP.UI.Screens.MainMenu
 		public float MinStateTimeUntilChange = 5f;
 
 		// Target switches hard-snap by design (stock CameraSpectator), so
-		// the snap is hidden behind a full-screen black UI fade: 0.35s
-		// out, switch at full black, 0.6s back in.
+		// the snap is hidden behind a full-screen black UI fade. ALL
+		// swaps are forced through RequestSwitch -> FadeSwitchRoutine:
+		// FindAndSpectateShip may ONLY run at full black inside it.
+		public float FadeOutDuration = 0.6f;
+
+		public float FadeHoldDuration = 0.15f;
+
+		public float FadeInDuration = 1f;
+
 		private bool fadeInProgress;
 
 		private Image fadeImage;
@@ -117,10 +125,20 @@ namespace OpenFrontier.IP.UI.Screens.MainMenu
 			// cooldown stops thrash while EVERYTHING is docked.
 			if ((spectatingUnit == null || !spectatingUnit.IsValidAndNotDestroyed || spectatingUnit.IsDocked) && Time.time > lastSwitchTime + 2f)
 			{
-				StartCoroutine(FadeSwitchRoutine());
+				RequestSwitch();
 				return;
 			}
 			if (IsReadyToSwitchUnit())
+			{
+				RequestSwitch();
+			}
+		}
+
+		// The ONLY way to swap the spectate target. The camera cannot
+		// switch until the screen is fully black - no fade, no swap.
+		private void RequestSwitch()
+		{
+			if (!fadeInProgress)
 			{
 				StartCoroutine(FadeSwitchRoutine());
 			}
@@ -130,16 +148,21 @@ namespace OpenFrontier.IP.UI.Screens.MainMenu
 		{
 			fadeInProgress = true;
 			EnsureFadeCanvas();
-			yield return FadeTo(1f, 0.35f);
+			yield return FadeTo(1f, FadeOutDuration);
 			Unit unit = spectatingUnit;
 			FindAndSpectateShip();
 			if (spectatingUnit != unit)
 			{
 				lastSwitchTime = Time.time;
 			}
-			// One frame at full black so the camera attaches unseen.
-			yield return null;
-			yield return FadeTo(0f, 0.6f);
+			// A beat at full black so the camera attaches unseen.
+			float num = 0f;
+			while (num < FadeHoldDuration)
+			{
+				num += Time.unscaledDeltaTime;
+				yield return null;
+			}
+			yield return FadeTo(0f, FadeInDuration);
 			fadeInProgress = false;
 		}
 
