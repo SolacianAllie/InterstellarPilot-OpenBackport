@@ -253,44 +253,56 @@ namespace OpenFrontier.IP.Engine
 					}
 				}
 			}
-			PullPlanetSystemIntoMenuRange(sector);
-		}
-
-		// Menu geometry reality: the gate distance is ~3000u, everything
-		// lives within ~2400u - but stock planet placement is ~20000u and
-		// stock moons orbit 40000u from THAT (authored for the sector
-		// map, not a camera). The planet was a distant marble and the
-		// moon effectively didn't exist. Bring the planet into the
-		// scene's living space and hang the moon right off it. Radius
-		// comes from renderer bounds - the serialized Unit.Radius on
-		// planet prefabs is a placeholder (1).
-		private static void PullPlanetSystemIntoMenuRange(Sector sector)
-		{
+			PullMoonsCloseToPlanets(sector);
+			int num3 = 0;
+			int num4 = 0;
 			EngineASX.Instance.EnumerateUnitsWithPredicate(delegate(Unit unit)
 			{
-				if (unit.GetComponent<Moon>() == null)
+				if (unit.GetComponent<Moon>() != null)
 				{
-					float y = UnityEngine.Random.Range(-1500f, 800f);
-					Vector3 vector = Geometry.RandomXZUnitVector() * UnityEngine.Random.Range(4000f, 6000f);
-					vector.y = y;
-					unit.transform.localPosition = vector;
+					num4++;
+				}
+				else
+				{
+					num3++;
 				}
 			}, (Unit e) => e.IsValidAndNotDestroyed && e.Sector == sector && e.UnitType == UnitType.Planet);
+			Debug.Log(string.Format("[MainMenuWorldController] planet system: {0} planet(s), {1} moon(s)", num3, num4));
+		}
+
+		// The stock settings park moons 40000u from their planet -
+		// authored for the sector map, not a camera. The planet stays at
+		// its stock ~20000u backdrop spot (moving it close let it
+		// swallow the spectating camera), so for the moon to be SEEN it
+		// must hug the planet's disc: orbit at 1.4-1.9x the planet's
+		// TRUE visual radius from renderer bounds. The serialized
+		// Unit.Radius is a placeholder (1) - trusting it put the moon
+		// inside the planet's mesh. ActiveUnitMoon.Reposition reads
+		// OffsetFromPlanet live every FixedUpdate, so this applies
+		// immediately.
+		private static void PullMoonsCloseToPlanets(Sector sector)
+		{
 			EngineASX.Instance.EnumerateUnitsWithPredicate(delegate(Unit unit)
 			{
 				Moon component = unit.GetComponent<Moon>();
 				if (component != null && component.OrbitingAroundUnit != null)
 				{
-					float num = 1500f;
+					float num = 0f;
 					Renderer componentInChildren = component.OrbitingAroundUnit.GetComponentInChildren<Renderer>();
 					if (componentInChildren != null)
 					{
-						num = Mathf.Max(num, componentInChildren.bounds.extents.magnitude);
+						// extents.magnitude of a sphere = radius * sqrt(3)
+						num = componentInChildren.bounds.extents.magnitude / 1.732f;
 					}
-					float num2 = num * UnityEngine.Random.Range(1.6f, 2.4f);
-					float y2 = UnityEngine.Random.value * 360f;
-					float x2 = UnityEngine.Random.Range(-8f, 8f);
-					component.OffsetFromPlanet = Quaternion.Euler(x2, y2, 0f) * Vector3.forward * num2;
+					if (num <= 0f)
+					{
+						num = Mathf.Max(1000f, component.OrbitingAroundUnit.Radius);
+					}
+					float num2 = num * UnityEngine.Random.Range(1.4f, 1.9f);
+					float y = UnityEngine.Random.value * 360f;
+					float x = UnityEngine.Random.Range(-8f, 8f);
+					component.OffsetFromPlanet = Quaternion.Euler(x, y, 0f) * Vector3.forward * num2;
+					Debug.Log(string.Format("[MainMenuWorldController] moon pulled in: planet '{0}' visual radius {1:0} at {2}, moon '{3}' orbit {4:0}", component.OrbitingAroundUnit.name, num, component.OrbitingAroundUnit.transform.localPosition, unit.name, num2));
 				}
 			}, (Unit e) => e.IsValidAndNotDestroyed && e.Sector == sector && e.UnitType == UnitType.Planet);
 		}
