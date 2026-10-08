@@ -15,6 +15,16 @@ namespace OpenFrontier
 	{
 		private int appliedLevel = -1;
 
+		private void Awake()
+		{
+			// Spawn the post-processing ladder sibling here: it has no
+			// prefab wiring of its own (avoids a new-script GUID dance).
+			if (GetComponent<PostProcessingQualitySync>() == null)
+			{
+				gameObject.AddComponent<PostProcessingQualitySync>();
+			}
+		}
+
 		private void Update()
 		{
 			int qualityLevel = QualitySettings.GetQualityLevel();
