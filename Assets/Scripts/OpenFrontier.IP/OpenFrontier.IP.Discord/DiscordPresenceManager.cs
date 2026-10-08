@@ -892,6 +892,38 @@ namespace OpenFrontier.IP.Discord
 		}
 
 		/// <summary>
+		/// The unit's display class. Ships get "series-variant" from
+		/// the game itself, but Unit.ClassName is a SHIP variant field
+		/// and stays empty for stations and structures - so their
+		/// display name lives on the class, and is used as the
+		/// fallback here (and as the icon mapping key).
+		/// </summary>
+		private static string GetUnitClassLabel(Unit unit)
+		{
+			if (unit == null)
+			{
+				return string.Empty;
+			}
+			string label = unit.GetClassAndSeriesName(false);
+			if (!string.IsNullOrEmpty(label))
+			{
+				return label;
+			}
+			if (unit.UnitClass != null)
+			{
+				if (!string.IsNullOrEmpty(unit.UnitClass.className))
+				{
+					return unit.UnitClass.className;
+				}
+				if (unit.UnitClass.UnitSeries != null && !string.IsNullOrEmpty(unit.UnitClass.UnitSeries.Name))
+				{
+					return unit.UnitClass.UnitSeries.Name;
+				}
+			}
+			return string.Empty;
+		}
+
+		/// <summary>
 		/// Small-image tooltip: the unit's full class, its variant and
 		/// its name - the long form of what the details line abbreviates.
 		/// Stations and structures have no variant, so they read as
@@ -903,7 +935,7 @@ namespace OpenFrontier.IP.Discord
 			{
 				return string.Empty;
 			}
-			string line = unit.GetClassAndSeriesName(false);
+			string line = GetUnitClassLabel(unit);
 			string name = GetUnitName(unit);
 			if (string.IsNullOrEmpty(line))
 			{
@@ -930,7 +962,10 @@ namespace OpenFrontier.IP.Discord
 				assetKey = config != null
 					? config.ResolveImageKey(
 						series != null ? series.Name : null,
-						unit.GetClassName(false))
+						// For ships UnitClass.className is the variant
+						// suffix, not a class name - the series name
+						// is their key, so only non-ships match on it.
+						unit.UnitType == UnitType.Ship ? null : unit.UnitClass.className)
 					: null;
 			}
 			if (string.IsNullOrEmpty(assetKey))
