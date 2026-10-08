@@ -22,6 +22,8 @@ namespace OpenFrontier.IP
 
 		public int InitialPoolSize = 25;
 
+		private static bool readbackLogged;
+
 		private void Awake()
 		{
 			for (int i = 0; i < InitialPoolSize; i++)
@@ -60,6 +62,7 @@ namespace OpenFrontier.IP
 					{
 						pooledShieldHit.CachedMaterial = pooledShieldHit.Renderer.material;
 					}
+					Debug.Log(string.Format("[ShieldHit] mat={0} shader={1} snapshot=({2:0.00},{3:0.00},{4:0.00})", pooledShieldHit.CachedMaterial.name, pooledShieldHit.CachedMaterial.shader.name, pooledShieldHit.HitColor.r, pooledShieldHit.HitColor.g, pooledShieldHit.HitColor.b));
 					pooledShieldHit.StartExpiryTime = Time.time;
 					pooledShieldHit.StartTime = Time.time;
 					pooledShieldHit.SetShieldHitOrientation(damageSourceWorldPosition);
@@ -101,7 +104,14 @@ namespace OpenFrontier.IP
 			// directly on the cached instanced material.
 			if (hitInfo.CachedMaterial != null)
 			{
-				hitInfo.CachedMaterial.SetColor("_BaseColor", new Color(hitInfo.HitColor.r, hitInfo.HitColor.g, hitInfo.HitColor.b, a));
+				Color color = new Color(hitInfo.HitColor.r, hitInfo.HitColor.g, hitInfo.HitColor.b, a);
+				hitInfo.CachedMaterial.SetColor("_BaseColor", color);
+				if (!readbackLogged)
+				{
+					readbackLogged = true;
+					Color color2 = hitInfo.CachedMaterial.GetColor("_BaseColor");
+					Debug.Log(string.Format("[ShieldHit] readback _BaseColor=({0:0.00},{1:0.00},{2:0.00},{3:0.00})", color2.r, color2.g, color2.b, color2.a));
+				}
 			}
 		}
 
