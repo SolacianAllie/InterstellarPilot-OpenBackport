@@ -49,6 +49,7 @@ namespace OpenFrontier.IP
 					pooledShieldHit.MaxScale = Mathf.Clamp(shieldDamage * DamageScaleMultiplier, MinShieldHitScale, MaxShieldHitScale);
 					pooledShieldHit.gameObject.SetActive(value: true);
 					pooledShieldHit.TargetUnit = unit;
+					pooledShieldHit.ShieldIndex = unit.GetShieldIndex(damageSourceWorldPosition);
 					pooledShieldHit.StartExpiryTime = Time.time;
 					pooledShieldHit.StartTime = Time.time;
 					pooledShieldHit.SetShieldHitOrientation(damageSourceWorldPosition);
@@ -82,7 +83,13 @@ namespace OpenFrontier.IP
 		{
 			float num = Mathf.Clamp01((Time.time - hitInfo.StartExpiryTime) / (expiryTime - hitInfo.StartExpiryTime));
 			float a = 1f - num;
-			Color color = new Color(1f, 1f, 1f, a);
+			// Open Frontier: tint with the hit shield section's LIVE
+			// health color (the same GetUnitShieldColor the UI widgets
+			// use) - blue while the section holds, shifting as it
+			// depletes, so shield state reads in the world, not just on
+			// the HUD. Alpha keeps the stock fade.
+			Color unitShieldColor = EngineASX.Instance.GetUnitShieldColor(hitInfo.TargetUnit, hitInfo.ShieldIndex);
+			Color color = new Color(unitShieldColor.r, unitShieldColor.g, unitShieldColor.b, a);
 			hitInfo.transform.position = hitInfo.TargetUnit.transform.TransformPoint(hitInfo.LocalTranslation);
 			hitInfo.transform.rotation = hitInfo.TargetUnit.transform.rotation * hitInfo.LocalRotation;
 			float num2 = (1f - Mathf.Clamp01(num / ShieldScaleDuration)) * hitInfo.MaxScale;

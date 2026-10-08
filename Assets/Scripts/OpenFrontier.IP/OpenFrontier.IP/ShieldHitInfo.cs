@@ -19,6 +19,11 @@ namespace OpenFrontier.IP
 
 		public float MaxScale;
 
+		// Open Frontier: which of the 6 shield sections was hit (matches
+		// the UI's shield widgets) - the effect tints with that
+		// section's live health color.
+		public int ShieldIndex;
+
 		public void SetShieldHitOrientation(Vector3 damageSourceWorldPosition)
 		{
 			if (TargetUnit != null)
