@@ -220,10 +220,13 @@ namespace OpenFrontier.IP.Engine
 			// The probe-only anchor sun (SkyProbe layer): rides the light
 			// axis from the sector anchor so the anchor-positioned
 			// reflection probe captures a sun that matches the lighting.
+			// NOT intensity-scaled: it is invisible to players and only
+			// feeds the reflection capture - scaling it up injected
+			// extra HDR energy into ship reflections (white blowout).
 			Vector3 vector4 = (EngineASX.Instance != null && EngineASX.Instance.ActiveSector != null) ? EngineASX.Instance.ActiveSector.transform.position : main.transform.position;
 			Vector3 position2 = vector4 + vector * AnchorSunDistance;
 			Quaternion rotation2 = Quaternion.LookRotation(position2 - vector4, main.transform.up);
-			float num6 = 2f * AnchorSunDistance * Mathf.Tan(CoreAngularDiameter * 0.5f * (Mathf.PI / 180f)) * num3;
+			float num6 = 2f * AnchorSunDistance * Mathf.Tan(CoreAngularDiameter * 0.5f * (Mathf.PI / 180f));
 			anchorCoreTransform.SetPositionAndRotation(position2, rotation2);
 			anchorCoreTransform.localScale = new Vector3(num6, num6, 1f);
 			anchorGlowTransform.SetPositionAndRotation(position2 + vector, rotation2);
