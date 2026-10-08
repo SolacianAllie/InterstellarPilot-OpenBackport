@@ -253,27 +253,44 @@ namespace OpenFrontier.IP.Engine
 					}
 				}
 			}
-			PullMoonsCloseToPlanets(sector);
+			PullPlanetSystemIntoMenuRange(sector);
 		}
 
-		// The stock settings park moons 40000u from their planet (twice
-		// the sector's own gate distance!) - authored for the sector map,
-		// not a camera, so menu moons existed but were effectively
-		// invisible. Bring every moon into a close cinematic orbit.
-		// ActiveUnitMoon.Reposition reads OffsetFromPlanet live every
-		// FixedUpdate, so this applies immediately.
-		private static void PullMoonsCloseToPlanets(Sector sector)
+		// Menu geometry reality: the gate distance is ~3000u, everything
+		// lives within ~2400u - but stock planet placement is ~20000u and
+		// stock moons orbit 40000u from THAT (authored for the sector
+		// map, not a camera). The planet was a distant marble and the
+		// moon effectively didn't exist. Bring the planet into the
+		// scene's living space and hang the moon right off it. Radius
+		// comes from renderer bounds - the serialized Unit.Radius on
+		// planet prefabs is a placeholder (1).
+		private static void PullPlanetSystemIntoMenuRange(Sector sector)
 		{
+			EngineASX.Instance.EnumerateUnitsWithPredicate(delegate(Unit unit)
+			{
+				if (unit.GetComponent<Moon>() == null)
+				{
+					float y = UnityEngine.Random.Range(-1500f, 800f);
+					Vector3 vector = Geometry.RandomXZUnitVector() * UnityEngine.Random.Range(4000f, 6000f);
+					vector.y = y;
+					unit.transform.localPosition = vector;
+				}
+			}, (Unit e) => e.IsValidAndNotDestroyed && e.Sector == sector && e.UnitType == UnitType.Planet);
 			EngineASX.Instance.EnumerateUnitsWithPredicate(delegate(Unit unit)
 			{
 				Moon component = unit.GetComponent<Moon>();
 				if (component != null && component.OrbitingAroundUnit != null)
 				{
-					float num = Mathf.Max(1000f, component.OrbitingAroundUnit.Radius);
-					float num2 = num * UnityEngine.Random.Range(2.2f, 3.2f);
-					float y = UnityEngine.Random.value * 360f;
-					float x = UnityEngine.Random.Range(-8f, 8f);
-					component.OffsetFromPlanet = Quaternion.Euler(x, y, 0f) * Vector3.forward * num2;
+					float num = 1500f;
+					Renderer componentInChildren = component.OrbitingAroundUnit.GetComponentInChildren<Renderer>();
+					if (componentInChildren != null)
+					{
+						num = Mathf.Max(num, componentInChildren.bounds.extents.magnitude);
+					}
+					float num2 = num * UnityEngine.Random.Range(1.6f, 2.4f);
+					float y2 = UnityEngine.Random.value * 360f;
+					float x2 = UnityEngine.Random.Range(-8f, 8f);
+					component.OffsetFromPlanet = Quaternion.Euler(x2, y2, 0f) * Vector3.forward * num2;
 				}
 			}, (Unit e) => e.IsValidAndNotDestroyed && e.Sector == sector && e.UnitType == UnitType.Planet);
 		}
