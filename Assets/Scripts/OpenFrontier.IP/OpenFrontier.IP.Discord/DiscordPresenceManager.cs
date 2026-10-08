@@ -272,7 +272,7 @@ namespace OpenFrontier.IP.Discord
 			{
 				return "no-world";
 			}
-			Unit ship = GetPlayerShip(engine);
+			Unit ship = GetPresenceUnit(engine);
 			Sector sector = engine.ActiveSector;
 			ScenarioInfo scenario = engine.World.ScenarioInfo;
 			return string.Concat(
@@ -626,12 +626,17 @@ namespace OpenFrontier.IP.Discord
 			}
 			EngineASX engine = EngineASX.Instance;
 			bool inMenu = IsInMainMenu();
-			Unit ship = inMenu ? null : GetPlayerShip(engine);
+			// The icon and tooltip follow whatever the player is in
+			// or docked inside; the cargo manifest stays with the unit
+			// they actually command, so a shuttle parked in a carrier
+			// still shows its own freight.
+			Unit presenceUnit = inMenu ? null : GetPresenceUnit(engine);
+			Unit playerUnit = inMenu ? null : GetPlayerUnit(engine);
 			Faction player = FindPlayerFaction(engine);
 			Sector sector = engine != null ? engine.ActiveSector : null;
 			string scenarioTitle = GetScenarioTitle(engine);
 
-			BuildPresenceCards(inMenu, engine, ship, player, sector, scenarioTitle);
+			BuildPresenceCards(inMenu, engine, playerUnit, player, sector, scenarioTitle);
 			if (presenceCards.Count == 0)
 			{
 				return;
@@ -661,7 +666,7 @@ namespace OpenFrontier.IP.Discord
 						// actually piloting or manning: their ship,
 						// their station, or a turret/satellite they
 						// took the controls of.
-						ApplyUnitImage(assets, ship, BuildUnitTooltip(ship));
+						ApplyUnitImage(assets, presenceUnit, BuildUnitTooltip(presenceUnit));
 						activity.SetAssets(assets);
 					}
 					using (var timestamps = new ActivityTimestamps())
@@ -1029,14 +1034,37 @@ namespace OpenFrontier.IP.Discord
 			return total;
 		}
 
-		private static Unit GetPlayerShip(EngineASX engine)
+		/// <summary>
+		/// The unit the player is actually commanding (their ship, or
+		/// the station they're docked at).
+		/// </summary>
+		private static Unit GetPlayerUnit(EngineASX engine)
 		{
 			if (engine == null)
 			{
 				return null;
 			}
-			Unit ship = engine.PlayerUnit;
-			return ship != null && ship.IsValidAndNotDestroyed ? ship : null;
+			Unit unit = engine.PlayerUnit;
+			return unit != null && unit.IsValidAndNotDestroyed ? unit : null;
+		}
+
+		/// <summary>
+		/// The unit the presence should represent: what the player is
+		/// in, or - when docked - whatever they are docked inside.
+		/// GetRootUnit is the game's own notion of that outer unit, so
+		/// a shuttle parked in a carrier's hangar shows the carrier
+		/// (with the carrier's own ship icon), and a ship berthed at a
+		/// station shows the station, exactly as if it were a station.
+		/// </summary>
+		private static Unit GetPresenceUnit(EngineASX engine)
+		{
+			Unit unit = GetPlayerUnit(engine);
+			if (unit == null)
+			{
+				return null;
+			}
+			Unit host = unit.GetRootUnit();
+			return host != null && host.IsValidAndNotDestroyed ? host : unit;
 		}
 
 		private static void AddButton(Activity activity, string label, string url)
