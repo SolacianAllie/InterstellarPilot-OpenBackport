@@ -104,14 +104,27 @@ namespace OpenFrontier.IP.Engine
 			}, (Unit e) => e.IsValidAndNotDestroyed);
 			foreach (Unit item in list)
 			{
-				Object.Destroy(item.gameObject);
+				// Notify first (fleets and AI processors drop their
+				// references), then clean up - raw Destroy leaves the
+				// faction AI ticking over corpses and spams the log.
+				EngineASX.Instance.RegisterDestroyedUnit(item);
+				item.SafeDestroy();
 			}
 			foreach (GameObject gameObject in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
 			{
 				string name = gameObject.name;
 				if (PresetRootPrefixes.Any((string prefix) => name.StartsWith(prefix)))
 				{
-					Object.Destroy(gameObject);
+					Unit component = gameObject.GetComponent<Unit>();
+					if (component != null)
+					{
+						EngineASX.Instance.RegisterDestroyedUnit(component);
+						component.SafeDestroy();
+					}
+					else
+					{
+						Object.Destroy(gameObject);
+					}
 				}
 			}
 		}
