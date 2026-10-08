@@ -245,9 +245,11 @@ namespace OpenFrontier.IP.Engine
 			}
 		}
 
-		// Fresh belts (1-2, no gas clouds in the menu), each filled with
-		// REAL mineable asteroid units so miner fleets have something to
-		// work - the decorative cluster rocks alone aren't harvestable.
+		// Fresh belts (1-2), each filled with REAL mineable asteroid units
+		// so miner fleets have something to work - the decorative cluster
+		// rocks alone aren't harvestable. Belts may come with a gas cloud
+		// (variance): gassy types roll the shared probability, the NoGas
+		// type variants stay clean by construction.
 		private List<AsteroidCluster> SpawnAsteroidClusters(Sector sector)
 		{
 			List<AsteroidCluster> list = new List<AsteroidCluster>();
@@ -263,10 +265,12 @@ namespace OpenFrontier.IP.Engine
 			// The menu used to place blind, so two 4000-radius belts could
 			// land on top of each other.
 			float num2 = 400f;
+			float num3 = 0.5f;
 			CreateAsteroidClustersSeederSettings createAsteroidClustersSeederSettings = GameController.Instance.GameSettings.DefaultWorldSeedSettings.CreateAsteroidClustersSeederSettings;
 			if (createAsteroidClustersSeederSettings != null)
 			{
 				num2 = createAsteroidClustersSeederSettings.MinDistanceBetweenAsteroidClusters;
+				num3 = createAsteroidClustersSeederSettings.ProbabilityOfGeneratingGasCloud;
 			}
 			for (int i = 0; i < num; i++)
 			{
@@ -295,6 +299,11 @@ namespace OpenFrontier.IP.Engine
 				asteroidCluster.transform.localPosition = localPosition;
 				asteroidCluster.GetComponent<Unit>().Init();
 				SeedRealAsteroids(asteroidCluster);
+				Unit random = asteroidCluster.AsteroidType.GasCloudPrefabs.GetRandom();
+				if (random != null && UnityEngine.Random.value < num3)
+				{
+					CreateAsteroidClustersSeeder.CreateGasCloud(sector, asteroidCluster.Unit.Radius, localPosition, random);
+				}
 				list.Add(asteroidCluster);
 			}
 			return list;
