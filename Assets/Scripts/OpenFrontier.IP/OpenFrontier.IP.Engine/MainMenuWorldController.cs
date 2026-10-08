@@ -66,13 +66,18 @@ namespace OpenFrontier.IP.Engine
 			{
 				return;
 			}
-			int num = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
-			System.Random random = new System.Random(num);
-			// Fresh backdrop (nebulae/starfield re-rolled from the new seed)
-			// and a fresh star color from the seeded generator.
-			sector.RandomSeed = num;
-			sector.DirectionLightColor = StarColorGenerator.ForSector(num);
-			sector.SkyExposure = Mathf.Lerp(0.7f, 1.3f, (float)random.NextDouble());
+			// The sector self-assigns a fresh RandomSeed at load (prefab
+			// seed -1 = stock "random per visit" behavior) and the
+			// backdrop recipe lives in the prefab's SpaceConstructorParams.
+			// We only derive the star color from that seed (keeps
+			// sky/sun/star coherent) and jitter the exposure. The guard
+			// covers init ordering - if Init hasn't run yet, roll it here.
+			if (sector.RandomSeed == -1)
+			{
+				sector.AssignRandomSeed();
+			}
+			sector.DirectionLightColor = StarColorGenerator.ForSector(sector.RandomSeed);
+			sector.SkyExposure = Mathf.Lerp(0.7f, 1.3f, UnityEngine.Random.value);
 			// Replace the preset dressing before regenerating: stock
 			// stations/ships/planet/shuttle/clusters go, everything comes
 			// back randomly below.
@@ -89,7 +94,7 @@ namespace OpenFrontier.IP.Engine
 			PopulateMenuSystem(sector, clusters);
 			SpawnHeroShipAndSpectate(sector);
 			MakeMenuAIAggressive();
-			Debug.Log("[MainMenuWorldController] rolled menu system, seed " + num);
+			Debug.Log("[MainMenuWorldController] rolled menu system, seed " + sector.RandomSeed);
 		}
 
 		// The trader faction that owns the stations and traffic; the hero

@@ -49,7 +49,7 @@ MonoBehaviour:
   LightDirectionFudge: 0
   backgroundRotation: {x: 0, y: 0, z: 0, w: 1}
   SectorType: 3
-  RandomSeed: 1254878937
+  RandomSeed: -1
   UniqueId: -1
   ActiveSceneResourceName: hellemus
   LightRotation: {x: 0, y: 0, z: 0, w: 1}
