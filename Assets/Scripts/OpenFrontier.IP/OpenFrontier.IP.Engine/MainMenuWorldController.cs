@@ -598,7 +598,6 @@ namespace OpenFrontier.IP.Engine
 			float actualGateDistance = sector.GetActualGateDistance();
 			var list = GameController.Instance.LoadedUnitClasses.Where((UnitClass e) => e.IsUsable && e.UnitType == UnitType.Station && e.SeedInSandbox && e.StationPurpose != StationPurpose.SectorControl).OrderBy((UnitClass e) => UnityEngine.Random.value).ToList();
 			civilianFaction = null;
-			Faction securityFaction = null;
 			float num = 6.2831855f / Mathf.Max(1, list.Count);
 			for (int i = 0; i < list.Count; i++)
 			{
@@ -638,18 +637,10 @@ namespace OpenFrontier.IP.Engine
 				{
 					ForceTradeOrders(SpawnSoloShipFleet(faction, sector, vector2 + UnityEngine.Random.onUnitSphere * 900f, TraderPrefabs[UnityEngine.Random.Range(0, TraderPrefabs.Length)]));
 				}
-				// ...and sometimes a patrol on station.
-				if (UnityEngine.Random.value < 0.35f)
-				{
-					if (securityFaction == null)
-					{
-						securityFaction = CreateAIFaction(FactionType.Security);
-					}
-					if (securityFaction != null)
-					{
-						SpawnUtils.SpawnFleetWithLargerUnits(securityFaction, sector, vector2 + UnityEngine.Random.onUnitSphere * 1200f, UnityEngine.Random.Range(3, 6));
-					}
-				}
+				// NOTE: no explicit station patrols - the spawner settings
+				// have no non-outlaw Security faction type (the attempt
+				// only ever logged a warning), and the strategy layer now
+				// generates organic patrol/protect fleets on its own.
 			}
 			// Every cluster gets 1-2 SOLO miners, dropped in the rocks
 			// and force-ordered to mine then sell.
@@ -722,7 +713,7 @@ namespace OpenFrontier.IP.Engine
 					}
 					catch (System.Exception ex)
 					{
-						Debug.LogWarning("[MainMenuWorldController] cargo fill failed for " + trader.name + ": " + ex.Message);
+						Debug.LogWarning("[MainMenuWorldController] cargo fill failed for " + trader.name + ": " + ex);
 					}
 				}
 			}
