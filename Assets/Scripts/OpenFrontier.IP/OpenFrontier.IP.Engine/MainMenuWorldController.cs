@@ -85,6 +85,19 @@ namespace OpenFrontier.IP.Engine
 			PopulateMenuSystem(sector);
 			SpawnHeroShipAndSpectate(sector);
 			Debug.Log("[MainMenuWorldController] rolled menu system, seed " + num);
+			StartCoroutine(WarmUpWorld());
+		}
+
+		// Fast-forward the fresh system behind the loading fade: ~12x for
+		// a couple of real seconds gives fleets half a minute to pick up
+		// orders and get underway, so the reveal shows a world already in
+		// motion instead of everyone parked at their spawn points.
+		private System.Collections.IEnumerator WarmUpWorld()
+		{
+			float timeScale = Time.timeScale;
+			Time.timeScale = 12f;
+			yield return new WaitForSecondsRealtime(2.5f);
+			Time.timeScale = timeScale;
 		}
 
 		// The trader faction that owns the stations and traffic; the hero
