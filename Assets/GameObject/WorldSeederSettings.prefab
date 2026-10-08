@@ -802,6 +802,8 @@ MonoBehaviour:
   AsteroidTypes:
   - {fileID: 114724804207875695, guid: 755565b5a4dce3e44bef35de5165ed8c, type: 2}
   - {fileID: 114724804207875695, guid: 0d8324338c6f7be48844e5f934d56459, type: 2}
+  - {fileID: 114724804207875695, guid: 897dc6d247e942978432c400a2196b4e, type: 2}
+  - {fileID: 114724804207875695, guid: 412c03e4360b466e986376b0c7ee0bd5, type: 2}
   AsteroidTypeWeightRandomness: 0.2
 --- !u!4 &4808113985169905
 Transform:
