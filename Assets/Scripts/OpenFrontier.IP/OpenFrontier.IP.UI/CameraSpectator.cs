@@ -127,6 +127,7 @@ namespace OpenFrontier.IP.UI
 			}
 			private set
 			{
+				SpectateState previousState = currentState;
 				if (currentState != value)
 				{
 					lastStateChangeTime = CurrentGameTime();
@@ -145,9 +146,17 @@ namespace OpenFrontier.IP.UI
 						break;
 					}
 					case SpectateState.Orbit:
-						cameraAngle = GetOrbitCameraAngle();
+						// Orbit->Orbit re-entry must NOT re-frame: the
+						// state timer re-rolls every few seconds, and
+						// re-randomizing angle/distance on the SAME ship
+						// was a visible perspective snap. Only frame up
+						// when arriving from a different state.
+						if (previousState != SpectateState.Orbit)
+						{
+							cameraAngle = GetOrbitCameraAngle();
+							SetRandomOrbitDistance();
+						}
 						currentRotRate = new Vector3(0f - OrbitSpeed + Random.value * OrbitSpeed * 2f * OrbitRotationRateMultiplierX, 0f - OrbitSpeed + Random.value * OrbitSpeed * 2f, 0f);
-						SetRandomOrbitDistance();
 						break;
 					}
 				}

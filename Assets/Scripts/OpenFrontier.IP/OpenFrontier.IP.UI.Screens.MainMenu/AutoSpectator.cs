@@ -35,6 +35,13 @@ namespace OpenFrontier.IP.UI.Screens.MainMenu
 
 		private Image fadeImage;
 
+		// Dwell-clock tracker: ANY target change (our fade swaps, the
+		// hero-ship attach at roll, external spectate calls) restarts
+		// the swap delay - the opening ship used to get skipped after
+		// ~5s because lastSwitchTime started at 0 and the roll's attach
+		// never reset it.
+		private Unit lastKnownTargetRoot;
+
 		private void Awake()
 		{
 			world = UnityObjectHelper.FindComponent<WorldBase>();
@@ -118,6 +125,11 @@ namespace OpenFrontier.IP.UI.Screens.MainMenu
 			if (!EngineASX.LoadedAndReady || fadeInProgress)
 			{
 				return;
+			}
+			if (cameraSpectator != null && cameraSpectator.TargetRootUnit != lastKnownTargetRoot)
+			{
+				lastKnownTargetRoot = cameraSpectator.TargetRootUnit;
+				lastSwitchTime = Time.time;
 			}
 			// Watchdog: a target that docked, died or left the sector
 			// leaves the camera staring at empty space (or the cargo
