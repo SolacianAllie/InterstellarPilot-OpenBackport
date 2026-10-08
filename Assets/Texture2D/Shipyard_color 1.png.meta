@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: a40656e6c194d724ea2ea952c5c6aab6
+guid: 4d9e61fb354c15bda99e9d8d6b172cad
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -18,7 +18,7 @@ TextureImporter:
   bumpmap:
     convertToNormalMap: 1
     externalNormalMap: 0
-    heightScale: 0.25
+    heightScale: 0.05
     normalMapFilter: 1
     flipGreenChannel: 0
   isReadable: 0
@@ -30,7 +30,7 @@ TextureImporter:
   generateCubemap: 6
   cubemapConvolution: 0
   seamlessCubemap: 0
-  textureFormat: 29
+  textureFormat: 28
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
@@ -52,7 +52,7 @@ TextureImporter:
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
-  alphaIsTransparency: 1
+  alphaIsTransparency: 0
   spriteTessellationMethod: 0
   spriteTessellationDetail: -1
   spriteGeometrySubdivision: -1

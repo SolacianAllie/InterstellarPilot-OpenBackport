@@ -3,6 +3,7 @@ using System.Linq;
 using OpenFrontier.IP.Common.Factions;
 using OpenFrontier.IP.Engine.Core.Units;
 using OpenFrontier.IP.Engine.Factions;
+using OpenFrontier.IP.Engine.WorldSeeding.WorldSeedingLayers;
 using OpenFrontier.IP.Scenarios;
 using OpenFrontier.IP.Testing.Spawning;
 using OpenFrontier.Unity.Utils;
@@ -58,7 +59,7 @@ namespace OpenFrontier.IP.Engine
 			return scenarioInfo != null && mainMenuScenario != null && (scenarioInfo == mainMenuScenario || scenarioInfo.UniqueId == mainMenuScenario.UniqueId);
 		}
 
-		private static void RollMenuSystem()
+		private void RollMenuSystem()
 		{
 			Sector sector = EngineASX.Instance.ActiveSector;
 			if (sector == null || EngineASX.Instance.ActiveSectorData == null)
