@@ -60,6 +60,11 @@ namespace OpenFrontier.IP.UI
 
 		private Vector3 currentRotRate = Vector3.zero;
 
+		// The re-rolled drift rate the current one eases toward - the
+		// state timer re-rolls every few seconds and assigning the new
+		// rate instantly made the orbit suddenly reverse direction.
+		private Vector3 targetRotRate = Vector3.zero;
+
 		private SpectateState currentState;
 
 		private int currentViewportIndex;
@@ -156,7 +161,11 @@ namespace OpenFrontier.IP.UI
 							cameraAngle = GetOrbitCameraAngle();
 							SetRandomOrbitDistance();
 						}
-						currentRotRate = new Vector3(0f - OrbitSpeed + Random.value * OrbitSpeed * 2f * OrbitRotationRateMultiplierX, 0f - OrbitSpeed + Random.value * OrbitSpeed * 2f, 0f);
+						targetRotRate = new Vector3(0f - OrbitSpeed + Random.value * OrbitSpeed * 2f * OrbitRotationRateMultiplierX, 0f - OrbitSpeed + Random.value * OrbitSpeed * 2f, 0f);
+						if (previousState != SpectateState.Orbit)
+						{
+							currentRotRate = targetRotRate;
+						}
 						break;
 					}
 				}
@@ -424,6 +433,9 @@ namespace OpenFrontier.IP.UI
 				break;
 			case SpectateState.Orbit:
 				ApplyOrbit();
+				// Ease into re-rolled drift rates (~2s settle) instead
+				// of snapping the orbit's direction/speed instantly.
+				currentRotRate = Vector3.Lerp(currentRotRate, targetRotRate, 1f - Mathf.Exp(-1.5f * (float)GameController.Instance.RealDeltaTime));
 				cameraAngle += currentRotRate * (float)GameController.Instance.RealDeltaTime;
 				break;
 			case SpectateState.Flyby:
