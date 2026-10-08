@@ -17,13 +17,29 @@ namespace OpenFrontier.IP.Engine
 				GetSafeSpawnPosition(asteroidCluster, position, placementSettings, list, random, out var randomPosition, out var scale);
 				GameObject gameObject = InstantiateAsteroid(prefabSettings, randomPosition, random.RandomQuaternion(), parent, random);
 				gameObject.transform.localScale = scale;
-				gameObject.isStatic = true;
+				// Tumbling rocks can never be static: static flags feed the
+				// batcher, and a combined mesh is baked immovable.
+				gameObject.isStatic = false;
+				AddRotator(gameObject, asteroidCluster, placementSettings, scale, random);
 				list.Add(gameObject);
 			}
-			if (GameController.Instance.GameSettings.VideoSettings.StaticBatchAsteroids)
-			{
-				StaticBatchingUtility.Combine(parent.gameObject);
-			}
+			// StaticBatchingUtility.Combine is deliberately gone from here:
+			// it bakes the field into one immovable mesh, which would freeze
+			// the per-rock rotators. (VideoSettings.StaticBatchAsteroids no
+			// longer applies to these fields.)
+		}
+
+		private static void AddRotator(GameObject rock, AsteroidCluster asteroidCluster, AsteroidFieldPlacementSettings placementSettings, Vector3 scale, System.Random random)
+		{
+			// Speed scales with size: map the rock's scale onto the field's
+			// size window, lerp nimble->lumbering, then jitter so two rocks
+			// of the same size still drift differently.
+			float maxSize = asteroidCluster.Unit.Radius / placementSettings.MaxSizeReferenceAsteroidFieldRadius * placementSettings.MaxSize;
+			float t = Mathf.InverseLerp(placementSettings.MinSize, maxSize, scale.x);
+			float num = Mathf.Lerp(AsteroidFieldRotator.MaxDegreesPerSecond, AsteroidFieldRotator.MinDegreesPerSecond, t);
+			num *= Mathf.Lerp(0.75f, 1.25f, random.NextFloat());
+			Vector3 rotationAxis = random.RandomQuaternion() * Vector3.forward;
+			rock.AddComponent<AsteroidFieldRotator>().Init(rotationAxis, num);
 		}
 
 		public static GameObject InstantiateAsteroid(AsteroidFieldPrefabSettings prefabSettings, Vector3 position, Quaternion rotation, Transform parent, System.Random random)
