@@ -1,4 +1,4 @@
-OPEN FRONTIER — V0.2.0 "EVERY VISIT, A NEW SKY" (in development)
+OPEN FRONTIER — V0.1.0 "EVERY VISIT, A NEW SKY" (in development)
 ===============================================
 
 The main menu stops being a menu. Plus shield visuals that actually
@@ -89,7 +89,7 @@ ALSO IN THIS CYCLE
 
 
 ===============================================================
-OPEN FRONTIER — V0.1.0 "STARS & SKIES"
+ORIGINAL DRAFT — V0.1.0 "STARS & SKIES"
 ===============================================
 
 The first major release for Open Frontier is here, and it's all about
