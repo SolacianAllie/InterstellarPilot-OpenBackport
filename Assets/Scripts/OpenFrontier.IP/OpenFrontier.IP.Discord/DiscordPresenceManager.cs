@@ -666,7 +666,8 @@ namespace OpenFrontier.IP.Discord
 						// actually piloting or manning: their ship,
 						// their station, or a turret/satellite they
 						// took the controls of.
-						ApplyUnitImage(assets, presenceUnit, BuildUnitTooltip(presenceUnit));
+						ApplyUnitImage(assets, presenceUnit,
+							BuildPresenceTooltip(playerUnit, presenceUnit));
 						activity.SetAssets(assets);
 					}
 					using (var timestamps = new ActivityTimestamps())
@@ -713,16 +714,6 @@ namespace OpenFrontier.IP.Discord
 
 			int shipCount = CountShips(player);
 			int fleetCount = player != null && player.Fleets != null ? player.Fleets.Count : 0;
-
-			// Docked is a state, not a fact, so it leads the deck and
-			// the icon beside it already shows what you're inside.
-			// The player's own unit carries the flag - the station or
-			// carrier hosting them isn't itself docked.
-			if (ship != null && ship.IsDocked)
-			{
-				presenceCards.Add(new PresenceCard(
-					"Docked", BuildStateLine(sector, player, shipCount)));
-			}
 
 			// What the player is carrying. (The unit itself is the
 			// small image and its tooltip - the text never names it.)
@@ -939,10 +930,32 @@ namespace OpenFrontier.IP.Discord
 		}
 
 		/// <summary>
+		/// Hover text for the small image. Normally the unit's own
+		/// identity, but when the player is berthed inside something
+		/// the icon shows the host, so the hover says what they are
+		/// docked in. Manually occupying a station, or sitting in a
+		/// hangar without a ship, is NOT docking - there is no host to
+		/// name - so the unit simply identifies itself.
+		/// </summary>
+		private static string BuildPresenceTooltip(Unit playerUnit, Unit presenceUnit)
+		{
+			string label = BuildUnitTooltip(presenceUnit);
+			if (string.IsNullOrEmpty(label))
+			{
+				return label;
+			}
+			bool berthed = playerUnit != null
+				&& playerUnit.IsValidAndNotDestroyed
+				&& playerUnit.IsDocked
+				&& presenceUnit != null
+				&& !ReferenceEquals(playerUnit, presenceUnit);
+			return berthed ? "Docked in: " + label : label;
+		}
+
+		/// <summary>
 		/// Small-image tooltip: the unit's full class, its variant and
-		/// its name - the long form of what the details line abbreviates.
-		/// Stations and structures have no variant, so they read as
-		/// their type (plus a name, when they were given one).
+		/// its name. Stations and structures have no variant, so they
+		/// read as their type (plus a name, when given one).
 		/// </summary>
 		private static string BuildUnitTooltip(Unit unit)
 		{
