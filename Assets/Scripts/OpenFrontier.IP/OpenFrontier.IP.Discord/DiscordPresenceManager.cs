@@ -777,7 +777,9 @@ namespace OpenFrontier.IP.Discord
 					: scenario != null && !string.IsNullOrWhiteSpace(scenario.Objectives)
 						? scenario.Objectives
 						: "Open Frontier";
-				presenceCards.Add(new PresenceCard(scenarioTitle, blurb));
+				// Labelled, so the line reads as what the player is
+				// playing rather than another floating fact.
+				presenceCards.Add(new PresenceCard("Playing: " + scenarioTitle, blurb));
 			}
 
 			for (int i = 0; i < presenceCards.Count; i++)
