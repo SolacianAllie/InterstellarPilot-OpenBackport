@@ -61,11 +61,11 @@ namespace OpenFrontier
 			{
 				universalRenderPipelineAsset.mainLightShadowmapResolution = num;
 			}
-			// Tiers 2 (Normal) and 3 (High) stretch shadows to fill the
-			// sector (gate distance ~3000u). The split is re-balanced so
-			// the near field stays tight (30/150/600/3000) instead of
-			// scaling the stock proportions (60/300/900 - too soft up
-			// close). Lowest = off, Low/Highest = stock 250u.
+			// Tiers 0 and 1 are UNTOUCHED (off / stock 250u with 5/25/75
+			// splits). Tiers 2 and 3 keep tier 1's exact near field
+			// (5/25/75u) and stretch only cascade 3 from that cutoff
+			// out to the sector's end (~3000u gate distance): the split
+			// fractions below are 5/25/75 of 3000.
 			float num2;
 			Vector3 vector;
 			switch (qualityLevel)
@@ -77,7 +77,7 @@ namespace OpenFrontier
 			case 2:
 			case 3:
 				num2 = 3000f;
-				vector = new Vector3(0.01f, 0.05f, 0.2f);
+				vector = new Vector3(5f / 3000f, 25f / 3000f, 75f / 3000f);
 				break;
 			default:
 				num2 = 250f;
