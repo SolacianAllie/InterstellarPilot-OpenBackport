@@ -154,8 +154,14 @@ namespace OpenFrontier.IP
 			hitInfo.transform.position = hitInfo.TargetUnit.transform.TransformPoint(hitInfo.LocalTranslation);
 			hitInfo.transform.rotation = hitInfo.TargetUnit.transform.rotation * hitInfo.LocalRotation;
 			// Scale: grow from 0 to full over the first 0.5s on a fresh
-			// spawn (ScaleIn); resets keep full size.
-			float num5 = ((!hitInfo.ScaleIn || num2 >= 0.5f) ? hitInfo.MaxScale : (hitInfo.MaxScale * (num2 / 0.5f)));
+			// spawn (ScaleIn) - quadratic ease-out: fast linear start,
+			// decelerating into full size. Resets keep full size.
+			float num5 = hitInfo.MaxScale;
+			if (hitInfo.ScaleIn && num2 < 0.5f)
+			{
+				float num6 = num2 / 0.5f;
+				num5 = hitInfo.MaxScale * (1f - (1f - num6) * (1f - num6));
+			}
 			hitInfo.transform.localScale = new Vector3(num5, num5, num5);
 			Color color;
 			if (hitInfo.DepletedFlash)
