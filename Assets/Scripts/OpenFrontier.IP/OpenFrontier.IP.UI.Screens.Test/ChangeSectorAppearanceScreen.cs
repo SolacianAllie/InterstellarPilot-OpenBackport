@@ -69,7 +69,9 @@ namespace OpenFrontier.IP.UI.Screens.Test
 			SunSaturationSlider.minValue = 0f;
 			SunSaturationSlider.maxValue = 1f;
 			SunSaturationSlider.onValueChanged.AddListener(SunHsvSliderValueChanged);
-			SunValueSlider.minValue = 0.5f;
+			// Open Frontier: floor the slider at the same minimum the
+			// generator uses - all stars have brightness >= 1.
+			SunValueSlider.minValue = 1f;
 			SunValueSlider.maxValue = 3f;
 			SunValueSlider.onValueChanged.AddListener(SunHsvSliderValueChanged);
 		}
