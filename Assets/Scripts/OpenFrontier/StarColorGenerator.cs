@@ -6,7 +6,7 @@ namespace OpenFrontier
 	/// Open Frontier: deterministic per-sector star colors, seeded by the
 	/// sector's UniqueId so every sector keeps its own star color across
 	/// sessions. Full godmode-slider range: any hue, any saturation,
-	/// brightness 0.5-2.0 - the sun can be almost anything a player could
+	/// brightness 1-3 - the sun can be almost anything a player could
 	/// create, but random.
 	/// </summary>
 	public static class StarColorGenerator
@@ -50,20 +50,20 @@ namespace OpenFrontier
 			return num - Mathf.Min(color.r, Mathf.Min(color.g, color.b)) > 0.02f;
 		}
 
-		// Floors the brightness at 0.5 so the sun always reads, without
+		// Floors the brightness at 1 so the sun always reads, without
 		// brightening anything already above it; HDR values pass through.
 		public static Color NormalizeStarColor(Color color)
 		{
 			float num = Mathf.Max(color.r, Mathf.Max(color.g, color.b));
-			if (num >= 0.5f)
+			if (num >= 1f)
 			{
 				return color;
 			}
 			if (num <= 0f)
 			{
-				return new Color(0.5f, 0.5f, 0.5f, 1f);
+				return new Color(1f, 1f, 1f, 1f);
 			}
-			float num2 = 0.5f / num;
+			float num2 = 1f / num;
 			return new Color(color.r * num2, color.g * num2, color.b * num2, 1f);
 		}
 
@@ -101,7 +101,7 @@ namespace OpenFrontier
 		public static Color ForSector(int sectorUniqueId)
 		{
 			System.Random random = new System.Random(sectorUniqueId * 7919 + 101);
-			return HsvToRgb(Range(random, 0f, 1f), Range(random, 0f, 1f), Range(random, 0.5f, 2f));
+			return HsvToRgb(Range(random, 0f, 1f), Range(random, 0f, 1f), Range(random, 1f, 3f));
 		}
 
 		private static float Range(System.Random random, float min, float max)
