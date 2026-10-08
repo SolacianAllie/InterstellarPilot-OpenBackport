@@ -8,6 +8,7 @@ structure. Add new ones as they are found.
 C# changes are verified outside the editor with a generated .NET harness:
 
 - Regenerate: `python3 /tmp/opencode/gen_harness2.py` (rebuilds csprojs against live `Assets/Scripts`)
+- **New `.cs` files are INVISIBLE to the harness until regen** — a stale csproj silently skips them, so their errors only surface in the editor (`MainMenuWorldController.cs` hid three missing-using bugs this way). Always regen after creating files.
 - Build: `cd /tmp/opencode/harness && dotnet build All.csproj -v q -nologo`
 
 **Known blind spot:** the harness compiles against a UnityEngine *reference stub*,
