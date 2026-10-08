@@ -164,42 +164,49 @@ namespace OpenFrontier.IP.Engine
 			}
 		}
 
-		// The menu ALWAYS has a planet, and it ALWAYS has a moon.
-		// Prefabs are serialized (they live in Assets/GameObject, not
-		// Resources) and mirror the seeder's direct instantiate + Init path.
-		public Unit[] PlanetPrefabs;
-
-		public Unit[] MoonPrefabs;
+		// The menu ALWAYS has a planet, and it ALWAYS has a moon. Uses the
+		// stock universe/sandbox pipeline (CreatePlanetsSeeder driven by the
+		// shared WorldSeederSettings) verbatim, then tops up the moon if
+		// the 0.8 probability didn't produce one.
+		public CreatePlanetsSeederSettings PlanetsSettings;
 
 		private void SpawnGuaranteedPlanetWithMoon(Sector sector)
 		{
-			if (PlanetPrefabs == null || PlanetPrefabs.Length == 0)
+			if (PlanetsSettings == null)
 			{
 				return;
 			}
-			Unit unit = UnityObjectHelper.InstantiateAndGetComponent(PlanetPrefabs[UnityEngine.Random.Range(0, PlanetPrefabs.Length)]);
-			unit.transform.SetParent(sector.transform, worldPositionStays: true);
-			unit.transform.localPosition = sector.GetRandomSectorPositionWithinGateDistance(0.5f);
-			UnitPlanet component = unit.GetComponent<UnitPlanet>();
-			if (component != null)
+			// The proven sandbox/universe path, verbatim.
+			GameObject gameObject = new GameObject("MenuPlanetsSeeder");
+			CreatePlanetsSeeder createPlanetsSeeder = gameObject.AddComponent<CreatePlanetsSeeder>();
+			createPlanetsSeeder.CreatePlanetsSeederSettings = PlanetsSettings;
+			createPlanetsSeeder.CreateScenePlanets(sector);
+			Object.Destroy(gameObject);
+			// Guarantee the moon (the settings roll it at 0.8).
+			bool flag = false;
+			EngineASX.Instance.EnumerateUnitsWithPredicate(delegate(Unit unit)
 			{
-				component.Rotation = new Vector3(UnityEngine.Random.Range(-30f, 30f), UnityEngine.Random.Range(0f, 360f), 0f);
-			}
-			unit.GetComponent<Unit>().Init();
-			if (MoonPrefabs == null || MoonPrefabs.Length == 0)
+				if (unit.GetComponent<Moon>() != null && unit.Sector == sector)
+				{
+					flag = true;
+				}
+			}, (Unit e) => e.IsValidAndNotDestroyed);
+			if (!flag && PlanetsSettings.MoonPrefabs.Count > 0)
 			{
-				return;
-			}
-			Unit unit2 = UnityObjectHelper.InstantiateAndGetComponent(MoonPrefabs[UnityEngine.Random.Range(0, MoonPrefabs.Length)]);
-			Moon component2 = unit2.GetComponent<Moon>();
-			if (component2 != null)
-			{
-				component2.OrbitingAroundUnit = unit;
-				float y = UnityEngine.Random.value * 360f;
-				float x = UnityEngine.Random.Range(-30f, 30f);
-				component2.OffsetFromPlanet = Quaternion.Euler(x, y, 0f) * Vector3.forward * (unit.Radius * UnityEngine.Random.Range(2.5f, 4f));
-				unit2.GetComponent<Unit>().Init(autoFindParents: false);
-				unit2.Sector = sector;
+				List<Unit> unitsByType = sector.GetUnitsByType(UnitType.Planet);
+				if (unitsByType != null && unitsByType.Count > 0)
+				{
+					Unit unit2 = unitsByType[unitsByType.Count - 1];
+					Unit unit3 = UnityObjectHelper.InstantiateAndGetComponent(PlanetsSettings.MoonPrefabs[UnityEngine.Random.Range(0, PlanetsSettings.MoonPrefabs.Count)]);
+					Moon component = unit3.GetComponent<Moon>();
+					if (component != null)
+					{
+						component.OrbitingAroundUnit = unit2;
+						CreatePlanetsSeeder.RandomizeMoon(component, PlanetsSettings);
+						unit3.GetComponent<Unit>().Init(autoFindParents: false);
+						unit3.Sector = sector;
+					}
+				}
 			}
 		}
 
