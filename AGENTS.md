@@ -49,6 +49,19 @@ exit 198) — the user performs all editor actions.
   (reflection probes!) gets a lopsided or missing sky — capture from the
   SECTOR ANCHOR instead (see `SpaceReflectionProbe`), with far plane
   ~100000.
+- **Cameras instantiated mid-scene become rogue BASE cameras in URP:**
+  `UrpCameraStacker` only restacks on scene load, so any prefab spawned
+  with an enabled Camera (e.g. WormholeAnim) renders AFTER the stack as
+  its own base camera — with clear flags that can wipe the frame to black
+  (this blacked out the wormhole transition; the anim's camera is now
+  disabled in the prefab). Never spawn enabled cameras at runtime unless
+  they are explicitly stacked.
+- **Play-mode edits to the URP asset can PERSIST in the editor:**
+  `ShadowQualitySync` writes `mainLightShadowmapResolution` at runtime;
+  the editor re-serialized the asset mid-session and the value stuck
+  (4096), while an unrelated setting (`m_PrefilterSoftShadows`) silently
+  reverted. After play sessions, diff `Assets/Settings/OpenFrontier-URP.asset`
+  before committing — accept intentional drift, restore the rest.
 - **URP material postprocessor strips hand-edited YAML** for materials whose
   shader has a known URP ShaderID. Recreate those materials natively via the
   `Material` API; never hand-edit their YAML.
@@ -56,6 +69,10 @@ exit 198) — the user performs all editor actions.
   directory) is a read-only reference of the original game — never modify it.
 - **Soft particles are standardized Near=1/Far=0** (empirically verified on
   this OpenGL stack; URP's formula reads 0 behind empty space here).
+  Do NOT write new soft-particle fades against `_CameraDepthTexture` —
+  `sceneZ` reads ~0 behind open space and any `sceneZ - eyeZ` fade kills
+  alpha (this made the legacy-particle additive shaders render lasers
+  invisibly; their fade is now a passthrough).
 - **`Screen.dpi` can return 0** (Android foldables, Linux editor). Never feed
   it into touch/drag thresholds directly — it once set
   `EventSystem.pixelDragThreshold` to 0 and ate every tap on the sector map.

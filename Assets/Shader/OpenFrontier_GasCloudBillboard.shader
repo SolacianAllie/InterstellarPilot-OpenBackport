@@ -5,6 +5,9 @@ Shader "OpenFrontier/GasCloud Billboard" {
 		// The source puff texture is very soft (avg alpha ~0.29);
 		// boost it so the distant billboard reads as a solid cloud.
 		_AlphaBoost ("Alpha Boost", Range(1, 8)) = 3
+		// Per-billboard fade (MaterialPropertyBlock), applied AFTER the
+		// boost so fading is linear instead of fighting the saturate.
+		_GlobalFade ("Global Fade", Range(0, 1)) = 1
 	}
 	SubShader {
 		Tags { "Queue"="Transparent" "IgnoreProjector"="True" "RenderType"="Transparent" }
@@ -23,6 +26,7 @@ Shader "OpenFrontier/GasCloud Billboard" {
 			float4 _BaseMap_ST;
 			fixed4 _BaseColor;
 			float _AlphaBoost;
+			float _GlobalFade;
 
 			struct appdata {
 				float4 vertex : POSITION;
@@ -46,7 +50,7 @@ Shader "OpenFrontier/GasCloud Billboard" {
 			fixed4 frag(v2f input) : SV_Target
 			{
 				fixed4 col = tex2D(_BaseMap, input.uv) * _BaseColor;
-				col.a = saturate(col.a * _AlphaBoost);
+				col.a = saturate(col.a * _AlphaBoost) * _GlobalFade;
 				// Open Frontier: fog now applies - from inside a cloud (dense
 				// fog), other clouds' billboards are swallowed by the murk
 				// instead of hanging visibly in it.

@@ -1,0 +1,334 @@
+using System.Collections.Generic;
+using System.Linq;
+using OpenFrontier.IP.Common.Factions;
+using OpenFrontier.IP.Engine.Core.Units;
+using OpenFrontier.IP.Engine.Factions;
+using OpenFrontier.IP.Engine.WorldSeeding.WorldSeedingLayers;
+using OpenFrontier.IP.Scenarios;
+using OpenFrontier.IP.Testing.Spawning;
+using OpenFrontier.Unity.Utils;
+using UnityEngine;
+
+namespace OpenFrontier.IP.Engine
+{
+	/// <summary>
+	/// Open Frontier: re-rolls the main menu's star system on EVERY menu
+	/// visit so the backdrop is a fresh randomly generated system each
+	/// time, custom-universe style. Detects the menu scenario the same way
+	/// EngineMusicPlayerController does (World.ScenarioInfo matches
+	/// GameController.MainMenuScenario), then:
+	///   1. re-seeds the sector and regenerates its backdrop (nebulae +
+	///      starfield params re-rolled via the stock pipeline)
+	///   2. rolls a new star color via the seeded HSV generator and writes
+	///      it into the sector's DirectionLightColor (drives light, sun
+	///      billboard, tint and the reflection probe's anchor sun)
+	///   3. jitters the sky exposure
+	///   4. POPULATES the system like a light custom universe: civilian
+	///      stations + trader traffic, miner fleets working the clusters,
+	///      a security patrol, and a chance of a hostile bandit horde -
+	///      faction AI assigns strategies and hostilities play out
+	///      organically, so the spectating camera always has life to watch.
+	/// ActiveSectorData.OnSectorChanged applies the visuals (backdrop
+	/// regen + sun tint refresh + probe recapture).
+	/// Lives on the persistent GameController.
+	/// </summary>
+	public class MainMenuWorldController : MonoBehaviour
+	{
+		private ScenarioInfo appliedScenario;
+
+		private void Update()
+		{
+			if (!EngineASX.LoadedAndReady || EngineASX.Instance.World == null || GameController.Instance == null)
+			{
+				return;
+			}
+			ScenarioInfo scenarioInfo = EngineASX.Instance.World.ScenarioInfo;
+			if (scenarioInfo != appliedScenario)
+			{
+				appliedScenario = scenarioInfo;
+				if (IsMainMenuScenario(scenarioInfo))
+				{
+					RollMenuSystem();
+				}
+			}
+		}
+
+		private static bool IsMainMenuScenario(ScenarioInfo scenarioInfo)
+		{
+			ScenarioInfo mainMenuScenario = GameController.Instance.MainMenuScenario;
+			return scenarioInfo != null && mainMenuScenario != null && (scenarioInfo == mainMenuScenario || scenarioInfo.UniqueId == mainMenuScenario.UniqueId);
+		}
+
+		private void RollMenuSystem()
+		{
+			Sector sector = EngineASX.Instance.ActiveSector;
+			if (sector == null || EngineASX.Instance.ActiveSectorData == null)
+			{
+				return;
+			}
+			int num = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
+			System.Random random = new System.Random(num);
+			// Fresh backdrop (nebulae/starfield re-rolled from the new seed)
+			// and a fresh star color from the seeded generator.
+			sector.RandomSeed = num;
+			sector.DirectionLightColor = StarColorGenerator.ForSector(num);
+			sector.SkyExposure = Mathf.Lerp(0.7f, 1.3f, (float)random.NextDouble());
+			// Replace the preset dressing before regenerating: stock
+			// stations/ships/planet/shuttle/clusters go, everything comes
+			// back randomly below.
+			ClearPresetMenuContent();
+			SpawnAsteroidClusters(sector);
+			// Applies everything: regenerates the backdrop, refreshes the
+			// sun tint, recaptures the reflection probe.
+			EngineASX.Instance.ActiveSectorData.OnSectorChanged();
+			SpawnGuaranteedPlanetWithMoon(sector);
+			PopulateMenuSystem(sector);
+			SpawnHeroShipAndSpectate(sector);
+			Debug.Log("[MainMenuWorldController] rolled menu system, seed " + num);
+		}
+
+		// The trader faction that owns the stations and traffic; the hero
+		// ship joins it so the faction AI hands it trade runs.
+		private static Faction civilianFaction;
+
+		// The MenuScreenScene's hand-placed world content - replaced by the
+		// random composition below on every visit.
+		private static readonly string[] PresetUnitNames = new string[6] { "unit_space_station_tef (1)", "UnitRefinery", "unit_shuttle_a", "UnitPlanetOrangeWithImpacts", "UnitAsteroidClusterTypeA", "UnitHypersleepPodFactory" };
+
+		private static readonly string[] PresetRootPrefixes = new string[5] { "Bay_", "Dock", "AIGenericPilotController", "GenericNpc", "GenericGroupNoCloak" };
+
+		private static void ClearPresetMenuContent()
+		{
+			List<Unit> list = new List<Unit>();
+			EngineASX.Instance.EnumerateUnitsWithPredicate(delegate(Unit unit)
+			{
+				Unit rootUnit = unit.GetRootUnit();
+				if (rootUnit != null && (System.Array.IndexOf(PresetUnitNames, rootUnit.gameObject.name) >= 0 || rootUnit.UnitType == UnitType.AsteroidCluster))
+				{
+					list.Add(rootUnit);
+				}
+			}, (Unit e) => e.IsValidAndNotDestroyed);
+			// Menu-only: the gas clouds go too - clearer belts and a
+			// cleaner backdrop for the random system.
+			List<Unit> list2 = new List<Unit>();
+			EngineASX.Instance.EnumerateUnitsWithPredicate(delegate(Unit unit)
+			{
+				Unit rootUnit2 = unit.GetRootUnit();
+				if (rootUnit2 != null && rootUnit2.GetComponent<UnitGasCloud>() != null)
+				{
+					list2.Add(rootUnit2);
+				}
+			}, (Unit e) => e.IsValidAndNotDestroyed);
+			list.AddRange(list2);
+			foreach (Unit item in list)
+			{
+				// Notify first (fleets and AI processors drop their
+				// references), then clean up - raw Destroy leaves the
+				// faction AI ticking over corpses and spams the log.
+				EngineASX.Instance.RegisterDestroyedUnit(item);
+				item.SafeDestroy();
+			}
+			foreach (GameObject gameObject in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+			{
+				string name = gameObject.name;
+				if (PresetRootPrefixes.Any((string prefix) => name.StartsWith(prefix)))
+				{
+					Unit component = gameObject.GetComponent<Unit>();
+					if (component != null)
+					{
+						EngineASX.Instance.RegisterDestroyedUnit(component);
+						component.SafeDestroy();
+					}
+					else
+					{
+						Object.Destroy(gameObject);
+					}
+				}
+			}
+		}
+
+		// Fresh belts every visit (1-2, no gas clouds in the menu), so the
+		// sector always has at least one.
+		private static void SpawnAsteroidClusters(Sector sector)
+		{
+			AsteroidType[] array = Resources.LoadAll<AsteroidType>("Prefabs/WorldData/AsteroidTypes");
+			if (array.Length == 0)
+			{
+				return;
+			}
+			int num = UnityEngine.Random.Range(1, 3);
+			for (int i = 0; i < num; i++)
+			{
+				AsteroidType asteroidType = array[UnityEngine.Random.Range(0, array.Length)];
+				AsteroidCluster asteroidClusterPrefab = asteroidType.AsteroidClusterPrefabs[UnityEngine.Random.Range(0, asteroidType.AsteroidClusterPrefabs.Count)];
+				AsteroidCluster asteroidCluster = UnityObjectHelper.InstantiateAndGetComponent(asteroidClusterPrefab);
+				asteroidCluster.Unit.Radius = UnityEngine.Random.Range(2500f, 4000f);
+				asteroidCluster.transform.SetParent(sector.transform, worldPositionStays: true);
+				asteroidCluster.transform.localPosition = sector.GetRandomSectorPositionWithinGateDistance(0.75f);
+				asteroidCluster.GetComponent<Unit>().Init();
+			}
+		}
+
+		// The menu ALWAYS has a planet, and it ALWAYS has a moon. Uses the
+		// stock universe/sandbox pipeline (CreatePlanetsSeeder driven by the
+		// shared WorldSeederSettings) verbatim, then tops up the moon if
+		// the 0.8 probability didn't produce one.
+		public CreatePlanetsSeederSettings PlanetsSettings;
+
+		private void SpawnGuaranteedPlanetWithMoon(Sector sector)
+		{
+			if (PlanetsSettings == null)
+			{
+				return;
+			}
+			// The proven sandbox/universe path, verbatim.
+			GameObject gameObject = new GameObject("MenuPlanetsSeeder");
+			CreatePlanetsSeeder createPlanetsSeeder = gameObject.AddComponent<CreatePlanetsSeeder>();
+			createPlanetsSeeder.CreatePlanetsSeederSettings = PlanetsSettings;
+			createPlanetsSeeder.CreateScenePlanets(sector);
+			Object.Destroy(gameObject);
+			// Guarantee the moon (the settings roll it at 0.8).
+			bool flag = false;
+			EngineASX.Instance.EnumerateUnitsWithPredicate(delegate(Unit unit)
+			{
+				if (unit.GetComponent<Moon>() != null && unit.Sector == sector)
+				{
+					flag = true;
+				}
+			}, (Unit e) => e.IsValidAndNotDestroyed);
+			if (!flag && PlanetsSettings.MoonPrefabs.Count > 0)
+			{
+				List<Unit> unitsByType = sector.GetUnitsByType(UnitType.Planet);
+				if (unitsByType != null && unitsByType.Count > 0)
+				{
+					Unit unit2 = unitsByType[unitsByType.Count - 1];
+					Unit unit3 = UnityObjectHelper.InstantiateAndGetComponent(PlanetsSettings.MoonPrefabs[UnityEngine.Random.Range(0, PlanetsSettings.MoonPrefabs.Count)]);
+					Moon component = unit3.GetComponent<Moon>();
+					if (component != null)
+					{
+						component.OrbitingAroundUnit = unit2;
+						CreatePlanetsSeeder.RandomizeMoon(component, PlanetsSettings);
+						unit3.GetComponent<Unit>().Init(autoFindParents: false);
+						unit3.Sector = sector;
+					}
+				}
+			}
+		}
+
+		// The camera's opening view: a random ship from the whole pool, so
+		// over time the menu shows off every ship class in the game. It
+		// joins the trader faction as a fleet of one, so the faction AI
+		// gives it the old shuttle's life: exploring the system and
+		// periodically docking at stations.
+		private static void SpawnHeroShipAndSpectate(Sector sector)
+		{
+			var list = GameController.Instance.LoadedUnitClasses.Where((UnitClass e) => e.IsUsable && e.UnitType == UnitType.Ship).ToList();
+			if (list.Count == 0)
+			{
+				return;
+			}
+			Unit unit = SpawnUtils.SpawnUnit(list[UnityEngine.Random.Range(0, list.Count)].UnitPrefab, sector, sector.GetRandomSectorPositionWithinGateDistance(0.3f), civilianFaction);
+			if (unit != null)
+			{
+				if (civilianFaction != null)
+				{
+					SpawnUtils.SpawnGenericFleetWithUnits(civilianFaction, new List<Unit> { unit });
+				}
+				if (EngineASX.Instance.World != null)
+				{
+					EngineASX.Instance.World.Engine.CameraStartSpectateUnit(unit, allowFlyby: true, allowViewport: false, allowOrbit: true);
+				}
+			}
+		}
+
+		// Light custom-universe population: everything the local AI needs
+		// to exist and work inside this one system.
+		private static void PopulateMenuSystem(Sector sector)
+		{
+			if (EngineASX.Instance.FactionSpawner == null || EngineASX.Instance.FactionSpawner.Settings == null)
+			{
+				return;
+			}
+			// 2-3 stations, EACH with its own faction - factions trading
+			// with each other is what makes the system feel alive.
+			civilianFaction = CreateAIFaction(FactionType.Trader);
+			var list = GameController.Instance.LoadedUnitClasses.Where((UnitClass e) => e.IsUsable && e.UnitType == UnitType.Station && e.SeedInSandbox && e.StationPurpose != StationPurpose.SectorControl).ToList();
+			List<Faction> list2 = new List<Faction>();
+			int num = UnityEngine.Random.Range(2, 4);
+			for (int i = 0; i < num && list.Count > 0; i++)
+			{
+				Faction stationFaction = ((i == 0) ? civilianFaction : CreateAIFaction(FactionType.Trader));
+				if (stationFaction != null)
+				{
+					list2.Add(stationFaction);
+				}
+				SpawnUtils.SpawnUnit(list[UnityEngine.Random.Range(0, list.Count)].UnitPrefab, sector, sector.GetRandomSectorPositionWithinGateDistance(0.75f), stationFaction);
+			}
+			// Trader traffic between the stations, with strategies assigned
+			// at creation so fleets get to work immediately.
+			foreach (Faction item in list2)
+			{
+				int num2 = UnityEngine.Random.Range(1, 3);
+				for (int j = 0; j < num2; j++)
+				{
+					SpawnUtils.SpawnFleetWithSmallUnits(item, sector, sector.GetRandomSectorPositionWithinGateDistance(0.75f), UnityEngine.Random.Range(3, 6));
+				}
+			}
+			AssignStrategiesToIdleFleets();
+			// Miners working the clusters.
+			Faction faction = CreateAIFaction(FactionType.Miner);
+			if (faction != null)
+			{
+				int num3 = UnityEngine.Random.Range(1, 3);
+				for (int k = 0; k < num3; k++)
+				{
+					SpawnUtils.SpawnFleetWithLargerMiningUnits(faction, sector, sector.GetRandomSectorPositionWithinGateDistance(0.75f), UnityEngine.Random.Range(3, 6));
+				}
+			}
+			// A security patrol.
+			Faction faction2 = CreateAIFaction(FactionType.Security);
+			if (faction2 != null)
+			{
+				SpawnUtils.SpawnFleetWithLargerUnits(faction2, sector, sector.GetRandomSectorPositionWithinGateDistance(0.75f), UnityEngine.Random.Range(4, 7));
+			}
+			// 40% chance of a hostile bandit horde - HostileWithAll, so the
+			// locals spot and engage them on their own.
+			if (UnityEngine.Random.value < 0.4f)
+			{
+				SpawnUtils.SpawnBanditHordesAtSectorPosition(sector, sector.GetRandomSectorPositionWithinGateDistance(0.75f), 1, 2);
+			}
+		}
+
+		// The "ships sitting around doing nothing" fix: generic fleets
+		// spawn strategy-less and wait for the AI's periodic idle pass -
+		// assign strategies at creation so everyone works immediately.
+		private static void AssignStrategiesToIdleFleets()
+		{
+			foreach (Faction faction in EngineASX.Instance.Factions)
+			{
+				if (faction.FactionAI == null)
+				{
+					continue;
+				}
+				foreach (Fleet fleet in faction.Fleets)
+				{
+					if (fleet != null && fleet.FleetStrategy == null)
+					{
+						fleet.FleetStrategy = FactionAIStrategyModule.GetBestStrategyForFleet(fleet, faction.FactionAI);
+					}
+				}
+			}
+		}
+
+		private static Faction CreateAIFaction(FactionType factionType)
+		{
+			FactionSpawnerSpawnType factionSpawnerSpawnType = EngineASX.Instance.FactionSpawner.Settings.FactionTypes.FirstOrDefault((FactionSpawnerSpawnType e) => e.TypeInfo.FactionType == factionType && !e.IsFreelancer);
+			if (factionSpawnerSpawnType == null)
+			{
+				Debug.LogWarning("[MainMenuWorldController] no AI faction type available for " + factionType);
+				return null;
+			}
+			return FactionSpawner.CreateFactionAndAIAndAssignName(factionSpawnerSpawnType);
+		}
+	}
+}

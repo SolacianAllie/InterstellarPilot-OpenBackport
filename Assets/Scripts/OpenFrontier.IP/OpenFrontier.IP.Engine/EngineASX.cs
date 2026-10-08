@@ -3294,6 +3294,16 @@ namespace OpenFrontier.IP.Engine
 					wormholeAnimator.transform.position = camera.transform.position;
 					wormholeAnimator.transform.rotation = camera.transform.rotation;
 					wormholeAnimator.transform.SetParent(camera.transform, worldPositionStays: true);
+					// Open Frontier: hide the sky for the jump - only the
+					// tunnel should be visible (URP overlays can't clear to
+					// black the way the BIRP anim camera did). Restored in
+					// wormholeAnimator_AnimationFinished; both are scene
+					// objects, so a mid-jump scene reload self-heals.
+					if (Instance.SpaceConstructor != null)
+					{
+						Instance.SpaceConstructor.StaticStars.MeshRenderer.enabled = false;
+						Instance.SpaceConstructor.NebulasTransform.gameObject.SetActive(value: false);
+					}
 				}
 				PreSectorChangeCleanup();
 				sectorTransitionInfo = new SectorTransitionInfo(gateRequestor, targetSector, unit)
@@ -4303,6 +4313,11 @@ namespace OpenFrontier.IP.Engine
 
 		private void wormholeAnimator_AnimationFinished(WormholeAnimator sender)
 		{
+			if (Instance.SpaceConstructor != null)
+			{
+				Instance.SpaceConstructor.StaticStars.MeshRenderer.enabled = true;
+				Instance.SpaceConstructor.NebulasTransform.gameObject.SetActive(value: true);
+			}
 			Unit wormholeUserUnit = sectorTransitionInfo.WormholeUserUnit;
 			if (sectorTransitionInfo.Wormhole != null)
 			{

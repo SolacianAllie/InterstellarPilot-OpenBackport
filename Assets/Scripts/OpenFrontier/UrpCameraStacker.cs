@@ -34,6 +34,10 @@ namespace OpenFrontier
 			var baseData = cams[0].GetUniversalAdditionalCameraData();
 			baseData.renderType = CameraRenderType.Base;
 			baseData.cameraStack.Clear();
+			// Post-processing on the base camera covers the whole stack
+			// (URP ignores post flags on overlays). Without this the
+			// volume profile (bloom etc.) never ran - effects looked dull.
+			baseData.renderPostProcessing = true;
 
 			foreach (var cam in cams.Skip(1))
 			{

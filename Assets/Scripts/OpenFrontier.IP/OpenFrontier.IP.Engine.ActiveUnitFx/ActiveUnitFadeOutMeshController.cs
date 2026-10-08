@@ -13,12 +13,18 @@ namespace OpenFrontier.IP.Engine.ActiveUnitFx
 
 			public Color OriginalColor;
 
+			// Distance-animated alpha, kept here (NOT read back from the
+			// block) so the cloud-hide multiplier can compose without
+			// compounding.
+			public float CurrentAlpha;
+
 			public FadeOutMesh(MeshRenderer meshRenderer, MaterialPropertyBlock materialPropertyBlock, Color originalColor)
 			{
 				this = default;
 				MeshRenderer = meshRenderer;
 				MaterialPropertyBlock = materialPropertyBlock;
 				OriginalColor = originalColor;
+				CurrentAlpha = originalColor.a;
 			}
 		}
 
@@ -41,6 +47,14 @@ namespace OpenFrontier.IP.Engine.ActiveUnitFx
 		public bool UseRealTime = true;
 
 		private List<FadeOutMesh> fadeOutMeshes = new List<FadeOutMesh>();
+
+		// Open Frontier: wormhole billboards honor the same hide-in-cloud
+		// flag as the gas cloud billboards (GasCloudBilboardController.
+		// BillboardsHidden) - their LODs were visible through the fog.
+		// Fades independently and multiplies into the distance fade.
+		private float cloudFade = 1f;
+
+		private const float CloudFadeSpeed = 1.5f;
 
 		public float GetDeltaTime()
 		{
@@ -95,7 +109,27 @@ namespace OpenFrontier.IP.Engine.ActiveUnitFx
 			{
 				activeUnit.UpdateCameraDistance();
 			}
+			float num = (GasCloudBilboardController.BillboardsHidden ? 0f : 1f);
+			if (cloudFade != num)
+			{
+				cloudFade = Mathf.MoveTowards(cloudFade, num, CloudFadeSpeed * GetDeltaTime());
+				RefreshAllColours();
+			}
 			Apply(immediate: false);
+		}
+
+		private void RefreshAllColours()
+		{
+			for (int i = 0; i < fadeOutMeshes.Count; i++)
+			{
+				FadeOutMesh fadeOutMesh = fadeOutMeshes[i];
+				if (fadeOutMesh.MeshRenderer != null)
+				{
+					Color color = fadeOutMesh.OriginalColor;
+					color.a = fadeOutMesh.CurrentAlpha;
+					SetColour(fadeOutMesh.MaterialPropertyBlock, fadeOutMesh.MeshRenderer, color);
+				}
+			}
 		}
 
 		private void Apply(bool immediate)
@@ -104,46 +138,51 @@ namespace OpenFrontier.IP.Engine.ActiveUnitFx
 			{
 				return;
 			}
-			foreach (FadeOutMesh fadeOutMesh in fadeOutMeshes)
+			for (int i = 0; i < fadeOutMeshes.Count; i++)
 			{
+				FadeOutMesh fadeOutMesh = fadeOutMeshes[i];
 				MeshRenderer meshRenderer = fadeOutMesh.MeshRenderer;
 				float originalAlpha = fadeOutMesh.OriginalColor.a;
-				// Read the animated color back from the block (written
-				// as _BaseColor by SetColour), keeping the original albedo.
-				Color color = fadeOutMesh.OriginalColor;
-				color.a = fadeOutMesh.MaterialPropertyBlock.GetColor("_BaseColor").a;
+				float num2 = fadeOutMesh.CurrentAlpha;
 				if (!(meshRenderer != null))
 				{
 					continue;
 				}
 				if (!Inverse)
 				{
-					if (color.a <= originalAlpha && activeUnit.LastDistanceFromCamera < LowerDistance)
+					if (num2 <= originalAlpha && activeUnit.LastDistanceFromCamera < LowerDistance)
 					{
-						color.a = (immediate ? originalAlpha : Mathf.Clamp(color.a + FadeInRate * GetDeltaTime(), 0f, originalAlpha));
-						SetColour(fadeOutMesh.MaterialPropertyBlock, fadeOutMesh.MeshRenderer, color);
+						num2 = (immediate ? originalAlpha : Mathf.Clamp(num2 + FadeInRate * GetDeltaTime(), 0f, originalAlpha));
 					}
-					else if (color.a >= 0f && activeUnit.LastDistanceFromCamera > UpperDistance)
+					else if (num2 >= 0f && activeUnit.LastDistanceFromCamera > UpperDistance)
 					{
-						color.a = (immediate ? 0f : Mathf.Clamp(color.a - FadeOutRate * GetDeltaTime(), 0f, originalAlpha));
-						SetColour(fadeOutMesh.MaterialPropertyBlock, fadeOutMesh.MeshRenderer, color);
+						num2 = (immediate ? 0f : Mathf.Clamp(num2 - FadeOutRate * GetDeltaTime(), 0f, originalAlpha));
 					}
 				}
-				else if (color.a >= 0f && activeUnit.LastDistanceFromCamera < LowerDistance)
+				else if (num2 >= 0f && activeUnit.LastDistanceFromCamera < LowerDistance)
 				{
-					color.a = (immediate ? 0f : Mathf.Clamp(color.a - FadeOutRate * GetDeltaTime(), 0f, originalAlpha));
-					SetColour(fadeOutMesh.MaterialPropertyBlock, fadeOutMesh.MeshRenderer, color);
+					num2 = (immediate ? 0f : Mathf.Clamp(num2 - FadeOutRate * GetDeltaTime(), 0f, originalAlpha));
 				}
-				else if (color.a < originalAlpha && activeUnit.LastDistanceFromCamera > UpperDistance)
+				else if (num2 < originalAlpha && activeUnit.LastDistanceFromCamera > UpperDistance)
 				{
-					color.a = (immediate ? originalAlpha : Mathf.Clamp(color.a + FadeInRate * GetDeltaTime(), 0f, originalAlpha));
-					SetColour(fadeOutMesh.MaterialPropertyBlock, fadeOutMesh.MeshRenderer, color);
+					num2 = (immediate ? originalAlpha : Mathf.Clamp(num2 + FadeInRate * GetDeltaTime(), 0f, originalAlpha));
+				}
+				if (num2 != fadeOutMesh.CurrentAlpha || immediate)
+				{
+					fadeOutMesh.CurrentAlpha = num2;
+					fadeOutMeshes[i] = fadeOutMesh;
+					Color color = fadeOutMesh.OriginalColor;
+					color.a = num2;
+					SetColour(fadeOutMesh.MaterialPropertyBlock, meshRenderer, color);
 				}
 			}
 		}
 
-		private static void SetColour(MaterialPropertyBlock materialPropertyBlock, MeshRenderer meshRenderer, Color color)
+		// Writes alpha x cloudFade: the cloud-hide fade multiplies the
+		// distance fade so the two compose instead of overwriting.
+		private void SetColour(MaterialPropertyBlock materialPropertyBlock, MeshRenderer meshRenderer, Color color)
 		{
+			color.a *= cloudFade;
 			materialPropertyBlock.SetColor("_BaseColor", color); // URP port: _Color -> _BaseColor
 			meshRenderer.SetPropertyBlock(materialPropertyBlock);
 		}

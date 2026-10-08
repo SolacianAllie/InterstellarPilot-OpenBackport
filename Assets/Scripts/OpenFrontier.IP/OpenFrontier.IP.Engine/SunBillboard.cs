@@ -68,9 +68,10 @@ namespace OpenFrontier.IP.Engine
 		// parallax-shifted off the light axis. So a SECOND sun pair rides
 		// the probe-only SkyProbe layer (3 - no camera renders it), placed
 		// anchor-origin along the light axis: hulls reflect a sun that
-		// matches the lighting. Distance is arbitrary (probe far plane is
-		// 100000); 8000 keeps it outside sector content.
-		private const float AnchorSunDistance = 8000f;
+		// matches the lighting. 12000 puts it beyond sector content
+		// (asteroid fields reach ~9000) so the reflected sun occludes
+		// like the camera sun; the probe's far plane is 100000.
+		private const float AnchorSunDistance = 12000f;
 
 		private static int skyProbeLayer = -2;
 
@@ -178,11 +179,24 @@ namespace OpenFrontier.IP.Engine
 			{
 				return;
 			}
+			// Hide while between sectors (wormhole transition): only the
+			// tunnel should be visible in the void.
+			bool flag = EngineASX.Instance == null || EngineASX.Instance.ActiveSector != null;
+			if (coreRenderer.enabled != flag)
+			{
+				coreRenderer.enabled = flag;
+				glowRenderer.enabled = flag;
+				anchorCoreRenderer.enabled = flag;
+				anchorGlowRenderer.enabled = flag;
+			}
 			Vector3 vector = -cachedLight.transform.forward;
 			// Publish the sun direction for the planet atmosphere shader
 			// (day/night scattering follows the same light the sun shows).
 			Shader.SetGlobalVector("_SunDirectionWorld", new Vector4(vector.x, vector.y, vector.z, 0f));
-			float num = Mathf.Max(main.farClipPlane * 0.5f, 100f);
+			// 0.95 of the far plane (~8075): beyond the asteroid field
+			// visuals (~5000+), which were drawing UNDER the closer sun -
+			// the sun now correctly hides behind passing asteroids.
+			float num = Mathf.Max(main.farClipPlane * 0.95f, 100f);
 			Vector3 position = main.transform.position + vector * num;
 			// True billboard: face the camera dead-on (forward along the view
 			// ray, up aligned to the camera's up) so the sun reads correctly
@@ -207,7 +221,12 @@ namespace OpenFrontier.IP.Engine
 			anchorCoreTransform.localScale = new Vector3(num5, num5, 1f);
 			anchorGlowTransform.SetPositionAndRotation(position2 + vector, rotation2);
 			anchorGlowTransform.localScale = new Vector3(num5 * (GlowAngularDiameter / CoreAngularDiameter), num5 * (GlowAngularDiameter / CoreAngularDiameter), 1f);
-			Color starTint = StarTint;
+			// Dim with the cloud's starlight block: the visible sun
+			// breathes with the same lerped factor the directional
+			// light drops to inside gas clouds (additive quads scale
+			// with color).
+			float num6 = ((EngineASX.Instance != null && EngineASX.Instance.EnvironmentController != null) ? EngineASX.Instance.EnvironmentController.CurrentDirectionalLightFactor : 1f);
+			Color starTint = StarTint * num6;
 			// Material base color x star tint; the core is additionally
 			// pulled towards white so it reads as the blinding disk.
 			Color value = new Color((starTint.r + 1f) * 0.5f, (starTint.g + 1f) * 0.5f, (starTint.b + 1f) * 0.5f, 1f);

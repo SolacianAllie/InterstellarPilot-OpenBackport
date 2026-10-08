@@ -70,7 +70,7 @@ namespace OpenFrontier.IP.UI.Screens.Test
 			SunSaturationSlider.maxValue = 1f;
 			SunSaturationSlider.onValueChanged.AddListener(SunHsvSliderValueChanged);
 			SunValueSlider.minValue = 0.5f;
-			SunValueSlider.maxValue = 2f;
+			SunValueSlider.maxValue = 3f;
 			SunValueSlider.onValueChanged.AddListener(SunHsvSliderValueChanged);
 		}
 

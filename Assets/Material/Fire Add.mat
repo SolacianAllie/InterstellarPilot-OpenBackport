@@ -8,20 +8,19 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Fire Add
-  m_Shader: {fileID: 4800000, guid: fd23041324888deef9f6c2b5d48b3a09, type: 3}
+  m_Shader: {fileID: 4800000, guid: 3290585ab9734be6ac32005e044d31fd, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords:
-  - _SOFTPARTICLES_ON
-  - _SURFACE_TYPE_TRANSPARENT
+  m_ValidKeywords: []
   m_InvalidKeywords:
   - _FLIPBOOKBLENDING_OFF
+  - _SOFTPARTICLES_ON
+  - _SURFACE_TYPE_TRANSPARENT
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 1
-  m_CustomRenderQueue: 3000
-  stringTagMap:
-    RenderType: Transparent
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
   disabledShaderPasses:
   - DepthOnly
   - SHADOWCASTER
@@ -39,6 +38,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _EmissionMap:
         m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: 0464c322ad0f9e74fbdbf52051f63337, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
@@ -61,6 +64,7 @@ Material:
     - _DstBlendAlpha: 1
     - _FlipbookBlending: 0
     - _FlipbookMode: 0
+    - _InvFade: 1
     - _Mode: 0
     - _QueueOffset: 0
     - _SoftParticlesEnabled: 1
@@ -78,6 +82,7 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SoftParticleFadeParams: {r: 1, g: -1, b: 0, a: 0}
+    - _TintColor: {r: 4, g: 4, b: 4, a: 0.5}
     - _color: {r: 0.5, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
