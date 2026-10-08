@@ -33,6 +33,12 @@ exit 198) — the user performs all editor actions.
 
 ## Non-obvious traps
 
+- **Sun/backdrop render order:** the sun quads (layer 16, queue 3000)
+  sit at 0.95×far (~8075); nebula quads (layer 0) were ALSO queue 3000,
+  so transparent distance-sort drew nearer nebulae OVER the sun ("sun
+  clips into the skybox", worse at 1.6× size). All 338 nebula materials
+  are now queue 2999 — the sun always draws after the backdrop, while
+  gameplay particles (3000) still distance-sort over it correctly.
 - **Mipmap streaming renders textures at their smallest mip IN THE
   LINUX EDITOR on this OpenGL stack** (ships read as flat grey, blown
   to white by sun+bloom). Mipmaps themselves are fine. Streaming is
