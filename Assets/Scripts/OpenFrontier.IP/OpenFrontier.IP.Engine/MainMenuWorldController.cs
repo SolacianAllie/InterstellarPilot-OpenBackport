@@ -114,35 +114,43 @@ namespace OpenFrontier.IP.Engine
 					array[i] = array[num3];
 					array[num3] = nebulaColour;
 				}
+				// Rarity ladder (cumulative): >=1 always, >=2 70%,
+				// >=3 50%, >=4 35%, >=5 25%, >=6 18%, >=7 13%, all 8
+				// (rainbow) 10%. Exact: 1=30 2=20 3=15 4=10 5=7 6=5
+				// 7=3 8=10.
 				float value = UnityEngine.Random.value;
 				int num4;
 				if (value < 0.1f)
 				{
 					num4 = 8;
 				}
-				else if (value < 0.2f)
+				else if (value < 0.13f)
 				{
 					num4 = 7;
 				}
-				else if (value < 0.31f)
+				else if (value < 0.18f)
 				{
 					num4 = 6;
 				}
-				else if (value < 0.43f)
+				else if (value < 0.25f)
 				{
 					num4 = 5;
 				}
-				else if (value < 0.56f)
+				else if (value < 0.35f)
 				{
 					num4 = 4;
 				}
-				else if (value < 0.7f)
+				else if (value < 0.5f)
 				{
 					num4 = 3;
 				}
+				else if (value < 0.7f)
+				{
+					num4 = 2;
+				}
 				else
 				{
-					num4 = ((UnityEngine.Random.value < 0.5f) ? 1 : 2);
+					num4 = 1;
 				}
 				Common.NebulaColour nebulaColors = (Common.NebulaColour)0;
 				for (int j = 0; j < num4; j++)
