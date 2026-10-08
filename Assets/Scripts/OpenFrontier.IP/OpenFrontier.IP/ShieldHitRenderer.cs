@@ -163,19 +163,22 @@ namespace OpenFrontier.IP
 			else
 			{
 				Color unitShieldColor = EngineASX.Instance.GetUnitShieldColor(hitInfo.TargetUnit, hitInfo.ShieldIndex);
+				// The flash peak is the health color HDR-overdriven
+				// (x2.5), not white - a blue shield flashes bright blue.
+				Color color4 = unitShieldColor * 2.5f;
 				if (num2 < 0.2f)
 				{
 					// 0.0-0.2s: the flash fades in from health color to
-					// the white peak; the alpha fade-in (0.1s) overlaps
-					// its first half.
-					Color color2 = Color.Lerp(unitShieldColor, new Color(2f, 2f, 2f), num2 / 0.2f);
+					// the overdriven peak; the alpha fade-in (0.1s)
+					// overlaps its first half.
+					Color color2 = Color.Lerp(unitShieldColor, color4, num2 / 0.2f);
 					color = new Color(color2.r, color2.g, color2.b, Mathf.Clamp01(num2 / 0.1f));
 				}
 				else if (num2 < 0.7f)
 				{
-					// 0.2-0.7s: the flash fades out over 0.5s - white
-					// settling back to the health color.
-					Color color3 = Color.Lerp(new Color(2f, 2f, 2f), unitShieldColor, (num2 - 0.2f) / 0.5f);
+					// 0.2-0.7s: the flash fades out over 0.5s - the
+					// overdrive releasing back to the health color.
+					Color color3 = Color.Lerp(color4, unitShieldColor, (num2 - 0.2f) / 0.5f);
 					color = new Color(color3.r, color3.g, color3.b, 1f);
 				}
 				else
