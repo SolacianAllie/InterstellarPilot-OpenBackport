@@ -15,7 +15,7 @@ namespace OpenFrontier.IP.Engine
 	public class AsteroidFieldRotator : MonoBehaviour
 	{
 		// Degrees/sec for the SMALLEST rocks (nimble)...
-		public const float MaxDegreesPerSecond = 2f;
+		public const float MaxDegreesPerSecond = 10f;
 
 		// ...and for the LARGEST (they lumber). Sizes in between lerp.
 		public const float MinDegreesPerSecond = 0.15f;
