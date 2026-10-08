@@ -1,8 +1,10 @@
+using System.Collections.Generic;
 using System.Linq;
 using OpenFrontier.IP.Common.Factions;
 using OpenFrontier.IP.Engine.Factions;
 using OpenFrontier.IP.Scenarios;
 using OpenFrontier.IP.Testing.Spawning;
+using OpenFrontier.Unity.Utils;
 using UnityEngine;
 
 namespace OpenFrontier.IP.Engine
@@ -69,11 +71,108 @@ namespace OpenFrontier.IP.Engine
 			sector.RandomSeed = num;
 			sector.DirectionLightColor = StarColorGenerator.ForSector(num);
 			sector.SkyExposure = Mathf.Lerp(0.7f, 1.3f, (float)random.NextDouble());
+			// Replace the preset dressing before regenerating: stock
+			// stations/ships/planet/shuttle/clusters go, everything comes
+			// back randomly below.
+			ClearPresetMenuContent();
+			RandomizeAsteroidClusterTypes(sector);
 			// Applies everything: regenerates the backdrop, refreshes the
 			// sun tint, recaptures the reflection probe.
 			EngineASX.Instance.ActiveSectorData.OnSectorChanged();
+			SpawnGuaranteedPlanetWithMoon(sector);
+			SpawnHeroShipAndSpectate(sector);
 			PopulateMenuSystem(sector);
 			Debug.Log("[MainMenuWorldController] rolled menu system, seed " + num);
+		}
+
+		// The MenuScreenScene's hand-placed world content - replaced by the
+		// random composition below on every visit.
+		private static readonly string[] PresetUnitNames = new string[6] { "unit_space_station_tef (1)", "UnitRefinery", "unit_shuttle_a", "UnitPlanetOrangeWithImpacts", "UnitAsteroidClusterTypeA", "UnitHypersleepPodFactory" };
+
+		private static readonly string[] PresetRootPrefixes = new string[5] { "Bay_", "Dock", "AIGenericPilotController", "GenericNpc", "GenericGroupNoCloak" };
+
+		private static void ClearPresetMenuContent()
+		{
+			List<Unit> list = new List<Unit>();
+			EngineASX.Instance.EnumerateUnitsWithPredicate(delegate(Unit unit)
+			{
+				Unit rootUnit = unit.GetRootUnit();
+				if (rootUnit != null && System.Array.IndexOf(PresetUnitNames, rootUnit.gameObject.name) >= 0)
+				{
+					list.Add(rootUnit);
+				}
+			}, (Unit e) => e.IsValidAndNotDestroyed);
+			foreach (Unit item in list)
+			{
+				Object.Destroy(item.gameObject);
+			}
+			foreach (GameObject gameObject in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+			{
+				string name = gameObject.name;
+				if (PresetRootPrefixes.Any((string prefix) => name.StartsWith(prefix)))
+				{
+					Object.Destroy(gameObject);
+				}
+			}
+		}
+
+		private static void RandomizeAsteroidClusterTypes(Sector sector)
+		{
+			AsteroidType[] array = Resources.LoadAll<AsteroidType>("Prefabs/WorldData/AsteroidTypes");
+			List<Unit> unitsByType = sector.GetUnitsByType(UnitType.AsteroidCluster);
+			if (array.Length == 0 || unitsByType == null)
+			{
+				return;
+			}
+			foreach (Unit item in unitsByType)
+			{
+				AsteroidCluster component = item.GetComponent<AsteroidCluster>();
+				if (component != null)
+				{
+					component.AsteroidType = array[UnityEngine.Random.Range(0, array.Length)];
+				}
+			}
+		}
+
+		// The menu ALWAYS has a planet, and it ALWAYS has a moon.
+		private static void SpawnGuaranteedPlanetWithMoon(Sector sector)
+		{
+			string[] planetNames = new string[10] { "ActiveUnitPlanetAlienAshyGreen", "ActiveUnitPlanetAlienPurple", "ActiveUnitPlanetDevoidOfLife", "ActiveUnitPlanetEarthLike", "ActiveUnitPlanetEarth", "ActiveUnitPlanetFrozenTundras", "ActiveUnitPlanetJupitersCousin", "ActiveUnitPlanetOrangeWithImpacts", "ActiveUnitPlanetVolcanica", "ActiveUnitPlanetWinterWorld" };
+			Unit unitPrefab = UnityObjectHelper.Load<Unit>("Prefabs/WorldData/ActiveUnits/Environment/" + planetNames[UnityEngine.Random.Range(0, planetNames.Length)]);
+			if (unitPrefab == null)
+			{
+				return;
+			}
+			Unit planet = SpawnUtils.SpawnUnit(unitPrefab, sector, sector.GetRandomSectorPositionWithinGateDistance(0.5f), null);
+			Unit unitPrefab2 = UnityObjectHelper.Load<Unit>("Prefabs/WorldData/ActiveUnits/Environment/ActiveUnitMoon" + UnityEngine.Random.Range(1, 5));
+			if (planet != null && unitPrefab2 != null)
+			{
+				Unit unit = SpawnUtils.SpawnUnit(unitPrefab2, sector, planet.SectorPosition, null);
+				Moon component = unit.GetComponent<Moon>();
+				if (component != null)
+				{
+					component.OrbitingAroundUnit = planet;
+					float y = UnityEngine.Random.value * 360f;
+					float x = UnityEngine.Random.Range(-30f, 30f);
+					component.OffsetFromPlanet = Quaternion.Euler(x, y, 0f) * Vector3.forward * (planet.Radius * UnityEngine.Random.Range(2.5f, 4f));
+				}
+			}
+		}
+
+		// The camera's opening view: a random ship from the whole pool, so
+		// over time the menu shows off every ship class in the game.
+		private static void SpawnHeroShipAndSpectate(Sector sector)
+		{
+			var list = GameController.Instance.LoadedUnitClasses.Where((UnitClass e) => e.IsUsable && e.UnitType == UnitType.Ship).ToList();
+			if (list.Count == 0)
+			{
+				return;
+			}
+			Unit unit = SpawnUtils.SpawnUnit(list[UnityEngine.Random.Range(0, list.Count)].UnitPrefab, sector, sector.GetRandomSectorPositionWithinGateDistance(0.3f), null);
+			if (unit != null && EngineASX.Instance.World != null)
+			{
+				EngineASX.Instance.World.Engine.CameraStartSpectateUnit(unit, allowFlyby: true, allowViewport: false, allowOrbit: true);
+			}
 		}
 
 		// Light custom-universe population: everything the local AI needs
