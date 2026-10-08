@@ -63,13 +63,9 @@ namespace OpenFrontier.IP.Discord
 		[SerializeField]
 		private string largeImageAsset = "openfrontier";
 
-		[Tooltip("Optional activity asset name for the small image (the icon beside the presence text). Leave empty to show none. Upload e.g. 'ship' to your app's Rich Presence assets to use it.")]
+		[Tooltip("Optional activity asset name used when the player's unit has no mapped asset of its own. Leave empty to show no small image at all.")]
 		[SerializeField]
-		private string smallImageAsset = "";
-
-		[Tooltip("Activity asset name shown as the small image while the player's ship is docked. Upload an icon under this name to your app's Rich Presence assets.")]
-		[SerializeField]
-		private string dockedImageAsset = "docked";
+		private string fallbackImageAsset = "";
 
 		[Tooltip("Optional first presence button label (with its URL below). Leave either empty to show no buttons.")]
 		[SerializeField]
@@ -547,19 +543,11 @@ namespace OpenFrontier.IP.Discord
 						assets.SetLargeText(string.IsNullOrEmpty(scenarioTitle)
 							? "Open Frontier"
 							: scenarioTitle);
-						// The small image doubles as a docked flag -
-						// one asset, two pieces of information.
-						bool docked = ship != null && ship.IsDocked;
-						if (!string.IsNullOrEmpty(smallImageAsset))
-						{
-							assets.SetSmallImage(smallImageAsset);
-							assets.SetSmallText(docked ? "Docked" : "In flight");
-						}
-						else if (docked)
-						{
-							assets.SetSmallImage(dockedImageAsset);
-							assets.SetSmallText("Docked");
-						}
+						// The small image is whatever the player is
+						// actually piloting or manning: their ship,
+						// their station, or a turret/satellite they
+						// took the controls of.
+						ApplyUnitImage(assets, ship, BuildUnitTooltip(ship));
 						activity.SetAssets(assets);
 					}
 					using (var timestamps = new ActivityTimestamps())
@@ -587,6 +575,64 @@ namespace OpenFrontier.IP.Discord
 			catch (Exception e)
 			{
 				Debug.LogWarning("[Discord] Presence update threw: " + e.Message);
+			}
+		}
+
+		/// <summary>
+		/// Small-image tooltip: the unit's full class, its variant and
+		/// its name - the long form of what the details line abbreviates.
+		/// Stations and structures have no variant, so they read as
+		/// their type (plus a name, when they were given one).
+		/// </summary>
+		private static string BuildUnitTooltip(Unit unit)
+		{
+			if (unit == null || !unit.IsValidAndNotDestroyed)
+			{
+				return string.Empty;
+			}
+			string line = unit.GetClassAndSeriesName(false);
+			if (string.IsNullOrEmpty(line))
+			{
+				return unit.UnitName ?? string.Empty;
+			}
+			return string.IsNullOrEmpty(unit.UnitName)
+				? line
+				: line + " \"" + unit.UnitName + "\"";
+		}
+
+		/// <summary>
+		/// Picks the activity asset for the unit's class (an explicit
+		/// mapping first, then the class name lowercased without
+		/// spaces), and attaches it with the tooltip.
+		/// </summary>
+		private void ApplyUnitImage(ActivityAssets assets, Unit unit, string tooltip)
+		{
+			if (assets == null)
+			{
+				return;
+			}
+			string assetKey = null;
+			if (unit != null && unit.IsValidAndNotDestroyed && unit.UnitClass != null)
+			{
+				UnitSeries series = unit.UnitClass.UnitSeries;
+				assetKey = config != null
+					? config.ResolveImageKey(
+						series != null ? series.Name : null,
+						unit.GetClassName(false))
+					: null;
+			}
+			if (string.IsNullOrEmpty(assetKey))
+			{
+				assetKey = fallbackImageAsset;
+			}
+			if (string.IsNullOrEmpty(assetKey))
+			{
+				return;
+			}
+			assets.SetSmallImage(assetKey);
+			if (!string.IsNullOrEmpty(tooltip))
+			{
+				assets.SetSmallText(tooltip);
 			}
 		}
 

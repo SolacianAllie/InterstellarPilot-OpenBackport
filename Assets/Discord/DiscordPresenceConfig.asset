@@ -13,3 +13,42 @@ MonoBehaviour:
   m_Name: DiscordPresenceConfig
   m_EditorClassIdentifier: 
   ApplicationId: 1557818000009207900
+  imageMappings:
+  - className: Bar
+    assetKey: bar1
+  - className: Adv. Shipyard
+    assetKey: shipyard
+  - className: Shipyard
+    assetKey: shipyard
+  - className: Sector HQ
+    assetKey: outpost
+  - className: Outpost
+    assetKey: outpost
+  - className: Trade Station
+    assetKey: tradestation
+  - className: Small Satellite
+    assetKey: smallsatellite
+  - className: Storage Locker
+    assetKey: storagelocker
+  - className: Refinery
+    assetKey: refinery
+  - className: Light Weapons Platform
+    assetKey: weaponsplatform
+  - className: Medium Weapons Platform
+    assetKey: weaponsplatform
+  - className: Orbital Farm
+    assetKey: factory
+  - className: Brewery
+    assetKey: factory
+  - className: Hospital
+    assetKey: factory
+  - className: Jewellery Factory
+    assetKey: factory
+  - className: Laboratory
+    assetKey: factory
+  - className: Light Arms Factory
+    assetKey: factory
+  - className: Hypersleep Pod Factory
+    assetKey: factory
+  - className: Rations Factory
+    assetKey: factory

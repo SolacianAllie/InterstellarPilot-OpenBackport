@@ -1940,8 +1940,7 @@ MonoBehaviour:
   connectOnStartup: 1
   updateInterval: 15
   largeImageAsset: openfrontier
-  smallImageAsset: 
-  dockedImageAsset: docked
+  fallbackImageAsset: 
   buttonOneLabel: 
   buttonOneUrl: 
   buttonTwoLabel: 
