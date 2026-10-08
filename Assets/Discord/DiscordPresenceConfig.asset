@@ -24,6 +24,10 @@ MonoBehaviour:
     assetKey: outpost
   - className: Outpost
     assetKey: outpost
+  - className: Equipment Shop
+    assetKey: outpost
+  - className: Repair Shop
+    assetKey: outpost
   - className: Trade Station
     assetKey: tradestation
   - className: Small Satellite
@@ -51,4 +55,8 @@ MonoBehaviour:
   - className: Hypersleep Pod Factory
     assetKey: factory
   - className: Rations Factory
+    assetKey: factory
+  - className: Scrapyard
+    assetKey: factory
+  - className: Vehicle Plant
     assetKey: factory
