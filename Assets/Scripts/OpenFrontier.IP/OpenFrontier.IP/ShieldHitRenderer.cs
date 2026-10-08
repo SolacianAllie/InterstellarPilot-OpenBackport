@@ -56,7 +56,9 @@ namespace OpenFrontier.IP
 					// A section this hit just emptied pops: bright red
 					// flash, short life.
 					pooledShieldHit.DepletedFlash = unit.Components != null && unit.Components.ShieldComponent != null && unit.Components.ShieldComponent.GetShieldPointNormalized(pooledShieldHit.ShieldIndex) <= 0f;
-					pooledShieldHit.Duration = (pooledShieldHit.DepletedFlash ? 0.4f : ShieldHitDuration);
+					// ~Laser fade-out time (0.25-0.4s on the classes):
+					// the shield flash dies with the beam that made it.
+					pooledShieldHit.Duration = (pooledShieldHit.DepletedFlash ? 0.4f : 0.5f);
 					// Cache the instanced material once per pooled object -
 					// the property block tint never reached the shader on
 					// this stack, so the color is set directly on it.
@@ -101,30 +103,31 @@ namespace OpenFrontier.IP
 			// Constant size for the whole life - the fade is carried by
 			// alpha now, not by shrinking away.
 			hitInfo.transform.localScale = new Vector3(hitInfo.MaxScale, hitInfo.MaxScale, hitInfo.MaxScale);
-			// Bright at the moment of impact, then bleed out - no
-			// fade-in (a fade-in mutes the impact).
-			float num2 = 1f - num;
+			float num2 = num * (expiryTime - hitInfo.StartExpiryTime);
 			Color color;
 			if (hitInfo.DepletedFlash)
 			{
 				// Section emptied by the hit: very bright RED pop (HDR -
 				// feeds bloom), gone in 0.4s.
-				color = new Color(2f, 0.05f, 0.05f, num2);
-			}
-			else if (num < 0.06f)
-			{
-				// Phase 1: a very brief WHITE impact flash (~0.12s),
-				// only mildly HDR - a stronger pulse overdrives the
-				// additive shader into white through the whole effect.
-				color = new Color(1.4f, 1.4f, 1.4f, num2);
+				color = new Color(2f, 0.05f, 0.05f, 1f - num);
 			}
 			else
 			{
-				// Phase 2: the section's LIVE health color, exactly as
-				// the UI widgets read it - no brightness overdrive, so
-				// the shield shows its true health color.
 				Color unitShieldColor = EngineASX.Instance.GetUnitShieldColor(hitInfo.TargetUnit, hitInfo.ShieldIndex);
-				color = new Color(unitShieldColor.r, unitShieldColor.g, unitShieldColor.b, num2);
+				if (num2 < 0.1f)
+				{
+					// Flash phase (0.1s): fade in, overdrive a little to
+					// white, settle back to the health color.
+					float num3 = num2 / 0.1f;
+					Color color2 = Color.Lerp(new Color(1.4f, 1.4f, 1.4f), unitShieldColor, num3);
+					color = new Color(color2.r, color2.g, color2.b, Mathf.Clamp01(num3 * 2f));
+				}
+				else
+				{
+					// Sustain phase: live UI health color, alpha bleeding
+					// out so the flash dies with the laser's fade.
+					color = new Color(unitShieldColor.r, unitShieldColor.g, unitShieldColor.b, 1f - (num2 - 0.1f) / (expiryTime - hitInfo.StartExpiryTime - 0.1f));
+				}
 			}
 			// The runtime shader is Legacy Particles/Additive: it tints
 			// via _TintColor (NOT _Color or _BaseColor).
