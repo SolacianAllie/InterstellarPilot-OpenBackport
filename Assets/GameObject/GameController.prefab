@@ -1936,6 +1936,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   config: {fileID: 11400000, guid: 3876c129bdbd40e3951785c526b825c6, type: 2}
+  useDirectRpc: 1
   connectOnStartup: 1
   updateInterval: 15
   largeImageAsset: openfrontier

@@ -11,5 +11,5 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0d845b25bc434de0bcf95ea5cc988c93, type: 3}
   m_Name: DiscordPresenceConfig
-  m_EditorClassIdentifier:
-  ApplicationId: 0
+  m_EditorClassIdentifier: 
+  ApplicationId: 1557818000009207900

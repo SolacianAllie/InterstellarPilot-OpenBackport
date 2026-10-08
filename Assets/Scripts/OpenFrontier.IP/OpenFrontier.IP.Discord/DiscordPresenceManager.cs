@@ -10,19 +10,29 @@ namespace OpenFrontier.IP.Discord
 	/// Discord Rich Presence for Open Frontier, powered by the
 	/// Discord Social SDK (com.discord.partnersdk).
 	///
-	/// The SDK authenticates through a device authorization
-	/// flow: the first launch asks the player to approve the
-	/// app with their Discord account, and the resulting
-	/// tokens are stored in PlayerPrefs. Later launches detect
-	/// the stored credentials and refresh them silently.
+	/// Two modes:
 	///
-	/// Authentication runs as a chain with a watchdog: stored
-	/// refresh token -> stored access token -> interactive
-	/// re-prompt. Each stage that fails (including a stored
-	/// token the Discord server has rejected, which only shows
-	/// up as an async socket drop) advances to the next stage,
-	/// so a player who loses their data, revokes the app, or
-	/// switches accounts is re-prompted instead of silently
+	/// - Direct RPC (default): no authorization whatsoever. Naming
+	///   the application is enough for the SDK to publish presence
+	///   straight to the running Discord client (the Discord app on
+	///   Android, SDK 1.10+). No prompt, no stored tokens, no portal
+	///   OAuth configuration - presence simply appears whenever a
+	///   Discord client is available.
+	///
+	/// - Authenticated: the SDK's device authorization flow, which
+	///   shows presence even when no Discord client is running. The
+	///   player authorizes the app once (tokens are stored in
+	///   PlayerPrefs and refreshed silently afterwards), which
+	///   requires the redirect URLs and "public client" setting on
+	///   the Discord application.
+	///
+	/// Authentication, when enabled, runs as a chain with a
+	/// watchdog: stored refresh token -> stored access token ->
+	/// interactive re-prompt. Each stage that fails (including a
+	/// stored token the Discord server has rejected, which only
+	/// shows up as an async socket drop) advances to the next
+	/// stage, so a player who loses their data, revokes the app,
+	/// or switches accounts is re-prompted instead of silently
 	/// losing presence. A declined prompt is not nagged - the
 	/// chain gives up for the launch and re-prompts next time.
 	///
@@ -36,6 +46,10 @@ namespace OpenFrontier.IP.Discord
 		[Tooltip("Discord application configuration (the Application ID from the Discord Developer Portal). Presence stays offline while this is unset.")]
 		[SerializeField]
 		private DiscordPresenceConfig config;
+
+		[Tooltip("Direct mode: publish presence straight to the running Discord client over RPC, with no account authorization at all - no login prompt, no stored tokens, no portal OAuth setup. Presence appears whenever Discord is open (on Android, whenever the Discord app is installed and signed in). Disable to use the authenticated flow instead, which shows presence even with no Discord client running, but asks the player to authorize the app once.")]
+		[SerializeField]
+		private bool useDirectRpc = true;
 
 		[Tooltip("Attempt to connect on startup. Players can opt out by setting PlayerPrefs 'DiscordPresenceEnabled' to 0.")]
 		[SerializeField]
@@ -80,6 +94,7 @@ namespace OpenFrontier.IP.Discord
 
 		private Client client;
 		private bool statusReady;
+		private bool directRpcActive;
 		private AuthStage authStage;
 		private bool triedRefresh;
 		private bool triedAccessToken;
@@ -91,8 +106,11 @@ namespace OpenFrontier.IP.Discord
 		private float nextPresenceUpdate;
 		private ulong sessionStartEpoch;
 
-		/// <summary>True while the SDK reports the connection as Ready (authorized and live).</summary>
+		/// <summary>True while the SDK reports the authenticated connection as Ready.</summary>
 		public bool IsAuthorized => statusReady;
+
+		/// <summary>True whenever presence can be published: the authenticated connection is Ready, or direct RPC mode is active.</summary>
+		public bool IsPresenceLive => statusReady || directRpcActive;
 
 		/// <summary>True when credentials from a previous authorization are stored on this device.</summary>
 		public bool HasStoredCredentials => !string.IsNullOrEmpty(PlayerPrefs.GetString(AccessTokenKey, ""));
@@ -114,13 +132,23 @@ namespace OpenFrontier.IP.Discord
 				return;
 			}
 			CreateClient();
-			BeginAuthentication();
+			if (useDirectRpc)
+			{
+				StartDirectRpc();
+			}
+			else
+			{
+				BeginAuthentication();
+			}
 		}
 
 		private void Update()
 		{
-			UpdateAuthWatchdog();
-			if (!statusReady || client == null)
+			if (!directRpcActive)
+			{
+				UpdateAuthWatchdog();
+			}
+			if (client == null || (!statusReady && !directRpcActive))
 			{
 				return;
 			}
@@ -134,6 +162,43 @@ namespace OpenFrontier.IP.Discord
 		// ------------------------------------------------------------------
 		// Authentication chain
 		// ------------------------------------------------------------------
+
+		/// <summary>
+		/// Direct RPC mode: no authorization at all. Naming the
+		/// application is enough for the SDK to publish presence
+		/// directly to the running Discord client (the Discord app
+		/// on Android, SDK 1.10+) - nothing is prompted and nothing
+		/// is stored, so there is no auth state to lose or recover.
+		/// </summary>
+		private void StartDirectRpc()
+		{
+			if (client == null)
+			{
+				return;
+			}
+			try
+			{
+				client.SetApplicationId(config.ApplicationId);
+			}
+			catch (Exception e)
+			{
+				Debug.LogWarning("[Discord] Direct RPC mode could not start: " + e.Message);
+				return;
+			}
+			directRpcActive = true;
+			client.IsDiscordAppInstalled(installed =>
+			{
+				if (installed)
+				{
+					Debug.Log("[Discord] Direct RPC mode - Rich Presence active (no authorization needed).");
+				}
+				else
+				{
+					Debug.Log("[Discord] No Discord client found - presence will appear once Discord is running.");
+				}
+			});
+			PushPresence();
+		}
 
 		private void CreateClient()
 		{
@@ -172,6 +237,11 @@ namespace OpenFrontier.IP.Discord
 		/// </summary>
 		public void RestartAuthentication()
 		{
+			if (directRpcActive)
+			{
+				Debug.Log("[Discord] RestartAuthentication only applies to the authenticated flow - Direct RPC mode needs no authorization.");
+				return;
+			}
 			PlayerPrefs.DeleteKey(AccessTokenKey);
 			PlayerPrefs.DeleteKey(RefreshTokenKey);
 			PlayerPrefs.Save();
@@ -424,7 +494,7 @@ namespace OpenFrontier.IP.Discord
 
 		private void PushPresence()
 		{
-			if (client == null || !statusReady)
+			if (client == null || (!statusReady && !directRpcActive))
 			{
 				return;
 			}
@@ -475,7 +545,8 @@ namespace OpenFrontier.IP.Discord
 						else if (!reportedPresenceFailure)
 						{
 							reportedPresenceFailure = true;
-							Debug.Log("[Discord] Presence update failed: " + result.Error());
+							Debug.Log("[Discord] Presence update failed: " + result.Error()
+								+ (directRpcActive ? " (no Discord client running?)" : ""));
 						}
 					});
 				}
