@@ -91,13 +91,18 @@ namespace OpenFrontier.IP.Engine
 		// Fast-forward the fresh system behind the loading fade: ~12x for
 		// a couple of real seconds gives fleets half a minute to pick up
 		// orders and get underway, so the reveal shows a world already in
-		// motion instead of everyone parked at their spawn points.
+		// motion instead of everyone parked at their spawn points. The
+		// loading screen holds until this completes (WarmUpInProgress).
+		public static bool WarmUpInProgress { get; private set; }
+
 		private System.Collections.IEnumerator WarmUpWorld()
 		{
 			float timeScale = Time.timeScale;
+			WarmUpInProgress = true;
 			Time.timeScale = 12f;
 			yield return new WaitForSecondsRealtime(2.5f);
 			Time.timeScale = timeScale;
+			WarmUpInProgress = false;
 		}
 
 		// The trader faction that owns the stations and traffic; the hero

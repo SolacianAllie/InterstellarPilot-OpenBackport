@@ -37,7 +37,10 @@ namespace OpenFrontier.IP.UI
 
 		private void Update()
 		{
-			if (!isDestroying && (GameController.Instance.ScenarioLoader == null || !GameController.Instance.ScenarioLoader.IsLoading) && EngineASX.LoadedAndReady)
+			// Open Frontier: hold the screen while the main menu world's
+			// warm-up burst runs, so the time skip stays behind the
+			// loading screen until it is done.
+			if (!isDestroying && (GameController.Instance.ScenarioLoader == null || !GameController.Instance.ScenarioLoader.IsLoading) && EngineASX.LoadedAndReady && !MainMenuWorldController.WarmUpInProgress)
 			{
 				isDestroying = true;
 				Object.Destroy(gameObject);
