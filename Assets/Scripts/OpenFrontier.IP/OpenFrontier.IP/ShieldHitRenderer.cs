@@ -92,6 +92,17 @@ namespace OpenFrontier.IP
 					pooledShieldHit.StartExpiryTime = Time.time;
 					pooledShieldHit.StartTime = Time.time;
 					pooledShieldHit.SetShieldHitOrientation(damageSourceWorldPosition);
+					// Apply the first frame NOW: a pooled object would
+					// otherwise activate for one frame wearing its
+					// PREVIOUS effect's transform and tint - a stale
+					// ghost that reads as a flicker before the flash.
+					pooledShieldHit.transform.position = unit.transform.TransformPoint(pooledShieldHit.LocalTranslation);
+					pooledShieldHit.transform.rotation = unit.transform.rotation * pooledShieldHit.LocalRotation;
+					pooledShieldHit.transform.localScale = new Vector3(pooledShieldHit.MaxScale, pooledShieldHit.MaxScale, pooledShieldHit.MaxScale);
+					if (pooledShieldHit.CachedMaterial != null)
+					{
+						pooledShieldHit.CachedMaterial.SetColor("_TintColor", new Color(1.4f, 1.4f, 1.4f, 0f));
+					}
 					return pooledShieldHit;
 				}
 			}
