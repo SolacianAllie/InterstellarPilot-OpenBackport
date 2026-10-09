@@ -19,48 +19,30 @@ the players who still care.
 
 ## Why we'd rather you contributed than forked
 
-This is a request, not a restriction — the licence permits forking and we have
-no power to stop it. But we're asked often enough that it's worth explaining.
+A request, not a restriction — the AGPL permits forking and we can't stop it.
+Three reasons:
 
-**The hard-won knowledge lives here, not in the code.** Anyone can read a
-decompile; almost nobody can read *this* repository's history and docs. The
-story universes are baked into their scene files, so editing a sector prefab
-silently does nothing in Uncharted Space — that's in `AGENTS.md`, and it's the
-kind of thing that costs an afternoon to rediscover. The verification workflow
-(the offline compile harness, then confirming zero `error CS` lines in
-`Logs/Editor.log`) assumes you're working in this tree. Unity 6 and URP have
-their own traps here — instance IDs obsoleted, asmdef reference rules, the
-harness's blind spots — and they're written down because we hit them.
+- **The knowledge is here, not in the code.** The traps live in
+  [`AGENTS.md`](AGENTS.md) (story universes are baked into their scene files,
+  so prefab edits silently do nothing in Uncharted Space), and the
+  verification workflow assumes you work in this tree.
+- **A fork fixes nothing for players of this build.** One playable, tested
+  download is the entire value of a preservation project. Two forks split the
+  bug reports, device testing and platform work, then both stall.
+- **PRs land in the build people download.** If you were building your own
+  version anyway, we'd rather absorb the work than watch it happen next door.
 
-**A fork fixes nothing for anyone playing this game.** The value of a
-preservation project is that there is *one* playable, tested, downloadable
-build that everyone can point at. Two maintained forks split the bug reports,
-the device testing, the Android packaging work, the shader fixes, and the
-players, and then both stall. This game already survived one disappearance; it
-doesn't need a split.
+What we ask in return: your own branding, no implied endorsement, and a CLA
+signature. In return you get the reasoning behind every weird fix in the
+history, input on prioritisation, and credits if you want them. Small
+contributions count — a crash on an odd device, a wrong translation, a
+confusing log message.
 
-**Pull requests land in the builds people download.** If you were going to
-build your own version anyway, we'd rather absorb the work than watch it happen
-next door. That includes the unglamorous 80% — device reports, save bugs,
-platform packaging, log lines — which is exactly what a project like this
-lives or dies by.
-
-**What we ask in return:** your own branding on anything you ship, no
-implication of endorsement, and a CLA signature so we can keep publishing. In
-return you'll get the reasoning behind every weird fix in the history, direct
-input on what to prioritise, and your name in the credits if you want it.
-
-**If you fork anyway,** [`TRADEMARK_POLICY.md`](TRADEMARK_POLICY.md) has a
-rebranding checklist: the build and company name, the launcher icon, your store
-listing, your own Discord application, and — the one people forget — the
-in-game support email, which must point at you rather than at this project.
-Player-visible strings announcing "Open Frontier" should follow. Renaming the
-internal namespaces and assembly definitions is *not* required and, at ~2,100
-files, is not something to attempt casually.
-
-Small contributions genuinely count. A crash on an odd device, a wrong
-translation, a confusing log message — all of it is useful and none of it needs
-permission.
+**If you fork anyway,** [`TRADEMARK_POLICY.md`](TRADEMARK_POLICY.md) has the
+rebranding checklist: build and company name, launcher icon, store listing,
+your own Discord application, and the in-game support email, which must point at
+you rather than us. Renaming the internal namespaces and assembly definitions
+isn't required, and at ~2,100 files isn't something to attempt casually.
 
 ## Before you start
 

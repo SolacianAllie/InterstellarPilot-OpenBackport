@@ -6,28 +6,16 @@ rights to the project's name, logo, artwork, or store presence** — those are
 separate rights, and this policy is where you find out what you may and may
 not do with them.
 
-## Why this exists
+## Scope
 
-This project exists to preserve and modernize a game that was abandoned by its
-original developer and eventually removed from app stores. The AGPL guarantees
-that any *derivative* release must publish its source and keep the copyright
-notices intact. This policy covers the other half: making sure the community's
-work is not shipped under someone else's product name, and that people aren't
-made to think a third-party release is ours.
+The AGPL guarantees that any derivative release publishes its source and keeps
+the copyright notices. This policy covers the other half: making sure the
+community's work isn't shipped under someone else's product name, or mistaken
+for a re-release of a game that already disappeared from the stores once.
 
-## What we would ask instead
-
-To be clear about what this is and isn't: forking is permitted by the AGPL, and
-this policy does not restrict it. We would still much rather you contributed
-here — the reasoning is in [`CONTRIBUTING.md`](CONTRIBUTING.md), and it comes
-down to the project keeping one playable, tested build that everyone can point
-at, with the accumulated knowledge (see `AGENTS.md`) staying in one place where
-it benefits everyone.
-
-So this policy is deliberately narrow. It protects the name so that a
-contributor's work, and the community's work, can't be mistaken for a
-re-release of a game that already disappeared from the stores once. That's the
-line we do hold.
+Forking is permitted and this policy doesn't restrict it — we'd still rather
+people contributed here, for the reasons in
+[`CONTRIBUTING.md`](CONTRIBUTING.md). What we hold is the name.
 
 ## Protected marks
 
@@ -82,19 +70,14 @@ whole of the legal requirement. Get those right and you are in compliance.
 ### Not required: renaming the code itself
 
 You do **not** need to rename internal identifiers — the `OpenFrontier.*`
-namespaces, the `OpenFrontier`/`OpenFrontier.IP` assembly definitions, prefab
-paths, or asset folder names. Only the marks are withheld; the copyright and
-patent licences in the AGPL and `CLA.md` continue to apply in full.
+namespaces, the assembly definitions, prefab paths or asset folders. Only the
+marks are withheld; the copyright and patent licences continue to apply in full.
 
-This is worth stating plainly, because it is a big job and a false belief about
-it is expensive: the name is embedded in roughly **2,100 source files** across
-**20 assembly definitions**, plus `Resources/` load paths that the engine
-resolves by string. Renaming it touches nearly everything, breaks prefab and
-`Resources` references if done carelessly, and can invalidate existing save
-files — for no legal benefit whatsoever. Renaming it in *this* repository would
-be reckless. If you want to do it in your fork for taste or hygiene, that is
-your call and nobody here will complain; just don't think the licence requires
-it.
+Doing it anyway is a large, risky job for no legal benefit: the name appears in
+roughly **2,100 source files** across **20 assembly definitions**, plus
+`Resources/` paths the engine resolves by string. Renaming breaks prefab and
+`Resources` references if done carelessly and can invalidate existing save
+files. Your call, nobody will complain — but don't think the licence requires it.
 
 ## What you may not do without written permission
 

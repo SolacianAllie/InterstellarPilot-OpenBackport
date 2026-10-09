@@ -61,56 +61,25 @@ LICENSING & CONTRIBUTING
 ------------------------------------------------------------
 **The code is AGPL-3.0. The name is not.**
 
-The [GNU Affero General Public License v3.0](LICENSE) means anyone may use,
-modify and redistribute this project — and if they ship a modified version,
-they must publish their source and keep the copyright notices. That is the
-deal, and it is deliberate: this is a preservation project, and the point is
-that improvements stay visible to the community.
+Anyone may use, modify and redistribute this project under the
+[AGPL-3.0](LICENSE), provided they publish their source and keep the copyright
+notices. The name, logo, app icon and store presence are **not** licensed
+([TRADEMARK_POLICY.md](TRADEMARK_POLICY.md)): fork freely, build it under your
+own branding, and don't ship your version as "Open Frontier".
 
-What the AGPL does *not* cover is the project's identity. The "InterstellarPilot:
-Open Frontier" name, the logo, app icon and store presence are not licensed, per
-[TRADEMARK_POLICY.md](TRADEMARK_POLICY.md). Fork freely; build it under your
-own name. Please don't ship your version as "Open Frontier" — it makes it
-impossible for players to tell a community release from a re-release of a game
-that already disappeared from the stores once.
+GitHub lets anyone fork a public repo and the AGPL grants it outright, so that
+isn't ours to refuse. What we do ask is that changes come back here. This game
+nearly died once; the knowledge that keeps it alive (see [AGENTS.md](AGENTS.md))
+only helps if it stays in one place. A fork fixes nothing for players of this
+build — a pull request lands in the one they download.
 
-GitHub's terms give anyone the right to fork a public repository, and this
-project doesn't pretend it can take that away. What it can do is stop a
-someone shipping the game's work under this project's name.
+Forking anyway? Rebrand it: build name, launcher icon, store listing, your own
+Discord application, and the in-game support email, which must point at you and
+not us. The file-by-file checklist is in
+[TRADEMARK_POLICY.md](TRADEMARK_POLICY.md). Renaming the internal namespaces is
+not required, and at ~2,100 files it breaks prefab and save references if done
+carelessly.
 
-### Please build on top of it, not beside it
-
-The licence lets you fork, and we can't honestly say otherwise. But we'd
-genuinely rather you didn't.
-
-This game nearly died once already. It took one person pulling a dead mobile
-title out of app stores, restoring it to a modern engine, and then grinding
-through save bugs, platform builds and shader whack-a-mole to get it flying
-again. All of that knowledge lives *in this repository* — the traps are written
-down in [AGENTS.md](AGENTS.md), the verification workflow assumes you work
-here, and the story scenarios are baked into their scene files in ways that
-quietly break if you approach them from the outside. A fork can do anything we
-can, but it starts from zero on all of it, and the result is a second,
-separately-maintained game that fixes nothing for anyone playing this one.
-
-If you were going to build your own version anyway, we'd rather absorb your
-work than watch it happen next door: open a pull request and it lands in the
-builds that people actually download. Small contributions count — a crash on
-an odd device, a mistranslated string, a log line that would have saved someone
-an afternoon.
-
-And if you do fork, that's fine — just rebrand it. Rename the build, swap the
-icon, get your own store listing and your own Discord application, and point
-the in-game support email at *you* rather than at us. The full checklist is in
-[TRADEMARK_POLICY.md](TRADEMARK_POLICY.md); it names the exact files. You do
-not need to rename the code's internal namespaces — that's roughly 2,100
-files, breaks prefab and save references if done carelessly, and buys nothing
-the licence requires.
-
-The only thing we ask in return is the name. Build under your own branding,
-don't imply we're behind it, and we'll help you however we can.
-
-**Contributions are welcome** via pull request. Please read
-[CONTRIBUTING.md](CONTRIBUTING.md) first — and note [`CLA.md`](CLA.md), which
-records the rights you grant so the project can keep being published (that
-document is a **draft that has not been lawyer-reviewed**, and we mean it).
+Contributions are welcome — read [CONTRIBUTING.md](CONTRIBUTING.md). Note
+[`CLA.md`](CLA.md): the rights you grant so the project can keep being published
+(a **draft that has not been lawyer-reviewed**, and we mean it).
