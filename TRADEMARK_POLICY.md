@@ -13,19 +13,40 @@ the copyright notices. This policy covers the other half: making sure the
 community's work isn't shipped under someone else's product name, or mistaken
 for a re-release of a game that already disappeared from the stores once.
 
-Forking is permitted and this policy doesn't restrict it — we'd still rather
-people contributed here, for the reasons in
-[`CONTRIBUTING.md`](CONTRIBUTING.md). What we hold is the name.
+Forks are legal — this policy doesn't restrict them. But we'd rather you built
+this game *with* us than beside us. If you want to work on it directly as a
+collaborator, see
+[Working directly in the project](CONTRIBUTING.md#working-directly-in-the-project).
+If you fork and ship anyway, the one thing we ask is that you rebrand. What we
+hold is the name.
 
 ## Protected marks
 
-The following are trademarks of this project and are not licensed by the AGPL,
-by the CLA, or by any contribution:
+These are trademarks of this project, and are **not** granted by the AGPL or the
+CLA:
 
 - **InterstellarPilot: Open Frontier**
 - **Open Frontier** (when used as the product/game name)
 - The project logo, app icon, title artwork, and store screenshots
 - Store listing names, icons, and descriptions for this project
+
+Contributors and collaborators are authorised to use them for work on this
+project — see below. Everyone else needs permission.
+
+## Contributors, collaborators and maintainers
+
+Working on this project isn't a restricted use of the name. It's the whole point.
+
+- **Contributors and onboarded collaborators** may use the project name and logo
+  to describe their work here: commits, pull requests, issues, release notes,
+  credits, blog posts, streams and videos about the project.
+- **Maintainers** may use the marks for this project's own releases, store
+  listings and announcements.
+- **Anyone who has contributed here may keep their name on the work they
+  did**, and may ask to be credited. Credit is expected, not optional.
+
+What nobody may do is pass a *separate product* off as this project's official
+release. That's the line below.
 
 ## What you may do
 
@@ -34,6 +55,8 @@ by the CLA, or by any contribution:
 - Describe your project truthfully, including saying it is "a fork of
   InterstellarPilot: Open Frontier" or "based on Open Frontier"
 - Discuss the project, its features, and your changes in any medium
+- Describe your own work on this project using the name and logo (see
+  *Contributors, collaborators and maintainers* above)
 - Use the marks in plain textual reference to the original project, where the
   use doesn't imply sponsorship or endorsement (for example, a blog post titled
   "Adding Discord Rich Presence to InterstellarPilot: Open Frontier")
