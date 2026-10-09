@@ -80,9 +80,21 @@ The [GNU Affero General Public License v3.0](LICENSE) means anyone may use, modi
 
 What the AGPL does *not* cover is the project's identity. The "InterstellarPilot: Open Frontier" and "Open Backport" names, the logo, app icon and store presence are not licensed, per [TRADEMARK_POLICY.md](TRADEMARK_POLICY.md). Fork freely; build it under your own name. Please don't ship your version under either name — it makes it impossible for players to tell a community release from a re-release of a game that already disappeared from the stores once.
 
+GitHub lets anyone fork a public repo and the AGPL grants it outright, so that isn't ours to refuse. What we do ask is that changes come back here. This game nearly died once; the knowledge that keeps it alive only helps if it stays in one place.
+
+A fork fixes nothing for players of this build — a pull request lands in the one they download.
+
+Forking anyway? Rebrand it: build name, launcher icon, store listing, your own Discord application, and the in-game support email, which must point at you and not us. The file-by-file checklist is in [TRADEMARK_POLICY.md](TRADEMARK_POLICY.md). Renaming the internal namespaces is not required, and at ~2,100 source files it breaks prefab and save references if done carelessly.
+
 This branch is the compatibility line for OpenGL ES 3.0 hardware and is maintained alongside [Open Frontier](https://github.com/SolacianAllie/InterstellarPilot-OpenFrontier), which is the actively developed branch. Both are covered by the same licence; changes here are expected to flow back to the main project.
 
 **Contributions are welcome** — by pull request, or by being onboarded to work directly in the repository, which is what we'd rather you did. See [CONTRIBUTING.md](CONTRIBUTING.md). Note [`CLA.md`](CLA.md): the Linux Foundation's Individual CLA, adopted here with the granting party changed to this project, so contributions stay licensable by us and can't be pulled out from under it.
+
+SUPPORT THIS PROJECT
+------------------------------------------------------------
+You can support development of this project by funding me on [Ko-Fi](https://ko-fi.com/solacianallie).
+To avoid needing to monetize the game directly, Any desire from the community to support me in development of this project can be done there!
+Depending on how much support i get, i will start releasing development builds of the game for people to try out and updates about things as i work on them, just to reward those who sink their own hard earned cash into helping support me while i develop this.
 
 CREDIT
 ------------------------------------------------------------
