@@ -28,7 +28,7 @@ INSTALLATION
 DEVICE COMPATIBILITY
 ------------------------------------------------------------
 Unity 6.6 sets the floor: Android devices need **OpenGL ES 3.1+ or Vulkan** (roughly 2016-era mid-range hardware and newer). Devices below that line (e.g. Adreno 3xx GPUs such as the Adreno 308) fail at startup with "Unable to initialize the Unity Engine Graphics API" - this is an engine limitation, not something the project can configure away.
-For any devices below this threshold, we have a special version in tandem development, [OpenBackport](https://github.com/SolacianAllie/InterstellarPilot-OpenBackport).
+**For any devices below this threshold**, we have a special version in tandem development, [OpenBackport](https://github.com/SolacianAllie/InterstellarPilot-OpenBackport).
 This version runs in Unity 6.3 LTS and supports a lower floor than 6.6, however i still need people with lesser devices to notify me of issues with it.
 
 SUPPORT THIS PROJECT
