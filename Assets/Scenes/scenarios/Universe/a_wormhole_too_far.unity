@@ -5844,6 +5844,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2404}
   - component: {fileID: 4870}
+  - component: {fileID: 9000}
   m_Layer: 23
   m_Name: UnitPlanetJupitersCousin
   m_TagString: Untagged
@@ -7821,6 +7822,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2510}
   - component: {fileID: 5084}
+  - component: {fileID: 9001}
   m_Layer: 23
   m_Name: UnitPlanetOrangeWithImpacts
   m_TagString: Untagged
@@ -9952,6 +9954,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2631}
   - component: {fileID: 5272}
+  - component: {fileID: 9002}
   m_Layer: 23
   m_Name: UnitPlanetDevoidOfLife
   m_TagString: Untagged
@@ -117865,3 +117868,48 @@ MonoBehaviour:
   MaxClass: 4
   OverrideUnitClassRating: 1
   WeaponArc: {x: 0, y: 360, z: 0}
+
+--- !u!114 &9000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 319}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40c9c439be6db788db69f909045ebdf0, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  Rotation: {x: 0, y: 0, z: 0}
+  RotationRateMultiplier: 1
+
+--- !u!114 &9001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 426}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40c9c439be6db788db69f909045ebdf0, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  Rotation: {x: 0, y: 0, z: 0}
+  RotationRateMultiplier: 1
+
+--- !u!114 &9002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 547}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40c9c439be6db788db69f909045ebdf0, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  Rotation: {x: 0, y: 0, z: 0}
+  RotationRateMultiplier: 1

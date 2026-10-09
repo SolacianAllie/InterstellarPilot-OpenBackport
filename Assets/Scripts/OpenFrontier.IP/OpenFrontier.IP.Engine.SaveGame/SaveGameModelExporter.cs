@@ -1717,6 +1717,10 @@ namespace OpenFrontier.IP.Engine.SaveGame
 			savedGame.Units.Add(modelUnit);
 		}
 
+		// One malformed unit must never abort an entire save, so this
+		// warning is logged at most once per session.
+		private static bool warnedMissingPlanetComponent;
+
 		private ModelUnit ExportUnit(Unit unit)
 		{
 			ModelUnit modelUnit = new ModelUnit();
@@ -1730,7 +1734,24 @@ namespace OpenFrontier.IP.Engine.SaveGame
 			modelUnit.Rotation = unit.transform.localRotation.eulerAngles.ToVec3();
 			if (unit.UnitType == UnitType.Planet)
 			{
-				modelUnit.Rotation = unit.GetComponent<UnitPlanet>().Rotation.ToVec3();
+				UnitPlanet planet = unit.GetComponent<UnitPlanet>();
+				if (planet != null)
+				{
+					modelUnit.Rotation = planet.Rotation.ToVec3();
+				}
+				else
+				{
+					// A planet without its UnitPlanet component (seen
+					// in a hand-baked story scene) must not abort the
+					// whole save - fall back to the transform's own
+					// rotation and warn once.
+					if (!warnedMissingPlanetComponent)
+					{
+						warnedMissingPlanetComponent = true;
+						UnityEngine.Debug.LogWarning("[Save] A planet is missing its UnitPlanet component; falling back to transform rotation. Saving continues.");
+					}
+					modelUnit.Rotation = unit.transform.localRotation.eulerAngles.ToVec3();
+				}
 			}
 			else
 			{
