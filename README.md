@@ -69,9 +69,10 @@ own branding, and don't ship your version as "Open Frontier".
 
 GitHub lets anyone fork a public repo and the AGPL grants it outright, so that
 isn't ours to refuse. What we do ask is that changes come back here. This game
-nearly died once; the knowledge that keeps it alive (see [AGENTS.md](AGENTS.md))
-only helps if it stays in one place. A fork fixes nothing for players of this
-build — a pull request lands in the one they download.
+nearly died once; the knowledge that keeps it alive only helps if it stays in 
+one place.
+A fork fixes nothing for players of this build — a pull request lands in the
+one they download.
 
 Forking anyway? Rebrand it: build name, launcher icon, store listing, your own
 Discord application, and the in-game support email, which must point at you and
