@@ -7,7 +7,10 @@ the players who still care.
 
 ## Ground rules, up front
 
-1. **Contributions are welcome through pull requests.**
+1. **Contributions are welcome**, either as a pull request from a fork or by
+   being onboarded to work directly in this repository — see
+   [Working directly in the project](#working-directly-in-the-project). We
+   prefer the second and will say so up front.
 2. **Anyone can fork** the repository — GitHub's terms give every user that
    right, the AGPL grants it explicitly, and this project does not pretend
    otherwise. What we ask is that forks be built under their own name and
@@ -44,6 +47,42 @@ your own Discord application, and the in-game support email, which must point at
 you rather than us. Renaming the internal namespaces and assembly definitions
 isn't required, and at ~2,100 files isn't something to attempt casually.
 
+## Working directly in the project
+
+Anyone can PR from a fork. If you'd rather work *inside* this repository — no
+fork, direct access to issues, branches, releases and the full history of why
+every weird fix exists — you can be onboarded as an official collaborator.
+**This is the path we'd rather you took**, and we're open to it.
+
+**How to ask:** open an issue, or email **nightvizla@gmail.com**, saying what
+you'd like to work on and roughly what you've done before. That's the whole
+process — no portfolio, no track record to prove. Making sense of a decompiled
+codebase is not a skill anyone can demonstrate in advance.
+
+| Level | What you can do |
+|---|---|
+| Contributor | Open issues; PRs from a fork — the normal path |
+| Collaborator | Push branches in this repo, see releases, join reviews |
+| Maintainer | Merge to the main branch, cut releases, set scope |
+
+**What we ask of collaborators:**
+
+- Work on a branch and open a PR into `Legacy`. Nothing lands on the main
+  branch directly — that's what review is for.
+- Read [`AGENTS.md`](AGENTS.md) before your first commit and follow the
+  verification workflow below. It's the difference between a PR that merges
+  cleanly and one that costs the maintainer an afternoon.
+- Claim what you're working in an issue, so two people don't build the same
+  thing.
+- Sign the CLA, same as anyone.
+- Flag anything large *before* you build it: engine changes, dependency swaps,
+  save formats, store listing, licensing questions. Cheap to ask, expensive to
+  unpick.
+
+Onboarding itself is: CLA signed, `AGENTS.md` read, access granted. Some
+contributors go on to become maintainers; the project is small enough that
+that happens.
+
 ## Before you start
 
 - **Read [`AGENTS.md`](AGENTS.md).** It documents the traps in this codebase
@@ -60,7 +99,9 @@ isn't required, and at ~2,100 files isn't something to attempt casually.
 
 ## Making a change
 
-1. Fork the repository and branch from `Dev` (that is the default branch).
+1. **Put your work where it can be reviewed.** Collaborators: branch in this
+   repository. Everyone else: fork, branch from `Legacy`, open a PR.
+   (`Legacy` is the main branch; `Dev` is being folded into it.)
 2. Keep the change focused. One fix or one feature per pull request — large
    mixed diffs are hard to review and hard to merge safely.
 3. Match the surrounding style. The decompiled game code uses tabs and a

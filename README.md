@@ -80,6 +80,8 @@ not us. The file-by-file checklist is in
 not required, and at ~2,100 files it breaks prefab and save references if done
 carelessly.
 
-Contributions are welcome — read [CONTRIBUTING.md](CONTRIBUTING.md). Note
-[`CLA.md`](CLA.md): the rights you grant so the project can keep being published
-(a **draft that has not been lawyer-reviewed**, and we mean it).
+Contributions are welcome — by pull request, or by being onboarded to work
+directly in the repository, which is what we'd rather you did. See
+[CONTRIBUTING.md](CONTRIBUTING.md). Note [`CLA.md`](CLA.md): the rights you
+grant so the project can keep being published (a **draft that has not been
+lawyer-reviewed**, and we mean it).
