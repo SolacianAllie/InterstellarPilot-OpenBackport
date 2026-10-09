@@ -205,10 +205,21 @@ check_urp_version() {
 repair_urp_version() {
   # Write path, used only during a sync. A merge from Dev can reintroduce 11,
   # and nothing but URP's own upward-only version bump ever corrects it.
+  #
+  # If the file is conflicted we resolve it to our side first: our copy is the
+  # one Unity already re-serialized with 17.3's schema, so it is the only
+  # coherent one here. It stays in the human-review queue afterwards, because
+  # shader-stripping settings are a real tuning knob and Dev may have changed
+  # them.
   local file="$URP_GLOBAL_SETTINGS"
   local want="$URP_LAST_VERSION"
 
   [ -f "$file" ] || { warn "$file missing"; return 0; }
+
+  if git ls-files -u -- "$file" | grep -q .; then
+    resolve_ours "$file"
+    info "resolved conflict in $file to our side (only coherent under 6.3)"
+  fi
 
   local count
   count="$(grep -c '^[[:space:]]*m_AssetVersion:' "$file" || true)"
