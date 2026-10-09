@@ -335,12 +335,6 @@
       "source": "builtin",
       "dependencies": {}
     },
-    "com.unity.modules.physicscore2d": {
-      "version": "1.0.0",
-      "depth": 0,
-      "source": "builtin",
-      "dependencies": {}
-    },
     "com.unity.modules.screencapture": {
       "version": "1.0.0",
       "depth": 0,
@@ -372,26 +366,12 @@
         "com.unity.modules.terrain": "1.0.0"
       }
     },
-    "com.unity.modules.tetgen": {
-      "version": "1.0.0",
-      "depth": 0,
-      "source": "builtin",
-      "dependencies": {}
-    },
     "com.unity.modules.tilemap": {
       "version": "1.0.0",
       "depth": 0,
       "source": "builtin",
       "dependencies": {
         "com.unity.modules.physics2d": "1.0.0"
-      }
-    },
-    "com.unity.modules.timelinefoundation": {
-      "version": "1.0.0",
-      "depth": 0,
-      "source": "builtin",
-      "dependencies": {
-        "com.unity.modules.jsonserialize": "1.0.0"
       }
     },
     "com.unity.modules.ui": {

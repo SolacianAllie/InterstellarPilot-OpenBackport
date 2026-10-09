@@ -98,7 +98,7 @@ namespace UnityEngine.UI.Extensions
 			{
 				base.CalculateLayoutInputHorizontal();
 				float num = GetGreatestMinimumChildWidth() + (float)padding.left + (float)padding.right;
-				base.SetLayoutInputForAxis(num, float.PositiveInfinity, -1f, -1f, 0);
+				base.SetLayoutInputForAxis(num, -1f, -1f, 0);
 			}
 			else
 			{
@@ -125,7 +125,7 @@ namespace UnityEngine.UI.Extensions
 			}
 			base.CalculateLayoutInputHorizontal();
 			float num = GetGreatestMinimumChildHeigth() + (float)padding.bottom + (float)padding.top;
-			base.SetLayoutInputForAxis(num, float.PositiveInfinity, -1f, -1f, 1);
+			base.SetLayoutInputForAxis(num, -1f, -1f, 1);
 		}
 
 		public float SetLayout(int axis, bool layoutInput)
@@ -257,7 +257,7 @@ namespace UnityEngine.UI.Extensions
 			num3 += num4;
 			if (layoutInput)
 			{
-				base.SetLayoutInputForAxis(num3, float.PositiveInfinity, num3, -1f, axis);
+				base.SetLayoutInputForAxis(num3, num3, -1f, axis);
 			}
 			return num3;
 		}

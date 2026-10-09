@@ -203,11 +203,11 @@ namespace UnityEngine.UI
 			}
 			if (!flag2)
 			{
-				base.SetLayoutInputForAxis(num4, LayoutUtility.DefaultMaxSize, num4, num4, axis);
+				base.SetLayoutInputForAxis(num4, num4, num4, axis);
 			}
 			else
 			{
-				base.SetLayoutInputForAxis(num2, LayoutUtility.DefaultMaxSize, num3, num4, axis);
+				base.SetLayoutInputForAxis(num2, num3, num4, axis);
 			}
 		}
 
