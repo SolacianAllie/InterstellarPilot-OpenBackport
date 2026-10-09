@@ -15,6 +15,20 @@ notices intact. This policy covers the other half: making sure the community's
 work is not shipped under someone else's product name, and that people aren't
 made to think a third-party release is ours.
 
+## What we would ask instead
+
+To be clear about what this is and isn't: forking is permitted by the AGPL, and
+this policy does not restrict it. We would still much rather you contributed
+here — the reasoning is in [`CONTRIBUTING.md`](CONTRIBUTING.md), and it comes
+down to the project keeping one playable, tested build that everyone can point
+at, with the accumulated knowledge (see `AGENTS.md`) staying in one place where
+it benefits everyone.
+
+So this policy is deliberately narrow. It protects the name so that a
+contributor's work, and the community's work, can't be mistaken for a
+re-release of a game that already disappeared from the stores once. That's the
+line we do hold.
+
 ## Protected marks
 
 The following are trademarks of this project and are not licensed by the AGPL,

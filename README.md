@@ -78,6 +78,30 @@ GitHub's terms give anyone the right to fork a public repository, and this
 project doesn't pretend it can take that away. What it can do is stop a
 someone shipping the game's work under this project's name.
 
+### Please build on top of it, not beside it
+
+The licence lets you fork, and we can't honestly say otherwise. But we'd
+genuinely rather you didn't.
+
+This game nearly died once already. It took one person pulling a dead mobile
+title out of app stores, restoring it to a modern engine, and then grinding
+through save bugs, platform builds and shader whack-a-mole to get it flying
+again. All of that knowledge lives *in this repository* — the traps are written
+down in [AGENTS.md](AGENTS.md), the verification workflow assumes you work
+here, and the story scenarios are baked into their scene files in ways that
+quietly break if you approach them from the outside. A fork can do anything we
+can, but it starts from zero on all of it, and the result is a second,
+separately-maintained game that fixes nothing for anyone playing this one.
+
+If you were going to build your own version anyway, we'd rather absorb your
+work than watch it happen next door: open a pull request and it lands in the
+builds that people actually download. Small contributions count — a crash on
+an odd device, a mistranslated string, a log line that would have saved someone
+an afternoon.
+
+The only thing we ask in return is the name. Build under your own branding,
+don't imply we're behind it, and we'll help you however we can.
+
 **Contributions are welcome** via pull request. Please read
 [CONTRIBUTING.md](CONTRIBUTING.md) first — and note [`CLA.md`](CLA.md), which
 records the rights you grant so the project can keep being published (that
