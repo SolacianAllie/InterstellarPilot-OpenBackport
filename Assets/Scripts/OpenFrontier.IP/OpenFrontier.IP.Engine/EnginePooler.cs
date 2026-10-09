@@ -6,11 +6,11 @@ namespace OpenFrontier.IP.Engine
 {
 	public class EnginePooler : MonoBehaviour
 	{
-		private Dictionary<int, GameObject> activePoolObjects = new Dictionary<int, GameObject>();
+		private Dictionary<EntityId, GameObject> activePoolObjects = new Dictionary<EntityId, GameObject>();
 
-		private Dictionary<int, List<GameObject>> pooledObjects = new Dictionary<int, List<GameObject>>();
+		private Dictionary<EntityId, List<GameObject>> pooledObjects = new Dictionary<EntityId, List<GameObject>>();
 
-		private Dictionary<int, int> poolInstanceToPrefabMap = new Dictionary<int, int>();
+		private Dictionary<EntityId, EntityId> poolInstanceToPrefabMap = new Dictionary<EntityId, EntityId>();
 
 		private List<AudioSource> fadeOutAudioSources = new List<AudioSource>();
 
@@ -18,7 +18,7 @@ namespace OpenFrontier.IP.Engine
 		{
 			foreach (GameObject item in UnityObjectHelper.LoadAll<GameObject>(path))
 			{
-				int instanceID = item.GetInstanceID();
+				EntityId instanceID = item.GetEntityId();
 				List<GameObject> value = new List<GameObject>(20);
 				pooledObjects.Add(instanceID, value);
 				for (int i = 0; i < instanceCount; i++)
@@ -70,8 +70,8 @@ namespace OpenFrontier.IP.Engine
 			{
 				return;
 			}
-			int instanceID = g.GetInstanceID();
-			int value = default;
+			EntityId instanceID = g.GetEntityId();
+			EntityId value = default;
 			if (g.TryGetComponent<AudioSource>(out var component) && component.volume > 0f)
 			{
 				StartAudioFadeOut(g, component);
@@ -107,14 +107,14 @@ namespace OpenFrontier.IP.Engine
 
 		public GameObject GetPooledObjectOrCreate(GameObject prefab)
 		{
-			if (pooledObjects.ContainsKey(prefab.GetInstanceID()))
+			if (pooledObjects.ContainsKey(prefab.GetEntityId()))
 			{
 				GameObject gameObject = GetPooledObject(prefab);
 				if (gameObject == null)
 				{
 					gameObject = AddNewToPoolFromPrefab(prefab, keepPooled: false);
 				}
-				activePoolObjects[gameObject.GetInstanceID()] = gameObject;
+				activePoolObjects[gameObject.GetEntityId()] = gameObject;
 				return gameObject;
 			}
 			Debug.LogWarning("There is no pool for prefab: " + prefab, this);
@@ -123,7 +123,7 @@ namespace OpenFrontier.IP.Engine
 
 		public GameObject GetPooledObject(GameObject prefab)
 		{
-			int instanceID = prefab.GetInstanceID();
+			EntityId instanceID = prefab.GetEntityId();
 			List<GameObject> value = null;
 			if (pooledObjects.TryGetValue(instanceID, out value) && value.Count > 0)
 			{
@@ -146,9 +146,9 @@ namespace OpenFrontier.IP.Engine
 		private GameObject AddNewToPoolFromPrefab(GameObject prefab, bool keepPooled)
 		{
 			GameObject gameObject = Object.Instantiate(prefab);
-			List<GameObject> pool = pooledObjects[prefab.GetInstanceID()];
-			int instanceID = gameObject.GetInstanceID();
-			poolInstanceToPrefabMap.Add(instanceID, prefab.GetInstanceID());
+			List<GameObject> pool = pooledObjects[prefab.GetEntityId()];
+			EntityId instanceID = gameObject.GetEntityId();
+			poolInstanceToPrefabMap.Add(instanceID, prefab.GetEntityId());
 			if (keepPooled)
 			{
 				ReturnObjectToPool(pool, gameObject);
@@ -164,7 +164,7 @@ namespace OpenFrontier.IP.Engine
 				{
 					component.CleanupUnit();
 				}
-				activePoolObjects.Remove(g.GetInstanceID());
+				activePoolObjects.Remove(g.GetEntityId());
 				g.transform.SetParent(gameObject.transform);
 				g.transform.localPosition = Vector3.zero;
 				g.SetActive(value: false);

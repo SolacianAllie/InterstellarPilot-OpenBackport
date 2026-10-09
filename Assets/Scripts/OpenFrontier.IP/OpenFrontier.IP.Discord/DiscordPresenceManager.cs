@@ -276,9 +276,9 @@ namespace OpenFrontier.IP.Discord
 			Sector sector = engine.ActiveSector;
 			ScenarioInfo scenario = engine.World.ScenarioInfo;
 			return string.Concat(
-				engine.GetInstanceID().ToString(), "|",
+				engine.GetEntityId().ToString(), "|",
 				IsInMainMenu() ? "menu" : "game", "|",
-				ship != null ? ship.GetInstanceID().ToString() : "-", "|",
+				ship != null ? ship.GetEntityId().ToString() : "-", "|",
 				ship != null && ship.IsDocked ? "docked" : "-", "|",
 				GetUnitName(ship), "|",
 				sector != null ? sector.UniqueId.ToString() : "-", "|",

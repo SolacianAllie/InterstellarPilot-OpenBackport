@@ -3,6 +3,46 @@
 Only non-obvious traps live here — things you cannot learn from the project
 structure. Add new ones as they are found.
 
+## This is the Unity 6.3 LTS backport branch
+
+Editor is **6000.3.26f1**, not the 6.6 the rest of the project uses. It exists so
+the game can run on devices below Unity 6.6's Android graphics floor: Unity 6.6
+raised the minimum to **OpenGL ES 3.1**, and devices like the Samsung SM-T387W
+(Snapdragon 425 / Adreno 308, GLES 3.0, no Vulkan) are locked out. 6.3 is the
+newest *supported* release that still supports GLES 3.0. Do not "modernise"
+anything here toward 6.6.
+
+**Read version-specific API questions against the installed 6.3 assemblies, not
+the docs and not 6.6.** `~/Unity/Hub/Editor/6000.3.26f1/Editor/Data/Managed/UnityEngine/`
+is ground truth; `monodis --method` on it answers "does this API exist here?"
+reliably. The docs site lags: `Object.GetEntityId` 404s for 6000.3 even though it
+exists, and the docs for 6.6 describe APIs 6.3 does not have.
+
+**`GetEntityId()` exists in 6.3 — do NOT "fix" it to `GetInstanceID()`.** Both
+are present in 6.3 (`GetInstanceID()` was only deprecated in 6.4), and `EntityId`
+is a proper value type with `Equals`/`GetHashCode`/`ToString`, so
+`Dictionary<EntityId, …>` is fine. Rewriting it to `int` was a mistake that cost
+this branch three files of unnecessary divergence — one of which
+(`DiscordPresenceManager.cs`) is a hot file that Dev touches ~17×/6mo.
+
+### Files that must stay diverged from Dev
+
+Keep this list short; every entry is recurring merge cost. Current set is 4:
+
+| File | Why |
+|---|---|
+| `ProjectSettings/ProjectVersion.txt` | engine pin |
+| `Packages/manifest.json` | URP/core 17.3, ugui 2.0, timeline 1.8.13, test-framework 1.6 |
+| `ProjectSettings/ProjectSettings.asset` | `AndroidMinSdkVersion: 25` |
+| `…/AbstractFlowLayoutGroup.cs`, `…/FlowLayoutGroup.cs` | ugui 2.0.0 has no 5-arg `SetLayoutInputForAxis` |
+
+`Assets/UniversalRenderPipelineGlobalSettings.asset` also diverges
+(`m_AssetVersion: 10`) but **Unity rewrites its fields on open** — after any
+merge, reopen the project and re-check the version int. 17.3's
+`k_LastVersion` is 10 (17.6's is 11); `URPBuildDataValidator` throws at build
+start if they disagree, and nothing but URP's own upward-only version bump ever
+writes that field, so a merge from Dev silently reintroduces 11.
+
 ## Offline compile verification (`/tmp/opencode/harness`)
 
 C# changes are verified outside the editor with a generated .NET harness:
