@@ -24,7 +24,14 @@ The working branch is **`Backport`**, named to match the main game's scheme
 (`Dev`, `Legacy`). `tools/backport-sync.sh` hard-fails if you are not on it.
 
   origin    -> SolacianAllie/InterstellarPilot-OpenBackport   (this project)
-  frontier  -> SolacianAllie/InterstellarPilot-OpenFrontier   (upstream, merges from frontier/Dev)
+  frontier  -> SolacianAllie/InterstellarPilot-OpenFrontier   (upstream, merges from frontier/Legacy)
+
+**Sync from `frontier/Legacy`, not `frontier/Dev`.** Legacy is the upstream
+default branch and is a strict superset of Dev (Dev feeds Legacy by pull
+request), so Legacy is a strict superset of it. Merging from Dev silently skips
+everything already merged upstream — which happened once here, when the revised
+Linux Foundation CLA landed on Legacy and a Dev-based sync returned the previous
+unreviewed draft without any error.
 
 **Read version-specific API questions against the installed 6.3 assemblies, not
 the docs and not 6.6.** `~/Unity/Hub/Editor/6000.3.26f1/Editor/Data/Managed/UnityEngine/`

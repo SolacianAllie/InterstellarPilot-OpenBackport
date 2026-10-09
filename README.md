@@ -68,7 +68,7 @@ Merging Open Frontier's changes in is automated:
 ./tools/backport-sync.sh --verify      # check the Unity 6.3 invariants
 ```
 
-It merges `frontier/Dev` by default; pass another ref to override. The script reverts editor-owned files (which Unity rewrites on every open) to the 6.3 side and re-asserts the URP global-settings asset version, which silently breaks every build if a merge bumps it. Files carrying real intent are listed for manual review.
+It merges `frontier/Legacy` by default — the Open Frontier default branch and a strict superset of `frontier/Dev`, so nothing merged upstream is missed. Pass another ref to override (`frontier/Dev` for work still unmerged there). The script reverts editor-owned files (which Unity rewrites on every open) to the 6.3 side and re-asserts the URP global-settings asset version, which silently breaks every build if a merge bumps it. Files carrying real intent are listed for manual review.
 
 **Close Unity before syncing**, and **build** afterwards — this branch has produced build failures that compiled without a single error.
 

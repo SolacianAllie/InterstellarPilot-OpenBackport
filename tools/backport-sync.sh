@@ -26,7 +26,20 @@ set -euo pipefail
 #   origin   -> SolacianAllie/InterstellarPilot-OpenBackport   (this project)
 #   frontier -> SolacianAllie/InterstellarPilot-OpenFrontier   (upstream)
 readonly BRANCH="Backport"
-readonly SOURCE_DEFAULT="frontier/Dev"
+# Merge from frontier/Legacy, NOT frontier/Dev.
+#
+# Legacy is the default branch of the Open Frontier repo and is the one the
+# release-facing work lands on — the licensing set, README, trademark policy.
+# Dev is the working branch that feeds Legacy by pull request, so it is a strict
+# subset: at time of writing Legacy was 11 commits AHEAD of Dev and 0 behind.
+# Syncing from Dev therefore silently misses merged work, which already happened
+# once — the revised Linux Foundation CLA was missed entirely because it had
+# landed on Legacy. Syncing from Legacy is a strict superset and is what you want
+# for a branch that ships.
+#
+# If you specifically want work that is still sitting on Dev unmerged, pass it
+# explicitly: tools/backport-sync.sh frontier/Dev
+readonly SOURCE_DEFAULT="frontier/Legacy"
 
 # URP 17.3 (Unity 6.3) ships k_LastVersion = 10. URP 17.6 (Unity 6.6) ships 11.
 # A merge from Dev can reintroduce 11, which compiles fine and then throws in
@@ -76,12 +89,12 @@ die()     { printf '\n%serror:%s %s\n' "$RED" "$RESET" "$1" >&2; exit 1; }
 
 usage() {
   cat <<'EOF'
-backport-sync.sh — merge Open Frontier into the Unity 6.3 LTS backport branch
+backport-sync.sh — merge Open Frontier (Legacy) into the Unity 6.3 LTS backport branch
 
 USAGE
   tools/backport-sync.sh [options] [source]
 
-  source            branch/ref to merge from (default: frontier/Dev)
+  source            branch/ref to merge from (default: frontier/Legacy)
 
 OPTIONS
   --dry-run         report what would change; touch nothing
@@ -93,6 +106,8 @@ OPTIONS
 REPOSITORIES
   origin    SolacianAllie/InterstellarPilot-OpenBackport   (this project)
   frontier  SolacianAllie/InterstellarPilot-OpenFrontier   (upstream)
+            Merges frontier/Legacy, the default branch and a strict superset
+            of frontier/Dev. Pass frontier/Dev explicitly for unmerged work.
 
 TYPICAL USE
   tools/backport-sync.sh --dry-run     # see what a sync would do
