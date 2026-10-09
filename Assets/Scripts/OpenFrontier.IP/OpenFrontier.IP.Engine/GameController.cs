@@ -315,7 +315,7 @@ namespace OpenFrontier.IP.Engine
 
 		public ScenarioInfo SkirmishScenarioInfo;
 
-		public bool SpaceFogEnabled = true;
+		public bool SpaceFogEnabled = false;
 
 		// Open Frontier: the user's raw fps dropdown choice (30/60/90/120/144).
 		// The applied cap is min(UserTargetFrameRate, panel refresh rate);
@@ -323,13 +323,13 @@ namespace OpenFrontier.IP.Engine
 		// refresh rate goes back up.
 		public int UserTargetFrameRate = 60;
 
-		public bool LightingFXEnabled = true;
+		public bool LightingFXEnabled = false;
 
-		public const bool DefaultLightingFXEnabled = true;
+		public const bool DefaultLightingFXEnabled = false;
 
-		public const bool DefaultSpaceFogEnabled = true;
+		public const bool DefaultSpaceFogEnabled = false;
 
-		public const bool DefaultRenderCloakedShipOutlinesEnabled = true;
+		public const bool DefaultRenderCloakedShipOutlinesEnabled = false;
 
 		public float HypersleepTimeMultiplier = 8f;
 
@@ -347,7 +347,7 @@ namespace OpenFrontier.IP.Engine
 
 		public int DefaultQualityLevel = 2;
 
-		public bool RenderCloakedShipOutlinesEnabled = true;
+		public bool RenderCloakedShipOutlinesEnabled = false;
 
 		public string RenderCloakedShipOutlinesKey = "cloaked_outline_enabled";
 
@@ -755,10 +755,10 @@ namespace OpenFrontier.IP.Engine
 			PlayerOptions.Audio_MissileLockSound = PlayerPrefs.GetInt(PlayerOptionConstants.Audio_MissileLockSoundKey, 1) > 0;
 			int defaultValue = CombatDifficultyLevels.IndexOf(DefaultCombatDifficultyLevel);
 			CombatDifficultyLevelIndex = Mathf.Clamp(PlayerPrefs.GetInt(CombatDifficultyLevelKey, defaultValue), 0, CombatDifficultyLevels.Length);
-			SpaceFogEnabled = PlayerPrefs.GetInt(SpaceFogEnabledKey, Helper.BoolToInt(val: true)) > 0;
-			RenderCloakedShipOutlinesEnabled = PlayerPrefs.GetInt(RenderCloakedShipOutlinesKey, Helper.BoolToInt(val: true)) > 0;
+			SpaceFogEnabled = PlayerPrefs.GetInt(SpaceFogEnabledKey, Helper.BoolToInt(val: false)) > 0;
+			RenderCloakedShipOutlinesEnabled = PlayerPrefs.GetInt(RenderCloakedShipOutlinesKey, Helper.BoolToInt(val: false)) > 0;
 			PlayerOptions.Video_WormholeAnimationEnabled = PlayerPrefs.GetInt(PlayerOptionConstants.Video_WormholeAnimationEnabledKey, Helper.BoolToInt(PlayerOptionConstants.Video_DefaultWormholeAnimationEnabled)) > 0;
-			LightingFXEnabled = PlayerPrefs.GetInt(LightingFXEnabledKey, Helper.BoolToInt(val: true)) > 0;
+			LightingFXEnabled = PlayerPrefs.GetInt(LightingFXEnabledKey, Helper.BoolToInt(val: false)) > 0;
 			PreferCameraLock = PlayerPrefs.GetInt(PreferCameraLockKey, 0) > 0;
 			AutoTargetHostiles = PlayerPrefs.GetInt(AutoTargetHostilesKey, Helper.BoolToInt(val: true)) > 0;
 			AutoCloseInGameMenu = PlayerPrefs.GetInt(AutoCloseInGameMenuKey, 1) > 0;

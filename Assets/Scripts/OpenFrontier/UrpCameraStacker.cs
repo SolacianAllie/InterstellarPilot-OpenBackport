@@ -37,7 +37,12 @@ namespace OpenFrontier
 			// Post-processing on the base camera covers the whole stack
 			// (URP ignores post flags on overlays). Without this the
 			// volume profile (bloom etc.) never ran - effects looked dull.
-			baseData.renderPostProcessing = true;
+			//
+			// OPEN BACKPORT: deliberately left off - the bloom pyramid is
+			// unaffordable on the GLES 3.0 hardware this branch targets.
+			// PostProcessingQualitySync also sweeps every camera to keep
+			// the flag down.
+			baseData.renderPostProcessing = false;
 
 			foreach (var cam in cams.Skip(1))
 			{

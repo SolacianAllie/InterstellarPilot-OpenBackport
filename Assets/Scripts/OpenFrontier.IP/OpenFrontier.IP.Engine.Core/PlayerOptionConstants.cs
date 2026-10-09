@@ -44,7 +44,7 @@ namespace OpenFrontier.IP.Engine.Core
 
 		public string Video_WormholeAnimationEnabledKey = "video_wormhole_animation_enabled";
 
-		public int Video_DefaultTargetFrameRate = 60;
+		public int Video_DefaultTargetFrameRate = 30;
 
 		public bool Video_DefaultWormholeAnimationEnabled = true;
 

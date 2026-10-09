@@ -67,16 +67,15 @@ namespace OpenFrontier.IP.Engine
 
 		// Open Frontier: spawn the space reflection probe (once) under the
 		// EngineASX root - ships reflect the starfield/sun/distant planets.
+		//
+		// OPEN BACKPORT: never spawned. A realtime cubemap probe re-renders
+		// six faces of sky/gas-cloud/planet layers twice a second, which is
+		// the single most expensive thing this scene does on an Adreno 308.
+		// Callers null-guard on SpaceReflectionProbe.Instance already
+		// (RequestRender uses ?. / != null), so skipping creation is safe.
 		private void EnsureSpaceReflectionProbe()
 		{
-			EngineASX engineASX = (engine != null) ? engine : EngineASX.Instance;
-			if (engineASX == null || engineASX.GetComponentInChildren<SpaceReflectionProbe>() != null)
-			{
-				return;
-			}
-			GameObject gameObject = new GameObject("SpaceReflectionProbe");
-			gameObject.transform.SetParent(engineASX.transform, worldPositionStays: false);
-			gameObject.AddComponent<SpaceReflectionProbe>();
+			return;
 		}
 
 		// Open Frontier: give the sector's directional light a visible sun.
