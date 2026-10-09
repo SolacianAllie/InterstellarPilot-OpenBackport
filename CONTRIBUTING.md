@@ -1,10 +1,9 @@
 > **Scope note (Open Backport branch).** This repository is the
 > *InterstellarPilot: Open Backport* branch of the InterstellarPilot: Open
-> Frontier project - the compatibility line for OpenGL ES 3.0 hardware. It is
-> the same project under the same licence, and is maintained alongside the main
-> branch, which is the actively developed line. Changes here are expected to
-> flow back to the main project. This document uses the main project's name
-> throughout.
+> Frontier project — the compatibility line for OpenGL ES 3.0 hardware. It is
+> the same project under the same licence, maintained alongside the main branch,
+> which is the actively developed line. Changes here are expected to flow back.
+> This document uses the main project's name throughout.
 
 # Contributing to InterstellarPilot: Open Frontier
 
@@ -15,14 +14,81 @@ the players who still care.
 
 ## Ground rules, up front
 
-1. **Contributions are welcome through pull requests.**
+1. **Contributions are welcome**, either as a pull request from a fork or by
+   being onboarded to work directly in this repository — see
+   [Working directly in the project](#working-directly-in-the-project). We
+   prefer the second and will say so up front.
 2. **Anyone can fork** the repository — GitHub's terms give every user that
-   right, and this project does not pretend otherwise. What we ask is that
-   forks be built under their own name and branding: see
-   [`TRADEMARK_POLICY.md`](TRADEMARK_POLICY.md). The code is AGPL-3.0; the
-   "Open Frontier" name, logo, and store presence are not licensed.
+   right, the AGPL grants it explicitly, and this project does not pretend
+   otherwise. What we ask is that forks be built under their own name and
+   branding: see [`TRADEMARK_POLICY.md`](TRADEMARK_POLICY.md). The code is
+   AGPL-3.0; the "Open Frontier" name, logo, and store presence are not
+   licensed.
 3. **You keep your copyright**, and you grant the maintainer the rights needed
    to keep publishing the project (see [`CLA.md`](CLA.md)).
+
+## Why we'd rather you contributed than forked
+
+A request, not a restriction — the AGPL permits forking and we can't stop it.
+Three reasons:
+
+- **The knowledge is here, not in the code.** The traps live in
+  [`AGENTS.md`](AGENTS.md) (story universes are baked into their scene files,
+  so prefab edits silently do nothing in Uncharted Space), and the
+  verification workflow assumes you work in this tree.
+- **A fork fixes nothing for players of this build.** One playable, tested
+  download is the entire value of a preservation project. Two forks split the
+  bug reports, device testing and platform work, then both stall.
+- **PRs land in the build people download.** If you were building your own
+  version anyway, we'd rather absorb the work than watch it happen next door.
+
+What we ask in return: your own branding, no implied endorsement, and a CLA
+signature. In return you get the reasoning behind every weird fix in the
+history, input on prioritisation, and credits if you want them. Small
+contributions count — a crash on an odd device, a wrong translation, a
+confusing log message.
+
+**If you fork anyway,** [`TRADEMARK_POLICY.md`](TRADEMARK_POLICY.md) has the
+rebranding checklist: build and company name, launcher icon, store listing,
+your own Discord application, and the in-game support email, which must point at
+you rather than us. Renaming the internal namespaces and assembly definitions
+isn't required, and at ~2,100 files isn't something to attempt casually.
+
+## Working directly in the project
+
+Anyone can PR from a fork. If you'd rather work *inside* this repository — no
+fork, direct access to issues, branches, releases and the full history of why
+every weird fix exists — you can be onboarded as an official collaborator.
+**This is the path we'd rather you took**, and we're open to it.
+
+**How to ask:** open an issue, or email **nightvizla@gmail.com**, saying what
+you'd like to work on and roughly what you've done before. That's the whole
+process — no portfolio, no track record to prove. Making sense of a decompiled
+codebase is not a skill anyone can demonstrate in advance.
+
+| Level | What you can do |
+|---|---|
+| Contributor | Open issues; PRs from a fork — the normal path |
+| Collaborator | Push branches in this repo, see releases, join reviews |
+| Maintainer | Merge to the main branch, cut releases, set scope |
+
+**What we ask of collaborators:**
+
+- Work on a branch and open a PR into `Legacy`. Nothing lands on the main
+  branch directly — that's what review is for.
+- Read [`AGENTS.md`](AGENTS.md) before your first commit and follow the
+  verification workflow below. It's the difference between a PR that merges
+  cleanly and one that costs the maintainer an afternoon.
+- Claim what you're working in an issue, so two people don't build the same
+  thing.
+- Sign the CLA, same as anyone.
+- Flag anything large *before* you build it: engine changes, dependency swaps,
+  save formats, store listing, licensing questions. Cheap to ask, expensive to
+  unpick.
+
+Onboarding itself is: CLA signed, `AGENTS.md` read, access granted. Some
+contributors go on to become maintainers; the project is small enough that
+that happens.
 
 ## Before you start
 
@@ -30,7 +96,8 @@ the players who still care.
   that are not discoverable from the code itself (baked story scenarios, Unity
   6 quirks, editor-only blind spots in our compile harness). Following it will
   save you a wasted afternoon.
-- **Sign the CLA** with a comment on your issue or pull request:
+- **Sign the CLA** with a comment on your issue or pull request. It's the
+  Linux Foundation's Individual CLA with the granting party set to this project:
   > I have read and agree to the Contributor License Agreement of
   > InterstellarPilot: Open Frontier. My GitHub username is: @you
 - **Open an issue first** for anything substantial. A short conversation saves
@@ -40,7 +107,9 @@ the players who still care.
 
 ## Making a change
 
-1. Fork the repository and branch from `Dev` (that is the default branch).
+1. **Put your work where it can be reviewed.** Collaborators: branch in this
+   repository. Everyone else: fork, branch from `Legacy`, open a PR.
+   (`Legacy` is the main branch; `Dev` is being folded into it.)
 2. Keep the change focused. One fix or one feature per pull request — large
    mixed diffs are hard to review and hard to merge safely.
 3. Match the surrounding style. The decompiled game code uses tabs and a

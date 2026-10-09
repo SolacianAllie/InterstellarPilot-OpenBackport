@@ -1,9 +1,8 @@
 > **Scope note (Open Backport branch).** This repository is the
 > *InterstellarPilot: Open Backport* branch of the InterstellarPilot: Open
-> Frontier project - the compatibility line for OpenGL ES 3.0 hardware. The
-> trademark rules below apply to it unchanged: neither "Open Frontier" nor
-> "Open Backport" is licensed, and neither may be used by a third-party
-> release.
+> Frontier project — the compatibility line for OpenGL ES 3.0 hardware. The
+> rules below apply to it unchanged: neither name is licensed, and the
+> Contributors section extends to work done here in the same way.
 
 # Trademark Policy
 
@@ -13,24 +12,47 @@ rights to the project's name, logo, artwork, or store presence** — those are
 separate rights, and this policy is where you find out what you may and may
 not do with them.
 
-## Why this exists
+## Scope
 
-This project exists to preserve and modernize a game that was abandoned by its
-original developer and eventually removed from app stores. The AGPL guarantees
-that any *derivative* release must publish its source and keep the copyright
-notices intact. This policy covers the other half: making sure the community's
-work is not shipped under someone else's product name, and that people aren't
-made to think a third-party release is ours.
+The AGPL guarantees that any derivative release publishes its source and keeps
+the copyright notices. This policy covers the other half: making sure the
+community's work isn't shipped under someone else's product name, or mistaken
+for a re-release of a game that already disappeared from the stores once.
+
+Forks are legal — this policy doesn't restrict them. But we'd rather you built
+this game *with* us than beside us. If you want to work on it directly as a
+collaborator, see
+[Working directly in the project](CONTRIBUTING.md#working-directly-in-the-project).
+If you fork and ship anyway, the one thing we ask is that you rebrand. What we
+hold is the name.
 
 ## Protected marks
 
-The following are trademarks of this project and are not licensed by the AGPL,
-by the CLA, or by any contribution:
+These are trademarks of this project, and are **not** granted by the AGPL or the
+CLA:
 
 - **InterstellarPilot: Open Frontier**
 - **Open Frontier** (when used as the product/game name)
 - The project logo, app icon, title artwork, and store screenshots
 - Store listing names, icons, and descriptions for this project
+
+Contributors and collaborators are authorised to use them for work on this
+project — see below. Everyone else needs permission.
+
+## Contributors, collaborators and maintainers
+
+Working on this project isn't a restricted use of the name. It's the whole point.
+
+- **Contributors and onboarded collaborators** may use the project name and logo
+  to describe their work here: commits, pull requests, issues, release notes,
+  credits, blog posts, streams and videos about the project.
+- **Maintainers** may use the marks for this project's own releases, store
+  listings and announcements.
+- **Anyone who has contributed here may keep their name on the work they
+  did**, and may ask to be credited. Credit is expected, not optional.
+
+What nobody may do is pass a *separate product* off as this project's official
+release. That's the line below.
 
 ## What you may do
 
@@ -39,9 +61,52 @@ by the CLA, or by any contribution:
 - Describe your project truthfully, including saying it is "a fork of
   InterstellarPilot: Open Frontier" or "based on Open Frontier"
 - Discuss the project, its features, and your changes in any medium
+- Describe your own work on this project using the name and logo (see
+  *Contributors, collaborators and maintainers* above)
 - Use the marks in plain textual reference to the original project, where the
   use doesn't imply sponsorship or endorsement (for example, a blog post titled
   "Adding Discord Rich Presence to InterstellarPilot: Open Frontier")
+
+## If you fork: the rebranding checklist
+
+The AGPL lets you fork. This project asks that you rebrand if you ship the
+result. Everything in the first list below is **required**, because those are
+the marks; everything in the second is **strongly encouraged** but genuinely
+optional.
+
+### Required — these present the product to players, and they're the marks
+
+| What to change | Where it lives in a checkout of this project |
+|---|---|
+| Product and company name in the build | `ProjectSettings/ProjectSettings.asset` — `productName: InterstellarPilot - Open Frontier`, `companyName: Open Frontier` |
+| Android package / application id | `ProjectSettings.asset` → `applicationIdentifier`, plus whatever your store listing uses |
+| Launcher icon and app icon | `Assets/Texture2D/app icon.png` and the Android icon slots in `ProjectSettings.asset` |
+| Title screen and store artwork | The title art, icon and screenshots used by your store listing |
+| Discord presence title | `DiscordPresenceManager.GameDisplayName` in the Discord integration |
+| Your Discord application | Register your own application; you cannot list yourself under ours |
+| Support contact shown in-game | `GameController.SupportEmail` and the hardcoded string in the store screen. **Point these at you.** Leaving them pointing here means players contact this project about bugs in a build it did not ship — the single most damaging thing in this list |
+
+Renaming the build, the icon, the store listing and the support contact is the
+whole of the legal requirement. Get those right and you are in compliance.
+
+### Strongly encouraged, but not required
+
+- Update player-visible strings that still announce "Open Frontier" — the
+  version label on the main menu, Discord presence copy, about/credits text
+- Note the change honestly in your release notes: "fork of InterstellarPilot:
+  Open Frontier, rebranded"
+
+### Not required: renaming the code itself
+
+You do **not** need to rename internal identifiers — the `OpenFrontier.*`
+namespaces, the assembly definitions, prefab paths or asset folders. Only the
+marks are withheld; the copyright and patent licences continue to apply in full.
+
+Doing it anyway is a large, risky job for no legal benefit: the name appears in
+roughly **2,100 source files** across **20 assembly definitions**, plus
+`Resources/` paths the engine resolves by string. Renaming breaks prefab and
+`Resources` references if done carelessly and can invalidate existing save
+files. Your call, nobody will complain — but don't think the licence requires it.
 
 ## What you may not do without written permission
 

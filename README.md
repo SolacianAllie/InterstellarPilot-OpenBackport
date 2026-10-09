@@ -82,7 +82,7 @@ What the AGPL does *not* cover is the project's identity. The "InterstellarPilot
 
 This branch is the compatibility line for OpenGL ES 3.0 hardware and is maintained alongside [Open Frontier](https://github.com/SolacianAllie/InterstellarPilot-OpenFrontier), which is the actively developed branch. Both are covered by the same licence; changes here are expected to flow back to the main project.
 
-**Contributions are welcome** via pull request. Please read [CONTRIBUTING.md](CONTRIBUTING.md) first — and note [`CLA.md`](CLA.md), which records the rights you grant so the project can keep being published (that document is a **draft that has not been lawyer-reviewed**, and we mean it).
+**Contributions are welcome** — by pull request, or by being onboarded to work directly in the repository, which is what we'd rather you did. See [CONTRIBUTING.md](CONTRIBUTING.md). Note [`CLA.md`](CLA.md): the Linux Foundation's Individual CLA, adopted here with the granting party changed to this project, so contributions stay licensable by us and can't be pulled out from under it.
 
 CREDIT
 ------------------------------------------------------------
