@@ -30,3 +30,9 @@ DEVICE COMPATIBILITY
 Unity 6 sets the floor: Android devices need **OpenGL ES 3.1+ or Vulkan** (roughly 2016-era mid-range hardware and newer). Devices below that line (e.g. Adreno 3xx GPUs such as the Adreno 308) fail at startup with "Unable to initialize the Unity Engine Graphics API" - this is an engine limitation, not something the project can configure away.
 
 **We will not leave these players behind.** A backport effort is planned for the future (for example a legacy branch on an older Unity LTS, or a compatibility build) so that players on older hardware can keep flying too. Until then, the Play Store listing is filtered to compatible devices automatically.
+
+SUPPORT THIS PROJECT
+------------------------------------------------------------
+You can support development of this project by funding me on [Ko-Fi](https://ko-fi.com/solacianallie).
+To avoid needing to monetize the game directly, Any desire from the community to support me in development of this project can be done there!
+Depending on how much support i get, i will start releasing development builds of the game for people to try out and updates about things as i work on them, just to reward those who sink their own hard earned cash into helping support me while i develop this.
