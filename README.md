@@ -53,7 +53,12 @@ Running on an older LTS has real costs. This branch is maintained separately and
 
 DEVELOPING
 ------------------------------------------------------------
-This branch is a separate Unity project targeting **Unity 6000.3.26f1**.
+This branch is a separate Unity project targeting **Unity 6000.3.26f1**, and a separate git repository.
+
+| Remote | Repository |
+|--------|------------|
+| `origin` | `SolacianAllie/InterstellarPilot-OpenBackport` — this project |
+| `frontier` | `SolacianAllie/InterstellarPilot-OpenFrontier` — upstream |
 
 Merging Open Frontier's changes in is automated:
 
@@ -63,7 +68,7 @@ Merging Open Frontier's changes in is automated:
 ./tools/backport-sync.sh --verify      # check the Unity 6.3 invariants
 ```
 
-The script reverts editor-owned files (which Unity rewrites on every open) to the 6.3 side and re-asserts the URP global-settings asset version, which silently breaks every build if a merge bumps it. Files carrying real intent are listed for manual review.
+It merges `frontier/Dev` by default; pass another ref to override. The script reverts editor-owned files (which Unity rewrites on every open) to the 6.3 side and re-asserts the URP global-settings asset version, which silently breaks every build if a merge bumps it. Files carrying real intent are listed for manual review.
 
 **Close Unity before syncing**, and **build** afterwards — this branch has produced build failures that compiled without a single error.
 

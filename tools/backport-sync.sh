@@ -19,8 +19,14 @@ set -euo pipefail
 
 # ---------------------------------------------------------------- constants --
 
+# Upstream is the Open Frontier project. This is a standalone repo (it used to
+# be a worktree of the Frontier checkout, which meant remotes were SHARED and a
+# bare `git push origin` from here would have pushed backport/unity6.3 to the
+# Frontier repo). It is now independent, with:
+#   origin   -> SolacianAllie/InterstellarPilot-OpenBackport   (this project)
+#   frontier -> SolacianAllie/InterstellarPilot-OpenFrontier   (upstream)
 readonly BRANCH="backport/unity6.3"
-readonly SOURCE_DEFAULT="Dev"
+readonly SOURCE_DEFAULT="frontier/Dev"
 
 # URP 17.3 (Unity 6.3) ships k_LastVersion = 10. URP 17.6 (Unity 6.6) ships 11.
 # A merge from Dev can reintroduce 11, which compiles fine and then throws in
@@ -70,12 +76,12 @@ die()     { printf '\n%serror:%s %s\n' "$RED" "$RESET" "$1" >&2; exit 1; }
 
 usage() {
   cat <<'EOF'
-backport-sync.sh — merge Dev into the Unity 6.3 LTS backport branch
+backport-sync.sh — merge Open Frontier into the Unity 6.3 LTS backport branch
 
 USAGE
   tools/backport-sync.sh [options] [source]
 
-  source            branch/ref to merge from (default: Dev)
+  source            branch/ref to merge from (default: frontier/Dev)
 
 OPTIONS
   --dry-run         report what would change; touch nothing
@@ -83,6 +89,10 @@ OPTIONS
   --verify          run the invariant checks and exit (no merge)
   --abort           roll back an in-progress or last sync
   -h, --help        show this help
+
+REPOSITORIES
+  origin    SolacianAllie/InterstellarPilot-OpenBackport   (this project)
+  frontier  SolacianAllie/InterstellarPilot-OpenFrontier   (upstream)
 
 TYPICAL USE
   tools/backport-sync.sh --dry-run     # see what a sync would do

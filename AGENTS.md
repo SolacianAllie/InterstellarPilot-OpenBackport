@@ -3,14 +3,25 @@
 Only non-obvious traps live here — things you cannot learn from the project
 structure. Add new ones as they are found.
 
-## This is the Unity 6.3 LTS backport branch
+## This is the Unity 6.3 LTS backport project
 
-Editor is **6000.3.26f1**, not the 6.6 the rest of the project uses. It exists so
+Editor is **6000.3.26f1**, not the 6.6 the main game uses. It exists so
 the game can run on devices below Unity 6.6's Android graphics floor: Unity 6.6
 raised the minimum to **OpenGL ES 3.1**, and devices like the Samsung SM-T387W
 (Snapdragon 425 / Adreno 308, GLES 3.0, no Vulkan) are locked out. 6.3 is the
 newest *supported* release that still supports GLES 3.0. Do not "modernise"
 anything here toward 6.6.
+
+**This is a standalone git repository, not a git worktree of the Frontier
+checkout.** It started life as a worktree, which turned out to be a trap: git
+worktrees SHARE remote config, so `origin` resolved to InterstellarPilot-OpenFrontier
+in both directories, and a `git push origin` from here would have pushed
+`backport/unity6.3` to the Frontier repo. It was converted to a standalone repo
+by copying `.git` locally (so the 587 MB LFS store came along and nothing was
+re-downloaded). Do not re-add it as a worktree.
+
+  origin    -> SolacianAllie/InterstellarPilot-OpenBackport   (this project)
+  frontier  -> SolacianAllie/InterstellarPilot-OpenFrontier   (upstream, merges from frontier/Dev)
 
 **Read version-specific API questions against the installed 6.3 assemblies, not
 the docs and not 6.6.** `~/Unity/Hub/Editor/6000.3.26f1/Editor/Data/Managed/UnityEngine/`
