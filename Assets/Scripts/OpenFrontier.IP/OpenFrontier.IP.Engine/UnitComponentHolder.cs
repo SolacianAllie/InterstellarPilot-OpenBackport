@@ -1334,7 +1334,7 @@ namespace OpenFrontier.IP.Engine
 			int num = 0;
 			foreach (ComponentBase unitComponent in unitComponents)
 			{
-				if (unitComponent.ComponentClass.ComponentType.GetEntityId() == componentType.GetEntityId())
+				if (unitComponent.ComponentClass.ComponentType.GetInstanceID() == componentType.GetInstanceID())
 				{
 					num++;
 				}
