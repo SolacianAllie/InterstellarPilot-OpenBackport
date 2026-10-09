@@ -217,7 +217,11 @@ namespace OpenFrontier.IP.UI.Screens.MainMenu
 			gameObject.transform.SetParent(transform, worldPositionStays: false);
 			Canvas canvas = gameObject.AddComponent<Canvas>();
 			canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-			canvas.sortingOrder = 5000;
+			// BELOW the UI, not over it: the menu's own canvas sits at
+			// the default sorting order 0, so the fade has to draw
+			// under it - the blackout should swallow the universe and
+			// the camera swap, never the menus and HUD on top of it.
+			canvas.sortingOrder = -1;
 			GameObject gameObject2 = new GameObject("FadeImage");
 			gameObject2.transform.SetParent(gameObject.transform, worldPositionStays: false);
 			fadeImage = gameObject2.AddComponent<Image>();
