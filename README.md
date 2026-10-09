@@ -72,6 +72,20 @@ It merges `frontier/Dev` by default; pass another ref to override. The script re
 
 **Close Unity before syncing**, and **build** afterwards — this branch has produced build failures that compiled without a single error.
 
+LICENSING & CONTRIBUTING
+------------------------------------------------------------
+**The code is AGPL-3.0. The name is not.**
+
+The [GNU Affero General Public License v3.0](LICENSE) means anyone may use, modify and redistribute this project — and if they ship a modified version, they must publish their source and keep the copyright notices. That is the deal, and it is deliberate: this is a preservation project, and the point is that improvements stay visible to the community.
+
+What the AGPL does *not* cover is the project's identity. The "InterstellarPilot: Open Frontier" and "Open Backport" names, the logo, app icon and store presence are not licensed, per [TRADEMARK_POLICY.md](TRADEMARK_POLICY.md). Fork freely; build it under your own name. Please don't ship your version under either name — it makes it impossible for players to tell a community release from a re-release of a game that already disappeared from the stores once.
+
+This branch is the compatibility line for OpenGL ES 3.0 hardware and is maintained alongside [Open Frontier](https://github.com/SolacianAllie/InterstellarPilot-OpenFrontier), which is the actively developed branch. Both are covered by the same licence; changes here are expected to flow back to the main project.
+
+**Contributions are welcome** via pull request. Please read [CONTRIBUTING.md](CONTRIBUTING.md) first — and note [`CLA.md`](CLA.md), which records the rights you grant so the project can keep being published (that document is a **draft that has not been lawyer-reviewed**, and we mean it).
+
 CREDIT
 ------------------------------------------------------------
 Original game by **Pixelfactor Ltd.** Interstellar Pilot 2 is available on [Steam](https://store.steampowered.com/app/2199580/Interstellar_Pilot_2/).
+
+The interface font is [Noto Sans](https://fonts.google.com/noto/specimen/Noto+Sans), licensed under the SIL Open Font License 1.1 — see `Assets/Font/NotoSans - OFL.txt`.
