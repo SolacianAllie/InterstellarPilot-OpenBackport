@@ -112,3 +112,8 @@ InitTestScene*.unity*
 
 # Auto-generated cache in Assets folder
 /[Aa]ssets/[Ss]ceneDependencyCache*
+
+# Unity Performance Testing package regenerates these on every run/build
+# (transient run info + its meta) - not source.
+/[Pp]erformanceTestRunInfo.json
+/[Pp]erformanceTestRunSettings.json
