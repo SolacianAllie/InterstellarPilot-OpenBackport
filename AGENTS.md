@@ -22,6 +22,12 @@ with CS1503 (double → float).
 change, confirm zero `error CS` lines in the editor's `Logs/Editor.log`
 (or ask the user for the Console output) before considering the change done.
 
+**Editor-folder scripts are NOT compile-checked by the harness at all** (it
+skips `Editor/` dirs, and only walks `Assets/Scripts`). Anything behind a
+platform define (`#if UNITY_ANDROID`) is doubly invisible: the harness sees
+an empty file, and the editor won't compile it until the user switches build
+target. Verify those by grepping `Logs/Editor.log` for the target switch.
+
 ## Verification workflow
 
 1. Harness build (fast, catches 99% of issues)
@@ -33,6 +39,17 @@ exit 198) — the user performs all editor actions.
 
 ## Non-obvious traps
 
+- **Asmdef `Editor/` subfolders do NOT get platform editor-extension DLLs.**
+  An `Editor/` folder inside an asmdef compiles into that asmdef's generated
+  editor assembly, which lacks references to build-support modules — so
+  `using UnityEditor.Android;` fails there with CS0246
+  (`IPostGenerateGradleAndroidProject` not found) and kills the Android build
+  before Gradle starts. Loose scripts under `Assets/Editor/` compile into
+  `Assembly-CSharp-Editor`, which DOES reference them (verified in
+  `Library/Bee/artifacts/*/Assembly-CSharp-Editor.rsp`: it lists
+  `UnityEditor.Android.Extensions.dll` plus every game assembly). Discord's
+  own sample keeps `AndroidPostBuildProcessor` loose for this reason.
+  **Platform-specific build callbacks must live in `Assets/Editor/`.**
 - **Story universes are baked INTO their scene files:** `unchartered_space.unity`
   (and `a_wormhole_too_far.unity`) contain fully-expanded runtime-named copies
   of every sector's content (`GasCloud_Gas Cloud Cool Blue_-1_No-faction`,
