@@ -3,7 +3,7 @@
 # backport-sync.sh — merge the main game (Unity 6.6) into this Unity 6.3 LTS
 # backport branch, auto-resolving everything that is pure editor churn.
 #
-# The backport branch deliberately diverges from Dev in a handful of places
+# The backport branch deliberately diverges from upstream in a handful of places
 # because 6.3 lacks APIs that 6.6 has, or vice versa. Most of the divergent
 # files are not authored content at all: Unity rewrites them every time the
 # project is opened, so they conflict on every merge and then re-dirty the tree
@@ -42,7 +42,7 @@ readonly BRANCH="Backport"
 readonly SOURCE_DEFAULT="frontier/Legacy"
 
 # URP 17.3 (Unity 6.3) ships k_LastVersion = 10. URP 17.6 (Unity 6.6) ships 11.
-# A merge from Dev can reintroduce 11, which compiles fine and then throws in
+# A merge from upstream can reintroduce 11, which compiles fine and then throws in
 # URPBuildDataValidator at the start of every build. Nothing but URP's own
 # upward-only version bump ever writes this field, so it must be re-asserted.
 readonly URP_LAST_VERSION="10"
@@ -228,7 +228,7 @@ check_urp_version() {
 }
 
 repair_urp_version() {
-  # Write path, used only during a sync. A merge from Dev can reintroduce 11,
+  # Write path, used only during a sync. A merge from upstream can reintroduce 11,
   # and nothing but URP's own upward-only version bump ever corrects it.
   #
   # If the file is conflicted we resolve it to our side first: our copy is the

@@ -46,9 +46,9 @@ is a proper value type with `Equals`/`GetHashCode`/`ToString`, so
 this branch three files of unnecessary divergence — one of which
 (`DiscordPresenceManager.cs`) is a hot file that Dev touches ~17×/6mo.
 
-### Files that must stay diverged from Dev
+### Files that must stay diverged from Legacy
 
-Keep this list short; every entry is recurring merge cost. Current set is 4:
+Keep this list short; every entry is recurring merge cost. Current set is 5:
 
 | File | Why |
 |---|---|
@@ -56,13 +56,28 @@ Keep this list short; every entry is recurring merge cost. Current set is 4:
 | `Packages/manifest.json` | URP/core 17.3, ugui 2.0, timeline 1.8.13, test-framework 1.6 |
 | `ProjectSettings/ProjectSettings.asset` | `AndroidMinSdkVersion: 25` |
 | `…/AbstractFlowLayoutGroup.cs`, `…/FlowLayoutGroup.cs` | ugui 2.0.0 has no 5-arg `SetLayoutInputForAxis` |
+| `README.md` | **conflicts on every sync — resolve by hand, never auto** |
+
+**`README.md` is the one that will bite you.** It conflicts on *every* sync,
+permanently, because this branch's README is a rewrite rather than an edit: own
+intro, a "Why this branch exists" section, backport download filenames, and an
+inverted compatibility table. Do **not** add it to `AUTO_OURS_EXACT` in
+`backport-sync.sh`. Upstream's README carries real prose — the AGPL fork
+rationale, the rebrand checklist, the Ko-Fi support section — and auto-resolving
+to ours drops that silently. It was dropped exactly once before anyone noticed.
+
+The three legal documents (`CLA.md`, `CONTRIBUTING.md`, `TRADEMARK_POLICY.md`)
+are the opposite case and are safe: they carry upstream verbatim plus a branch
+scope note, so their upstream delta merges as a no-op. Verified by stripping the
+scope note and comparing the blob. **Re-apply the scope note after any manual
+`git checkout frontier/Legacy -- <those files>`**, which overwrites it.
 
 `Assets/UniversalRenderPipelineGlobalSettings.asset` also diverges
 (`m_AssetVersion: 10`) but **Unity rewrites its fields on open** — after any
 merge, reopen the project and re-check the version int. 17.3's
 `k_LastVersion` is 10 (17.6's is 11); `URPBuildDataValidator` throws at build
 start if they disagree, and nothing but URP's own upward-only version bump ever
-writes that field, so a merge from Dev silently reintroduces 11.
+writes that field, so a merge from upstream silently reintroduces 11.
 
 ## Offline compile verification (`/tmp/opencode/harness`)
 
