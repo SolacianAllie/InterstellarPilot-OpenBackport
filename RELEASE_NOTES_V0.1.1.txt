@@ -2,9 +2,10 @@ OPEN FRONTIER — V0.1.1 "HELLO, DISCORD"
 ===============================================
 
 A hotfix, and the headliner is something entirely new: Open Frontier
-now announces itself on Discord. Two proper bug fixes came out of
-playtesting it, including one that made an entire campaign unwinnable-
-ish. Sorry about that one.
+now announces itself on Discord. A handful of proper bug fixes came out
+of playtesting it, including one that made an entire campaign's saves
+impossible, and one where Android quietly shipped with the Unity logo on
+your home screen instead of ours. Sorry about both.
 
 
 DISCORD RICH PRESENCE
@@ -68,6 +69,20 @@ Two small ones that were driving me mad:
   compared to the main menu. Swiping up now looks up in both. (The HUD
   camera used to raise and lower itself, which is the opposite sign to
   "pitch up", and the conversion kept the wrong one.)
+
+
+ANDROID USES OUR ICON AGAIN
+------------------------------------------------------------
+If you installed the Android build on a phone, your launcher had the
+default Unity logo on it: every Android icon slot in the project's
+player settings was empty, so the APK had no icon of ours to show and
+fell back to the placeholder. All six densities now carry the real
+app icon.
+
+Android 8 and newer still wrap legacy icons in the system's own mask,
+so it looks slightly smaller than a modern adaptive icon would. If that
+bother you, the proper fix is an adaptive icon (a background layer plus
+a foreground inset for the safe zone) and it'll be done properly.
 
 
 Other notable things
