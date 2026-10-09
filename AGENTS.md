@@ -16,9 +16,12 @@ anything here toward 6.6.
 checkout.** It started life as a worktree, which turned out to be a trap: git
 worktrees SHARE remote config, so `origin` resolved to InterstellarPilot-OpenFrontier
 in both directories, and a `git push origin` from here would have pushed
-`backport/unity6.3` to the Frontier repo. It was converted to a standalone repo
+the backport branch to the Frontier repo. It was converted to a standalone repo
 by copying `.git` locally (so the 587 MB LFS store came along and nothing was
 re-downloaded). Do not re-add it as a worktree.
+
+The working branch is **`Backport`**, named to match the main game's scheme
+(`Dev`, `Legacy`). `tools/backport-sync.sh` hard-fails if you are not on it.
 
   origin    -> SolacianAllie/InterstellarPilot-OpenBackport   (this project)
   frontier  -> SolacianAllie/InterstellarPilot-OpenFrontier   (upstream, merges from frontier/Dev)

@@ -21,11 +21,11 @@ set -euo pipefail
 
 # Upstream is the Open Frontier project. This is a standalone repo (it used to
 # be a worktree of the Frontier checkout, which meant remotes were SHARED and a
-# bare `git push origin` from here would have pushed backport/unity6.3 to the
+# bare `git push origin` from here would have pushed the backport branch to the
 # Frontier repo). It is now independent, with:
 #   origin   -> SolacianAllie/InterstellarPilot-OpenBackport   (this project)
 #   frontier -> SolacianAllie/InterstellarPilot-OpenFrontier   (upstream)
-readonly BRANCH="backport/unity6.3"
+readonly BRANCH="Backport"
 readonly SOURCE_DEFAULT="frontier/Dev"
 
 # URP 17.3 (Unity 6.3) ships k_LastVersion = 10. URP 17.6 (Unity 6.6) ships 11.
