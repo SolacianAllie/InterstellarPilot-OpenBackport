@@ -69,8 +69,9 @@ own branding, and don't ship your version as "Open Frontier".
 
 GitHub lets anyone fork a public repo and the AGPL grants it outright, so that
 isn't ours to refuse. What we do ask is that changes come back here. This game
-nearly died once; the knowledge that keeps it alive only helps if it stays in 
+nearly died once; the knowledge that keeps it alive only helps if it stays in
 one place.
+
 A fork fixes nothing for players of this build — a pull request lands in the
 one they download.
 
