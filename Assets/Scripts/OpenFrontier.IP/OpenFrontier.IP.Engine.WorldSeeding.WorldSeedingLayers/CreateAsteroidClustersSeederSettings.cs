@@ -16,6 +16,9 @@ namespace OpenFrontier.IP.Engine.WorldSeeding.WorldSeedingLayers
 
 		public float AsteroidClusterRadiusPower = 1f;
 
-		public float ProbabilityOfGeneratingGasCloud = 0.75f;
+		// Coin flip per cluster: belts should sometimes have a gas cloud,
+		// sometimes not. (Was 0.75 - with several clusters per sector that
+		// made "at least one gassy belt" a near-guarantee.)
+		public float ProbabilityOfGeneratingGasCloud = 0.5f;
 	}
 }

@@ -1,0 +1,99 @@
+OPEN FRONTIER — V0.1.1 "HELLO, DISCORD"
+===============================================
+
+A hotfix, and the headliner is something entirely new: Open Frontier
+now announces itself on Discord. A handful of proper bug fixes came out
+of playtesting it, including one that made an entire campaign's saves
+impossible, and one where Android quietly shipped with the Unity logo on
+your home screen instead of ours. Sorry about both.
+
+
+DISCORD RICH PRESENCE
+------------------------------------------------------------
+Open Frontier now shows up on your Discord profile while you play. No
+account linking, no "sign in with Discord" prompt, nothing to approve —
+if Discord is open, your status updates. That's it.
+
+The small icon next to your name is whatever you're currently in:
+your ship, the station you docked at, the carrier you parked your
+shuttle inside, a weapons platform you manned. Hover it and you get the
+full story — class, variant and name (or the type and name of a
+station). Every ship series and every station, structure and turret in
+the game has its own icon, mapped from the actual class data, so
+nothing ever falls back to a generic blob.
+
+The two lines of text rotate through your actual situation, changing
+every ten seconds:
+
+- Your cargo manifest — a page at a time if you're hauling more than
+  three types, so the whole hold gets seen
+- Where you are — sector, scenario, security level, station count and
+  how far you are from the frontier
+- Your faction's treasury and fleet size
+- How much of the universe you've charted
+- Whatever the sector and the scenario have to say about themselves
+
+And the moment something real happens, presence updates instantly:
+swapping ships, docking, jumping, entering or leaving the main menu, or
+renaming anything. The rotation restarts on the spot, so you're never
+staring at stale information.
+
+If you want presence to show even when Discord ISN'T running, there's
+an authenticated mode in the spectator component — it asks you to
+authorise the app once. Off by default, because nobody should have to
+log in to see a spaceship.
+
+
+"A WORMHOLE TOO FAR" COULDN'T SAVE. FIXED.
+------------------------------------------------------------
+If you played the A Wormhole Too Far campaign, you probably gave up on
+saving around day one. Sorry! Three of that scenario's planets were
+missing a component, and the save exporter walked straight into it and
+threw — so the game refused to save, with a big red exception to
+show for it.
+
+The planets are fixed, and the save code no longer lets a single
+malformed object take your whole save file down with it. One bad unit
+now costs you one bad unit, not your playthrough.
+
+
+THE CAMERA FIXES
+------------------------------------------------------------
+Two small ones that were driving me mad:
+
+- The main menu's spectator blackout used to draw ON TOP of the menus
+  and HUD, so every camera swap blacked out the interface along with
+  the view. It now draws underneath, exactly where a cinematic fade
+  belongs.
+- Looking up and down with the camera in the universe was inverted
+  compared to the main menu. Swiping up now looks up in both. (The HUD
+  camera used to raise and lower itself, which is the opposite sign to
+  "pitch up", and the conversion kept the wrong one.)
+
+
+ANDROID USES OUR ICON AGAIN
+------------------------------------------------------------
+If you installed the Android build on a phone, your launcher had the
+default Unity logo on it: every Android icon slot in the project's
+player settings was empty, so the APK had no icon of ours to show and
+fell back to the placeholder. All six densities now carry the real
+app icon.
+
+Android 8 and newer still wrap legacy icons in the system's own mask,
+so it looks slightly smaller than a modern adaptive icon would. If that
+bother you, the proper fix is an adaptive icon (a background layer plus
+a foreground inset for the safe zone) and it'll be done properly.
+
+
+Other notable things
+------------------------------------------------------------
+- Rich Presence shows your sector's real security level (the same
+  value the game itself uses for asteroid yields and abandoned ships)
+  and your faction's real exploration progress.
+- Text lines are trimmed to Discord's length limit automatically, and
+  cards with nothing to show drop out of the rotation, so a fresh
+  pilot cycles fewer facts than a veteran.
+- Presence title reads "InterstellarPilot: Open Frontier", overriding
+  whatever name the Discord application is registered under.
+- No impact on save file formats — V0.1.1 saves load in V0.1.0 and
+  vice versa.

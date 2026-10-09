@@ -8067,25 +8067,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &442
-GameObject:
-  serializedVersion: 6
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Component:
-  - component: {fileID: 2611}
-  - component: {fileID: 5301}
-  - component: {fileID: 6794}
-  - component: {fileID: 4466}
-  m_Layer: 29
-  m_Name: GasCloud_Gas Cloud Dark_-1_No-faction (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!1 &443
 GameObject:
   serializedVersion: 6
@@ -23784,25 +23765,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &1347
-GameObject:
-  serializedVersion: 6
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Component:
-  - component: {fileID: 3406}
-  - component: {fileID: 6444}
-  - component: {fileID: 7295}
-  - component: {fileID: 4463}
-  m_Layer: 29
-  m_Name: GasCloud_Gas Cloud Grey_-1_No-faction
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!1 &1348
 GameObject:
   serializedVersion: 6
@@ -27202,25 +27164,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &1547
-GameObject:
-  serializedVersion: 6
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Component:
-  - component: {fileID: 3662}
-  - component: {fileID: 6684}
-  - component: {fileID: 6226}
-  - component: {fileID: 4456}
-  m_Layer: 29
-  m_Name: GasCloud_Gas Cloud Grey_-1_No-faction
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!1 &1548
 GameObject:
   serializedVersion: 6
@@ -28151,25 +28094,6 @@ GameObject:
   - component: {fileID: 6306}
   m_Layer: 19
   m_Name: Heavy Turret II
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!1 &1603
-GameObject:
-  serializedVersion: 6
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Component:
-  - component: {fileID: 3744}
-  - component: {fileID: 6761}
-  - component: {fileID: 6254}
-  - component: {fileID: 4459}
-  m_Layer: 29
-  m_Name: GasCloud_Gas Cloud Cool Blue_-1_No-faction
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -31299,25 +31223,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &1788
-GameObject:
-  serializedVersion: 6
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Component:
-  - component: {fileID: 3941}
-  - component: {fileID: 6928}
-  - component: {fileID: 6498}
-  - component: {fileID: 4452}
-  m_Layer: 29
-  m_Name: GasCloud_Gas Cloud Grey_-1_No-faction
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!1 &1789
 GameObject:
   serializedVersion: 6
@@ -33238,25 +33143,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &1902
-GameObject:
-  serializedVersion: 6
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Component:
-  - component: {fileID: 4029}
-  - component: {fileID: 7046}
-  - component: {fileID: 6570}
-  - component: {fileID: 4453}
-  m_Layer: 29
-  m_Name: GasCloud_Gas Cloud Cool Blue_-1_No-faction
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!1 &1903
 GameObject:
   serializedVersion: 6
@@ -34504,25 +34390,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &1976
-GameObject:
-  serializedVersion: 6
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Component:
-  - component: {fileID: 4123}
-  - component: {fileID: 7124}
-  - component: {fileID: 6330}
-  - component: {fileID: 4450}
-  m_Layer: 29
-  m_Name: GasCloud_Gas Cloud Grey_-1_No-faction
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!1 &1977
 GameObject:
   serializedVersion: 6
@@ -35380,25 +35247,6 @@ GameObject:
   - component: {fileID: 7333}
   m_Layer: 19
   m_Name: Heavy Turret II
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!1 &2028
-GameObject:
-  serializedVersion: 6
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Component:
-  - component: {fileID: 4177}
-  - component: {fileID: 7197}
-  - component: {fileID: 6353}
-  - component: {fileID: 4451}
-  m_Layer: 29
-  m_Name: GasCloud_Gas Cloud Grey_-1_No-faction
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -40229,11 +40077,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 3406}
   - {fileID: 4335}
   - {fileID: 3362}
   - {fileID: 3514}
-  - {fileID: 4177}
   - {fileID: 4297}
   - {fileID: 2412}
   - {fileID: 2539}
@@ -41888,9 +41734,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 3662}
   - {fileID: 4000}
-  - {fileID: 4123}
   - {fileID: 4038}
   - {fileID: 3336}
   - {fileID: 3994}
@@ -45053,21 +44897,6 @@ Transform:
   m_Father: {fileID: 2711}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
---- !u!4 &2611
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 442}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3181, y: 0, z: -4739}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2824}
-  m_RootOrder: 7
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &2612
 Transform:
   m_ObjectHideFlags: 0
@@ -48559,7 +48388,6 @@ Transform:
   - {fileID: 2645}
   - {fileID: 2565}
   - {fileID: 2263}
-  - {fileID: 2611}
   - {fileID: 2206}
   - {fileID: 2367}
   m_Father: {fileID: 2315}
@@ -49064,7 +48892,6 @@ Transform:
   m_Children:
   - {fileID: 3695}
   - {fileID: 3318}
-  - {fileID: 3941}
   - {fileID: 3595}
   - {fileID: 2401}
   - {fileID: 2415}
@@ -49150,9 +48977,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 4029}
   - {fileID: 3559}
-  - {fileID: 3744}
   - {fileID: 3487}
   - {fileID: 3628}
   - {fileID: 3209}
@@ -57855,21 +57680,6 @@ Transform:
   m_Father: {fileID: 4211}
   m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: -0, y: -89.99999, z: 0}
---- !u!4 &3406
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1347}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2510, y: 0, z: 1951}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2316}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &3407
 Transform:
   m_ObjectHideFlags: 0
@@ -61849,21 +61659,6 @@ Transform:
   m_Father: {fileID: 2590}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
---- !u!4 &3662
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1547}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -923, y: 0, z: 2063}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2417}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &3663
 Transform:
   m_ObjectHideFlags: 0
@@ -63133,21 +62928,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3174}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &3744
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1603}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1635, y: 0, z: 745}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2858}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &3745
@@ -66254,21 +66034,6 @@ Transform:
   m_Father: {fileID: 2812}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
---- !u!4 &3941
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1788}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1161, y: 0, z: -127}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2854}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &3942
 Transform:
   m_ObjectHideFlags: 0
@@ -67622,21 +67387,6 @@ Transform:
   m_Father: {fileID: 3867}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 180, y: 1.8669336E-05, z: 180}
---- !u!4 &4029
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1902}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2858}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4030
 Transform:
   m_ObjectHideFlags: 0
@@ -69136,21 +68886,6 @@ Transform:
   m_Father: {fileID: 3485}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
---- !u!4 &4123
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1976}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1185, y: 0, z: -2327}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2417}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4124
 Transform:
   m_ObjectHideFlags: 0
@@ -69994,21 +69729,6 @@ Transform:
   m_Father: {fileID: 3842}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 180, y: -40.699986, z: 180}
---- !u!4 &4177
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2028}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2062, y: 0, z: 1121}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2316}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4178
 Transform:
   m_ObjectHideFlags: 0
@@ -73947,58 +73667,6 @@ SphereCollider:
   m_Enabled: 1
   m_Radius: 20.8
   m_Center: {x: 0, y: 0, z: 0}
---- !u!135 &4450
-SphereCollider:
-  serializedVersion: 2
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1976}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  m_Radius: 2500
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!135 &4451
-SphereCollider:
-  serializedVersion: 2
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2028}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  m_Radius: 2000
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!135 &4452
-SphereCollider:
-  serializedVersion: 2
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1788}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  m_Radius: 1200
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!135 &4453
-SphereCollider:
-  serializedVersion: 2
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1902}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  m_Radius: 2000
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!135 &4454
 SphereCollider:
   serializedVersion: 2
@@ -74025,19 +73693,6 @@ SphereCollider:
   m_Enabled: 1
   m_Radius: 2000
   m_Center: {x: 0, y: 0, z: 0}
---- !u!135 &4456
-SphereCollider:
-  serializedVersion: 2
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1547}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  m_Radius: 1200
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!135 &4457
 SphereCollider:
   serializedVersion: 2
@@ -74063,19 +73718,6 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 3.84
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!135 &4459
-SphereCollider:
-  serializedVersion: 2
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1603}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  m_Radius: 2000
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!135 &4460
 SphereCollider:
@@ -74116,19 +73758,6 @@ SphereCollider:
   m_Enabled: 1
   m_Radius: 1500
   m_Center: {x: 0, y: 0, z: 0}
---- !u!135 &4463
-SphereCollider:
-  serializedVersion: 2
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1347}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  m_Radius: 1500
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!135 &4464
 SphereCollider:
   serializedVersion: 2
@@ -74154,19 +73783,6 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 6000
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!135 &4466
-SphereCollider:
-  serializedVersion: 2
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 442}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  m_Radius: 3500
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!135 &4467
 SphereCollider:
@@ -89195,32 +88811,6 @@ MonoBehaviour:
   AllowDestruction: 1
   IsInvulnerable: 1
   currentHealth: -1
---- !u!114 &5301
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 442}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31364a87781d1d98b6ee3057585af9b2, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
-  ClassName: Gas Cloud Dark
-  Mass: 1000
-  Seed: -1
-  CollisionCollider: {fileID: 0}
-  Radius: 3500
-  DamageCollider: {fileID: 0}
-  asteroid: {fileID: 0}
-  faction: {fileID: 0}
-  hasInit: 0
-  RpProvision: 0
-  uniqueId: -1
-  unitClass: {fileID: 114724804207875695, guid: 134de3dcc5c7e5d43831679db7d32423, type: 2}
-  UnitName:
-  UnitShortName:
 --- !u!114 &5302
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -105111,20 +104701,6 @@ MonoBehaviour:
   m_EditorClassIdentifier:
   BayId: 140
   MaxHullType: 4
---- !u!114 &6226
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1547}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a2a5361829ba4492cbe503f92f8c55fa, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
-  GasCloudClass: {fileID: 114724804207875695, guid: 3d4f68b04c2c4ea4e820497ff9894914, type: 2}
-  unit: {fileID: 0}
 --- !u!114 &6227
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -105551,20 +105127,6 @@ MonoBehaviour:
   m_EditorClassIdentifier:
   BayId: 200
   MaxHullType: 4
---- !u!114 &6254
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1603}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a2a5361829ba4492cbe503f92f8c55fa, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
-  GasCloudClass: {fileID: 114724804207875695, guid: 64460fcf15972734b88927b4bc98b35e, type: 2}
-  unit: {fileID: 0}
 --- !u!114 &6255
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -106752,20 +106314,6 @@ MonoBehaviour:
   MaxClass: 8
   OverrideUnitClassRating: 1
   WeaponArc: {x: 0, y: 360, z: 0}
---- !u!114 &6330
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1976}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a2a5361829ba4492cbe503f92f8c55fa, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
-  GasCloudClass: {fileID: 114724804207875695, guid: 3d4f68b04c2c4ea4e820497ff9894914, type: 2}
-  unit: {fileID: 0}
 --- !u!114 &6331
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -107148,20 +106696,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7afb68a6cee84a924a840c1b442d3ae1, type: 3}
   m_Name:
   m_EditorClassIdentifier:
---- !u!114 &6353
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2028}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a2a5361829ba4492cbe503f92f8c55fa, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
-  GasCloudClass: {fileID: 114724804207875695, guid: 3d4f68b04c2c4ea4e820497ff9894914, type: 2}
-  unit: {fileID: 0}
 --- !u!114 &6354
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -108712,32 +108246,6 @@ MonoBehaviour:
   MaxClass: 1
   OverrideUnitClassRating: 0
   WeaponArc: {x: 0, y: 90, z: 0}
---- !u!114 &6444
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1347}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31364a87781d1d98b6ee3057585af9b2, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
-  ClassName: Gas Cloud Grey
-  Mass: 1000
-  Seed: -1
-  CollisionCollider: {fileID: 0}
-  Radius: 1500
-  DamageCollider: {fileID: 0}
-  asteroid: {fileID: 0}
-  faction: {fileID: 0}
-  hasInit: 0
-  RpProvision: 0
-  uniqueId: -1
-  unitClass: {fileID: 114724804207875695, guid: a0e7acc5f069eaf498ca9694f17433aa, type: 2}
-  UnitName:
-  UnitShortName:
 --- !u!114 &6445
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -109616,20 +109124,6 @@ MonoBehaviour:
   ProbabilityOfBounty: 0.5
   ProbabilityOfBountyKnownPosition: 0.4
   ManualHostileWithAll: 0
---- !u!114 &6498
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1788}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a2a5361829ba4492cbe503f92f8c55fa, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
-  GasCloudClass: {fileID: 114724804207875695, guid: 3d4f68b04c2c4ea4e820497ff9894914, type: 2}
-  unit: {fileID: 0}
 --- !u!114 &6499
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -110901,20 +110395,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 810c6574c040a31d084cf68eb4a7fa75, type: 3}
   m_Name:
   m_EditorClassIdentifier:
---- !u!114 &6570
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1902}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a2a5361829ba4492cbe503f92f8c55fa, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
-  GasCloudClass: {fileID: 114724804207875695, guid: 64460fcf15972734b88927b4bc98b35e, type: 2}
-  unit: {fileID: 0}
 --- !u!114 &6571
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -112819,32 +112299,6 @@ MonoBehaviour:
   MaxClass: 4
   OverrideUnitClassRating: 1
   WeaponArc: {x: 0, y: 360, z: 0}
---- !u!114 &6684
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1547}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31364a87781d1d98b6ee3057585af9b2, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
-  ClassName: Gas Cloud Grey
-  Mass: 1000
-  Seed: -1
-  CollisionCollider: {fileID: 0}
-  Radius: 1200
-  DamageCollider: {fileID: 0}
-  asteroid: {fileID: 0}
-  faction: {fileID: 0}
-  hasInit: 0
-  RpProvision: 0
-  uniqueId: -1
-  unitClass: {fileID: 114724804207875695, guid: a0e7acc5f069eaf498ca9694f17433aa, type: 2}
-  UnitName:
-  UnitShortName:
 --- !u!114 &6685
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -114132,32 +113586,6 @@ MonoBehaviour:
   m_Name:
   m_EditorClassIdentifier:
   ComponentClass: {fileID: 114724804207875695, guid: d0ce102299190084ea3325105e9c7e25, type: 2}
---- !u!114 &6761
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1603}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31364a87781d1d98b6ee3057585af9b2, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
-  ClassName: Gas Cloud Cool Blue
-  Mass: 1000
-  Seed: -1
-  CollisionCollider: {fileID: 0}
-  Radius: 1500
-  DamageCollider: {fileID: 0}
-  asteroid: {fileID: 0}
-  faction: {fileID: 0}
-  hasInit: 0
-  RpProvision: 0
-  uniqueId: -1
-  unitClass: {fileID: 114724804207875695, guid: e056d427d8918714bb78973b89f74c3b, type: 2}
-  UnitName:
-  UnitShortName:
 --- !u!114 &6762
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -114696,20 +114124,6 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 262}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a2a5361829ba4492cbe503f92f8c55fa, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
-  GasCloudClass: {fileID: 114724804207875695, guid: 554446b223c536f4baea8b7ec1c67616, type: 2}
-  unit: {fileID: 0}
---- !u!114 &6794
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 442}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a2a5361829ba4492cbe503f92f8c55fa, type: 3}
@@ -116860,32 +116274,6 @@ MonoBehaviour:
   MaxClass: 4
   OverrideUnitClassRating: 1
   WeaponArc: {x: 0, y: 360, z: 0}
---- !u!114 &6928
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1788}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31364a87781d1d98b6ee3057585af9b2, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
-  ClassName: Gas Cloud Grey
-  Mass: 1000
-  Seed: -1
-  CollisionCollider: {fileID: 0}
-  Radius: 1500
-  DamageCollider: {fileID: 0}
-  asteroid: {fileID: 0}
-  faction: {fileID: 0}
-  hasInit: 0
-  RpProvision: 0
-  uniqueId: -1
-  unitClass: {fileID: 114724804207875695, guid: a0e7acc5f069eaf498ca9694f17433aa, type: 2}
-  UnitName:
-  UnitShortName:
 --- !u!114 &6929
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -118789,32 +118177,6 @@ MonoBehaviour:
   MaxClass: 4
   OverrideUnitClassRating: 1
   WeaponArc: {x: 0, y: 360, z: 0}
---- !u!114 &7046
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1902}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31364a87781d1d98b6ee3057585af9b2, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
-  ClassName: Gas Cloud Cool Blue
-  Mass: 1000
-  Seed: -1
-  CollisionCollider: {fileID: 0}
-  Radius: 1500
-  DamageCollider: {fileID: 0}
-  asteroid: {fileID: 0}
-  faction: {fileID: 0}
-  hasInit: 0
-  RpProvision: 0
-  uniqueId: -1
-  unitClass: {fileID: 114724804207875695, guid: e056d427d8918714bb78973b89f74c3b, type: 2}
-  UnitName:
-  UnitShortName:
 --- !u!114 &7047
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -120072,32 +119434,6 @@ MonoBehaviour:
   UsesCloak: 1
   AICheatAmmo: 0
   AllowDitchShip: 1
---- !u!114 &7124
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1976}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31364a87781d1d98b6ee3057585af9b2, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
-  ClassName: Gas Cloud Grey
-  Mass: 1000
-  Seed: -1
-  CollisionCollider: {fileID: 0}
-  Radius: 2500
-  DamageCollider: {fileID: 0}
-  asteroid: {fileID: 0}
-  faction: {fileID: 0}
-  hasInit: 0
-  RpProvision: 0
-  uniqueId: -1
-  unitClass: {fileID: 114724804207875695, guid: a0e7acc5f069eaf498ca9694f17433aa, type: 2}
-  UnitName:
-  UnitShortName:
 --- !u!114 &7125
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -121252,32 +120588,6 @@ MonoBehaviour:
   m_EditorClassIdentifier:
   GasCloudClass: {fileID: 114724804207875695, guid: 3d4f68b04c2c4ea4e820497ff9894914, type: 2}
   unit: {fileID: 0}
---- !u!114 &7197
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2028}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31364a87781d1d98b6ee3057585af9b2, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
-  ClassName: Gas Cloud Grey
-  Mass: 1000
-  Seed: -1
-  CollisionCollider: {fileID: 0}
-  Radius: 1500
-  DamageCollider: {fileID: 0}
-  asteroid: {fileID: 0}
-  faction: {fileID: 0}
-  hasInit: 0
-  RpProvision: 0
-  uniqueId: -1
-  unitClass: {fileID: 114724804207875695, guid: a0e7acc5f069eaf498ca9694f17433aa, type: 2}
-  UnitName:
-  UnitShortName:
 --- !u!114 &7198
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -122790,20 +122100,6 @@ MonoBehaviour:
   MinDesignationRandomValue: 156
   MaxDesignationRandomValue: 804
   ProbabilityOfGreekAlphabetSuffix: 0.7
---- !u!114 &7295
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1347}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a2a5361829ba4492cbe503f92f8c55fa, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
-  GasCloudClass: {fileID: 114724804207875695, guid: 3d4f68b04c2c4ea4e820497ff9894914, type: 2}
-  unit: {fileID: 0}
 --- !u!114 &7296
 MonoBehaviour:
   m_ObjectHideFlags: 0

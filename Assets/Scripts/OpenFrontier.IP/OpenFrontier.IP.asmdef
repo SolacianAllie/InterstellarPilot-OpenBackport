@@ -12,6 +12,7 @@
         "OpenFrontier.Unity.Utils",
         "UnityEngine.UI",
         "Unity.TextMeshPro",
+        "Discord.Sdk",
         "OpenFrontier"
     ],
     "includePlatforms": [],

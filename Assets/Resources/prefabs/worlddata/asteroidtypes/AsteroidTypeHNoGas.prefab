@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1709254077376921
+GameObject:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Component:
+  - component: {fileID: 4730242686860875}
+  - component: {fileID: 114724804207875695}
+  m_Layer: 0
+  m_Name: AsteroidTypeHNoGas
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4730242686860875
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+--- !u!114 &114724804207875695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709254077376921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7993f5a855a8a6689b080afaf799e2ed, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  AsteroidFieldPrefabSettings: {fileID: 114724804207875695, guid: 83b70384144d4034a8b84b4b387229cd, type: 2}
+  AsteroidTypeSprite: {fileID: 21300000, guid: 92ede183d174fec4aa0fae2ff6ba41ab, type: 2}
+  UniverseMapSectorTypeSprite: {fileID: 21300000, guid: 60ab893b433f0544fbc2e5abc0967177, type: 2}
+  AsteroidUnitPrefabs:
+  - {fileID: 114618682377417806, guid: 238f37cdeb828db43b5c8a46d1a13a68, type: 2}
+  AsteroidClusterPrefabs:
+  - {fileID: 114618682377417806, guid: 6f88cbc09f6bfe14dbb774bb62e26ec4, type: 2}
+  PreferredWeighting: 1
+  GasCloudPrefabs: []

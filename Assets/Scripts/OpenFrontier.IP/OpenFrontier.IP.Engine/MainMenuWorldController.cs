@@ -245,9 +245,11 @@ namespace OpenFrontier.IP.Engine
 			}
 		}
 
-		// Fresh belts (1-2, no gas clouds in the menu), each filled with
-		// REAL mineable asteroid units so miner fleets have something to
-		// work - the decorative cluster rocks alone aren't harvestable.
+		// Fresh belts (1-2), each filled with REAL mineable asteroid units
+		// so miner fleets have something to work - the decorative cluster
+		// rocks alone aren't harvestable. Belts may come with a gas cloud
+		// (variance): gassy types roll the shared probability, the NoGas
+		// type variants stay clean by construction.
 		private List<AsteroidCluster> SpawnAsteroidClusters(Sector sector)
 		{
 			List<AsteroidCluster> list = new List<AsteroidCluster>();
@@ -257,6 +259,19 @@ namespace OpenFrontier.IP.Engine
 				return list;
 			}
 			int num = UnityEngine.Random.Range(1, 3);
+			// Mirror the sandbox generator's spacing rule (same settings
+			// source, CreateAsteroidClustersSeeder): a new belt's edge must
+			// clear every placed belt's edge by MinDistanceBetweenAsteroidClusters.
+			// The menu used to place blind, so two 4000-radius belts could
+			// land on top of each other.
+			float num2 = 400f;
+			float num3 = 0.5f;
+			CreateAsteroidClustersSeederSettings createAsteroidClustersSeederSettings = GameController.Instance.GameSettings.DefaultWorldSeedSettings.CreateAsteroidClustersSeederSettings;
+			if (createAsteroidClustersSeederSettings != null)
+			{
+				num2 = createAsteroidClustersSeederSettings.MinDistanceBetweenAsteroidClusters;
+				num3 = createAsteroidClustersSeederSettings.ProbabilityOfGeneratingGasCloud;
+			}
 			for (int i = 0; i < num; i++)
 			{
 				AsteroidType asteroidType = array[UnityEngine.Random.Range(0, array.Length)];
@@ -264,9 +279,34 @@ namespace OpenFrontier.IP.Engine
 				AsteroidCluster asteroidCluster = UnityObjectHelper.InstantiateAndGetComponent(asteroidClusterPrefab);
 				asteroidCluster.Unit.Radius = UnityEngine.Random.Range(2500f, 4000f);
 				asteroidCluster.transform.SetParent(sector.transform, worldPositionStays: true);
-				asteroidCluster.transform.localPosition = sector.GetRandomSectorPositionWithinGateDistance(0.75f);
+				Vector3 localPosition = sector.GetRandomSectorPositionWithinGateDistance(0.75f);
+				int j = 0;
+				for (; j < 6; j++)
+				{
+					if (!list.Any((AsteroidCluster e) => Vector3.Distance(e.Unit.SectorPosition, localPosition) < num2 + e.Unit.Radius + asteroidCluster.Unit.Radius))
+					{
+						break;
+					}
+					localPosition = sector.GetRandomSectorPositionWithinGateDistance(0.75f);
+				}
+				if (j == 6)
+				{
+					// No clear spot in 6 tries (sandbox seeder behaviour):
+					// drop this belt rather than overlap a placed one.
+					Object.Destroy(asteroidCluster.gameObject);
+					continue;
+				}
+				asteroidCluster.transform.localPosition = localPosition;
 				asteroidCluster.GetComponent<Unit>().Init();
 				SeedRealAsteroids(asteroidCluster);
+				// Roll gas from the PICKED type, not the cluster prefab's
+				// back-referenced type (always the gassy original) - that's
+				// what makes the NoGas variants actually stay clean.
+				Unit random = asteroidType.GasCloudPrefabs.GetRandom();
+				if (random != null && UnityEngine.Random.value < num3)
+				{
+					CreateAsteroidClustersSeeder.CreateGasCloud(sector, asteroidCluster.Unit.Radius, localPosition, random);
+				}
 				list.Add(asteroidCluster);
 			}
 			return list;
@@ -356,7 +396,6 @@ namespace OpenFrontier.IP.Engine
 					num3++;
 				}
 			}, (Unit e) => e.IsValidAndNotDestroyed && e.Sector == sector && e.UnitType == UnitType.Planet);
-			Debug.Log(string.Format("[MainMenuWorldController] planet system: {0} planet(s), {1} moon(s)", num3, num4));
 		}
 
 		// Menu moon ladder: chance to ADD the Nth moon (conditional
@@ -430,9 +469,12 @@ namespace OpenFrontier.IP.Engine
 					// screen), so a multi-moon system reads as distinct
 					// bodies, not clones. Orbit math uses the PLANET's
 					// radius, so scale never hides a moon inside it.
-					unit2.transform.localScale = Vector3.one * UnityEngine.Random.Range(0.5f, 4f);
+					// The CLOSEST moon (i=0) is clamped to 1x max - it
+					// sits near the camera's beat and a giant there
+					// swallows the frame.
+					float num5 = ((i == 0) ? UnityEngine.Random.Range(0.5f, 1f) : UnityEngine.Random.Range(0.5f, 4f));
+					unit2.transform.localScale = Vector3.one * num5;
 				}
-				Debug.Log(string.Format("[MainMenuWorldController] planet '{0}' visual radius {1:0}: {2} moon(s) placed", item.Key.name, num, item.Value.Count));
 			}
 		}
 
@@ -448,11 +490,37 @@ namespace OpenFrontier.IP.Engine
 			{
 				return;
 			}
-			Unit unit = SpawnUtils.SpawnUnit(list[UnityEngine.Random.Range(0, list.Count)].UnitPrefab, sector, sector.GetRandomSectorPositionWithinGateDistance(0.3f), civilianFaction);
+			// Spawn out in the deep black: sample candidates on the
+			// sector's outer rim and keep the one farthest from any
+			// station, so the hero ship has to FLY IN before it can
+			// work. Its faction gets a few million credits of working
+			// capital for the trip.
+			Vector3 vector = sector.GetRandomSectorPositionWithinGateDistance(0.9f);
+			float num = 0f;
+			List<Unit> list2 = sector.GetUnitsByType(UnitType.Station);
+			for (int i = 0; i < 6; i++)
+			{
+				Vector3 vector2 = Geometry.RandomXZUnitVector() * (sector.GetActualGateDistance() * UnityEngine.Random.Range(0.85f, 1.15f));
+				float num2 = float.MaxValue;
+				if (list2 != null)
+				{
+					foreach (Unit item in list2)
+					{
+						num2 = Mathf.Min(num2, Vector3.Distance(vector2, item.SectorPosition));
+					}
+				}
+				if (num2 > num)
+				{
+					num = num2;
+					vector = vector2;
+				}
+			}
+			Unit unit = SpawnUtils.SpawnUnit(list[UnityEngine.Random.Range(0, list.Count)].UnitPrefab, sector, vector, civilianFaction);
 			if (unit != null)
 			{
 				if (civilianFaction != null)
 				{
+					civilianFaction.Credits += UnityEngine.Random.Range(2000000, 5000001);
 					SpawnUtils.SpawnGenericFleetWithUnits(civilianFaction, new List<Unit> { unit });
 				}
 				if (EngineASX.Instance.World != null)
@@ -477,7 +545,6 @@ namespace OpenFrontier.IP.Engine
 			float actualGateDistance = sector.GetActualGateDistance();
 			var list = GameController.Instance.LoadedUnitClasses.Where((UnitClass e) => e.IsUsable && e.UnitType == UnitType.Station && e.SeedInSandbox && e.StationPurpose != StationPurpose.SectorControl).OrderBy((UnitClass e) => UnityEngine.Random.value).ToList();
 			civilianFaction = null;
-			Faction securityFaction = null;
 			float num = 6.2831855f / Mathf.Max(1, list.Count);
 			for (int i = 0; i < list.Count; i++)
 			{
@@ -517,18 +584,10 @@ namespace OpenFrontier.IP.Engine
 				{
 					ForceTradeOrders(SpawnSoloShipFleet(faction, sector, vector2 + UnityEngine.Random.onUnitSphere * 900f, TraderPrefabs[UnityEngine.Random.Range(0, TraderPrefabs.Length)]));
 				}
-				// ...and sometimes a patrol on station.
-				if (UnityEngine.Random.value < 0.35f)
-				{
-					if (securityFaction == null)
-					{
-						securityFaction = CreateAIFaction(FactionType.Security);
-					}
-					if (securityFaction != null)
-					{
-						SpawnUtils.SpawnFleetWithLargerUnits(securityFaction, sector, vector2 + UnityEngine.Random.onUnitSphere * 1200f, UnityEngine.Random.Range(3, 6));
-					}
-				}
+				// NOTE: no explicit station patrols - the spawner settings
+				// have no non-outlaw Security faction type (the attempt
+				// only ever logged a warning), and the strategy layer now
+				// generates organic patrol/protect fleets on its own.
 			}
 			// Every cluster gets 1-2 SOLO miners, dropped in the rocks
 			// and force-ordered to mine then sell.
@@ -539,10 +598,33 @@ namespace OpenFrontier.IP.Engine
 				{
 					foreach (AsteroidCluster cluster in clusters)
 					{
-						int num4 = UnityEngine.Random.Range(1, 3);
-						for (int l = 0; l < num4; l++)
+						// 1-2 miners PER ASTEROID in the belt, each dropped
+						// beside its rock: the belt visibly crawls with
+						// workers instead of one lonely hauler.
+						List<Unit> list2 = sector.GetUnitsByType(UnitType.Asteroid)?.Where((Unit u) => u != null && Vector3.Distance(u.SectorPosition, cluster.Unit.SectorPosition) <= cluster.Unit.Radius * 1.1f).ToList() ?? new List<Unit>();
+						if (list2.Count == 0)
 						{
-							ForceMineOrders(SpawnSoloShipFleet(faction2, sector, cluster.Unit.SectorPosition + UnityEngine.Random.onUnitSphere * (cluster.Unit.Radius * 0.5f), GameController.Instance.UnitClasses.Hauler_M.UnitPrefab));
+							// Belt somehow rockless - old 1-2 per-cluster
+							// behaviour as a fallback.
+							int num6 = UnityEngine.Random.Range(1, 3);
+							for (int m = 0; m < num6; m++)
+							{
+								ForceMineOrders(SpawnSoloShipFleet(faction2, sector, cluster.Unit.SectorPosition + UnityEngine.Random.onUnitSphere * (cluster.Unit.Radius * 0.5f), GameController.Instance.UnitClasses.Hauler_M.UnitPrefab));
+							}
+							continue;
+						}
+						foreach (Unit item2 in list2)
+						{
+							int num4 = UnityEngine.Random.Range(1, 3);
+							for (int l = 0; l < num4; l++)
+							{
+								// Spawn at the belt's EDGE (1.0-1.25x
+								// radius), not beside the rock: miners
+								// fly in over different distances and
+								// start work staggered, not all at once.
+								Vector3 vector3 = cluster.Unit.SectorPosition + Geometry.RandomXZUnitVector() * (cluster.Unit.Radius * UnityEngine.Random.Range(1f, 1.25f));
+								ForceMineOrders(SpawnSoloShipFleet(faction2, sector, vector3, GameController.Instance.UnitClasses.Hauler_M.UnitPrefab));
+							}
 						}
 					}
 				}
@@ -552,6 +634,28 @@ namespace OpenFrontier.IP.Engine
 			if (UnityEngine.Random.value < 0.15f)
 			{
 				SpawnUtils.SpawnBanditHordesAtSectorPosition(sector, sector.GetRandomSectorPositionWithinGateDistance(0.75f), 1, 2);
+			}
+			// Stock the shelves: menu stations spawn AFTER world seeding,
+			// so they miss WorldTraderCargoSeeder and open with EMPTY
+			// cargo bays - no sellable stock = no trade routes = traders
+			// "finding trade route" forever. Run the stock pipeline's fill.
+			WorldTraderCargoSeederSettings worldTraderCargoSeederSettings = GameController.Instance.GameSettings.DefaultWorldSeedSettings.WorldTraderCargoSeederSettings;
+			if (worldTraderCargoSeederSettings != null)
+			{
+				foreach (CargoTrader trader in EngineASX.Instance.Traders)
+				{
+					// One bad station must not abort the fill (an NRE here
+					// once killed the whole roll tail: no intel, no
+					// strategies, no peace - the idle-ship bug).
+					try
+					{
+						WorldTraderCargoSeeder.TrySpawnCargo(trader.UnitComponents, worldTraderCargoSeederSettings);
+					}
+					catch (System.Exception ex)
+					{
+						Debug.LogWarning("[MainMenuWorldController] cargo fill failed for " + trader.name + ": " + ex);
+					}
+				}
 			}
 			DiscoverMenuSectorForAllFactions(sector);
 			AssignStrategiesToIdleFleets();
@@ -590,6 +694,11 @@ namespace OpenFrontier.IP.Engine
 			AutonomousTradeOrder autonomousTradeOrder = UnityObjectHelper.NewGameObject<AutonomousTradeOrder>();
 			autonomousTradeOrder.MaxJumpDistance = 4;
 			autonomousTradeOrder.MaxDuration = 0f;
+			// Repeat (not Requeue): Requeue silently drops the order when
+			// it's the fleet's ONLY one (it re-appends to the back of a
+			// non-empty queue); Repeat re-inserts at the front - a solo
+			// trader's trade run loops forever.
+			autonomousTradeOrder.CompletionMode = FleetOrderCompletionMode.Repeat;
 			fleet.EnqueueOrder(autonomousTradeOrder);
 		}
 
@@ -604,11 +713,15 @@ namespace OpenFrontier.IP.Engine
 			}
 			MineOrder mineOrder = UnityObjectHelper.NewGameObject<MineOrder>();
 			mineOrder.MaxJumpDistance = 2;
-			mineOrder.CompletionMode = FleetOrderCompletionMode.Destroy;
+			// Requeue (not Destroy): on completion the order goes to the
+			// back of the queue, so [mine, sell] cycles forever - the same
+			// pattern the game's own OrdersHelper uses. With Destroy the
+			// fleet went permanently idle after its first cycle.
+			mineOrder.CompletionMode = FleetOrderCompletionMode.Requeue;
 			mineOrder.MaxDuration = mineOrder.AIDefaultMaxDuration;
 			fleet.EnqueueOrder(mineOrder);
 			SellCargoOrder sellCargoOrder = UnityObjectHelper.NewGameObject<SellCargoOrder>();
-			sellCargoOrder.CompletionMode = FleetOrderCompletionMode.Destroy;
+			sellCargoOrder.CompletionMode = FleetOrderCompletionMode.Requeue;
 			sellCargoOrder.SellEquipment = false;
 			sellCargoOrder.MaxJumpDistance = 4;
 			sellCargoOrder.MaxDuration = sellCargoOrder.AIDefaultMaxDuration;
@@ -646,7 +759,10 @@ namespace OpenFrontier.IP.Engine
 				}
 				foreach (Fleet fleet in faction.Fleets)
 				{
-					if (fleet != null && fleet.FleetStrategy == null)
+					// FleetStrategy is a non-nullable enum FIELD - "== null"
+					// compiled to always-false (CS0472), so this whole pass
+					// was dead code and strategy-less fleets idled forever.
+					if (fleet != null && fleet.FleetStrategy == FactionStrategy.Unspecified)
 					{
 						fleet.FleetStrategy = FactionAIStrategyModule.GetBestStrategyForFleet(fleet, faction.FactionAI);
 					}

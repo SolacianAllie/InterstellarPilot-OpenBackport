@@ -48,9 +48,14 @@ namespace OpenFrontier.IP.UI.Screens.Hud
 					float num = Mathf.Lerp(hudCameraSettings.OrbitPanGestureMinRotationSpeed, hudCameraSettings.OrbitPanGestureMaxRotationSpeed, GameController.Instance.CameraDragRotateSensitivity) * hudCameraSettings.OrbitPanGestureSpeedMultiplier;
 					num *= GameController.Instance.GetCameraDragRotateSensitivityMultiplier();
 					desiredCameraAngleY += DeviceInfo.PixelsToUnits(velocityX) * num;
-					// Vertical drag now pitches the camera (free look up/down)
+					// Vertical drag pitches the camera (free look up/down)
 					// instead of changing elevation; elevation stays on its button.
-					desiredCameraAngleX = Mathf.Clamp(desiredCameraAngleX + DeviceInfo.PixelsToUnits(velocityY) * num, 0f - MaxManualOrbitAngleX, MaxManualOrbitAngleX);
+					// NEGATED to match the menu's spectator camera: that one
+					// derives its pitch from where it sits around the target,
+					// so an upwards swipe looks up there, while a positive
+					// euler X here would look DOWN - the two were inverted
+					// since elevation became pitch.
+					desiredCameraAngleX = Mathf.Clamp(desiredCameraAngleX - DeviceInfo.PixelsToUnits(velocityY) * num, 0f - MaxManualOrbitAngleX, MaxManualOrbitAngleX);
 					EngineASX.Instance.HudCamera.SetCameraDesiredRotation(desiredCameraAngleX, desiredCameraAngleY);
 				}
 			}

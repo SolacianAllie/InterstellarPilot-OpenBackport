@@ -137,6 +137,7 @@ Packages/packages-lock.json linguist-generated
 
 # Compressed Archive
 *.7z                    lfs
+*.aar                   lfs
 *.bz2                   lfs
 *.gz                    lfs
 *.rar                   lfs
@@ -169,3 +170,11 @@ Packages/packages-lock.json linguist-generated
 
 # Exceptions for .asset files such as lightning pre-baking
 LightingData.asset     binary
+
+# Android Archives (Discord Social SDK natives ship as .aar - these were
+# the only SDK binaries NOT covered by the rules above, which is how a
+# 278MB Android debug aar ended up as a plain blob and blocked a push.
+# Only the Windows/Linux/Android binaries are vendored; iOS, macOS,
+# Android-debug, voice (Krisp) and debug-symbol files were removed to
+# stay under GitHub's 100MB per-file limit and the LFS quota. Re-extract
+# them from DiscordSocialSdk-UnityPlugin-<version>.zip if ever needed.
