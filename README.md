@@ -6,15 +6,9 @@ After being abandoned multiple times and now being removed from app stores for a
 
 This project aims to decompile, rebuild, and port the game to **Unity 6 with URP**, breathing new life into it for the community to modify, enhance, and enjoy for years to come.
 
-This is the **actively developed** line of the project. If your device can run it, this is the branch to use.
-
-## If your device is too old
-
-Unity 6.6 raised the Android graphics floor to **OpenGL ES 3.1**, which locks out a large band of still-in-use hardware — most notably anything with an **Adreno 3xx** GPU (Adreno 308, 320, 330) and older Mali parts. Those devices fail at startup with *"Unable to initialize the Unity Engine Graphics API"*. It is an engine limitation and cannot be configured away.
-
-**We will not leave these players behind.** [InterstellarPilot: Open Backport](https://github.com/SolacianAllie/InterstellarPilot-OpenBackport) runs the same game on **Unity 6.3 LTS**, which still supports **OpenGL ES 3.0**. It is a separate project with its own releases, and it receives Open Frontier's changes by periodic automated merge.
-
 There are also long term future plans to overhaul the game with long requested features and abilities.
+
+This is the **actively developed** line of the project. If your device can run it, this is the branch to use.
 
 PLATFORM SUPPORT
 ------------------------------------------------------------
@@ -34,23 +28,30 @@ INSTALLATION
 
 DEVICE COMPATIBILITY
 ------------------------------------------------------------
-| Requirement | This project (Unity 6.6) | Open Backport (Unity 6.3 LTS) |
+Unity 6.6 sets the floor: Android devices need **OpenGL ES 3.1+ or Vulkan** (roughly 2016-era mid-range hardware and newer). Devices below that line (e.g. Adreno 3xx GPUs such as the Adreno 308) fail at startup with "Unable to initialize the Unity Engine Graphics API" - this is an engine limitation, not something the project can configure away.
+
+**For any devices below this threshold**, we have a special version in tandem development, [OpenBackport](https://github.com/SolacianAllie/InterstellarPilot-OpenBackport).
+This version runs in Unity 6.3 LTS and supports a lower floor than 6.6, however i still need people with lesser devices to notify me of issues with it.
+
+| Requirement | This project (Unity 6.6) | OpenBackport (Unity 6.3 LTS) |
 |-------------|--------------------------|--------------------------------|
 | Graphics API | **OpenGL ES 3.1+** or Vulkan | **OpenGL ES 3.0+** or Vulkan |
 | Android version | **8.0 Oreo (API 26)** | 7.1 Nougat (API 25) |
 | 32-bit ARM (armeabi-v7a) | Supported | Supported |
 
-Requires roughly **2016-era mid-range hardware and newer**. If your device reports OpenGL ES 3.0 as its only option, or has an Adreno 3xx GPU, use [Open Backport](https://github.com/SolacianAllie/InterstellarPilot-OpenBackport).
+Both `armeabi-v7a` and `arm64-v8a` are shipped in the APK. Google Play requires 64-bit support, and shipping both keeps 32-bit-only devices installable. The Play Store listing is filtered to compatible devices automatically.
 
-Both `armeabi-v7a` and `arm64-v8a` are shipped in the APK. Google Play requires 64-bit support, and shipping both keeps 32-bit-only devices installable.
-
-The Play Store listing is filtered to compatible devices automatically.
-
-UNITY VERSION NOTES
+UNITY VERSION
 ------------------------------------------------------------
 This project targets **Unity 6000.6.4f1** with **URP 17.6.0**, and is kept on the newest Unity release deliberately so it picks up engine fixes and platform support first.
 
-Rendering is **Forward**. Both `armeabi-v7a` (ARMv7) and `arm64-v8a` are built.
+Rendering is **Forward**.
+
+SUPPORT THIS PROJECT
+------------------------------------------------------------
+You can support development of this project by funding me on [Ko-Fi](https://ko-fi.com/solacianallie).
+To avoid needing to monetize the game directly, Any desire from the community to support me in development of this project can be done there!
+Depending on how much support i get, i will start releasing development builds of the game for people to try out and updates about things as i work on them, just to reward those who sink their own hard earned cash into helping support me while i develop this.
 
 CREDIT
 ------------------------------------------------------------
