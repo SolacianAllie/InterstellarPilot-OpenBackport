@@ -43,7 +43,7 @@ MonoBehaviour:
   m_GlyphTable: []
   m_CharacterTable: []
   m_AtlasTextures:
-  - {fileID: 2800000, guid: bf0261a9698da2d4eaa7c7c65c4e56c7, type: 3}
+  - {fileID: 2800000, guid: b7cab7857ee6b464bb0e539ec7c09347, type: 3}
   m_AtlasTextureIndex: 0
   m_IsMultiAtlasTexturesEnabled: 0
   m_ClearDynamicDataOnBuild: 1
