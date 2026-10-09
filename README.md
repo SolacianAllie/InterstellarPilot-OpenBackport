@@ -99,6 +99,14 @@ builds that people actually download. Small contributions count — a crash on
 an odd device, a mistranslated string, a log line that would have saved someone
 an afternoon.
 
+And if you do fork, that's fine — just rebrand it. Rename the build, swap the
+icon, get your own store listing and your own Discord application, and point
+the in-game support email at *you* rather than at us. The full checklist is in
+[TRADEMARK_POLICY.md](TRADEMARK_POLICY.md); it names the exact files. You do
+not need to rename the code's internal namespaces — that's roughly 2,100
+files, breaks prefab and save references if done carelessly, and buys nothing
+the licence requires.
+
 The only thing we ask in return is the name. Build under your own branding,
 don't imply we're behind it, and we'll help you however we can.
 

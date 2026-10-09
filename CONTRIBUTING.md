@@ -50,6 +50,14 @@ implication of endorsement, and a CLA signature so we can keep publishing. In
 return you'll get the reasoning behind every weird fix in the history, direct
 input on what to prioritise, and your name in the credits if you want it.
 
+**If you fork anyway,** [`TRADEMARK_POLICY.md`](TRADEMARK_POLICY.md) has a
+rebranding checklist: the build and company name, the launcher icon, your store
+listing, your own Discord application, and — the one people forget — the
+in-game support email, which must point at you rather than at this project.
+Player-visible strings announcing "Open Frontier" should follow. Renaming the
+internal namespaces and assembly definitions is *not* required and, at ~2,100
+files, is not something to attempt casually.
+
 Small contributions genuinely count. A crash on an odd device, a wrong
 translation, a confusing log message — all of it is useful and none of it needs
 permission.

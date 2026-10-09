@@ -50,6 +50,52 @@ by the CLA, or by any contribution:
   use doesn't imply sponsorship or endorsement (for example, a blog post titled
   "Adding Discord Rich Presence to InterstellarPilot: Open Frontier")
 
+## If you fork: the rebranding checklist
+
+The AGPL lets you fork. This project asks that you rebrand if you ship the
+result. Everything in the first list below is **required**, because those are
+the marks; everything in the second is **strongly encouraged** but genuinely
+optional.
+
+### Required — these present the product to players, and they're the marks
+
+| What to change | Where it lives in a checkout of this project |
+|---|---|
+| Product and company name in the build | `ProjectSettings/ProjectSettings.asset` — `productName: InterstellarPilot - Open Frontier`, `companyName: Open Frontier` |
+| Android package / application id | `ProjectSettings.asset` → `applicationIdentifier`, plus whatever your store listing uses |
+| Launcher icon and app icon | `Assets/Texture2D/app icon.png` and the Android icon slots in `ProjectSettings.asset` |
+| Title screen and store artwork | The title art, icon and screenshots used by your store listing |
+| Discord presence title | `DiscordPresenceManager.GameDisplayName` in the Discord integration |
+| Your Discord application | Register your own application; you cannot list yourself under ours |
+| Support contact shown in-game | `GameController.SupportEmail` and the hardcoded string in the store screen. **Point these at you.** Leaving them pointing here means players contact this project about bugs in a build it did not ship — the single most damaging thing in this list |
+
+Renaming the build, the icon, the store listing and the support contact is the
+whole of the legal requirement. Get those right and you are in compliance.
+
+### Strongly encouraged, but not required
+
+- Update player-visible strings that still announce "Open Frontier" — the
+  version label on the main menu, Discord presence copy, about/credits text
+- Note the change honestly in your release notes: "fork of InterstellarPilot:
+  Open Frontier, rebranded"
+
+### Not required: renaming the code itself
+
+You do **not** need to rename internal identifiers — the `OpenFrontier.*`
+namespaces, the `OpenFrontier`/`OpenFrontier.IP` assembly definitions, prefab
+paths, or asset folder names. Only the marks are withheld; the copyright and
+patent licences in the AGPL and `CLA.md` continue to apply in full.
+
+This is worth stating plainly, because it is a big job and a false belief about
+it is expensive: the name is embedded in roughly **2,100 source files** across
+**20 assembly definitions**, plus `Resources/` load paths that the engine
+resolves by string. Renaming it touches nearly everything, breaks prefab and
+`Resources` references if done carelessly, and can invalidate existing save
+files — for no legal benefit whatsoever. Renaming it in *this* repository would
+be reckless. If you want to do it in your fork for taste or hygiene, that is
+your call and nobody here will complain; just don't think the licence requires
+it.
+
 ## What you may not do without written permission
 
 - Publishing, distributing, or offering for download any build under the
