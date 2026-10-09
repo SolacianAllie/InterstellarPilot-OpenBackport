@@ -89,7 +89,8 @@ that happens.
   that are not discoverable from the code itself (baked story scenarios, Unity
   6 quirks, editor-only blind spots in our compile harness). Following it will
   save you a wasted afternoon.
-- **Sign the CLA** with a comment on your issue or pull request:
+- **Sign the CLA** with a comment on your issue or pull request. It's the
+  Linux Foundation's Individual CLA with the granting party set to this project:
   > I have read and agree to the Contributor License Agreement of
   > InterstellarPilot: Open Frontier. My GitHub username is: @you
 - **Open an issue first** for anything substantial. A short conversation saves

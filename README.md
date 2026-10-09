@@ -84,6 +84,7 @@ carelessly.
 
 Contributions are welcome — by pull request, or by being onboarded to work
 directly in the repository, which is what we'd rather you did. See
-[CONTRIBUTING.md](CONTRIBUTING.md). Note [`CLA.md`](CLA.md): the rights you
-grant so the project can keep being published (a **draft that has not been
-lawyer-reviewed**, and we mean it).
+[CONTRIBUTING.md](CONTRIBUTING.md). Note [`CLA.md`](CLA.md): the
+Linux Foundation's Individual CLA, adopted here with the granting party changed
+to this project, so contributions stay licensable by us and can't be pulled out
+from under it.
